@@ -9,6 +9,9 @@ class PixelGrid : JPanel() {
     var pixelSize = 20
     var pixelSmooth = 0
 
+    var hoverColour = Color.GRAY
+    var hoverOpacity = 225 / 3
+
     var rowAmount = 8
     var columnAmount = 8
 
@@ -17,9 +20,9 @@ class PixelGrid : JPanel() {
     var rectangleMatrix: MutableList<MutableList<Rectangle>>
     var pixelMatrix: MutableList<MutableList<Color?>>
 
-    var focusedPixel: Rectangle? = null
-    var focusedRow = 0
-    var focusedColumn = 0
+    var hoverPixel: Rectangle? = null
+    var hoverRow = 0
+    var hoverColumn = 0
 
     init {
         isOpaque = false
@@ -44,24 +47,29 @@ class PixelGrid : JPanel() {
                 for ((rowIndex, row) in rectangleMatrix.withIndex()) {
                     for ((columnIndex, column) in row.withIndex()) {
                         if (column.contains(e.point)) {
-                            focusedPixel = column
-                            focusedRow = rowIndex
-                            focusedColumn = columnIndex
+                            hoverPixel = column
+                            hoverRow = rowIndex
+                            hoverColumn = columnIndex
                         }
                     }
                 }
+            }
+
+            override fun mouseDragged(e: MouseEvent) {
+                mouseMoved(e)
+                pixelMatrix[hoverRow][hoverColumn] = Components.colourPicker.color
             }
         })
 
         addMouseListener(object : MouseAdapter() {
             override fun mousePressed(e: MouseEvent) {
-                pixelMatrix[focusedRow][focusedColumn] = Color.BLACK
+                pixelMatrix[hoverRow][hoverColumn] = Color.BLACK
             }
 
             override fun mouseExited(e: MouseEvent) {
-                focusedPixel = null
-                focusedRow = -1
-                focusedColumn = -1
+                hoverPixel = null
+                hoverRow = -1
+                hoverColumn = -1
             }
         })
 
@@ -75,12 +83,14 @@ class PixelGrid : JPanel() {
         g2D.color = Color.GRAY
         g2D.stroke = BasicStroke(lineThickness)
 
+        // Draws the grid
         for (row in rectangleMatrix) {
             for (column in row) {
                 g2D.drawRect(column.x, column.y, column.width, column.height)
             }
         }
 
+        // Draws the pixels
         for (row in 0 until rectangleMatrix.size) {
             for (column in 0 until rectangleMatrix[row].size) {
                 if (pixelMatrix[row][column] != null) {
@@ -91,9 +101,9 @@ class PixelGrid : JPanel() {
             }
         }
 
-        if (focusedPixel != null) {
-            g2D.color = Color.LIGHT_GRAY
-            g2D.fillRect(focusedPixel!!.x, focusedPixel!!.y, focusedPixel!!.width, focusedPixel!!.height)
+        if (hoverPixel != null) {
+            g2D.color = Color(hoverColour.red, hoverColour.green, hoverColour.blue, hoverOpacity)
+            g2D.fillRect(hoverPixel!!.x, hoverPixel!!.y, hoverPixel!!.width, hoverPixel!!.height)
         }
     }
 }
