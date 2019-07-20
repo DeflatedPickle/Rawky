@@ -57,13 +57,13 @@ class PixelGrid : JPanel() {
 
             override fun mouseDragged(e: MouseEvent) {
                 mouseMoved(e)
-                pixelMatrix[hoverRow][hoverColumn] = Components.colourPicker.color
+                pixelMatrix[hoverRow][hoverColumn] = Components.colourShades.selectedShade
             }
         })
 
         addMouseListener(object : MouseAdapter() {
             override fun mousePressed(e: MouseEvent) {
-                pixelMatrix[hoverRow][hoverColumn] = Color.BLACK
+                pixelMatrix[hoverRow][hoverColumn] = Components.colourShades.selectedShade
             }
 
             override fun mouseExited(e: MouseEvent) {
