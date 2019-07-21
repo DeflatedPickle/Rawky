@@ -1,10 +1,27 @@
 package com.deflatedpickle.rawky.components
 
 import com.bric.colorpicker.ColorPicker
+import org.jdesktop.swingx.JXButton
+import org.jdesktop.swingx.painter.CompoundPainter
+import org.jdesktop.swingx.painter.MattePainter
+import java.awt.event.ActionEvent
 
 object Components {
-    lateinit var pixelGrid: PixelGrid
-    lateinit var colourPicker: ColorPicker
-    lateinit var colourShades: ColourShades
-    lateinit var colourPalette: ColourPalette
+    val pixelGrid = PixelGrid()
+    val colourPicker = ColorPicker(false, true)
+    val colourShades = ColourShades()
+    val colourPalette = ColourPalette()
+
+    init {
+        colourPicker.addColorListener {
+            colourShades.colour = colourPicker.color
+
+            val shades = colourShades.getShades()
+            for ((index, button) in colourShades.buttonList.withIndex()) {
+                button.backgroundPainter = CompoundPainter<JXButton>(MattePainter(shades[index]))
+            }
+            colourShades.selectedButton.actionListeners[0].actionPerformed(ActionEvent(colourShades.selectedButton, 0, ""))
+            colourShades.selectedButton.text = " "
+        }
+    }
 }

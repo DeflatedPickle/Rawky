@@ -3,16 +3,11 @@ package com.deflatedpickle.rawky
 import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
-import com.deflatedpickle.rawky.components.PixelGrid
+import com.deflatedpickle.rawky.components.Components
 import org.pushingpixels.substance.api.skin.SubstanceGraphiteElectricLookAndFeel
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
-import com.bric.colorpicker.ColorPicker
-import com.deflatedpickle.rawky.components.ColourPalette
-import com.deflatedpickle.rawky.components.ColourShades
-import com.deflatedpickle.rawky.components.Components
-
 
 fun main() {
     val frame = JFrame("Rawky")
@@ -29,25 +24,21 @@ fun main() {
 
         val grid = CGrid(cControl)
 
-        Components.pixelGrid = PixelGrid()
         val pixelGrid = DefaultSingleCDockable("pixelGrid", "Pixel Grid", Components.pixelGrid)
         cControl.addDockable(pixelGrid)
         pixelGrid.isVisible = true
         grid.add(0.0, 0.0, 1.0, 2.0, pixelGrid)
 
-        Components.colourPicker = ColorPicker(false, true)
         val colourPicker = DefaultSingleCDockable("colourPicker", "Colour Picker", Components.colourPicker)
         cControl.addDockable(colourPicker)
         colourPicker.isVisible = true
         grid.add(1.0, 0.0, 0.6, 1.0, colourPicker)
 
-        Components.colourShades = ColourShades()
         val colourShades = DefaultSingleCDockable("colourShades", "Colour Shades", Components.colourShades)
         cControl.addDockable(colourShades)
         colourShades.isVisible = true
         grid.add(1.0, 0.4, 0.6, 0.6, colourShades)
 
-        Components.colourPalette = ColourPalette()
         val colourPalette = DefaultSingleCDockable("colourPalette", "Colour Palette", Components.colourPalette)
         cControl.addDockable(colourPalette)
         colourPalette.isVisible = true

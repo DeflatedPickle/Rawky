@@ -4,7 +4,6 @@ import org.jdesktop.swingx.JXButton
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter
 import java.awt.Color
-import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import java.awt.event.ActionEvent
@@ -17,6 +16,18 @@ class ColourShades : JPanel() {
     // TODO: Split the amount for darker and lighter shades
     var amount = 7
     val buttonList = mutableListOf<JXButton>()
+
+    var colour = Color.BLACK
+        set(value) {
+            field = value
+
+            val shades = getShades()
+            for ((index, button) in this.buttonList.withIndex()) {
+                button.backgroundPainter = CompoundPainter<JXButton>(MattePainter(shades[index]))
+            }
+            this.selectedButton.actionListeners[0].actionPerformed(ActionEvent(this.selectedButton, 0, ""))
+            this.selectedButton.text = " "
+        }
 
     var selectedShade: Color? = null
     lateinit var selectedButton: JXButton
@@ -51,25 +62,16 @@ class ColourShades : JPanel() {
                 weighty = 1.0
             })
         }
-
-        Components.colourPicker.addColorListener {
-            val shades = getShades()
-            for ((index, button) in buttonList.withIndex()) {
-                button.backgroundPainter = CompoundPainter<JXButton>(MattePainter(shades[index]))
-            }
-            selectedButton.actionListeners[0].actionPerformed(ActionEvent(selectedButton, 0, ""))
-            selectedButton.text = " "
-        }
     }
 
     fun getShades(): List<Color> {
         val list = mutableListOf<Color>()
         for (i in (0 until amount / 2).reversed()) {
-            list.add(darken(Components.colourPicker.color, i / (amount.toDouble() / 2) + 0.1))
+            list.add(darken(colour, i / (amount.toDouble() / 2) + 0.1))
         }
-        list.add(Components.colourPicker.color)
+        list.add(colour)
         for (i in 0 until amount / 2) {
-            list.add(lighten(Components.colourPicker.color, i / (amount.toDouble() / 2) + 0.1))
+            list.add(lighten(colour, i / (amount.toDouble() / 2) + 0.1))
         }
         return list
     }
