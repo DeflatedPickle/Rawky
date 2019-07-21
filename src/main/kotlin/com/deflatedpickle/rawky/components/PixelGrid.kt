@@ -9,11 +9,10 @@ class PixelGrid : JPanel() {
     var pixelSize = 20
     var pixelSmooth = 0
 
-    var hoverColour = Color.GRAY
     var hoverOpacity = 225 / 3
 
-    var rowAmount = 8
-    var columnAmount = 8
+    var rowAmount = 16
+    var columnAmount = 16
 
     var lineThickness = 1f
 
@@ -29,10 +28,10 @@ class PixelGrid : JPanel() {
 
         val rMatrix = mutableListOf<MutableList<Rectangle>>()
         val pMatrix = mutableListOf<MutableList<Color?>>()
-        for (row in 0..rowAmount) {
+        for (row in 0 until rowAmount) {
             val rectangleCells = mutableListOf<Rectangle>()
             val pixelCells = mutableListOf<Color?>()
-            for (column in 0..columnAmount) {
+            for (column in 0 until columnAmount) {
                 rectangleCells.add(Rectangle(row * pixelSize, column * pixelSize, pixelSize, pixelSize))
                 pixelCells.add(null)
             }
@@ -102,7 +101,7 @@ class PixelGrid : JPanel() {
         }
 
         if (hoverPixel != null) {
-            g2D.color = Color(hoverColour.red, hoverColour.green, hoverColour.blue, hoverOpacity)
+            g2D.color = Color(Components.colourShades.selectedShade!!.red, Components.colourShades.selectedShade!!.green, Components.colourShades.selectedShade!!.blue, hoverOpacity)
             g2D.fillRect(hoverPixel!!.x, hoverPixel!!.y, hoverPixel!!.width, hoverPixel!!.height)
         }
     }

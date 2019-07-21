@@ -9,6 +9,7 @@ import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
 import com.bric.colorpicker.ColorPicker
+import com.deflatedpickle.rawky.components.ColourPalette
 import com.deflatedpickle.rawky.components.ColourShades
 import com.deflatedpickle.rawky.components.Components
 
@@ -16,7 +17,7 @@ import com.deflatedpickle.rawky.components.Components
 fun main() {
     val frame = JFrame("Rawky")
     frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-    frame.setSize(600, 400)
+    frame.setSize(600, 500)
 
     SwingUtilities.invokeLater {
         // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
@@ -38,13 +39,19 @@ fun main() {
         val colourPicker = DefaultSingleCDockable("colourPicker", "Colour Picker", Components.colourPicker)
         cControl.addDockable(colourPicker)
         colourPicker.isVisible = true
-        grid.add(1.0, 0.0, 0.4, 1.0, colourPicker)
+        grid.add(1.0, 0.0, 0.6, 1.0, colourPicker)
 
         Components.colourShades = ColourShades()
         val colourShades = DefaultSingleCDockable("colourShades", "Colour Shades", Components.colourShades)
         cControl.addDockable(colourShades)
         colourShades.isVisible = true
-        grid.add(1.0, 1.0, 0.4, 0.2, colourShades)
+        grid.add(1.0, 0.4, 0.6, 0.6, colourShades)
+
+        Components.colourPalette = ColourPalette()
+        val colourPalette = DefaultSingleCDockable("colourPalette", "Colour Palette", Components.colourPalette)
+        cControl.addDockable(colourPalette)
+        colourPalette.isVisible = true
+        grid.add(1.0, 1.0, 0.6, 0.6, colourPalette)
 
         cControl.contentArea.deploy(grid)
     }

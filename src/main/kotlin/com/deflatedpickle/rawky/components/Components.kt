@@ -6,4 +6,5 @@ object Components {
     lateinit var pixelGrid: PixelGrid
     lateinit var colourPicker: ColorPicker
     lateinit var colourShades: ColourShades
+    lateinit var colourPalette: ColourPalette
 }
