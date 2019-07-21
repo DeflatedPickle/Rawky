@@ -29,7 +29,7 @@ class ColourShades : JPanel() {
             this.selectedButton.text = " "
         }
 
-    var selectedShade: Color? = null
+    lateinit var selectedShade: Color
     lateinit var selectedButton: JXButton
 
     init {
@@ -43,6 +43,7 @@ class ColourShades : JPanel() {
                 backgroundPainter = CompoundPainter<JXButton>(MattePainter(shades[i]))
 
                 if (i == amount / 2 + 1) {
+                    selectedShade = shades[i]
                     selectedButton = this
                 }
 

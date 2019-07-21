@@ -46,6 +46,9 @@ dependencies {
 
     // OBJ Models
     implementation 'de.javagl:obj:0.3.0'
+
+    // SVG Icons
+    implementation 'org.pushing-pixels:radiance-photon:2.0.1'
 }
 
 compileKotlin {

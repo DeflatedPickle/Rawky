@@ -56,13 +56,13 @@ class PixelGrid : JPanel() {
 
             override fun mouseDragged(e: MouseEvent) {
                 mouseMoved(e)
-                pixelMatrix[hoverRow][hoverColumn] = Components.colourShades.selectedShade
+                performTool()
             }
         })
 
         addMouseListener(object : MouseAdapter() {
             override fun mousePressed(e: MouseEvent) {
-                pixelMatrix[hoverRow][hoverColumn] = Components.colourShades.selectedShade
+                performTool()
             }
 
             override fun mouseExited(e: MouseEvent) {
@@ -79,15 +79,7 @@ class PixelGrid : JPanel() {
 
     override fun paintComponent(g: Graphics) {
         val g2D = g as Graphics2D
-        g2D.color = Color.GRAY
         g2D.stroke = BasicStroke(lineThickness)
-
-        // Draws the grid
-        for (row in rectangleMatrix) {
-            for (column in row) {
-                g2D.drawRect(column.x, column.y, column.width, column.height)
-            }
-        }
 
         // Draws the pixels
         for (row in 0 until rectangleMatrix.size) {
@@ -101,8 +93,27 @@ class PixelGrid : JPanel() {
         }
 
         if (hoverPixel != null) {
-            g2D.color = Color(Components.colourShades.selectedShade!!.red, Components.colourShades.selectedShade!!.green, Components.colourShades.selectedShade!!.blue, hoverOpacity)
+            g2D.color = Color(Components.colourShades.selectedShade.red, Components.colourShades.selectedShade.green, Components.colourShades.selectedShade.blue, hoverOpacity)
             g2D.fillRect(hoverPixel!!.x, hoverPixel!!.y, hoverPixel!!.width, hoverPixel!!.height)
+        }
+
+        // Draws the grid
+        g2D.color = Color.GRAY
+        for (row in rectangleMatrix) {
+            for (column in row) {
+                g2D.drawRect(column.x, column.y, column.width, column.height)
+            }
+        }
+    }
+
+    fun performTool() {
+        when (Components.toolbox.tool) {
+            Toolbox.Tool.PENCIL -> {
+                pixelMatrix[hoverRow][hoverColumn] = Components.colourShades.selectedShade
+            }
+            Toolbox.Tool.ERASER -> {
+                pixelMatrix[hoverRow][hoverColumn] = null
+            }
         }
     }
 }

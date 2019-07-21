@@ -7,12 +7,15 @@ import org.jdesktop.swingx.painter.MattePainter
 import java.awt.event.ActionEvent
 
 object Components {
+    val toolbox = Toolbox()
     val pixelGrid = PixelGrid()
     val colourPicker = ColorPicker(false, true)
     val colourShades = ColourShades()
     val colourPalette = ColourPalette()
 
     init {
+        toolbox.pencilButton.isSelected = true
+
         colourPicker.addColorListener {
             colourShades.colour = colourPicker.color
 

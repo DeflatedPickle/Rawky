@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.components
 
+import com.deflatedpickle.rawky.Icons
 import org.jdesktop.swingx.JXButton
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter
@@ -13,7 +14,7 @@ class ColourPalette : JPanel() {
     var cellSize = 28
     val cellList = mutableListOf<JXButton>()
 
-    val newButton = JButton("+").apply {
+    val newButton = JButton(Icons.plus).apply {
         preferredSize = Dimension(cellSize, cellSize)
 
         addActionListener {
