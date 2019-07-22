@@ -114,6 +114,9 @@ class PixelGrid : JPanel() {
             Toolbox.Tool.ERASER -> {
                 pixelMatrix[hoverRow][hoverColumn] = null
             }
+            Toolbox.Tool.PICKER -> {
+                Components.colourPicker.color = pixelMatrix[hoverRow][hoverColumn]
+            }
         }
     }
 }

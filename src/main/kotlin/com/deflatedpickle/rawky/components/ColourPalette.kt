@@ -16,6 +16,7 @@ class ColourPalette : JPanel() {
 
     val newButton = JButton(Icons.plus).apply {
         preferredSize = Dimension(cellSize, cellSize)
+        toolTipText = "Add Colour"
 
         addActionListener {
             this@ColourPalette.add(

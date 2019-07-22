@@ -4,6 +4,7 @@ import com.bric.colorpicker.ColorPicker
 import org.jdesktop.swingx.JXButton
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter
+import java.awt.Color
 import java.awt.event.ActionEvent
 
 object Components {
@@ -16,6 +17,7 @@ object Components {
     init {
         toolbox.pencilButton.isSelected = true
 
+        colourPicker.color = Color.WHITE
         colourPicker.addColorListener {
             colourShades.colour = colourPicker.color
 
