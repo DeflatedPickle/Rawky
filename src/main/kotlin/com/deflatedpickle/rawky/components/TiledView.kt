@@ -1,0 +1,31 @@
+package com.deflatedpickle.rawky.components
+
+import java.awt.Graphics
+import java.awt.Graphics2D
+import javax.swing.JPanel
+
+class TiledView : JPanel() {
+    var rows = 3
+    var columns = 3
+
+    var scale = 0.2
+    var padding = 0
+
+    init {
+        isOpaque = false
+    }
+
+    override fun paintComponent(g: Graphics) {
+        val g2D = g as Graphics2D
+        g2D.scale(scale, scale)
+
+        for (row in 0 until rows) {
+            for (column in 0 until columns) {
+                Components.pixelGrid.drawPixels(g2D)
+                g2D.translate((Components.pixelGrid.pixelSize + padding) * 16, 0)
+            }
+            g2D.translate(0, (Components.pixelGrid.pixelSize + padding) * 16)
+            g2D.translate(-(Components.pixelGrid.pixelSize + padding) * 16 * columns, 0)
+        }
+    }
+}

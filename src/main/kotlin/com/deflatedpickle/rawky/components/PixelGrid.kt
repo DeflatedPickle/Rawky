@@ -71,10 +71,6 @@ class PixelGrid : JPanel() {
                 hoverColumn = -1
             }
         })
-
-        Timer(1000 / 60) {
-            this.repaint()
-        }.start()
     }
 
     override fun paintComponent(g: Graphics) {
@@ -82,15 +78,7 @@ class PixelGrid : JPanel() {
         g2D.stroke = BasicStroke(lineThickness)
 
         // Draws the pixels
-        for (row in 0 until rectangleMatrix.size) {
-            for (column in 0 until rectangleMatrix[row].size) {
-                if (pixelMatrix[row][column] != null) {
-                    g2D.color = pixelMatrix[row][column]
-                    val rectangle = rectangleMatrix[row][column]
-                    g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, pixelSmooth, pixelSmooth)
-                }
-            }
-        }
+        drawPixels(g2D)
 
         if (hoverPixel != null) {
             g2D.color = Color(Components.colourShades.selectedShade.red, Components.colourShades.selectedShade.green, Components.colourShades.selectedShade.blue, hoverOpacity)
@@ -106,17 +94,33 @@ class PixelGrid : JPanel() {
         }
     }
 
+    fun drawPixels(g2D: Graphics2D) {
+        for (row in 0 until rectangleMatrix.size) {
+            for (column in 0 until rectangleMatrix[row].size) {
+                if (pixelMatrix[row][column] != null) {
+                    g2D.color = pixelMatrix[row][column]
+                    val rectangle = rectangleMatrix[row][column]
+                    g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, pixelSmooth, pixelSmooth)
+                }
+            }
+        }
+    }
+
     fun performTool() {
-        when (Components.toolbox.tool) {
-            Toolbox.Tool.PENCIL -> {
-                pixelMatrix[hoverRow][hoverColumn] = Components.colourShades.selectedShade
+        try {
+            when (Components.toolbox.tool) {
+                Toolbox.Tool.PENCIL -> {
+                    pixelMatrix[hoverRow][hoverColumn] = Components.colourShades.selectedShade
+                }
+                Toolbox.Tool.ERASER -> {
+                    pixelMatrix[hoverRow][hoverColumn] = null
+                }
+                Toolbox.Tool.PICKER -> {
+                    Components.colourPicker.color = pixelMatrix[hoverRow][hoverColumn]
+                }
             }
-            Toolbox.Tool.ERASER -> {
-                pixelMatrix[hoverRow][hoverColumn] = null
-            }
-            Toolbox.Tool.PICKER -> {
-                Components.colourPicker.color = pixelMatrix[hoverRow][hoverColumn]
-            }
+        }
+        catch (e: Exception) {
         }
     }
 }

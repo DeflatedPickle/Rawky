@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent
 object Components {
     val toolbox = Toolbox()
     val pixelGrid = PixelGrid()
+    val tiledView = TiledView()
     val colourPicker = ColorPicker(false, true)
     val colourShades = ColourShades()
     val colourPalette = ColourPalette()
