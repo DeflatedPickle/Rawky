@@ -13,7 +13,7 @@ import javax.swing.*
 fun main() {
     val frame = JFrame("Rawky")
     frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-    frame.setSize(700, 500)
+    frame.setSize(900, 600)
 
     SwingUtilities.invokeLater {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
@@ -33,7 +33,12 @@ fun main() {
         val tiledView = DefaultSingleCDockable("tiledView", "Tiled View", Components.tiledView)
         cControl.addDockable(tiledView)
         tiledView.isVisible = true
-        grid.add(0.0, 0.3, 0.6, 2.0, tiledView)
+        grid.add(0.0, 0.3, 0.6, 1.0, tiledView)
+
+        val modelView = DefaultSingleCDockable("modelView", "Model View", Components.modelView)
+        cControl.addDockable(modelView)
+        modelView.isVisible = true
+        grid.add(0.0, 1.0, 0.6, 1.0, modelView)
 
         val pixelGrid = DefaultSingleCDockable("pixelGrid", "Pixel Grid", Components.pixelGrid)
         cControl.addDockable(pixelGrid)

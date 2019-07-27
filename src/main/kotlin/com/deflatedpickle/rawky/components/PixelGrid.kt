@@ -17,7 +17,7 @@ class PixelGrid : JPanel() {
     var lineThickness = 1f
 
     var rectangleMatrix: MutableList<MutableList<Rectangle>>
-    var pixelMatrix: MutableList<MutableList<Color?>>
+    var pixelMatrix: MutableList<MutableList<Color>>
 
     var hoverPixel: Rectangle? = null
     var hoverRow = 0
@@ -27,13 +27,13 @@ class PixelGrid : JPanel() {
         isOpaque = false
 
         val rMatrix = mutableListOf<MutableList<Rectangle>>()
-        val pMatrix = mutableListOf<MutableList<Color?>>()
+        val pMatrix = mutableListOf<MutableList<Color>>()
         for (row in 0 until rowAmount) {
             val rectangleCells = mutableListOf<Rectangle>()
-            val pixelCells = mutableListOf<Color?>()
+            val pixelCells = mutableListOf<Color>()
             for (column in 0 until columnAmount) {
                 rectangleCells.add(Rectangle(row * pixelSize, column * pixelSize, pixelSize, pixelSize))
-                pixelCells.add(null)
+                pixelCells.add(Color(0, 0, 0, 0))
             }
             rMatrix.add(rectangleCells)
             pMatrix.add(pixelCells)
@@ -97,11 +97,9 @@ class PixelGrid : JPanel() {
     fun drawPixels(g2D: Graphics2D) {
         for (row in 0 until rectangleMatrix.size) {
             for (column in 0 until rectangleMatrix[row].size) {
-                if (pixelMatrix[row][column] != null) {
-                    g2D.color = pixelMatrix[row][column]
-                    val rectangle = rectangleMatrix[row][column]
-                    g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, pixelSmooth, pixelSmooth)
-                }
+                g2D.color = pixelMatrix[row][column]
+                val rectangle = rectangleMatrix[row][column]
+                g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, pixelSmooth, pixelSmooth)
             }
         }
     }
@@ -113,7 +111,7 @@ class PixelGrid : JPanel() {
                     pixelMatrix[hoverRow][hoverColumn] = Components.colourShades.selectedShade
                 }
                 Toolbox.Tool.ERASER -> {
-                    pixelMatrix[hoverRow][hoverColumn] = null
+                    pixelMatrix[hoverRow][hoverColumn] = Color(0, 0, 0, 0)
                 }
                 Toolbox.Tool.PICKER -> {
                     Components.colourPicker.color = pixelMatrix[hoverRow][hoverColumn]

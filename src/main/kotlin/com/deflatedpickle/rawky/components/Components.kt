@@ -11,6 +11,7 @@ object Components {
     val toolbox = Toolbox()
     val pixelGrid = PixelGrid()
     val tiledView = TiledView()
+    val modelView = ModelView()
     val colourPicker = ColorPicker(false, true)
     val colourShades = ColourShades()
     val colourPalette = ColourPalette()
