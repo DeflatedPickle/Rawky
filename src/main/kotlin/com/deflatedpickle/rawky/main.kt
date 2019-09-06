@@ -33,7 +33,12 @@ fun main() {
         val tiledView = DefaultSingleCDockable("tiledView", "Tiled View", Components.tiledView)
         cControl.addDockable(tiledView)
         tiledView.isVisible = true
-        grid.add(0.0, 0.3, 0.6, 2.0, tiledView)
+        grid.add(0.0, 0.3, 0.6, 1.0, tiledView)
+
+        val layerList = DefaultSingleCDockable("layerList", "Layer List", Components.layerList)
+        cControl.addDockable(layerList)
+        layerList.isVisible = true
+        grid.add(0.0, 1.0, 0.6, 1.0, layerList)
 
         val pixelGrid = DefaultSingleCDockable("pixelGrid", "Pixel Grid", Components.pixelGrid)
         cControl.addDockable(pixelGrid)

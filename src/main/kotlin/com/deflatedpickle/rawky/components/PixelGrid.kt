@@ -6,6 +6,30 @@ import javax.swing.JPanel
 import javax.swing.Timer
 
 class PixelGrid : JPanel() {
+    class Layer {
+        val pixelMatrix: MutableList<MutableList<Cell>>
+
+        init {
+            val rowList = mutableListOf<MutableList<Cell>>()
+            for (row in 0 until Components.pixelGrid.rowAmount) {
+                val columnList = mutableListOf<Cell>()
+                for (column in 0 until Components.pixelGrid.columnAmount) {
+                    columnList.add(Cell())
+                }
+                rowList.add(columnList)
+            }
+            pixelMatrix = rowList
+        }
+    }
+
+    class Cell {
+        var colour: Color? = null
+
+        override fun toString(): String {
+            return "Cell { $colour }"
+        }
+    }
+
     var pixelSize = 20
     var pixelSmooth = 0
 
@@ -21,7 +45,7 @@ class PixelGrid : JPanel() {
     var lineThickness = 1f
 
     var rectangleMatrix: MutableList<MutableList<Rectangle>>
-    var pixelMatrix: MutableList<MutableList<Color?>>
+    var layerList = mutableListOf<Layer>()
 
     var hoverPixel: Rectangle? = null
     var hoverRow = 0
@@ -31,19 +55,14 @@ class PixelGrid : JPanel() {
         isOpaque = false
 
         val rMatrix = mutableListOf<MutableList<Rectangle>>()
-        val pMatrix = mutableListOf<MutableList<Color?>>()
         for (row in 0 until rowAmount) {
             val rectangleCells = mutableListOf<Rectangle>()
-            val pixelCells = mutableListOf<Color?>()
             for (column in 0 until columnAmount) {
                 rectangleCells.add(Rectangle(row * pixelSize, column * pixelSize, pixelSize, pixelSize))
-                pixelCells.add(null)
             }
             rMatrix.add(rectangleCells)
-            pMatrix.add(pixelCells)
         }
         rectangleMatrix = rMatrix
-        pixelMatrix = pMatrix
 
         addMouseMotionListener(object : MouseMotionAdapter() {
             override fun mouseMoved(e: MouseEvent) {
@@ -120,10 +139,12 @@ class PixelGrid : JPanel() {
     fun drawPixels(g2D: Graphics2D) {
         for (row in 0 until rectangleMatrix.size) {
             for (column in 0 until rectangleMatrix[row].size) {
-                if (pixelMatrix[row][column] != null) {
-                    g2D.color = pixelMatrix[row][column]
-                    val rectangle = rectangleMatrix[row][column]
-                    g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, pixelSmooth, pixelSmooth)
+                for (layer in this.layerList.reversed()) {
+                    if (layer.pixelMatrix[row][column].colour != null) {
+                        g2D.color = layer.pixelMatrix[row][column].colour
+                        val rectangle = rectangleMatrix[row][column]
+                        g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, pixelSmooth, pixelSmooth)
+                    }
                 }
             }
         }
@@ -133,13 +154,13 @@ class PixelGrid : JPanel() {
         try {
             when (Components.toolbox.tool) {
                 Toolbox.Tool.PENCIL -> {
-                    pixelMatrix[hoverRow][hoverColumn] = Components.colourShades.selectedShade
+                    layerList[Components.layerList.list.selectedIndex].pixelMatrix[hoverRow][hoverColumn].colour = Components.colourShades.selectedShade
                 }
                 Toolbox.Tool.ERASER -> {
-                    pixelMatrix[hoverRow][hoverColumn] = null
+                    layerList[Components.layerList.list.selectedIndex].pixelMatrix[hoverRow][hoverColumn].colour = null
                 }
                 Toolbox.Tool.PICKER -> {
-                    Components.colourPicker.color = pixelMatrix[hoverRow][hoverColumn]
+                    Components.colourPicker.color = layerList[Components.layerList.list.selectedIndex].pixelMatrix[hoverRow][hoverColumn].colour
                 }
             }
         }

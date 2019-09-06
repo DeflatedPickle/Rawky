@@ -15,6 +15,7 @@ object Components {
     val colourShades = ColourShades()
     val colourLibrary = ColourLibrary()
     val colourPalette = ColourPalette()
+    val layerList = LayerList()
 
     init {
         toolbox.pencilButton.isSelected = true
@@ -30,5 +31,7 @@ object Components {
             colourShades.selectedButton.actionListeners[0].actionPerformed(ActionEvent(colourShades.selectedButton, 0, ""))
             colourShades.selectedButton.text = " "
         }
+
+        layerList.addLayer()
     }
 }
