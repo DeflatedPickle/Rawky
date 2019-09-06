@@ -55,11 +55,17 @@ fun main() {
         colourPalette.isVisible = true
         grid.add(1.0, 1.0, 0.4, 0.6, colourPalette)
 
+        val colourLibrary = DefaultSingleCDockable("colourLibrary", "Colour Library", Components.colourLibrary)
+        cControl.addDockable(colourLibrary)
+        colourLibrary.isVisible = true
+        grid.add(1.0, 1.0, 0.4, 0.6, colourLibrary)
+
         cControl.contentArea.deploy(grid)
 
         Timer(1000 / 60) {
             Components.pixelGrid.repaint()
             Components.tiledView.repaint()
+            Components.colourPalette.repaint()
         }.start()
     }
 

@@ -1,74 +1,112 @@
 package com.deflatedpickle.rawky.components
 
-import com.deflatedpickle.rawky.Icons
-import org.jdesktop.swingx.JXButton
-import org.jdesktop.swingx.painter.CompoundPainter
-import org.jdesktop.swingx.painter.MattePainter
-import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.Color
-import java.awt.Dimension
-import javax.swing.*
-import javax.swing.border.TitledBorder
+import java.awt.Graphics
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
+import java.util.*
+import javax.swing.JMenuItem
+import javax.swing.JPanel
+import javax.swing.JPopupMenu
 
 class ColourPalette : JPanel() {
-    var cellSize = 28
-    val cellList = mutableListOf<JXButton>()
+    class ColourSwatch(var x: Int, var y: Int, val colour: Color)
 
-    val newButton = JButton(Icons.plus).apply {
-        preferredSize = Dimension(cellSize, cellSize)
-        toolTipText = "Add Colour"
+    var cellSize = 40
+    val colourList = mutableListOf<ColourSwatch>()
 
-        addActionListener {
-            this@ColourPalette.add(
-                    JXButton().apply {
-                        val button = this
-                        cellList.add(this)
-                        preferredSize = Dimension(cellSize, cellSize)
-                        backgroundPainter = CompoundPainter<JXButton>(MattePainter(Components.colourShades.selectedShade))
+    var mouseX = 0
+    var mouseY = 0
+    var mouseToggled = false
+    var mouseOffsetX = 0
+    var mouseOffsetY = 0
 
-                        addActionListener {
-                            Components.colourPicker.color = ((backgroundPainter as CompoundPainter<JXButton>).painters[0] as MattePainter).fillPaint as Color
+    var selectedColour: ColourSwatch? = null
+
+    init {
+        addMouseMotionListener(object : MouseAdapter() {
+            override fun mouseMoved(e: MouseEvent) {
+                mouseX = e.x
+                mouseY = e.y
+            }
+
+            override fun mousePressed(e: MouseEvent) {
+                mouseToggled = true
+
+                if (e.button == MouseEvent.BUTTON1) {
+                    if (e.clickCount == 2) {
+                        Components.colourPicker.color = selectedColour?.colour
+                    }
+                }
+            }
+
+            override fun mouseReleased(e: MouseEvent) {
+                mouseToggled = false
+
+                for (i in colourList) {
+                    if (e.x > i.x && e.x < i.x + cellSize
+                            && e.y > i.y && e.y < i.y + cellSize) {
+                        selectedColour = i
+                        Collections.swap(colourList, colourList.indexOf(i), colourList.size - 1)
+                        mouseOffsetX = e.x - i.x
+                        mouseOffsetY = e.y - i.y
+                        break
+                    } else {
+                        selectedColour = null
+                        mouseOffsetX = 0
+                        mouseOffsetY = 0
+                    }
+                }
+            }
+
+            override fun mouseDragged(e: MouseEvent) {
+                if (mouseToggled) {
+                    mouseReleased(e)
+                }
+
+                if (selectedColour != null) {
+                    selectedColour!!.x = e.x - mouseOffsetX
+                    selectedColour!!.y = e.y - mouseOffsetY
+                }
+            }
+        }.apply { addMouseListener(this) })
+
+        componentPopupMenu = JPopupMenu().apply {
+            add(JMenuItem("Add").apply {
+                addActionListener {
+                    colourList.add(ColourSwatch(mouseX, mouseY, Components.colourPicker.color))
+                }
+            })
+
+            add(JMenuItem("Delete").apply {
+                addActionListener {
+                    for (i in colourList) {
+                        if (mouseX > i.x && mouseX < i.x + cellSize
+                                && mouseY > i.y && mouseY < i.y + cellSize) {
+                            colourList.remove(i)
+                            break
                         }
-
-                        // TODO: Add a colour picker to change the cell colour
-                        componentPopupMenu = JPopupMenu().apply {
-                            add(ColourShades().apply {
-                                border = TitledBorder("Change Shade")
-                                preferredSize = Dimension(140, 40)
-
-                                colour = ((backgroundPainter as CompoundPainter<JXButton>).painters[0] as MattePainter).fillPaint as Color
-
-                                for ((index, button) in buttonList.withIndex()) {
-                                    val shades = this.getShades()
-                                    button.addActionListener {
-                                        backgroundPainter = CompoundPainter<JXButton>(MattePainter(shades[index]))
-                                    }
-                                }
-                            })
-                            add(JSeparator())
-                            add(JMenuItem("Delete").apply {
-                                addActionListener {
-                                    cellList.remove(button)
-                                    this@ColourPalette.remove(button)
-
-                                    this@ColourPalette.invalidate()
-                                    this@ColourPalette.revalidate()
-                                    this@ColourPalette.repaint()
-                                }
-                            })
-                        }
-                    },
-                    this@ColourPalette.components.indexOf(this)
-            )
-
-            this.invalidate()
-            this.revalidate()
-            this.repaint()
+                    }
+                }
+            })
         }
     }
 
-    init {
-        this.layout = WrapLayout()
-        add(newButton)
+    override fun paintComponent(g: Graphics) {
+        super.paintComponent(g)
+
+        for (i in this.colourList) {
+            g.color = i.colour
+            g.fillRect(i.x, i.y, cellSize, cellSize)
+
+            if (i == selectedColour) {
+                g.color = Color.GREEN
+                g.drawRect(i.x, i.y, cellSize, cellSize)
+            } else if (mouseX > i.x && mouseX < i.x + cellSize
+                    && mouseY > i.y && mouseY < i.y + cellSize) {
+                g.color = Color.CYAN
+                g.drawRect(i.x, i.y, cellSize, cellSize)
+            }
+        }
     }
 }

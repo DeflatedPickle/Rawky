@@ -13,6 +13,7 @@ object Components {
     val tiledView = TiledView()
     val colourPicker = ColorPicker(false, true)
     val colourShades = ColourShades()
+    val colourLibrary = ColourLibrary()
     val colourPalette = ColourPalette()
 
     init {
