@@ -9,6 +9,10 @@ class PixelGrid : JPanel() {
     var pixelSize = 20
     var pixelSmooth = 0
 
+    var backgroundPixelSize = pixelSize / 3
+    var backgroundFillEven = Color.LIGHT_GRAY
+    var backgroundFillOdd = Color.WHITE
+
     var hoverOpacity = 225 / 3
 
     var rowAmount = 16
@@ -76,6 +80,25 @@ class PixelGrid : JPanel() {
     override fun paintComponent(g: Graphics) {
         val g2D = g as Graphics2D
         g2D.stroke = BasicStroke(lineThickness)
+
+        for (row in 0 until /* this.height */ rowAmount * pixelSize / backgroundPixelSize) {
+            for (column in 0 until /* this.width */ columnAmount * pixelSize / backgroundPixelSize) {
+                g2D.color = if (row % 2 == 0) {
+                    if (column % 2 == 0) {
+                        backgroundFillEven
+                    } else {
+                        backgroundFillOdd
+                    }
+                } else {
+                    if (column % 2 == 0) {
+                        backgroundFillOdd
+                    } else {
+                        backgroundFillEven
+                    }
+                }
+                g2D.fillRect(column * backgroundPixelSize, row * backgroundPixelSize, backgroundPixelSize, backgroundPixelSize)
+            }
+        }
 
         // Draws the pixels
         drawPixels(g2D)
