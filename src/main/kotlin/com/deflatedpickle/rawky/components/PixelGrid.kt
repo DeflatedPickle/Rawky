@@ -145,11 +145,13 @@ class PixelGrid : JPanel() {
     fun drawPixels(g2D: Graphics2D) {
         for (row in 0 until rectangleMatrix.size) {
             for (column in 0 until rectangleMatrix[row].size) {
-                for (layer in this.layerList.reversed()) {
-                    if (layer.pixelMatrix[row][column].colour != null) {
-                        g2D.color = layer.pixelMatrix[row][column].colour
-                        val rectangle = rectangleMatrix[row][column]
-                        g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, pixelSmooth, pixelSmooth)
+                for ((layerIndex, layer) in this.layerList.withIndex().reversed()) {
+                    if (Components.layerList.listModel.dataVector[layerIndex][1] as Boolean) {
+                        if (layer.pixelMatrix[row][column].colour != null) {
+                            g2D.color = layer.pixelMatrix[row][column].colour
+                            val rectangle = rectangleMatrix[row][column]
+                            g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, pixelSmooth, pixelSmooth)
+                        }
                     }
                 }
             }
@@ -160,13 +162,17 @@ class PixelGrid : JPanel() {
         try {
             when (Components.toolbox.tool) {
                 Toolbox.Tool.PENCIL -> {
-                    layerList[Components.layerList.list.selectedIndex].pixelMatrix[hoverRow][hoverColumn].colour = Components.colourShades.selectedShade
+                    if (!(Components.layerList.listModel.dataVector[Components.layerList.list.selectedRow][2] as Boolean)) {
+                        layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour = Components.colourShades.selectedShade
+                    }
                 }
                 Toolbox.Tool.ERASER -> {
-                    layerList[Components.layerList.list.selectedIndex].pixelMatrix[hoverRow][hoverColumn].colour = null
+                    if (!(Components.layerList.listModel.dataVector[Components.layerList.list.selectedRow][2] as Boolean)) {
+                        layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour = null
+                    }
                 }
                 Toolbox.Tool.PICKER -> {
-                    Components.colourPicker.color = layerList[Components.layerList.list.selectedIndex].pixelMatrix[hoverRow][hoverColumn].colour
+                    Components.colourPicker.color = layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour
                 }
             }
         }

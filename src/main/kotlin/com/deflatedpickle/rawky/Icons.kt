@@ -12,4 +12,10 @@ object Icons {
 
     val plus = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/plus.svg"), initialSize)
     val minus = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/minus.svg"), initialSize)
+
+    val lock = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/lock_2.svg"), initialSize)
+    val unlock = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/unlock_2.svg"), initialSize)
+
+    val rounded_rectangle = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/rounded_rectangle.svg"), initialSize)
+    val rounded_rectangle_filled = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/rounded_rectangle_filled.svg"), initialSize)
 }
