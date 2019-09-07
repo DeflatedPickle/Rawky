@@ -13,7 +13,7 @@ import javax.swing.*
 fun main() {
     val frame = JFrame("Rawky")
     frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-    frame.setSize(700, 500)
+    frame.setSize(900, 600)
 
     SwingUtilities.invokeLater {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
@@ -74,22 +74,22 @@ fun main() {
         val colourPicker = DefaultSingleCDockable("colourPicker", "Colour Picker", Components.colourPicker)
         cControl.addDockable(colourPicker)
         colourPicker.isVisible = true
-        grid.add(1.0, 0.3, 0.4, 1.0, colourPicker)
+        grid.add(1.0, 0.3, 0.4, 0.8, colourPicker)
 
         val colourShades = DefaultSingleCDockable("colourShades", "Colour Shades", Components.colourShades)
         cControl.addDockable(colourShades)
         colourShades.isVisible = true
-        grid.add(1.0, 0.8, 0.4, 0.6, colourShades)
+        grid.add(1.0, 0.8, 0.4, 0.4, colourShades)
 
         val colourPalette = DefaultSingleCDockable("colourPalette", "Colour Palette", Components.colourPalette)
         cControl.addDockable(colourPalette)
         colourPalette.isVisible = true
-        grid.add(1.0, 1.0, 0.4, 0.6, colourPalette)
+        grid.add(1.0, 1.2, 0.4, 0.6, colourPalette)
 
         val colourLibrary = DefaultSingleCDockable("colourLibrary", "Colour Library", Components.colourLibrary)
         cControl.addDockable(colourLibrary)
         colourLibrary.isVisible = true
-        grid.add(1.0, 1.0, 0.4, 0.6, colourLibrary)
+        grid.add(1.0, 1.2, 0.4, 0.6, colourLibrary)
 
         cControl.contentArea.deploy(grid)
 
