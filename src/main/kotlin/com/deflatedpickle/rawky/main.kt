@@ -3,25 +3,30 @@ package com.deflatedpickle.rawky
 import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
-import com.deflatedpickle.rawky.components.Components
-import org.pushingpixels.substance.api.skin.SubstanceGraphiteElectricLookAndFeel
-import uk.co.timwise.wraplayout.WrapLayout
+import com.deflatedpickle.rawky.utils.Commands
+import com.deflatedpickle.rawky.utils.Components
+import com.deflatedpickle.rawky.utils.Icons
 import java.awt.BorderLayout
-import java.awt.GridBagLayout
 import javax.swing.*
 
 fun main() {
-    val frame = JFrame("Rawky")
-    frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-    frame.setSize(900, 600)
 
     SwingUtilities.invokeLater {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
         // UIManager.setLookAndFeel(SubstanceGraphiteElectricLookAndFeel())
+        Components.frame.layout = BorderLayout()
 
-        val cControl = CControl(frame)
+        Components.frame.add(JToolBar().apply {
+            add(JButton(Icons.picture).apply {
+                addActionListener {
+                    Commands.save()
+                }
+            })
+        }, BorderLayout.PAGE_START)
+
+        val cControl = CControl(Components.frame)
         cControl.contentArea.isOpaque = false
-        frame.add(cControl.contentArea)
+        Components.frame.add(cControl.contentArea)
 
         val grid = CGrid(cControl)
 
@@ -100,5 +105,5 @@ fun main() {
         }.start()
     }
 
-    frame.isVisible = true
+    Components.frame.isVisible = true
 }

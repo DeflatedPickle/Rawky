@@ -1,6 +1,6 @@
 package com.deflatedpickle.rawky.components
 
-import com.deflatedpickle.rawky.Icons
+import com.deflatedpickle.rawky.utils.Icons
 import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.Dimension
 import javax.swing.AbstractButton

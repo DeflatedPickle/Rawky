@@ -1,8 +1,8 @@
 package com.deflatedpickle.rawky.components
 
-import com.deflatedpickle.rawky.Icons
+import com.deflatedpickle.rawky.utils.Icons
+import com.deflatedpickle.rawky.utils.Components
 import java.awt.BorderLayout
-import java.awt.Component
 import javax.swing.*
 import javax.swing.table.DefaultTableModel
 import javax.swing.table.TableCellRenderer
@@ -50,9 +50,14 @@ class LayerList : JPanel() {
         add(list)
 
         add(JToolBar().apply {
-            add(JButton(Icons.plus).apply {
+            add(JButton(Icons.create_new).apply {
                 addActionListener {
                     addLayer()
+                }
+            })
+            add(JButton(Icons.trash).apply {
+                addActionListener {
+                    removeLayer()
                 }
             })
         }, BorderLayout.PAGE_END)
@@ -63,5 +68,10 @@ class LayerList : JPanel() {
         list.setRowSelectionInterval(0, 0)
 
         Components.pixelGrid.layerList.add(0, PixelGrid.Layer())
+    }
+
+    fun removeLayer() {
+        Components.pixelGrid.layerList.removeAt(list.selectedRow)
+        listModel.removeRow(list.selectedRow)
     }
 }

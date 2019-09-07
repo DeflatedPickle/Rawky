@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.components
 
+import com.deflatedpickle.rawky.utils.Components
 import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
