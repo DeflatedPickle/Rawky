@@ -81,7 +81,23 @@ fun main() {
         colourPicker.isVisible = true
         grid.add(1.0, 0.3, 0.4, 0.8, colourPicker)
 
-        val colourShades = DefaultSingleCDockable("colourShades", "Colour Shades", Components.colourShades)
+        val colourShades = DefaultSingleCDockable("colourShades", "Colour Shades", JPanel().apply {
+            isOpaque = false
+            layout = BorderLayout()
+
+            add(Components.colourShades)
+
+            add(JToolBar().apply {
+                add(JSlider(3, 21).apply {
+                    addChangeListener {
+                        Components.colourShades.amount = this.value
+                        Components.colourShades.createShades()
+                        Components.colourShades.updateShades()
+                        Components.colourShades.repaint()
+                    }
+                })
+            }, BorderLayout.PAGE_END)
+        })
         cControl.addDockable(colourShades)
         colourShades.isVisible = true
         grid.add(1.0, 0.8, 0.4, 0.4, colourShades)

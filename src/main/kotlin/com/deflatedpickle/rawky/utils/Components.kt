@@ -30,13 +30,7 @@ object Components {
         colourPicker.color = Color.WHITE
         colourPicker.addColorListener {
             colourShades.colour = colourPicker.color
-
-            val shades = colourShades.getShades()
-            for ((index, button) in colourShades.buttonList.withIndex()) {
-                button.backgroundPainter = CompoundPainter<JXButton>(MattePainter(shades[index]))
-            }
-            colourShades.selectedButton.actionListeners[0].actionPerformed(ActionEvent(colourShades.selectedButton, 0, ""))
-            colourShades.selectedButton.text = " "
+            colourShades.updateShades()
         }
 
         layerList.addLayer()
