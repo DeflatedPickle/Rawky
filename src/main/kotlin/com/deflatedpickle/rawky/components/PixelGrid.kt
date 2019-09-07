@@ -1,9 +1,10 @@
 package com.deflatedpickle.rawky.components
 
 import java.awt.*
-import java.awt.event.*
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
+import java.awt.event.MouseMotionAdapter
 import javax.swing.JPanel
-import javax.swing.Timer
 
 class PixelGrid : JPanel() {
     class Layer {
@@ -54,15 +55,7 @@ class PixelGrid : JPanel() {
     init {
         isOpaque = false
 
-        val rMatrix = mutableListOf<MutableList<Rectangle>>()
-        for (row in 0 until rowAmount) {
-            val rectangleCells = mutableListOf<Rectangle>()
-            for (column in 0 until columnAmount) {
-                rectangleCells.add(Rectangle(row * pixelSize, column * pixelSize, pixelSize, pixelSize))
-            }
-            rMatrix.add(rectangleCells)
-        }
-        rectangleMatrix = rMatrix
+        rectangleMatrix = zoom()
 
         addMouseMotionListener(object : MouseMotionAdapter() {
             override fun mouseMoved(e: MouseEvent) {
@@ -134,6 +127,19 @@ class PixelGrid : JPanel() {
                 g2D.drawRect(column.x, column.y, column.width, column.height)
             }
         }
+    }
+
+    fun zoom(): MutableList<MutableList<Rectangle>> {
+        val rMatrix = mutableListOf<MutableList<Rectangle>>()
+        for (row in 0 until rowAmount) {
+            val rectangleCells = mutableListOf<Rectangle>()
+            for (column in 0 until columnAmount) {
+                rectangleCells.add(Rectangle(row * pixelSize, column * pixelSize, pixelSize, pixelSize))
+            }
+            rMatrix.add(rectangleCells)
+        }
+
+        return rMatrix
     }
 
     fun drawPixels(g2D: Graphics2D) {

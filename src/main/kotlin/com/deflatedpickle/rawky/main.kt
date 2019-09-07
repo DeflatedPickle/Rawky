@@ -40,7 +40,33 @@ fun main() {
         layerList.isVisible = true
         grid.add(0.0, 1.0, 0.6, 1.0, layerList)
 
-        val pixelGrid = DefaultSingleCDockable("pixelGrid", "Pixel Grid", Components.pixelGrid)
+        val pixelGrid = DefaultSingleCDockable("pixelGrid", "Pixel Grid", JPanel().apply {
+            isOpaque = false
+            layout = BorderLayout()
+
+            add(Components.pixelGrid)
+
+            add(JToolBar().apply {
+                val slider = JSlider(1, 100).apply {
+                    this.value = Components.pixelGrid.pixelSize
+                    addChangeListener {
+                        Components.pixelGrid.pixelSize = this.value
+                        Components.pixelGrid.rectangleMatrix = Components.pixelGrid.zoom()
+                    }
+                }
+                add(JButton(Icons.minus).apply {
+                    addActionListener {
+                        slider.value--
+                    }
+                })
+                add(slider)
+                add(JButton(Icons.plus).apply {
+                    addActionListener {
+                        slider.value++
+                    }
+                })
+            }, BorderLayout.PAGE_END)
+        })
         cControl.addDockable(pixelGrid)
         pixelGrid.isVisible = true
         grid.add(0.6, 0.3, 0.6, 2.0, pixelGrid)
