@@ -99,13 +99,16 @@ class PixelGrid : JPanel() {
                 g2D.color = if (row % 2 == 0) {
                     if (column % 2 == 0) {
                         backgroundFillEven
-                    } else {
+                    }
+                    else {
                         backgroundFillOdd
                     }
-                } else {
+                }
+                else {
                     if (column % 2 == 0) {
                         backgroundFillOdd
-                    } else {
+                    }
+                    else {
                         backgroundFillEven
                     }
                 }
@@ -114,7 +117,9 @@ class PixelGrid : JPanel() {
         }
 
         // Draws the pixels
-        drawPixels(g2D)
+        for ((layerIndex, layer) in this.layerList.withIndex().reversed()) {
+            drawPixels(layerIndex, layer, g2D)
+        }
 
         if (hoverPixel != null) {
             g2D.color = Color(Components.colourShades.selectedShade.red, Components.colourShades.selectedShade.green, Components.colourShades.selectedShade.blue, hoverOpacity)
@@ -143,16 +148,14 @@ class PixelGrid : JPanel() {
         return rMatrix
     }
 
-    fun drawPixels(g2D: Graphics2D) {
+    fun drawPixels(layerIndex: Int, layer: Layer, g2D: Graphics2D) {
         for (row in 0 until rectangleMatrix.size) {
             for (column in 0 until rectangleMatrix[row].size) {
-                for ((layerIndex, layer) in this.layerList.withIndex().reversed()) {
-                    if (Components.layerList.listModel.dataVector[layerIndex][1] as Boolean) {
-                        if (layer.pixelMatrix[row][column].colour != null) {
-                            g2D.color = layer.pixelMatrix[row][column].colour
-                            val rectangle = rectangleMatrix[row][column]
-                            g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, pixelSmooth, pixelSmooth)
-                        }
+                if (Components.layerList.listModel.dataVector[layerIndex][2] as Boolean) {
+                    if (layer.pixelMatrix[row][column].colour != null) {
+                        g2D.color = layer.pixelMatrix[row][column].colour
+                        val rectangle = rectangleMatrix[row][column]
+                        g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, pixelSmooth, pixelSmooth)
                     }
                 }
             }
@@ -163,12 +166,12 @@ class PixelGrid : JPanel() {
         try {
             when (Components.toolbox.tool) {
                 Toolbox.Tool.PENCIL -> {
-                    if (!(Components.layerList.listModel.dataVector[Components.layerList.list.selectedRow][2] as Boolean)) {
+                    if (!(Components.layerList.listModel.dataVector[Components.layerList.list.selectedRow][3] as Boolean)) {
                         layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour = Components.colourShades.selectedShade
                     }
                 }
                 Toolbox.Tool.ERASER -> {
-                    if (!(Components.layerList.listModel.dataVector[Components.layerList.list.selectedRow][2] as Boolean)) {
+                    if (!(Components.layerList.listModel.dataVector[Components.layerList.list.selectedRow][3] as Boolean)) {
                         layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour = null
                     }
                 }

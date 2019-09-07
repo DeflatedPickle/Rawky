@@ -118,6 +118,7 @@ fun main() {
             Components.pixelGrid.repaint()
             Components.tiledView.repaint()
             Components.colourPalette.repaint()
+            Components.layerList.repaint()
         }.start()
     }
 

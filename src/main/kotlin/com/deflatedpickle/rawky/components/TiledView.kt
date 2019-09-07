@@ -22,7 +22,9 @@ class TiledView : JPanel() {
 
         for (row in 0 until rows) {
             for (column in 0 until columns) {
-                Components.pixelGrid.drawPixels(g2D)
+                for ((layerIndex, layer) in Components.pixelGrid.layerList.withIndex().reversed()) {
+                    Components.pixelGrid.drawPixels(layerIndex, layer, g2D)
+                }
                 g2D.translate((Components.pixelGrid.pixelSize + padding) * 16, 0)
             }
             g2D.translate(0, (Components.pixelGrid.pixelSize + padding) * 16)
