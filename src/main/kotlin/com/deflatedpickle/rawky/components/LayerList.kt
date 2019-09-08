@@ -7,6 +7,7 @@ import java.awt.*
 import java.util.*
 import javax.swing.*
 import javax.swing.Timer
+import javax.swing.border.LineBorder
 import javax.swing.table.DefaultTableModel
 import javax.swing.table.TableCellEditor
 import javax.swing.table.TableCellRenderer
@@ -47,7 +48,7 @@ class LayerList : JPanel() {
                         val g2D = g as Graphics2D
                         g2D.scale(0.12, 0.12)
 
-                        Components.pixelGrid.drawPixels(row, Components.pixelGrid.layerList[row], g2D)
+                        Components.pixelGrid.drawPixels(row, Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[row], g2D)
                     }
                 }
             }
@@ -86,30 +87,17 @@ class LayerList : JPanel() {
         layout = BorderLayout()
 
         add(list)
-
-        add(JToolBar().apply {
-            add(JButton(Icons.create_new).apply {
-                addActionListener {
-                    addLayer()
-                }
-            })
-            add(JButton(Icons.trash).apply {
-                addActionListener {
-                    removeLayer()
-                }
-            })
-        }, BorderLayout.PAGE_END)
     }
 
     fun addLayer() {
         listModel.insertRow(0, arrayOf(null, "Layer ${listModel.rowCount}", true, false))
         list.setRowSelectionInterval(0, 0)
 
-        Components.pixelGrid.layerList.add(0, PixelGrid.Layer())
+        Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.add(0, PixelGrid.Layer())
     }
 
     fun removeLayer() {
-        Components.pixelGrid.layerList.removeAt(list.selectedRow)
+        Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.removeAt(list.selectedRow)
         listModel.removeRow(list.selectedRow)
     }
 }

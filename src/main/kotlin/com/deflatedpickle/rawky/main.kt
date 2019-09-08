@@ -7,7 +7,9 @@ import com.deflatedpickle.rawky.utils.Commands
 import com.deflatedpickle.rawky.utils.Components
 import com.deflatedpickle.rawky.utils.Icons
 import java.awt.BorderLayout
+import java.awt.Color
 import javax.swing.*
+import javax.swing.border.LineBorder
 
 fun main() {
 
@@ -40,7 +42,52 @@ fun main() {
         tiledView.isVisible = true
         grid.add(0.0, 0.3, 0.6, 1.0, tiledView)
 
-        val layerList = DefaultSingleCDockable("layerList", "Layer List", Components.layerList)
+        val animationPreview = DefaultSingleCDockable("animationPreview", "Animation Preview", JPanel().apply {
+            isOpaque = false
+            layout = BorderLayout()
+
+            add(Components.animationPreview)
+
+            add(JToolBar().apply {
+                add(JSpinner(SpinnerNumberModel(1, 1, 240, 1)).apply {
+                    val timer = Timer(1000 / this.value as Int) {
+                        if (Components.animationPreview.frame < Components.animationTimeline.listModel.size() - 1) {
+                            Components.animationPreview.frame++
+                        }
+                        else {
+                            Components.animationPreview.frame = 0
+                        }
+                    }.apply { start() }
+
+                    addChangeListener {
+                        timer.delay = 1000 / this.value as Int
+                    }
+                })
+            }, BorderLayout.PAGE_END)
+        })
+        cControl.addDockable(animationPreview)
+        animationPreview.isVisible = true
+        grid.add(0.0, 0.3, 0.6, 1.0, animationPreview)
+
+        val layerList = DefaultSingleCDockable("layerList", "Layer List", JPanel().apply {
+            isOpaque = false
+            layout = BorderLayout()
+
+            add(JScrollPane(Components.layerList))
+
+            add(JToolBar().apply {
+                add(JButton(Icons.create_new).apply {
+                    addActionListener {
+                        Components.layerList.addLayer()
+                    }
+                })
+                add(JButton(Icons.trash).apply {
+                    addActionListener {
+                        Components.layerList.removeLayer()
+                    }
+                })
+            }, BorderLayout.PAGE_END)
+        })
         cControl.addDockable(layerList)
         layerList.isVisible = true
         grid.add(0.0, 1.0, 0.6, 1.0, layerList)
@@ -74,7 +121,24 @@ fun main() {
         })
         cControl.addDockable(pixelGrid)
         pixelGrid.isVisible = true
-        grid.add(0.6, 0.3, 0.6, 2.0, pixelGrid)
+        grid.add(0.6, 0.3, 0.6, 1.4, pixelGrid)
+
+        val animationTimeline = DefaultSingleCDockable("animationTimeline", "Animation Timeline", JPanel().apply {
+            layout = BorderLayout()
+
+            add(JScrollPane(Components.animationTimeline))
+
+            add(JToolBar().apply {
+                add(JButton(Icons.create_new).apply {
+                    addActionListener {
+                        Components.animationTimeline.addFrame()
+                    }
+                })
+            }, BorderLayout.PAGE_END)
+        })
+        cControl.addDockable(animationTimeline)
+        animationTimeline.isVisible = true
+        grid.add(0.6, 1.4, 0.6, 0.6, animationTimeline)
 
         val colourPicker = DefaultSingleCDockable("colourPicker", "Colour Picker", Components.colourPicker)
         cControl.addDockable(colourPicker)
@@ -85,10 +149,12 @@ fun main() {
             isOpaque = false
             layout = BorderLayout()
 
-            add(Components.colourShades)
+            add(JScrollPane(Components.colourShades))
 
             add(JToolBar().apply {
-                add(JSlider(3, 21).apply {
+                add(JSlider(3, 51).apply {
+                    value = Components.colourShades.amount
+
                     addChangeListener {
                         Components.colourShades.amount = this.value
                         Components.colourShades.createShades()
@@ -105,12 +171,12 @@ fun main() {
         val colourPalette = DefaultSingleCDockable("colourPalette", "Colour Palette", Components.colourPalette)
         cControl.addDockable(colourPalette)
         colourPalette.isVisible = true
-        grid.add(1.0, 1.2, 0.4, 0.6, colourPalette)
+        grid.add(1.2, 1.2, 0.4, 0.8, colourPalette)
 
         val colourLibrary = DefaultSingleCDockable("colourLibrary", "Colour Library", Components.colourLibrary)
         cControl.addDockable(colourLibrary)
         colourLibrary.isVisible = true
-        grid.add(1.0, 1.2, 0.4, 0.6, colourLibrary)
+        grid.add(1.2, 1.2, 0.4, 0.8, colourLibrary)
 
         cControl.contentArea.deploy(grid)
 
@@ -119,6 +185,8 @@ fun main() {
             Components.tiledView.repaint()
             Components.colourPalette.repaint()
             Components.layerList.repaint()
+            Components.animationPreview.repaint()
+            Components.animationTimeline.repaint()
         }.start()
     }
 

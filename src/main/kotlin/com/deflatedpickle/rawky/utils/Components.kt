@@ -20,10 +20,12 @@ object Components {
     val colourLibrary = ColourLibrary()
     val colourPalette = ColourPalette()
     val layerList = LayerList()
+    val animationTimeline = AnimationTimeline()
+    val animationPreview = AnimationPreview()
 
     init {
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-        frame.setSize(900, 600)
+        frame.setSize(1200, 800)
 
         toolbox.pencilButton.isSelected = true
 
@@ -33,6 +35,6 @@ object Components {
             colourShades.updateShades()
         }
 
-        layerList.addLayer()
+        animationTimeline.addFrame()
     }
 }

@@ -8,6 +8,10 @@ import java.awt.event.MouseMotionAdapter
 import javax.swing.JPanel
 
 class PixelGrid : JPanel() {
+    class Frame {
+        val layerList = mutableListOf<Layer>()
+    }
+
     class Layer {
         val pixelMatrix: MutableList<MutableList<Cell>>
 
@@ -47,7 +51,7 @@ class PixelGrid : JPanel() {
     var lineThickness = 1f
 
     var rectangleMatrix: MutableList<MutableList<Rectangle>>
-    var layerList = mutableListOf<Layer>()
+    var frameList = mutableListOf<Frame>()
 
     var hoverPixel: Rectangle? = null
     var hoverRow = 0
@@ -117,7 +121,7 @@ class PixelGrid : JPanel() {
         }
 
         // Draws the pixels
-        for ((layerIndex, layer) in this.layerList.withIndex().reversed()) {
+        for ((layerIndex, layer) in frameList[Components.animationTimeline.list.selectedIndex].layerList.withIndex().reversed()) {
             drawPixels(layerIndex, layer, g2D)
         }
 
@@ -167,16 +171,16 @@ class PixelGrid : JPanel() {
             when (Components.toolbox.tool) {
                 Toolbox.Tool.PENCIL -> {
                     if (!(Components.layerList.listModel.dataVector[Components.layerList.list.selectedRow][3] as Boolean)) {
-                        layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour = Components.colourShades.selectedShade
+                        frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour = Components.colourShades.selectedShade
                     }
                 }
                 Toolbox.Tool.ERASER -> {
                     if (!(Components.layerList.listModel.dataVector[Components.layerList.list.selectedRow][3] as Boolean)) {
-                        layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour = null
+                        frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour = null
                     }
                 }
                 Toolbox.Tool.PICKER -> {
-                    Components.colourPicker.color = layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour
+                    Components.colourPicker.color = frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour
                 }
             }
         }

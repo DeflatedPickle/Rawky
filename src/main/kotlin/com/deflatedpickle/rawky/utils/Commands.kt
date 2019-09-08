@@ -16,8 +16,10 @@ object Commands {
             ImageIO.write(BufferedImage(Components.pixelGrid.columnAmount, Components.pixelGrid.rowAmount, BufferedImage.TYPE_INT_ARGB).apply {
                 for (row in 0 until Components.pixelGrid.rowAmount) {
                     for (column in 0 until Components.pixelGrid.columnAmount) {
-                        for (layer in Components.pixelGrid.layerList.reversed()) {
-                            layer.pixelMatrix[row][column].colour?.rgb?.let { setRGB(row, column, it) }
+                        for (frame in Components.pixelGrid.frameList) {
+                            for (layer in frame.layerList.reversed()) {
+                                layer.pixelMatrix[row][column].colour?.rgb?.let { setRGB(row, column, it) }
+                            }
                         }
                     }
                 }
