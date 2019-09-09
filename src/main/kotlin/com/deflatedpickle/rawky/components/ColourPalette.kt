@@ -1,14 +1,17 @@
 package com.deflatedpickle.rawky.components
 
 import com.deflatedpickle.rawky.utils.Components
+import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics
+import java.awt.Graphics2D
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.util.*
 import javax.swing.JMenuItem
 import javax.swing.JPanel
 import javax.swing.JPopupMenu
+import javax.swing.UIManager
 
 class ColourPalette : JPanel() {
     class ColourSwatch(var x: Int, var y: Int, val colour: Color)
@@ -95,18 +98,25 @@ class ColourPalette : JPanel() {
 
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
+        val g2D = g as Graphics2D
 
         for (i in this.colourList) {
-            g.color = i.colour
-            g.fillRect(i.x, i.y, cellSize, cellSize)
+            g2D.color = i.colour
+            g2D.fillRect(i.x, i.y, cellSize, cellSize)
 
-            if (i == selectedColour) {
-                g.color = Color.GREEN
-                g.drawRect(i.x, i.y, cellSize, cellSize)
+            g2D.color = UIManager.getColor("List.selectionBackground")
+            val strokeThickness = if (i == selectedColour) {
+                3f
             } else if (mouseX > i.x && mouseX < i.x + cellSize
                     && mouseY > i.y && mouseY < i.y + cellSize) {
-                g.color = Color.CYAN
-                g.drawRect(i.x, i.y, cellSize, cellSize)
+                2f
+            } else {
+                0f
+            }
+
+            if (strokeThickness > 0) {
+                g2D.stroke = BasicStroke(strokeThickness)
+                g2D.drawRect(i.x, i.y, cellSize, cellSize)
             }
         }
     }

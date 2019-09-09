@@ -1,8 +1,9 @@
 package com.deflatedpickle.rawky.dialogue
 
+import com.alee.laf.WebLookAndFeel
+import com.bulenkov.darcula.DarculaLaf
 import com.deflatedpickle.rawky.utils.Components
 import org.pushingpixels.substance.api.skin.SubstanceGraphiteElectricLookAndFeel
-import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
@@ -14,7 +15,7 @@ class Settings : JDialog(Components.frame, "Settings") {
         layout = GridBagLayout()
     }
 
-    val appearanceComboBoxModel = DefaultComboBoxModel(arrayOf("Metal", "System", "Substance Graphite Electric"))
+    val appearanceComboBoxModel = DefaultComboBoxModel(arrayOf("Metal", "System", "Dracula", "Substance Graphite Electric", "Web"))
 
     init {
         layout = GridBagLayout()
@@ -39,7 +40,9 @@ class Settings : JDialog(Components.frame, "Settings") {
                                 when (selectedIndex) {
                                     0 -> UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName())
                                     1 -> UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
-                                    2 -> UIManager.setLookAndFeel(SubstanceGraphiteElectricLookAndFeel())
+                                    2 -> UIManager.setLookAndFeel(DarculaLaf())
+                                    3 -> UIManager.setLookAndFeel(SubstanceGraphiteElectricLookAndFeel())
+                                    4 -> UIManager.setLookAndFeel(WebLookAndFeel())
                                 }
                                 SwingUtilities.updateComponentTreeUI(Components.frame)
                                 SwingUtilities.updateComponentTreeUI(this@Settings)
@@ -47,6 +50,7 @@ class Settings : JDialog(Components.frame, "Settings") {
                         })
                     }
                 }
+                panel.revalidate()
             }
         }), GridBagConstraints().apply {
             weightx = 0.0

@@ -44,7 +44,11 @@ dependencies {
     implementation 'com.github.DeflatedPickle:WrapLayout:master-SNAPSHOT'
 
     // Themes
+    implementation 'com.github.lkishalmi:Darcula:gradle-SNAPSHOT'
     implementation 'org.pushing-pixels:radiance-substance:2.0.1'
+    //nimplementation 'com.github.vincenzopalazzo:material-ui-swing:V1.0.Beta1.4.1'
+    implementation 'com.weblookandfeel:weblaf-core:1.2.8'
+    implementation 'com.weblookandfeel:weblaf-ui:1.2.8'
 
     // OBJ Models
     implementation 'de.javagl:obj:0.3.0'

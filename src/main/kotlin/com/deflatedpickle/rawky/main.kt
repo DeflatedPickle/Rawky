@@ -3,6 +3,7 @@ package com.deflatedpickle.rawky
 import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
+import com.bulenkov.darcula.DarculaLaf
 import com.deflatedpickle.rawky.menu.File
 import com.deflatedpickle.rawky.menu.Program
 import com.deflatedpickle.rawky.utils.Commands
@@ -12,10 +13,8 @@ import java.awt.BorderLayout
 import javax.swing.*
 
 fun main() {
-
     SwingUtilities.invokeLater {
-        // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
-        // UIManager.setLookAndFeel(SubstanceGraphiteElectricLookAndFeel())
+        UIManager.setLookAndFeel(DarculaLaf())
 
         Components.frame.jMenuBar = JMenuBar().apply {
             add(File())

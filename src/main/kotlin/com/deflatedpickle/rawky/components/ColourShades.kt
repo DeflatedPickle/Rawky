@@ -9,6 +9,7 @@ import java.awt.Color
 import java.awt.Dimension
 import java.awt.event.ActionEvent
 import javax.swing.JPanel
+import javax.swing.UIManager
 import javax.swing.border.Border
 import javax.swing.border.LineBorder
 import kotlin.math.max
@@ -61,7 +62,7 @@ class ColourShades : JPanel() {
                         b.border = cachedBorder
                     }
 
-                    border = LineBorder(Color.WHITE, 2)
+                    border = LineBorder(UIManager.getColor("List.selectionBackground"), 2)
                 }
             })
         }
