@@ -51,6 +51,7 @@ class PixelGrid : JPanel() {
     var columnAmount = 16
 
     var lineThickness = 1f
+    var gridColour = Color.GRAY
 
     var rectangleMatrix: MutableList<MutableList<Rectangle>>
     var frameList = mutableListOf<Frame>()
@@ -167,7 +168,7 @@ class PixelGrid : JPanel() {
     }
 
     fun drawGrid(g2D: Graphics2D) {
-        g2D.color = Color.GRAY
+        g2D.color = gridColour
         for (row in rectangleMatrix) {
             for (column in row) {
                 g2D.drawRect(column.x, column.y, column.width, column.height)
