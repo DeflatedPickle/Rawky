@@ -53,6 +53,10 @@ class LayerList : JPanel() {
 
                     override fun paintComponent(g: Graphics) {
                         val g2D = g as Graphics2D
+
+                        g2D.color = Color.WHITE
+                        g2D.fillRect(0, 0, width, height)
+                        
                         g2D.scale(0.12, 0.12)
 
                         // Components.pixelGrid.drawTransparentBackground(g2D)
