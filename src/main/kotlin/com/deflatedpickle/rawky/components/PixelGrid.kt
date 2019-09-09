@@ -100,27 +100,7 @@ class PixelGrid : JPanel() {
         val g2D = g as Graphics2D
         g2D.stroke = BasicStroke(lineThickness)
 
-        for (row in 0 until /* this.height */ rowAmount * pixelSize / backgroundPixelSize) {
-            for (column in 0 until /* this.width */ columnAmount * pixelSize / backgroundPixelSize) {
-                g2D.color = if (row % 2 == 0) {
-                    if (column % 2 == 0) {
-                        backgroundFillEven
-                    }
-                    else {
-                        backgroundFillOdd
-                    }
-                }
-                else {
-                    if (column % 2 == 0) {
-                        backgroundFillOdd
-                    }
-                    else {
-                        backgroundFillEven
-                    }
-                }
-                g2D.fillRect(column * backgroundPixelSize, row * backgroundPixelSize, backgroundPixelSize, backgroundPixelSize)
-            }
-        }
+        drawTransparentBackground(g2D)
 
         // Draws the pixels
         for ((layerIndex, layer) in frameList[Components.animationTimeline.list.selectedIndex].layerList.withIndex().reversed()) {
@@ -132,13 +112,7 @@ class PixelGrid : JPanel() {
             g2D.fillRect(hoverPixel!!.x, hoverPixel!!.y, hoverPixel!!.width, hoverPixel!!.height)
         }
 
-        // Draws the grid
-        g2D.color = Color.GRAY
-        for (row in rectangleMatrix) {
-            for (column in row) {
-                g2D.drawRect(column.x, column.y, column.width, column.height)
-            }
-        }
+        drawGrid(g2D)
     }
 
     fun zoom(): MutableList<MutableList<Rectangle>> {
@@ -164,6 +138,39 @@ class PixelGrid : JPanel() {
                         g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, pixelSmooth, pixelSmooth)
                     }
                 }
+            }
+        }
+    }
+
+    fun drawTransparentBackground(g2D: Graphics2D) {
+        for (row in 0 until /* this.height */ rowAmount * pixelSize / backgroundPixelSize) {
+            for (column in 0 until /* this.width */ columnAmount * pixelSize / backgroundPixelSize) {
+                g2D.color = if (row % 2 == 0) {
+                    if (column % 2 == 0) {
+                        backgroundFillEven
+                    }
+                    else {
+                        backgroundFillOdd
+                    }
+                }
+                else {
+                    if (column % 2 == 0) {
+                        backgroundFillOdd
+                    }
+                    else {
+                        backgroundFillEven
+                    }
+                }
+                g2D.fillRect(column * backgroundPixelSize, row * backgroundPixelSize, backgroundPixelSize, backgroundPixelSize)
+            }
+        }
+    }
+
+    fun drawGrid(g2D: Graphics2D) {
+        g2D.color = Color.GRAY
+        for (row in rectangleMatrix) {
+            for (column in row) {
+                g2D.drawRect(column.x, column.y, column.width, column.height)
             }
         }
     }

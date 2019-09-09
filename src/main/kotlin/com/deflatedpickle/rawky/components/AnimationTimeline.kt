@@ -41,6 +41,8 @@ class AnimationTimeline : JPanel() {
 
                         g2D.scale(0.24, 0.24)
 
+                        // Components.pixelGrid.drawTransparentBackground(g2D)
+
                         for ((layerIndex, layer) in Components.pixelGrid.frameList[index].layerList.withIndex().reversed()) {
                             Components.pixelGrid.drawPixels(layerIndex, layer, g2D)
                         }

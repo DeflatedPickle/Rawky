@@ -3,6 +3,7 @@ package com.deflatedpickle.rawky
 import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
+import com.deflatedpickle.rawky.menu.File
 import com.deflatedpickle.rawky.utils.Commands
 import com.deflatedpickle.rawky.utils.Components
 import com.deflatedpickle.rawky.utils.Icons
@@ -14,16 +15,23 @@ fun main() {
     SwingUtilities.invokeLater {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
         // UIManager.setLookAndFeel(SubstanceGraphiteElectricLookAndFeel())
+
+        Components.frame.jMenuBar = JMenuBar().apply {
+            add(File())
+        }
+
         Components.frame.layout = BorderLayout()
 
         Components.frame.add(JToolBar().apply {
             add(JButton(Icons.opened_folder).apply {
+                toolTipText = "Open File"
                 addActionListener {
                     Commands.open()
                 }
             })
 
             add(JButton(Icons.picture).apply {
+                toolTipText = "Save File As"
                 addActionListener {
                     Commands.save()
                 }
@@ -81,11 +89,13 @@ fun main() {
 
             add(JToolBar().apply {
                 add(JButton(Icons.create_new).apply {
+                    toolTipText = "New Layer"
                     addActionListener {
                         Components.layerList.addLayer()
                     }
                 })
                 add(JButton(Icons.trash).apply {
+                    toolTipText = "Delete Layer"
                     addActionListener {
                         Components.layerList.removeLayer()
                     }
@@ -111,12 +121,14 @@ fun main() {
                     }
                 }
                 add(JButton(Icons.minus).apply {
+                    toolTipText = "Zoom Out"
                     addActionListener {
                         slider.value--
                     }
                 })
                 add(slider)
                 add(JButton(Icons.plus).apply {
+                    toolTipText = "Zoom In"
                     addActionListener {
                         slider.value++
                     }
@@ -134,6 +146,7 @@ fun main() {
 
             add(JToolBar().apply {
                 add(JButton(Icons.create_new).apply {
+                    toolTipText = "New Frame"
                     addActionListener {
                         Components.animationTimeline.addFrame()
                     }

@@ -55,6 +55,8 @@ class LayerList : JPanel() {
                         val g2D = g as Graphics2D
                         g2D.scale(0.12, 0.12)
 
+                        // Components.pixelGrid.drawTransparentBackground(g2D)
+
                         Components.pixelGrid.drawPixels(row, Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[row], g2D)
                     }
                 }
