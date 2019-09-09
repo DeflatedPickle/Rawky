@@ -33,4 +33,6 @@ object Icons {
 
     val rounded_rectangle = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/rounded_rectangle.svg"), initialSize)
     val rounded_rectangle_filled = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/rounded_rectangle_filled.svg"), initialSize)
+
+    val settings = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/settings.svg"), initialSize)
 }

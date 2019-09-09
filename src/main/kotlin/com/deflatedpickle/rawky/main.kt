@@ -4,6 +4,7 @@ import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
 import com.deflatedpickle.rawky.menu.File
+import com.deflatedpickle.rawky.menu.Program
 import com.deflatedpickle.rawky.utils.Commands
 import com.deflatedpickle.rawky.utils.Components
 import com.deflatedpickle.rawky.utils.Icons
@@ -13,11 +14,12 @@ import javax.swing.*
 fun main() {
 
     SwingUtilities.invokeLater {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
+        // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
         // UIManager.setLookAndFeel(SubstanceGraphiteElectricLookAndFeel())
 
         Components.frame.jMenuBar = JMenuBar().apply {
             add(File())
+            add(Program())
         }
 
         Components.frame.layout = BorderLayout()
