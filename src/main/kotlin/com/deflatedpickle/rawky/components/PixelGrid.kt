@@ -13,7 +13,9 @@ class PixelGrid : JPanel() {
     }
 
     class Layer {
-        val pixelMatrix: MutableList<MutableList<Cell>>
+        var pixelMatrix: MutableList<MutableList<Cell>>
+        var visible = true
+        var locked = false
 
         init {
             val rowList = mutableListOf<MutableList<Cell>>()

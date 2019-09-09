@@ -51,6 +51,9 @@ dependencies {
 
     // SVG Icons
     implementation 'org.pushing-pixels:radiance-photon:2.0.1'
+
+    // File Format
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
 
 compileKotlin {

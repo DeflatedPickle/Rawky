@@ -17,7 +17,7 @@ import kotlin.math.roundToInt
 
 class ColourShades : JPanel() {
     // TODO: Split the amount for darker and lighter shades
-    var amount = 7
+    var amount = 14
     val buttonSize = Dimension(40, 20)
     val buttonList = mutableListOf<JXButton>()
 

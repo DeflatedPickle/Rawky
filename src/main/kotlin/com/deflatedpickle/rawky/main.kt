@@ -7,9 +7,7 @@ import com.deflatedpickle.rawky.utils.Commands
 import com.deflatedpickle.rawky.utils.Components
 import com.deflatedpickle.rawky.utils.Icons
 import java.awt.BorderLayout
-import java.awt.Color
 import javax.swing.*
-import javax.swing.border.LineBorder
 
 fun main() {
 
@@ -19,6 +17,12 @@ fun main() {
         Components.frame.layout = BorderLayout()
 
         Components.frame.add(JToolBar().apply {
+            add(JButton(Icons.opened_folder).apply {
+                addActionListener {
+                    Commands.open()
+                }
+            })
+
             add(JButton(Icons.picture).apply {
                 addActionListener {
                     Commands.save()
@@ -171,12 +175,12 @@ fun main() {
         val colourPalette = DefaultSingleCDockable("colourPalette", "Colour Palette", Components.colourPalette)
         cControl.addDockable(colourPalette)
         colourPalette.isVisible = true
-        grid.add(1.2, 1.2, 0.4, 0.8, colourPalette)
+        grid.add(1.2, 0.3, 0.4, 0.4, colourPalette)
 
         val colourLibrary = DefaultSingleCDockable("colourLibrary", "Colour Library", Components.colourLibrary)
         cControl.addDockable(colourLibrary)
         colourLibrary.isVisible = true
-        grid.add(1.2, 1.2, 0.4, 0.8, colourLibrary)
+        grid.add(1.2, 0.7, 0.4, 0.4, colourLibrary)
 
         cControl.contentArea.deploy(grid)
 

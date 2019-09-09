@@ -13,7 +13,14 @@ import javax.swing.table.TableCellEditor
 import javax.swing.table.TableCellRenderer
 
 class LayerList : JPanel() {
-    val listModel = DefaultTableModel(arrayOf(), arrayOf("Preview", "Name", "Visibility", "State"))
+    val listModel = DefaultTableModel(arrayOf(), arrayOf("Preview", "Name", "Visibility", "State")).apply {
+        addTableModelListener {
+            when (it.column) {
+                2 -> Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[it.firstRow].visible = this.getValueAt(it.firstRow, it.column) as Boolean
+                3 -> Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[it.firstRow].locked = this.getValueAt(it.firstRow, it.column) as Boolean
+            }
+        }
+    }
     val list = JTable(listModel).apply {
         autoResizeMode = JTable.AUTO_RESIZE_OFF
         showVerticalLines = false
