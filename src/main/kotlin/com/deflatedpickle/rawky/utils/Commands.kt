@@ -48,10 +48,12 @@ object Commands {
                         when (key) {
                             "frameList" -> {
                                 for ((frameIndex, frame) in (value as ArrayList<*>).withIndex()) {
-                                    Components.animationTimeline.addFrame()
+                                    Components.animationTimeline.addFrame(false)
 
                                     for ((layerIndex, layer) in ((frame as LinkedTreeMap<String, Any>)["layerList"] as ArrayList<*>).withIndex()) {
                                         val castLayer = layer as LinkedTreeMap<Any, Any>
+                                        Components.layerList.addLayer()
+
                                         Components.pixelGrid.frameList[frameIndex].layerList[layerIndex].apply {
                                             val rowList = mutableListOf<MutableList<PixelGrid.Cell>>()
                                             for (row in castLayer["pixelMatrix"] as MutableList<MutableList<Any>>) {

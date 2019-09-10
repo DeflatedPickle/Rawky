@@ -4,6 +4,7 @@ import com.deflatedpickle.rawky.utils.Icons
 import com.deflatedpickle.rawky.utils.Components
 import org.apache.batik.ext.awt.g2d.DefaultGraphics2D
 import java.awt.*
+import java.lang.Exception
 import java.util.*
 import javax.swing.*
 import javax.swing.Timer

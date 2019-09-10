@@ -60,31 +60,39 @@ class AnimationTimeline : JPanel() {
         add(list)
 
         list.addListSelectionListener {
-            changeFrame()
+            if (!it.valueIsAdjusting) {
+                changeFrame()
+            }
         }
     }
 
-    fun addFrame() {
+    fun addFrame(addLayer: Boolean = true) {
         listModel.addElement("Frame ${listModel.size()}")
         list.selectedIndex = listModel.size() - 1
 
         Components.pixelGrid.frameList.add(PixelGrid.Frame())
-        Components.layerList.addLayer()
+        if (addLayer) {
+            Components.layerList.addLayer()
+        }
+
+        changeFrame()
     }
 
     fun changeFrame() {
+        Components.layerList.listModel.rowCount = 0
+
+        if (Components.pixelGrid.frameList.size > list.selectedIndex) {
+            if (list.selectedIndex >= 0) {
+                for (i in 0 until Components.pixelGrid.frameList[list.selectedIndex].layerList.size) {
+                    Components.layerList.listModel.insertRow(0, arrayOf(null, "Layer ${Components.layerList.listModel.rowCount}", Components.pixelGrid.frameList[list.selectedIndex].layerList[i].visible, Components.pixelGrid.frameList[list.selectedIndex].layerList[i].locked))
+                }
+            }
+        }
+
         try {
-            for (i in 0 until Components.layerList.listModel.rowCount) {
-                Components.layerList.listModel.removeRow(i)
-            }
-
-            for (i in 0 until Components.pixelGrid.frameList[list.selectedIndex].layerList.size) {
-                Components.layerList.listModel.insertRow(0, arrayOf(null, "Layer ${Components.layerList.listModel.rowCount}", true, false))
-            }
-
             Components.layerList.list.setRowSelectionInterval(0, 0)
         }
-        catch (e: Exception) {
+        catch (e : Exception) {
         }
     }
 }

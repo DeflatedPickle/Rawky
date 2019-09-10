@@ -10,6 +10,10 @@ import javax.swing.JPanel
 class PixelGrid : JPanel() {
     class Frame {
         var layerList = mutableListOf<Layer>()
+
+        override fun toString(): String {
+            return "Frame { $layerList }"
+        }
     }
 
     class Layer {
@@ -27,6 +31,10 @@ class PixelGrid : JPanel() {
                 rowList.add(columnList)
             }
             pixelMatrix = rowList
+        }
+
+        override fun toString(): String {
+            return "Layer { $pixelMatrix, $visible, $locked }"
         }
     }
 
