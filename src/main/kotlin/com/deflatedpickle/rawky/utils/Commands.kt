@@ -3,6 +3,8 @@ package com.deflatedpickle.rawky.utils
 import com.deflatedpickle.rawky.components.PixelGrid
 import com.google.gson.Gson
 import com.google.gson.internal.LinkedTreeMap
+import com.icafe4j.image.gif.GIFTweaker
+import com.icafe4j.image.reader.GIFReader
 import java.awt.Color
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
@@ -13,11 +15,12 @@ object Commands {
     val fileChooser = JFileChooser().apply {
         addChoosableFileFilter(FileNameExtensionFilter("Rawky (*.rawr)", "rawr").also { this.fileFilter = it })
         addChoosableFileFilter(FileNameExtensionFilter("PNG (*.png)", "png"))
+        addChoosableFileFilter(FileNameExtensionFilter("GIF (*.gif)", "gif"))
     }
 
     val gson = Gson()
 
-    fun new() {
+    fun new(withFrame: Boolean = true) {
         for ((frameIndex, frame) in Components.pixelGrid.frameList.withIndex()) {
             Components.pixelGrid.frameList[frameIndex].layerList = mutableListOf()
         }
@@ -28,12 +31,14 @@ object Commands {
         }
         Components.animationTimeline.listModel.removeAllElements()
 
-        Components.animationTimeline.addFrame()
+        if (withFrame) {
+            Components.animationTimeline.addFrame()
+        }
     }
 
     fun open() {
         if (fileChooser.showOpenDialog(Components.frame) == JFileChooser.APPROVE_OPTION) {
-            new()
+            new(false)
 
             when (fileChooser.selectedFile.extension) {
                 "rawr" -> {
@@ -67,6 +72,31 @@ object Commands {
                         }
                     }
                 }
+                "png" -> {
+                    Components.animationTimeline.addFrame()
+                    ImageIO.read(fileChooser.selectedFile).apply {
+                        for (row in 0 until Components.pixelGrid.rowAmount) {
+                            for (column in 0 until Components.pixelGrid.columnAmount) {
+                                Components.pixelGrid.frameList[0].layerList[0].pixelMatrix[row][column].colour = Color(getRGB(row, column), true)
+                            }
+                        }
+                    }
+                }
+                "gif" -> {
+                    GIFReader().apply {
+                        read(fileChooser.selectedFile.inputStream())
+
+                        Components.pixelGrid.frameList.clear()
+                        for ((frameIndex, frame) in frames.withIndex()) {
+                            Components.animationTimeline.addFrame()
+                            for (row in 0 until frame.height) {
+                                for (column in 0 until frame.width) {
+                                    Components.pixelGrid.frameList[frameIndex].layerList[0].pixelMatrix[row][column].colour = Color(frame.getRGB(row, column), true)
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -81,14 +111,31 @@ object Commands {
                     ImageIO.write(BufferedImage(Components.pixelGrid.columnAmount, Components.pixelGrid.rowAmount, BufferedImage.TYPE_INT_ARGB).apply {
                         for (row in 0 until Components.pixelGrid.rowAmount) {
                             for (column in 0 until Components.pixelGrid.columnAmount) {
-                                for (frame in Components.pixelGrid.frameList) {
-                                    for (layer in frame.layerList.reversed()) {
-                                        layer.pixelMatrix[row][column].colour?.rgb?.let { setRGB(row, column, it) }
-                                    }
+                                for (layer in Components.pixelGrid.frameList[0].layerList.reversed()) {
+                                    layer.pixelMatrix[row][column].colour?.rgb?.let { setRGB(row, column, it) }
                                 }
                             }
                         }
                     }, "png", fileChooser.selectedFile)
+                }
+                "gif" -> {
+                    val frameList = mutableListOf<BufferedImage>()
+                    for (frame in Components.pixelGrid.frameList) {
+                        BufferedImage(Components.pixelGrid.columnAmount, Components.pixelGrid.rowAmount, BufferedImage.TYPE_INT_ARGB).apply {
+                            for (layer in frame.layerList.reversed()) {
+                                for (row in 0 until Components.pixelGrid.rowAmount) {
+                                    for (column in 0 until Components.pixelGrid.columnAmount) {
+                                        layer.pixelMatrix[row][column].colour?.rgb?.let {
+                                            setRGB(row, column, it)
+                                        }
+                                    }
+                                }
+                            }
+                            frameList.add(this)
+                        }
+                    }
+                    // TODO: Add an option for delay
+                    GIFTweaker.writeAnimatedGIF(frameList.toTypedArray(), IntArray(Components.pixelGrid.frameList.size) { 1000 / 60 }, fileChooser.selectedFile.outputStream())
                 }
             }
         }

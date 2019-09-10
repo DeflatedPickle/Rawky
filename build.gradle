@@ -58,6 +58,9 @@ dependencies {
 
     // File Format
     implementation 'com.google.code.gson:gson:2.8.5'
+
+    // Image Importing/Exporting
+    implementation 'com.github.dragon66:icafe:c969c07d7b'
 }
 
 compileKotlin {
