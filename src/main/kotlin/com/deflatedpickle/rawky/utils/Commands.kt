@@ -22,10 +22,11 @@ object Commands {
 
     val gson = GsonBuilder().setPrettyPrinting().create()
 
-    fun new(withFrame: Boolean = true) {
-        for ((frameIndex, frame) in Components.pixelGrid.frameList.withIndex()) {
-            Components.pixelGrid.frameList[frameIndex].layerList = mutableListOf()
-        }
+    fun new(width: Int = 16, height: Int = 16, withFrame: Boolean = true) {
+        Components.pixelGrid.columnAmount = width
+        Components.pixelGrid.rowAmount = height
+        Components.pixelGrid.rectangleMatrix = Components.pixelGrid.zoom()
+
         Components.pixelGrid.frameList = mutableListOf()
 
         for (i in 0 until Components.layerList.listModel.rowCount) {
@@ -40,7 +41,7 @@ object Commands {
 
     fun open() {
         if (fileChooser.showOpenDialog(Components.frame) == JFileChooser.APPROVE_OPTION) {
-            new(false)
+            new(withFrame = false)
 
             when (fileChooser.selectedFile.extension) {
                 "rawr" -> {

@@ -4,12 +4,14 @@ import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
 import com.bulenkov.darcula.DarculaLaf
+import com.deflatedpickle.rawky.dialogue.New
 import com.deflatedpickle.rawky.menu.File
 import com.deflatedpickle.rawky.menu.Program
 import com.deflatedpickle.rawky.utils.Commands
 import com.deflatedpickle.rawky.utils.Components
 import com.deflatedpickle.rawky.utils.Icons
 import java.awt.BorderLayout
+import java.awt.Dimension
 import javax.swing.*
 
 fun main() {
@@ -27,7 +29,7 @@ fun main() {
             add(JButton(Icons.create_new).apply {
                 toolTipText = "New File"
                 addActionListener {
-                    Commands.new()
+                    New().isVisible = true
                 }
             })
 
@@ -118,7 +120,9 @@ fun main() {
             isOpaque = false
             layout = BorderLayout()
 
-            add(Components.pixelGrid)
+            add(JScrollPane(Components.pixelGrid.apply {
+                preferredSize = Dimension(2048, 2048)
+            }))
 
             add(JToolBar().apply {
                 val slider = JSlider(1, 100).apply {

@@ -150,9 +150,9 @@ class PixelGrid : JPanel() {
         }
     }
 
-    fun drawTransparentBackground(g2D: Graphics2D) {
-        for (row in 0 until /* this.height */ rowAmount * pixelSize / backgroundPixelSize) {
-            for (column in 0 until /* this.width */ columnAmount * pixelSize / backgroundPixelSize) {
+    fun drawTransparentBackground(g2D: Graphics2D, rowCount: Int = rowAmount, columnCount: Int = columnAmount) {
+        for (row in 0 until /* this.height */ rowCount * pixelSize / backgroundPixelSize) {
+            for (column in 0 until /* this.width */ columnCount * pixelSize / backgroundPixelSize) {
                 g2D.color = if (row % 2 == 0) {
                     if (column % 2 == 0) {
                         backgroundFillEven
