@@ -1,11 +1,7 @@
 package com.deflatedpickle.rawky.components
 
-import bibliothek.gui.dock.util.laf.LookAndFeelColors
 import com.deflatedpickle.rawky.utils.Components
 import java.awt.*
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
-import java.lang.Exception
 import javax.swing.*
 import javax.swing.border.LineBorder
 
@@ -16,7 +12,7 @@ class AnimationTimeline : JPanel() {
         visibleRowCount = -1
         selectionMode = ListSelectionModel.SINGLE_SELECTION
 
-        cellRenderer = ListCellRenderer<String> { list, value, index, isSelected, cellHasFocus ->
+        cellRenderer = ListCellRenderer<String> { _, value, index, isSelected, _ ->
             JPanel().apply {
                 layout = BoxLayout(this, BoxLayout.Y_AXIS)
 

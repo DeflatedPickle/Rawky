@@ -3,7 +3,6 @@ package com.deflatedpickle.rawky
 import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
-import com.bulenkov.darcula.DarculaLaf
 import com.deflatedpickle.rawky.dialogue.New
 import com.deflatedpickle.rawky.menu.File
 import com.deflatedpickle.rawky.menu.Program

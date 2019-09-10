@@ -1,14 +1,10 @@
 package com.deflatedpickle.rawky.components
 
-import com.deflatedpickle.rawky.utils.Icons
 import com.deflatedpickle.rawky.utils.Components
-import org.apache.batik.ext.awt.g2d.DefaultGraphics2D
+import com.deflatedpickle.rawky.utils.Icons
 import java.awt.*
-import java.lang.Exception
 import java.util.*
 import javax.swing.*
-import javax.swing.Timer
-import javax.swing.border.LineBorder
 import javax.swing.table.DefaultTableModel
 import javax.swing.table.TableCellEditor
 import javax.swing.table.TableCellRenderer
@@ -46,7 +42,7 @@ class LayerList : JPanel() {
                 }
 
             }
-            cellRenderer = TableCellRenderer { table, value, isSelected, hasFocus, row, column ->
+            cellRenderer = TableCellRenderer { _, _, _, _, row, _ ->
                 object : JPanel() {
                     init {
                         minimumSize = Dimension(40, 40)

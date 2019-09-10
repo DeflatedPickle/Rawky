@@ -2,13 +2,12 @@ package com.deflatedpickle.rawky.utils
 
 import com.deflatedpickle.rawky.components.ColourPalette
 import com.deflatedpickle.rawky.components.PixelGrid
-import com.google.gson.*
+import com.google.gson.GsonBuilder
 import com.google.gson.internal.LinkedTreeMap
 import com.icafe4j.image.gif.GIFTweaker
 import com.icafe4j.image.reader.GIFReader
 import java.awt.Color
 import java.awt.image.BufferedImage
-import java.lang.reflect.Type
 import javax.imageio.ImageIO
 import javax.swing.JFileChooser
 import javax.swing.filechooser.FileNameExtensionFilter
