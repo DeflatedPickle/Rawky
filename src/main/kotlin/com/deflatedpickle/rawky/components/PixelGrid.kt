@@ -103,7 +103,6 @@ class PixelGrid : JPanel() {
 
         drawTransparentBackground(g2D)
 
-        // Draws the pixels
         for ((layerIndex, layer) in frameList[Components.animationTimeline.list.selectedIndex].layerList.withIndex().reversed()) {
             drawPixels(layerIndex, layer, g2D)
         }

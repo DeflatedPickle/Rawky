@@ -1,12 +1,14 @@
 package com.deflatedpickle.rawky.utils
 
+import com.deflatedpickle.rawky.components.ColourPalette
 import com.deflatedpickle.rawky.components.PixelGrid
-import com.google.gson.Gson
+import com.google.gson.*
 import com.google.gson.internal.LinkedTreeMap
 import com.icafe4j.image.gif.GIFTweaker
 import com.icafe4j.image.reader.GIFReader
 import java.awt.Color
 import java.awt.image.BufferedImage
+import java.lang.reflect.Type
 import javax.imageio.ImageIO
 import javax.swing.JFileChooser
 import javax.swing.filechooser.FileNameExtensionFilter
@@ -18,7 +20,7 @@ object Commands {
         addChoosableFileFilter(FileNameExtensionFilter("GIF (*.gif)", "gif"))
     }
 
-    val gson = Gson()
+    val gson = GsonBuilder().setPrettyPrinting().create()
 
     fun new(withFrame: Boolean = true) {
         for ((frameIndex, frame) in Components.pixelGrid.frameList.withIndex()) {
@@ -42,31 +44,43 @@ object Commands {
 
             when (fileChooser.selectedFile.extension) {
                 "rawr" -> {
-                    // FIXME: Only loads 1 frame and doesn't populate the frame list or layer table
-                    for (key in gson.fromJson(fileChooser.selectedFile.readText(), MutableList::class.java)) {
-                        for ((frameIndex, frame) in (key as LinkedTreeMap<*, *>).toList().withIndex()) {
-                            // Components.animationTimeline.listModel.addElement("Frame ${Components.animationTimeline.listModel.size()}")
+                    for ((key, value) in gson.fromJson(fileChooser.selectedFile.readText(), HashMap::class.java)) {
+                        when (key) {
+                            "frameList" -> {
+                                for ((frameIndex, frame) in (value as ArrayList<*>).withIndex()) {
+                                    Components.animationTimeline.addFrame()
 
-                            for ((layerIndex, layer) in (frame.second as ArrayList<*>).withIndex()) {
-                                // Components.layerList.listModel.insertRow(0, arrayOf(null, "Layer ${Components.layerList.listModel.rowCount}", true, false))
-
-                                val castLayer = layer as LinkedTreeMap<Any, Any>
-                                Components.pixelGrid.frameList[frameIndex].layerList[layerIndex].apply {
-                                    val rowList = mutableListOf<MutableList<PixelGrid.Cell>>()
-                                    for (row in castLayer["pixelMatrix"] as MutableList<MutableList<Any>>) {
-                                        val columnList = mutableListOf<PixelGrid.Cell>()
-                                        for (column in row) {
-                                            columnList.add(PixelGrid.Cell().apply {
-                                                if (!(column as LinkedTreeMap<String, LinkedTreeMap<Double, Double>>).isEmpty()) {
-                                                    colour = (column["colour"] as LinkedTreeMap<String, Double>)["value"]?.toInt()?.let { Color(it) }
+                                    for ((layerIndex, layer) in ((frame as LinkedTreeMap<String, Any>)["layerList"] as ArrayList<*>).withIndex()) {
+                                        val castLayer = layer as LinkedTreeMap<Any, Any>
+                                        Components.pixelGrid.frameList[frameIndex].layerList[layerIndex].apply {
+                                            val rowList = mutableListOf<MutableList<PixelGrid.Cell>>()
+                                            for (row in castLayer["pixelMatrix"] as MutableList<MutableList<Any>>) {
+                                                val columnList = mutableListOf<PixelGrid.Cell>()
+                                                for (column in row) {
+                                                    columnList.add(PixelGrid.Cell().apply {
+                                                        if (!(column as LinkedTreeMap<String, LinkedTreeMap<Double, Double>>).isEmpty()) {
+                                                            colour = (column["colour"] as LinkedTreeMap<String, Double>)["value"]?.toInt()?.let { Color(it) }
+                                                        }
+                                                    })
                                                 }
-                                            })
+                                                rowList.add(columnList)
+                                            }
+                                            pixelMatrix = rowList
+                                            visible = castLayer["visible"] as Boolean
+                                            locked = castLayer["locked"] as Boolean
                                         }
-                                        rowList.add(columnList)
                                     }
-                                    pixelMatrix = rowList
-                                    visible = castLayer["visible"] as Boolean
-                                    locked = castLayer["locked"] as Boolean
+                                }
+                            }
+                            "colourLibrary" -> {
+                                for (i in value as ArrayList<*>) {
+                                    (i as LinkedTreeMap<String, Double>)["value"]?.toInt()?.let { Color(it) }?.let { Components.colourLibrary.addButton(it) }
+                                }
+                            }
+                            "colourPalette" -> {
+                                for (i in value as ArrayList<*>) {
+                                    val ii = i as LinkedTreeMap<String, Int>
+                                    Components.colourPalette.colourList.add(ColourPalette.ColourSwatch(ii["x"]!!, ii["y"]!!, Color((ii["colour"] as LinkedTreeMap<String, Double>)["value"]!!.toInt())))
                                 }
                             }
                         }
@@ -105,7 +119,7 @@ object Commands {
         if (fileChooser.showSaveDialog(Components.frame) == JFileChooser.APPROVE_OPTION) {
             when (fileChooser.selectedFile.extension) {
                 "rawr" -> {
-                    fileChooser.selectedFile.writeText(gson.toJson(Components.pixelGrid.frameList))
+                    fileChooser.selectedFile.writeText(gson.toJson(hashMapOf("frameList" to Components.pixelGrid.frameList, "colourLibrary" to Components.colourLibrary.cellList.map { it.colour }, "colourPalette" to Components.colourPalette.colourList)))
                 }
                 "png" -> {
                     ImageIO.write(BufferedImage(Components.pixelGrid.columnAmount, Components.pixelGrid.rowAmount, BufferedImage.TYPE_INT_ARGB).apply {
