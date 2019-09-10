@@ -17,9 +17,23 @@ object Commands {
 
     val gson = Gson()
 
+    fun new() {
+        for ((frameIndex, frame) in Components.pixelGrid.frameList.withIndex()) {
+            Components.pixelGrid.frameList[frameIndex].layerList = mutableListOf()
+        }
+        Components.pixelGrid.frameList = mutableListOf()
+
+        for (i in 0 until Components.layerList.listModel.rowCount) {
+            Components.layerList.listModel.removeRow(i)
+        }
+        Components.animationTimeline.listModel.removeAllElements()
+
+        Components.animationTimeline.addFrame()
+    }
+
     fun open() {
         if (fileChooser.showOpenDialog(Components.frame) == JFileChooser.APPROVE_OPTION) {
-            // Components.pixelGrid.frameList = mutableListOf()
+            new()
 
             when (fileChooser.selectedFile.extension) {
                 "rawr" -> {

@@ -17,12 +17,13 @@ class Settings : JDialog(Components.frame, "Settings") {
     }
 
     val labelConstraints = GridBagConstraints().apply {
-        weightx = 1.0
         anchor = GridBagConstraints.EAST
     }
 
     val lineEnd = GridBagConstraints().apply {
         gridwidth = GridBagConstraints.REMAINDER
+        weightx = 1.0
+        fill = GridBagConstraints.HORIZONTAL
     }
 
     val appearanceComboBoxModel = DefaultComboBoxModel(arrayOf("Metal", "System", "Dracula", "Substance Graphite Electric", "Web"))
@@ -69,7 +70,7 @@ class Settings : JDialog(Components.frame, "Settings") {
                                 SwingUtilities.updateComponentTreeUI(Components.frame)
                                 SwingUtilities.updateComponentTreeUI(this@Settings)
                             }
-                        })
+                        }, lineEnd)
                     }
                     ">components>pixel_grid" -> {
                         panel.add(JLabel("Pixel Smooth:"), labelConstraints)
@@ -92,6 +93,7 @@ class Settings : JDialog(Components.frame, "Settings") {
                     }
                 }
                 panel.revalidate()
+                panel.repaint()
             }
         }), GridBagConstraints().apply {
             weightx = 0.0

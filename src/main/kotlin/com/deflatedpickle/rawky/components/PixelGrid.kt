@@ -9,7 +9,7 @@ import javax.swing.JPanel
 
 class PixelGrid : JPanel() {
     class Frame {
-        val layerList = mutableListOf<Layer>()
+        var layerList = mutableListOf<Layer>()
     }
 
     class Layer {

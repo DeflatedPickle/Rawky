@@ -14,7 +14,7 @@ import javax.swing.*
 
 fun main() {
     SwingUtilities.invokeLater {
-        UIManager.setLookAndFeel(DarculaLaf())
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
 
         Components.frame.jMenuBar = JMenuBar().apply {
             add(File())
@@ -24,6 +24,13 @@ fun main() {
         Components.frame.layout = BorderLayout()
 
         Components.frame.add(JToolBar().apply {
+            add(JButton(Icons.create_new).apply {
+                toolTipText = "New File"
+                addActionListener {
+                    Commands.new()
+                }
+            })
+
             add(JButton(Icons.opened_folder).apply {
                 toolTipText = "Open File"
                 addActionListener {
@@ -170,7 +177,7 @@ fun main() {
             add(JScrollPane(Components.colourShades))
 
             add(JToolBar().apply {
-                add(JSlider(3, 51).apply {
+                add(JSlider(3, 3 * 31).apply {
                     value = Components.colourShades.amount
 
                     addChangeListener {
