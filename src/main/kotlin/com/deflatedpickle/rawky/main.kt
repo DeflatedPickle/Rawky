@@ -130,7 +130,7 @@ fun main() {
                     this.value = Components.pixelGrid.pixelSize
                     addChangeListener {
                         Components.pixelGrid.pixelSize = this.value
-                        Components.pixelGrid.rectangleMatrix = Components.pixelGrid.zoom()
+                        Components.pixelGrid.rectangleMatrix = Components.pixelGrid.refreshMatrix()
                     }
                 }
                 add(JButton(Icons.minus).apply {

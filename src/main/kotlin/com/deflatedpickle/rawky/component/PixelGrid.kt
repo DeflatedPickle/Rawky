@@ -5,6 +5,7 @@ import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
+import java.util.*
 import javax.swing.JPanel
 
 class PixelGrid : JPanel() {
@@ -71,7 +72,7 @@ class PixelGrid : JPanel() {
     init {
         isOpaque = false
 
-        rectangleMatrix = zoom()
+        rectangleMatrix = refreshMatrix()
 
         addMouseMotionListener(object : MouseMotionAdapter() {
             override fun mouseMoved(e: MouseEvent) {
@@ -123,7 +124,7 @@ class PixelGrid : JPanel() {
         drawGrid(g2D)
     }
 
-    fun zoom(): MutableList<MutableList<Rectangle>> {
+    fun refreshMatrix(): MutableList<MutableList<Rectangle>> {
         val rMatrix = mutableListOf<MutableList<Rectangle>>()
         for (row in 0 until rowAmount) {
             val rectangleCells = mutableListOf<Rectangle>()
@@ -139,7 +140,7 @@ class PixelGrid : JPanel() {
     fun drawPixels(layerIndex: Int, layer: Layer, g2D: Graphics2D) {
         for (row in 0 until rectangleMatrix.size) {
             for (column in 0 until rectangleMatrix[row].size) {
-                if (Components.layerList.listModel.dataVector[layerIndex][2] as Boolean) {
+                if ((Components.layerList.listModel.dataVector[layerIndex] as Vector<Any>)[2] as Boolean) {
                     if (layer.pixelMatrix[row][column].colour != null) {
                         g2D.color = layer.pixelMatrix[row][column].colour
                         val rectangle = rectangleMatrix[row][column]
@@ -187,12 +188,12 @@ class PixelGrid : JPanel() {
         try {
             when (Components.toolbox.tool) {
                 Toolbox.Tool.PENCIL -> {
-                    if (!(Components.layerList.listModel.dataVector[Components.layerList.list.selectedRow][3] as Boolean)) {
+                    if (!Components.layerList.isLayerLocked()) {
                         frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour = Components.colourShades.selectedShade
                     }
                 }
                 Toolbox.Tool.ERASER -> {
-                    if (!(Components.layerList.listModel.dataVector[Components.layerList.list.selectedRow][3] as Boolean)) {
+                    if (!Components.layerList.isLayerLocked()) {
                         frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour = null
                     }
                 }

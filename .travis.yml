@@ -11,7 +11,7 @@ cache:
 before_script:
   - choco install jdk8 -params 'installdir=c:\\java8'
   - export PATH=$PATH:"/c/java8/bin"
-  - choco install gradle --version 4.10 -params 'installdir=c:\\gradle'
+  - choco install gradle --version 5.0 -params 'installdir=c:\\gradle'
   - export PATH=$PATH:"/c/gradle/bin"
 script:
   - gradle shadowJar

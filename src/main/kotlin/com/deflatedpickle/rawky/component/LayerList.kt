@@ -110,4 +110,8 @@ class LayerList : JPanel() {
         Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.removeAt(list.selectedRow)
         listModel.removeRow(list.selectedRow)
     }
+
+    fun isLayerLocked(index: Int = list.selectedRow): Boolean {
+        return (listModel.dataVector[index] as Vector<Any>)[3] as Boolean
+    }
 }

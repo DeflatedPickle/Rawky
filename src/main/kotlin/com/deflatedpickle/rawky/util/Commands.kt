@@ -24,7 +24,7 @@ object Commands {
     fun new(width: Int = 16, height: Int = 16, withFrame: Boolean = true) {
         Components.pixelGrid.columnAmount = width
         Components.pixelGrid.rowAmount = height
-        Components.pixelGrid.rectangleMatrix = Components.pixelGrid.zoom()
+        Components.pixelGrid.rectangleMatrix = Components.pixelGrid.refreshMatrix()
 
         Components.pixelGrid.frameList = mutableListOf()
 
