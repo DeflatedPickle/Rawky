@@ -1,6 +1,6 @@
-package com.deflatedpickle.rawky.components
+package com.deflatedpickle.rawky.component
 
-import com.deflatedpickle.rawky.utils.Components
+import com.deflatedpickle.rawky.util.Components
 import java.awt.*
 import javax.swing.*
 import javax.swing.border.LineBorder

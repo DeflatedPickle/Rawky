@@ -1,7 +1,7 @@
 package com.deflatedpickle.rawky.dialogue
 
-import com.deflatedpickle.rawky.utils.Commands
-import com.deflatedpickle.rawky.utils.Components
+import com.deflatedpickle.rawky.util.Commands
+import com.deflatedpickle.rawky.util.Components
 import java.awt.*
 import javax.swing.*
 
@@ -19,7 +19,7 @@ class New : JDialog(Components.frame, "New File", true) {
     }
 
     init {
-        layout = GridLayout(2, 1)
+        layout = BorderLayout()
         size = Dimension(240, 160)
 
         add(JPanel(GridBagLayout()).apply {
@@ -38,6 +38,6 @@ class New : JDialog(Components.frame, "New File", true) {
                 }
             })
             add(JButton("Cancel").apply { addActionListener { this@New.dispose() } })
-        })
+        }, BorderLayout.PAGE_END)
     }
 }

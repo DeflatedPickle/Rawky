@@ -3,7 +3,7 @@ package com.deflatedpickle.rawky.dialogue
 import com.alee.laf.WebLookAndFeel
 import com.bric.colorpicker.ColorPickerDialog
 import com.bulenkov.darcula.DarculaLaf
-import com.deflatedpickle.rawky.utils.Components
+import com.deflatedpickle.rawky.util.Components
 import org.pushingpixels.substance.api.skin.SubstanceGraphiteElectricLookAndFeel
 import java.awt.Dimension
 import java.awt.GridBagConstraints
@@ -47,6 +47,7 @@ class Settings : JDialog(Components.frame, "Settings") {
 
         add(JScrollPane(JTree(node).apply {
             isRootVisible = false
+
             addTreeSelectionListener {
                 panel.removeAll()
 

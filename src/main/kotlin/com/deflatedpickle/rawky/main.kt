@@ -5,10 +5,11 @@ import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
 import com.deflatedpickle.rawky.dialogue.New
 import com.deflatedpickle.rawky.menu.File
+import com.deflatedpickle.rawky.menu.Help
 import com.deflatedpickle.rawky.menu.Program
-import com.deflatedpickle.rawky.utils.Commands
-import com.deflatedpickle.rawky.utils.Components
-import com.deflatedpickle.rawky.utils.Icons
+import com.deflatedpickle.rawky.util.Commands
+import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.util.Icons
 import java.awt.BorderLayout
 import java.awt.Dimension
 import javax.swing.*
@@ -20,6 +21,7 @@ fun main() {
         Components.frame.jMenuBar = JMenuBar().apply {
             add(File())
             add(Program())
+            add(Help())
         }
 
         Components.frame.layout = BorderLayout()

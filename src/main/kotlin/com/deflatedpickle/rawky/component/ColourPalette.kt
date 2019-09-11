@@ -1,6 +1,6 @@
-package com.deflatedpickle.rawky.components
+package com.deflatedpickle.rawky.component
 
-import com.deflatedpickle.rawky.utils.Components
+import com.deflatedpickle.rawky.util.Components
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics

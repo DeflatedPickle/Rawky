@@ -1,7 +1,7 @@
-package com.deflatedpickle.rawky.utils
+package com.deflatedpickle.rawky.util
 
 import com.bric.colorpicker.ColorPicker
-import com.deflatedpickle.rawky.components.*
+import com.deflatedpickle.rawky.component.*
 import java.awt.Color
 import javax.swing.JFrame
 

@@ -1,7 +1,7 @@
-package com.deflatedpickle.rawky.utils
+package com.deflatedpickle.rawky.util
 
-import com.deflatedpickle.rawky.components.ColourPalette
-import com.deflatedpickle.rawky.components.PixelGrid
+import com.deflatedpickle.rawky.component.ColourPalette
+import com.deflatedpickle.rawky.component.PixelGrid
 import com.google.gson.GsonBuilder
 import com.google.gson.internal.LinkedTreeMap
 import com.icafe4j.image.gif.GIFTweaker

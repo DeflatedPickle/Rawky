@@ -62,6 +62,9 @@ dependencies {
 
     // Image Importing/Exporting
     implementation 'com.github.dragon66:icafe:c969c07d7b'
+
+    // HTTP
+    implementation 'com.github.jkcclemens:khttp:0.1.0'
 }
 
 compileKotlin {

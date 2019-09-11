@@ -1,4 +1,4 @@
-package com.deflatedpickle.rawky.utils
+package com.deflatedpickle.rawky.util
 
 import org.pushingpixels.photon.icon.SvgBatikResizableIcon
 import java.awt.Dimension
