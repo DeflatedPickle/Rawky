@@ -46,7 +46,7 @@ It also has frames, which can be previewed above their name.
 
 ### Built With
 - [Kotlin](https://kotlinlang.org/)
-- [Swing](https://en.wikipedia.org/wiki/Swing_(Java\))
+- [Swing](https://en.wikipedia.org/wiki/Swing_(Java\\))
 
 ## Screenshots
 ||
@@ -69,14 +69,12 @@ I'm always looking to improve Rawky and the experience of using it, so if you ha
 - [Gradle](https://gradle.org/)
 - [Shadow](https://github.com/johnrengelman/shadow)
 - [Launch4j](http://launch4j.sourceforge.net/)
-
-
-- [DockingFrames](https://github.com/Benoker/DockingFrames)
-- [ColorPicker](https://mvnrepository.com/artifact/org.drjekyll/colorpicker)
-- [SwingX](https://mvnrepository.com/artifact/org.swinglabs/swingx)
-- [WrapLayout](https://github.com/DeflatedPickle/WrapLayout)
-- [Dracula](https://github.com/bulenkov/Darcula)
-- [Radiance](https://github.com/kirill-grouchnikov/radiance)
-- [WebLaF](https://github.com/mgarin/weblaf)
-- [GSON](https://github.com/google/gson)
-- [ICAFE](https://github.com/dragon66/icafe)
+* [DockingFrames](https://github.com/Benoker/DockingFrames)
+* [ColorPicker](https://mvnrepository.com/artifact/org.drjekyll/colorpicker)
+* [SwingX](https://mvnrepository.com/artifact/org.swinglabs/swingx)
+* [WrapLayout](https://github.com/DeflatedPickle/WrapLayout)
+* [Dracula](https://github.com/bulenkov/Darcula)
+* [Radiance](https://github.com/kirill-grouchnikov/radiance)
+* [WebLaF](https://github.com/mgarin/weblaf)
+* [GSON](https://github.com/google/gson)
+* [ICAFE](https://github.com/dragon66/icafe)
