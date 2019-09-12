@@ -22,7 +22,7 @@
     <img src="https://sloc.xyz/github/DeflatedPickle/Rawky/?category=lines">
 </p>
 
-<p align="center"><img src="https://github.com/DeflatedPickle/Rawky/.github/images/Rawky.png"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/DeflatedPickle/Rawky/master/.github/images/Rawky.png"></p>
 
 ## Table of Contents
 - [Key Features](#key-features)
