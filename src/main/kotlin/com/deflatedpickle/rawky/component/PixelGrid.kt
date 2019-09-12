@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
 import java.util.*
 import javax.swing.JPanel
+import javax.swing.SwingUtilities
 
 class PixelGrid : JPanel() {
     class Frame {
@@ -89,13 +90,21 @@ class PixelGrid : JPanel() {
 
             override fun mouseDragged(e: MouseEvent) {
                 mouseMoved(e)
-                performTool()
+                when {
+                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.tool.performLeft()
+                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.tool.performMiddle()
+                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.tool.performRight()
+                }
             }
         })
 
         addMouseListener(object : MouseAdapter() {
             override fun mousePressed(e: MouseEvent) {
-                performTool()
+                when {
+                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.tool.performLeft()
+                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.tool.performMiddle()
+                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.tool.performRight()
+                }
             }
 
             override fun mouseExited(e: MouseEvent) {
@@ -181,28 +190,6 @@ class PixelGrid : JPanel() {
             for (column in row) {
                 g2D.drawRect(column.x, column.y, column.width, column.height)
             }
-        }
-    }
-
-    fun performTool() {
-        try {
-            when (Components.toolbox.tool) {
-                Toolbox.Tool.PENCIL -> {
-                    if (!Components.layerList.isLayerLocked()) {
-                        frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour = Components.colourShades.selectedShade
-                    }
-                }
-                Toolbox.Tool.ERASER -> {
-                    if (!Components.layerList.isLayerLocked()) {
-                        frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour = null
-                    }
-                }
-                Toolbox.Tool.PICKER -> {
-                    Components.colourPicker.color = frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.list.selectedRow].pixelMatrix[hoverRow][hoverColumn].colour
-                }
-            }
-        }
-        catch (e: Exception) {
         }
     }
 }
