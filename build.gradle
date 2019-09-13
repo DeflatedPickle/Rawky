@@ -1,8 +1,12 @@
 plugins {
     id 'java'
-    id 'application'
     id 'org.jetbrains.kotlin.jvm' version '1.3.41'
+    id 'antlr'
+
+    id 'application'
+
     id 'com.stehno.natives' version '0.3.1'
+
     id "com.github.johnrengelman.shadow" version "4.0.4"
     id 'edu.sc.seis.launch4j' version '2.4.4'
 }
@@ -16,6 +20,10 @@ sourceCompatibility = 1.8
 
 mainClassName = 'com.deflatedpickle.rawky.MainKt'
 
+sourceSets {
+    main.java.srcDirs += "src/main/gen"
+}
+
 repositories {
     jcenter()
     mavenCentral()
@@ -26,7 +34,11 @@ repositories {
 }
 
 dependencies {
+    // Kotlin Standard Library
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    // ANTLR4
+    antlr "org.antlr:antlr4:4.7.2"
 
     // Scripting
     // implementation 'org.jruby:jruby:9.2.7.0'
@@ -61,6 +73,10 @@ dependencies {
 
     // HTTP
     implementation 'com.github.jkcclemens:khttp:0.1.0'
+}
+
+generateGrammarSource {
+    outputDirectory = file("src/main/gen/")
 }
 
 compileKotlin {

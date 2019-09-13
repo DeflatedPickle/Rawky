@@ -1,11 +1,15 @@
 package com.deflatedpickle.rawky.util
 
+import com.deflatedpickle.rawky.JASC_PALLexer
+import com.deflatedpickle.rawky.JASC_PALParser
 import com.deflatedpickle.rawky.component.ColourPalette
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.google.gson.GsonBuilder
 import com.google.gson.internal.LinkedTreeMap
 import com.icafe4j.image.gif.GIFTweaker
 import com.icafe4j.image.reader.GIFReader
+import org.antlr.v4.runtime.CharStreams
+import org.antlr.v4.runtime.CommonTokenStream
 import java.awt.Color
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
@@ -153,6 +157,25 @@ object Commands {
                     // TODO: Add an option for delay
                     GIFTweaker.writeAnimatedGIF(frameList.toTypedArray(), IntArray(Components.pixelGrid.frameList.size) { 1000 / 60 }, fileChooser.selectedFile.outputStream())
                 }
+            }
+        }
+    }
+
+    fun import_jasc_pal() {
+        val chooser = JFileChooser().apply {
+            addChoosableFileFilter(FileNameExtensionFilter("JASC PAL (*.pal)", "pal").also { this.fileFilter = it })
+        }
+
+        if (chooser.showOpenDialog(Components.frame) == JFileChooser.APPROVE_OPTION) {
+            val lexer = JASC_PALLexer(CharStreams.fromStream(chooser.selectedFile.inputStream()))
+            val token_stream = CommonTokenStream(lexer)
+            val parser = JASC_PALParser(token_stream)
+
+            val startContext = parser.start()
+
+            for (i in startContext.rgb()) {
+                Components.colourLibrary.cellList.clear()
+                Components.colourLibrary.addButton(Color(i.INT(0).text.toInt(), i.INT(1).text.toInt(), i.INT(2).text.toInt()))
             }
         }
     }
