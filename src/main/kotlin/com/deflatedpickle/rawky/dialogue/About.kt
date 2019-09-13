@@ -13,7 +13,7 @@ class About : JDialog(Components.frame, "About", true) {
 
         add(JPanel().apply {
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
-            add(JLabel("Rawky v0.1.0").apply { alignmentX = Component.CENTER_ALIGNMENT })
+            add(JLabel("Rawky v0.1.1").apply { alignmentX = Component.CENTER_ALIGNMENT })
             add(HyperLabel("GitHub Repository", URI("https://github.com/DeflatedPickle/Rawky")).apply { alignmentX = Component.CENTER_ALIGNMENT })
             add(JPanel().apply {
                 border = BorderFactory.createTitledBorder("Credits")
