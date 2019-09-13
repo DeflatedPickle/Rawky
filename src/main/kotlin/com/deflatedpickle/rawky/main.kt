@@ -7,6 +7,7 @@ import com.deflatedpickle.rawky.dialogue.New
 import com.deflatedpickle.rawky.menu.File
 import com.deflatedpickle.rawky.menu.Help
 import com.deflatedpickle.rawky.menu.Program
+import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Commands
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
@@ -201,12 +202,31 @@ fun main() {
         val colourPalette = DefaultSingleCDockable("colourPalette", "Colour Palette", Components.colourPalette)
         cControl.addDockable(colourPalette)
         colourPalette.isVisible = true
-        grid.add(1.2, 0.3, 0.4, 0.4, colourPalette)
+        grid.add(1.2, 0.3, 0.4, 0.2, colourPalette)
 
         val colourLibrary = DefaultSingleCDockable("colourLibrary", "Colour Library", Components.colourLibrary)
         cControl.addDockable(colourLibrary)
         colourLibrary.isVisible = true
-        grid.add(1.2, 0.7, 0.4, 0.4, colourLibrary)
+        grid.add(1.2, 0.7, 0.4, 0.2, colourLibrary)
+
+        val actionHistory = DefaultSingleCDockable("actionHistory", "Action History", JPanel().apply {
+            isOpaque = false
+            layout = BorderLayout()
+
+            add(JScrollPane(Components.actionHistory))
+
+            add(JToolBar().apply {
+                add(JButton(Icons.undo).apply {
+                    addActionListener { ActionStack.undo() }
+                })
+                add(JButton(Icons.redo).apply {
+                    addActionListener { ActionStack.redo() }
+                })
+            }, BorderLayout.PAGE_START)
+        })
+        cControl.addDockable(actionHistory)
+        actionHistory.isVisible = true
+        grid.add(1.2, 0.0, 0.4, 0.8, actionHistory)
 
         cControl.contentArea.deploy(grid)
 
