@@ -38,6 +38,6 @@ object Icons {
     val add_element = icon("add_element")
     
     fun icon(name: String): ImageIcon {
-        return ImageIcon(ImageIO.read(ClassLoader.getSystemResource("icons/icons/$name.png")))
+        return ImageIcon(ImageIO.read(ClassLoader.getSystemResource("friable/icons/$name.png")))
     }
 }
