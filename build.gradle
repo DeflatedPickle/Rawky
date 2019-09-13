@@ -29,12 +29,11 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
     // Scripting
-    implementation 'org.jruby:jruby:9.2.7.0'
+    // implementation 'org.jruby:jruby:9.2.7.0'
 
     // OpenGL
-    compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.3'
-    compile 'org.lwjgl.lwjgl:lwjgl:2.9.3'
-    // implementation "org.joml:joml:1.9.12"
+    // compile 'org.lwjgl.lwjgl:lwjgl_util:2.9.3'
+    // compile 'org.lwjgl.lwjgl:lwjgl:2.9.3'
 
     // Widgets
     // implementation 'com.github.cogman:javadocking:1.7.0'
@@ -53,9 +52,6 @@ dependencies {
 
     // OBJ Models
     implementation 'de.javagl:obj:0.3.0'
-
-    // SVG Icons
-    implementation 'org.pushing-pixels:radiance-photon:2.0.1'
 
     // File Format
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -84,11 +80,24 @@ run {
     systemProperty 'java.library.path', file('build/natives')
 }
 
+jar {
+    manifest {
+        attributes(
+                "Manifest-Version": "1.0",
+                "Main-Class": "com.deflatedpickle.rawky.Rawky",
+                "Implementation-Vendor": "DeflatedPickle",
+                "Implementation-Title": "Rawky",
+                "Implementation-Version": "0.1.1-alpha"
+        )
+    }
+}
+
 application {
     mainClassName = 'com.deflatedpickle.rawky.MainKt'
 }
 
 shadowJar {
+    // minimize()
     archiveName = "Rawky.jar"
 }
 

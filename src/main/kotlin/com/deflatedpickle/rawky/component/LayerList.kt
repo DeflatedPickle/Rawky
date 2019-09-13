@@ -70,10 +70,10 @@ class LayerList : JPanel() {
             cellEditor = DefaultCellEditor(JCheckBox().apply { isVisible = false })
             cellRenderer = TableCellRenderer { _, value, _, _, _, _ ->
                 JCheckBox(if (value as Boolean) {
-                    Icons.rounded_rectangle_filled
+                    Icons.show
                 }
                 else {
-                    Icons.rounded_rectangle
+                    Icons.hide
                 }).apply { isOpaque = false }
             }
         }

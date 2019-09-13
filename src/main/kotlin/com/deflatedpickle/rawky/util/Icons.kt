@@ -1,38 +1,43 @@
 package com.deflatedpickle.rawky.util
 
-import org.pushingpixels.photon.icon.SvgBatikResizableIcon
 import java.awt.Dimension
+import javax.imageio.ImageIO
+import javax.swing.ImageIcon
 
 object Icons {
     val initialSize = Dimension(24, 24)
 
-    val file = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/file.svg"), initialSize)
+    val create_new = icon("paper_new")
+    val opened_folder = icon("folder_open")
+    val picture = icon("save_as")
 
-    val create_new = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/create_new.svg"), initialSize)
-    val opened_folder = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/opened_folder.svg"), initialSize)
-    val picture = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/picture.svg"), initialSize)
+    val cut = icon("cut")
+    val copy = icon("copy")
+    val paste = icon("paste")
+    val trash = icon("delete")
 
-    val cut = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/cut.svg"), initialSize)
-    val copy = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/copy.svg"), initialSize)
-    val paste = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/paste.svg"), initialSize)
-    val trash = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/trash.svg"), initialSize)
+    val settings = icon("settings")
 
-    val crop = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/crop.svg"), initialSize)
+    val crop = icon("crop")
 
-    val undo = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/undo.svg"), initialSize)
+    val undo = icon("undo")
 
-    val pencil = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/pencil.svg"), initialSize)
-    val eraser = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/eraser.svg"), initialSize)
-    val colour_picker = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/color_dropper.svg"), initialSize)
+    val pencil = icon("pencil")
+    val eraser = icon("eraser")
+    val colour_picker = icon("colour_picker")
 
-    val plus = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/plus.svg"), initialSize)
-    val minus = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/minus.svg"), initialSize)
+    val zoom_in = icon("zoom_in")
+    val zoom_out = icon("zoom_out")
 
-    val lock = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/lock_2.svg"), initialSize)
-    val unlock = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/unlock_2.svg"), initialSize)
+    val lock = icon("lock_locked")
+    val unlock = icon("lock_unlocked")
 
-    val rounded_rectangle = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/rounded_rectangle.svg"), initialSize)
-    val rounded_rectangle_filled = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/rounded_rectangle_filled.svg"), initialSize)
+    val hide = icon("hide")
+    val show = icon("show")
 
-    val settings = SvgBatikResizableIcon.getSvgIcon(ClassLoader.getSystemResource("icons/svg/production/settings.svg"), initialSize)
+    val add_element = icon("add_element")
+    
+    fun icon(name: String): ImageIcon {
+        return ImageIcon(ImageIO.read(ClassLoader.getSystemResource("icons/icons/$name.png")))
+    }
 }

@@ -17,7 +17,7 @@ class ColourLibrary : JPanel() {
     var cellSize = 28
     val cellList = mutableListOf<Cell>()
 
-    val newButton = JButton(Icons.plus).apply {
+    val newButton = JButton(Icons.add_element).apply {
         preferredSize = Dimension(cellSize, cellSize)
         toolTipText = "Add Colour"
 

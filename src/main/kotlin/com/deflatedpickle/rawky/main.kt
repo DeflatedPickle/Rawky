@@ -133,14 +133,14 @@ fun main() {
                         Components.pixelGrid.rectangleMatrix = Components.pixelGrid.refreshMatrix()
                     }
                 }
-                add(JButton(Icons.minus).apply {
+                add(JButton(Icons.zoom_out).apply {
                     toolTipText = "Zoom Out"
                     addActionListener {
                         slider.value--
                     }
                 })
                 add(slider)
-                add(JButton(Icons.plus).apply {
+                add(JButton(Icons.zoom_in).apply {
                     toolTipText = "Zoom In"
                     addActionListener {
                         slider.value++
