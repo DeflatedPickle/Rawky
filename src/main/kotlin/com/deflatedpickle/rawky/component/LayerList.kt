@@ -40,7 +40,6 @@ class LayerList : JPanel() {
                 override fun getCellEditorValue(): Any {
                     return 0
                 }
-
             }
             cellRenderer = TableCellRenderer { _, _, _, _, row, _ ->
                 object : JPanel() {

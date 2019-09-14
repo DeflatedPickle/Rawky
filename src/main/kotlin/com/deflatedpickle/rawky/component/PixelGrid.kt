@@ -131,6 +131,8 @@ class PixelGrid : JPanel() {
         }
 
         drawGrid(g2D)
+
+        Components.toolbox.tool.render(g2D)
     }
 
     fun refreshMatrix(): MutableList<MutableList<Rectangle>> {

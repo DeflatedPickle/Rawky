@@ -4,12 +4,9 @@ import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
 import uk.co.timwise.wraplayout.WrapLayout
-import java.awt.Dimension
+import java.awt.*
 import java.util.concurrent.atomic.AtomicInteger
-import javax.swing.AbstractButton
-import javax.swing.ButtonGroup
-import javax.swing.JPanel
-import javax.swing.JToggleButton
+import javax.swing.*
 
 class Toolbox : JPanel() {
     val dimension = Dimension(28, 28)
@@ -72,11 +69,38 @@ class Toolbox : JPanel() {
                 // TODO: Should colour picking push/pull to/from the undo/redo stack?
                 Components.colourPicker.color = Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.list.selectedRow].pixelMatrix[Components.pixelGrid.hoverRow][Components.pixelGrid.hoverColumn].colour
             }
+
+            override fun render(g2D: Graphics2D) {
+                val mouse = MouseInfo.getPointerInfo().location.apply {
+                    SwingUtilities.convertPointFromScreen(this, Components.pixelGrid)
+                    translate(-25, 20)
+                }
+
+                if (Components.pixelGrid.hoverRow >= 0 && Components.pixelGrid.hoverColumn >= 0) {
+                    val layerList = Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList
+
+                    for ((index, layer) in layerList.withIndex()) {
+                        val hoverColour = layerList[index].pixelMatrix[Components.pixelGrid.hoverRow][Components.pixelGrid.hoverColumn].colour
+
+                        if (hoverColour != null) {
+                            g2D.color = Color.BLACK
+                            g2D.stroke = BasicStroke(4f)
+                            g2D.drawRect(mouse.x, mouse.y, 20, 20)
+                            g2D.color = hoverColour
+                            g2D.fillRect(mouse.x, mouse.y, 20, 20)
+                            
+                            break
+                        }
+                    }
+                }
+            }
         };
 
         open fun performLeft() {}
         open fun performMiddle() {}
         open fun performRight() {}
+
+        open fun render(g2D: Graphics2D) {}
     }
 
     var tool = Tool.PENCIL
