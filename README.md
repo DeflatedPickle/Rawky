@@ -1,9 +1,11 @@
 <h1 align="center">
     Rawky
     <br>
-    <a href="https://www.patreon.com/DeflatedPickle">
-       <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="100">
-    </a>
+    <p align="center">
+        <a href="https://www.patreon.com/DeflatedPickle"><img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" height="24px"></a>
+        <a href="https://discord.gg/X4VzEyn"><img height="48px" src="https://i.imgur.com/D5vyVzC.png"></a>
+        <a href='https://ko-fi.com/Q5Q0CSWL' target='_blank'><img height='24' style='border:0px;height:24px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com'/></a>
+    </p>
 </h1>
 
 <h4 align="center">A pixel art editor.</h4>
