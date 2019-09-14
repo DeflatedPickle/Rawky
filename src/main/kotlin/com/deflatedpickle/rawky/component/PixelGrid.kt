@@ -107,6 +107,10 @@ class PixelGrid : JPanel() {
                 }
             }
 
+            override fun mouseEntered(e: MouseEvent) {
+                cursor = Components.toolbox.tool.icon
+            }
+
             override fun mouseExited(e: MouseEvent) {
                 hoverPixel = null
                 hoverRow = -1
