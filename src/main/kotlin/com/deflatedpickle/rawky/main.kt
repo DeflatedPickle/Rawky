@@ -4,6 +4,7 @@ import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
 import com.deflatedpickle.rawky.dialogue.New
+import com.deflatedpickle.rawky.menu.Edit
 import com.deflatedpickle.rawky.menu.File
 import com.deflatedpickle.rawky.menu.Help
 import com.deflatedpickle.rawky.menu.Program
@@ -21,6 +22,7 @@ fun main() {
 
         Components.frame.jMenuBar = JMenuBar().apply {
             add(File())
+            add(Edit())
             add(Program())
             add(Help())
         }
@@ -30,23 +32,24 @@ fun main() {
         Components.frame.add(JToolBar().apply {
             add(JButton(Icons.create_new).apply {
                 toolTipText = "New File"
-                addActionListener {
-                    New().isVisible = true
-                }
+                addActionListener { New().isVisible = true }
             })
-
             add(JButton(Icons.opened_folder).apply {
                 toolTipText = "Open File"
-                addActionListener {
-                    Commands.open()
-                }
+                addActionListener { Commands.open() }
             })
-
             add(JButton(Icons.picture).apply {
                 toolTipText = "Save File As"
-                addActionListener {
-                    Commands.save()
-                }
+                addActionListener { Commands.save() }
+            })
+            addSeparator()
+            add(JButton(Icons.undo).apply {
+                toolTipText = "Undo"
+                addActionListener { ActionStack.undo() }
+            })
+            add(JButton(Icons.redo).apply {
+                toolTipText = "Redo"
+                addActionListener { ActionStack.redo() }
             })
         }, BorderLayout.PAGE_START)
 
