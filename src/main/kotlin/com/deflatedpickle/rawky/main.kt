@@ -220,10 +220,17 @@ fun main() {
 
             add(JToolBar().apply {
                 add(JButton(Icons.undo).apply {
+                    toolTipText = "Undo Action"
                     addActionListener { ActionStack.undo() }
                 })
                 add(JButton(Icons.redo).apply {
+                    toolTipText = "Redo Action"
                     addActionListener { ActionStack.redo() }
+                })
+                addSeparator()
+                add(JButton(Icons.trash).apply {
+                    toolTipText = "Delete Action"
+                    addActionListener { ActionStack.delete(Components.actionHistory.list.selectedIndex) }
                 })
             }, BorderLayout.PAGE_START)
         })

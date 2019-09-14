@@ -24,6 +24,8 @@ object ActionStack {
         Components.actionHistory.listModel.addElement(it.name)
 
         undoQueue.add(it)
+
+        Components.actionHistory.list.selectedIndex = Components.actionHistory.listModel.size() - 1
     }
 
     fun undo() {
@@ -32,6 +34,8 @@ object ActionStack {
                 Components.actionHistory.listModel.remove(Components.actionHistory.listModel.size - 1)
                 cleanup()
             })
+
+            Components.actionHistory.list.selectedIndex = Components.actionHistory.listModel.size() - 1
         }
     }
 
@@ -41,6 +45,15 @@ object ActionStack {
                 Components.actionHistory.listModel.addElement(name)
                 perform()
             })
+
+            Components.actionHistory.list.selectedIndex = Components.actionHistory.listModel.size() - 1
         }
+    }
+
+    fun delete(index: Int) {
+        Components.actionHistory.listModel.remove(index)
+        undoQueue.remove(undoQueue.elementAt(index))
+
+        Components.actionHistory.list.selectedIndex = Components.actionHistory.listModel.size() - 1
     }
 }
