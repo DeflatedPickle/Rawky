@@ -4,9 +4,11 @@ import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
 import com.deflatedpickle.rawky.dialogue.New
+import com.deflatedpickle.rawky.menu.Edit
 import com.deflatedpickle.rawky.menu.File
 import com.deflatedpickle.rawky.menu.Help
 import com.deflatedpickle.rawky.menu.Program
+import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Commands
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
@@ -20,6 +22,7 @@ fun main() {
 
         Components.frame.jMenuBar = JMenuBar().apply {
             add(File())
+            add(Edit())
             add(Program())
             add(Help())
         }
@@ -29,23 +32,24 @@ fun main() {
         Components.frame.add(JToolBar().apply {
             add(JButton(Icons.create_new).apply {
                 toolTipText = "New File"
-                addActionListener {
-                    New().isVisible = true
-                }
+                addActionListener { New().isVisible = true }
             })
-
             add(JButton(Icons.opened_folder).apply {
                 toolTipText = "Open File"
-                addActionListener {
-                    Commands.open()
-                }
+                addActionListener { Commands.open() }
             })
-
             add(JButton(Icons.picture).apply {
                 toolTipText = "Save File As"
-                addActionListener {
-                    Commands.save()
-                }
+                addActionListener { Commands.save() }
+            })
+            addSeparator()
+            add(JButton(Icons.undo).apply {
+                toolTipText = "Undo"
+                addActionListener { ActionStack.undo() }
+            })
+            add(JButton(Icons.redo).apply {
+                toolTipText = "Redo"
+                addActionListener { ActionStack.redo() }
             })
         }, BorderLayout.PAGE_START)
 
@@ -201,12 +205,31 @@ fun main() {
         val colourPalette = DefaultSingleCDockable("colourPalette", "Colour Palette", Components.colourPalette)
         cControl.addDockable(colourPalette)
         colourPalette.isVisible = true
-        grid.add(1.2, 0.3, 0.4, 0.4, colourPalette)
+        grid.add(1.2, 0.3, 0.4, 0.2, colourPalette)
 
         val colourLibrary = DefaultSingleCDockable("colourLibrary", "Colour Library", Components.colourLibrary)
         cControl.addDockable(colourLibrary)
         colourLibrary.isVisible = true
-        grid.add(1.2, 0.7, 0.4, 0.4, colourLibrary)
+        grid.add(1.2, 0.7, 0.4, 0.2, colourLibrary)
+
+        val actionHistory = DefaultSingleCDockable("actionHistory", "Action History", JPanel().apply {
+            isOpaque = false
+            layout = BorderLayout()
+
+            add(JScrollPane(Components.actionHistory))
+
+            add(JToolBar().apply {
+                add(JButton(Icons.undo).apply {
+                    addActionListener { ActionStack.undo() }
+                })
+                add(JButton(Icons.redo).apply {
+                    addActionListener { ActionStack.redo() }
+                })
+            }, BorderLayout.PAGE_START)
+        })
+        cControl.addDockable(actionHistory)
+        actionHistory.isVisible = true
+        grid.add(1.2, 0.0, 0.4, 0.8, actionHistory)
 
         cControl.contentArea.deploy(grid)
 

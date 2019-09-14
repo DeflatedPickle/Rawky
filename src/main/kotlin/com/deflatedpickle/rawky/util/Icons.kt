@@ -21,6 +21,7 @@ object Icons {
     val crop = icon("crop")
 
     val undo = icon("undo")
+    val redo = icon("redo")
 
     val pencil = icon("pencil")
     val eraser = icon("eraser")

@@ -18,6 +18,7 @@ object Components {
     val layerList = LayerList()
     val animationTimeline = AnimationTimeline()
     val animationPreview = AnimationPreview()
+    val actionHistory = ActionHistory()
 
     init {
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
