@@ -34,34 +34,48 @@ class Toolbox : JPanel() {
     enum class Tool(val icon: Cursor) {
         PENCIL(Toolkit.getDefaultToolkit().createCustomCursor(Icons.pencil.image, Point(8, 16), "Pencil")) {
             override fun performLeft() {
-                ActionStack.action(object : LockCheck("Pencil") {
-                    override fun perform() {
-                        super.perform()
-                        Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = Components.colourShades.selectedShade
-                    }
+                if (Components.pixelGrid
+                                .frameList[Components.animationTimeline.list.selectedIndex]
+                                .layerList[Components.layerList.list.selectedRow]
+                                .pixelMatrix[Components.pixelGrid.hoverRow][Components.pixelGrid.hoverColumn]
+                                .colour
+                        != Components.colourShades.selectedShade) {
+                    ActionStack.push(object : LockCheck("Pencil") {
+                        override fun perform() {
+                            super.perform()
+                            Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = Components.colourShades.selectedShade
+                        }
 
-                    override fun cleanup() {
-                        super.cleanup()
-                        Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = null
-                    }
-                })
+                        override fun cleanup() {
+                            super.cleanup()
+                            Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = null
+                        }
+                    })
+                }
             }
         },
         ERASER(Toolkit.getDefaultToolkit().createCustomCursor(Icons.eraser.image, Point(8, 8), "Eraser")) {
             override fun performLeft() {
-                ActionStack.action(object : LockCheck("Eraser") {
-                    val colour = Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
+                if (Components.pixelGrid
+                                .frameList[Components.animationTimeline.list.selectedIndex]
+                                .layerList[Components.layerList.list.selectedRow]
+                                .pixelMatrix[Components.pixelGrid.hoverRow][Components.pixelGrid.hoverColumn]
+                                .colour
+                        != null) {
+                    ActionStack.push(object : LockCheck("Eraser") {
+                        val colour = Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
 
-                    override fun perform() {
-                        super.perform()
-                        Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = null
-                    }
+                        override fun perform() {
+                            super.perform()
+                            Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = null
+                        }
 
-                    override fun cleanup() {
-                        super.cleanup()
-                        Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = colour
-                    }
-                })
+                        override fun cleanup() {
+                            super.cleanup()
+                            Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = colour
+                        }
+                    })
+                }
             }
         },
         PICKER(Toolkit.getDefaultToolkit().createCustomCursor(Icons.colour_picker.image, Point(8, 16), "Colour Picker")) {

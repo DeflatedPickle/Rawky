@@ -4,7 +4,25 @@ import java.util.*
 
 object ActionStack {
     abstract class Action(val name: String) : Comparable<Action> {
-        abstract fun perform()
+        /**
+         * A check to see if the action should happen
+         */
+        open fun check(): Boolean {
+            return true
+        }
+
+        /**
+         * Performed on redo
+         */
+        open fun perform() {
+            if (!check()) {
+                return
+            }
+        }
+
+        /**
+         * Performed on undo
+         */
         abstract fun cleanup()
 
         override fun compareTo(other: Action): Int {
@@ -15,7 +33,7 @@ object ActionStack {
     val undoQueue = PriorityQueue<Action>()
     val redoQueue = PriorityQueue<Action>()
 
-    fun action(it: Action) {
+    fun push(it: Action) {
         if (!redoQueue.isEmpty()) {
             redoQueue.clear()
         }
