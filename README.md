@@ -53,7 +53,7 @@ It also has frames, which can be previewed above their name.
 ## Screenshots
 ||
 |---|
-|![Windows 10](.github/images/Rawky.png)|
+|![Windows 10](.github/images/Rawky_Windows10.png)|
 |![Substance Graphite Electric](.github/images/Rawky_Substance_Graphite_Electric.png)|
 
 ## Download
