@@ -14,6 +14,7 @@ before_script:
   - choco install gradle --version 5.0 -params 'installdir=c:\\gradle'
   - export PATH=$PATH:"/c/gradle/bin"
 script:
+  - gradle generateGrammarSource
   - gradle shadowJar
   - gradle createExe
 deploy:
