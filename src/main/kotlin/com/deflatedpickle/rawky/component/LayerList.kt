@@ -14,7 +14,7 @@ class LayerList : JPanel() {
         addTableModelListener {
             when (it.column) {
                 2 -> Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[it.firstRow].visible = this.getValueAt(it.firstRow, it.column) as Boolean
-                3 -> Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[it.firstRow].locked = this.getValueAt(it.firstRow, it.column) as Boolean
+                3 -> Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[it.firstRow].lockType = this.getValueAt(it.firstRow, it.column) as PixelGrid.Layer.LockType
             }
         }
     }
@@ -77,17 +77,10 @@ class LayerList : JPanel() {
             }
         }
         columnModel.getColumn(3).apply {
-            maxWidth = 30
+            maxWidth = 90
 
-            cellEditor = DefaultCellEditor(JCheckBox().apply { isVisible = false })
-            cellRenderer = TableCellRenderer { _, value, _, _, _, _ ->
-                JCheckBox(if (value as Boolean) {
-                    Icons.lock
-                }
-                else {
-                    Icons.unlock
-                }).apply { isOpaque = false }
-            }
+            val cellModel = DefaultComboBoxModel(PixelGrid.Layer.LockType.values())
+            cellEditor = DefaultCellEditor(JComboBox(cellModel))
         }
     }
 
@@ -99,7 +92,7 @@ class LayerList : JPanel() {
     }
 
     fun addLayer() {
-        listModel.insertRow(0, arrayOf(null, "Layer ${listModel.rowCount}", true, false))
+        listModel.insertRow(0, arrayOf(null, "Layer ${listModel.rowCount}", true, PixelGrid.Layer.LockType.OFF))
         list.setRowSelectionInterval(0, 0)
 
         Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.add(0, PixelGrid.Layer())
@@ -110,7 +103,11 @@ class LayerList : JPanel() {
         listModel.removeRow(list.selectedRow)
     }
 
-    fun isLayerLocked(index: Int = list.selectedRow): Boolean {
-        return (listModel.dataVector[index] as Vector<Any>)[3] as Boolean
+    fun isLayerHidden(index: Int = list.selectedRow): Boolean {
+        return (listModel.dataVector[index] as Vector<Any>)[2] as Boolean
+    }
+
+    fun layerLockType(index: Int = list.selectedRow): PixelGrid.Layer.LockType {
+        return (listModel.dataVector[index] as Vector<Any>)[3] as PixelGrid.Layer.LockType
     }
 }

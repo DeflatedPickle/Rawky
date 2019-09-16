@@ -11,22 +11,19 @@ import javax.swing.*
 class Toolbox : JPanel() {
     val dimension = Dimension(28, 28)
 
-    open class LockCheck(name: String) : ActionStack.Action(name) {
+    abstract class LockCheck(name: String) : ActionStack.Action(name) {
         val frame = Components.animationTimeline.list.selectedIndex
         val layer = Components.layerList.list.selectedRow
 
         val row = Components.pixelGrid.hoverRow
         val column = Components.pixelGrid.hoverColumn
 
-        override fun perform() {
-            if (Components.layerList.isLayerLocked(layer)) {
-                return
-            }
-        }
-
-        override fun cleanup() {
-            if (Components.layerList.isLayerLocked(layer)) {
-                return
+        override fun check(): Boolean {
+            return when (Components.layerList.layerLockType(layer)) {
+                PixelGrid.Layer.LockType.OFF -> true
+                PixelGrid.Layer.LockType.COLOUR -> Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour != null
+                PixelGrid.Layer.LockType.ALPHA -> Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour == null
+                PixelGrid.Layer.LockType.ALL -> false
             }
         }
     }
@@ -40,17 +37,23 @@ class Toolbox : JPanel() {
                                 .pixelMatrix[Components.pixelGrid.hoverRow][Components.pixelGrid.hoverColumn]
                                 .colour
                         != Components.colourShades.selectedShade) {
-                    ActionStack.push(object : LockCheck("Pencil") {
+                    val pixel = object : LockCheck("Pencil") {
                         override fun perform() {
-                            super.perform()
-                            Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = Components.colourShades.selectedShade
+                            if (check()) {
+                                Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = Components.colourShades.selectedShade
+                            }
                         }
 
                         override fun cleanup() {
-                            super.cleanup()
-                            Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = null
+                            if (check()) {
+                                Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = null
+                            }
                         }
-                    })
+                    }
+
+                    if (pixel.check()) {
+                        ActionStack.push(pixel)
+                    }
                 }
             }
         },
@@ -62,19 +65,25 @@ class Toolbox : JPanel() {
                                 .pixelMatrix[Components.pixelGrid.hoverRow][Components.pixelGrid.hoverColumn]
                                 .colour
                         != null) {
-                    ActionStack.push(object : LockCheck("Eraser") {
+                    val pixel = object : LockCheck("Eraser") {
                         val colour = Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
 
                         override fun perform() {
-                            super.perform()
-                            Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = null
+                            if (check()) {
+                                Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = null
+                            }
                         }
 
                         override fun cleanup() {
-                            super.cleanup()
-                            Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = colour
+                            if (check()) {
+                                Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = colour
+                            }
                         }
-                    })
+                    }
+
+                    if (pixel.check()) {
+                        ActionStack.push(pixel)
+                    }
                 }
             }
         },

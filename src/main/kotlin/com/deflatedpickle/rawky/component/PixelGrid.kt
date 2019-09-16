@@ -21,7 +21,14 @@ class PixelGrid : JPanel() {
     class Layer {
         var pixelMatrix: MutableList<MutableList<Cell>>
         var visible = true
-        var locked = false
+
+        enum class LockType {
+            OFF,
+            COLOUR,
+            ALPHA,
+            ALL
+        }
+        var lockType = LockType.OFF
 
         init {
             val rowList = mutableListOf<MutableList<Cell>>()
@@ -36,7 +43,7 @@ class PixelGrid : JPanel() {
         }
 
         override fun toString(): String {
-            return "Layer { $pixelMatrix, $visible, $locked }"
+            return "Layer { $pixelMatrix, $visible, $lockType }"
         }
     }
 
@@ -155,7 +162,7 @@ class PixelGrid : JPanel() {
     fun drawPixels(layerIndex: Int, layer: Layer, g2D: Graphics2D) {
         for (row in 0 until rectangleMatrix.size) {
             for (column in 0 until rectangleMatrix[row].size) {
-                if ((Components.layerList.listModel.dataVector[layerIndex] as Vector<Any>)[2] as Boolean) {
+                if (Components.layerList.isLayerHidden(layerIndex)) {
                     if (layer.pixelMatrix[row][column].colour != null) {
                         g2D.color = layer.pixelMatrix[row][column].colour
                         val rectangle = rectangleMatrix[row][column]

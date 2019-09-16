@@ -73,7 +73,7 @@ object Commands {
                                             }
                                             pixelMatrix = rowList
                                             visible = castLayer["visible"] as Boolean
-                                            locked = castLayer["locked"] as Boolean
+                                            lockType = PixelGrid.Layer.LockType.valueOf(castLayer["lockType"] as String)
                                         }
                                     }
                                 }

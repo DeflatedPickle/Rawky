@@ -14,11 +14,7 @@ object ActionStack {
         /**
          * Performed on redo
          */
-        open fun perform() {
-            if (!check()) {
-                return
-            }
-        }
+        abstract fun perform()
 
         /**
          * Performed on undo

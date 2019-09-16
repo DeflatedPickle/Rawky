@@ -80,7 +80,7 @@ class AnimationTimeline : JPanel() {
         if (Components.pixelGrid.frameList.size > list.selectedIndex) {
             if (list.selectedIndex >= 0) {
                 for (i in 0 until Components.pixelGrid.frameList[list.selectedIndex].layerList.size) {
-                    Components.layerList.listModel.insertRow(0, arrayOf(null, "Layer ${Components.layerList.listModel.rowCount}", Components.pixelGrid.frameList[list.selectedIndex].layerList[i].visible, Components.pixelGrid.frameList[list.selectedIndex].layerList[i].locked))
+                    Components.layerList.listModel.insertRow(0, arrayOf(null, "Layer ${Components.layerList.listModel.rowCount}", Components.pixelGrid.frameList[list.selectedIndex].layerList[i].visible, Components.pixelGrid.frameList[list.selectedIndex].layerList[i].lockType))
                 }
             }
         }
