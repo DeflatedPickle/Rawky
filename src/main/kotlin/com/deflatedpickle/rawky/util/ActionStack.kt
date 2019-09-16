@@ -1,7 +1,5 @@
 package com.deflatedpickle.rawky.util
 
-import java.util.*
-
 object ActionStack {
     abstract class Action(val name: String) {
         /**
@@ -26,13 +24,12 @@ object ActionStack {
     val redoQueue = mutableListOf<Action>()
 
     fun push(it: Action) {
-        if (!redoQueue.isEmpty()) {
+        if (redoQueue.isNotEmpty()) {
             redoQueue.clear()
         }
 
         it.perform()
         Components.actionHistory.listModel.addElement(it.name)
-
         undoQueue.add(it)
 
         Components.actionHistory.list.selectedIndex = Components.actionHistory.listModel.size() - 1
@@ -62,10 +59,13 @@ object ActionStack {
         }
     }
 
-    fun delete(index: Int) {
+    fun pop(index: Int): Action {
         Components.actionHistory.listModel.remove(index)
-        undoQueue.remove(undoQueue.elementAt(index))
+        val item = undoQueue.elementAt(index)
+        undoQueue.remove(item)
 
         Components.actionHistory.list.selectedIndex = Components.actionHistory.listModel.size() - 1
+
+        return item
     }
 }

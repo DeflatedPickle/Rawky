@@ -230,7 +230,7 @@ fun main() {
                 addSeparator()
                 add(JButton(Icons.trash).apply {
                     toolTipText = "Delete Action"
-                    addActionListener { ActionStack.delete(Components.actionHistory.list.selectedIndex) }
+                    addActionListener { ActionStack.pop(Components.actionHistory.list.selectedIndex) }
                 })
             }, BorderLayout.PAGE_START)
         })
