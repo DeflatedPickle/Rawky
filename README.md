@@ -53,7 +53,7 @@ It also has frames, which can be previewed above their name.
 ## Screenshots
 ||
 |---|
-|![Windows 10](.github/images/Rawky_Windows10.png)|
+|![Windows 10](.github/images/Rawky.png)|
 |![Substance Graphite Electric](.github/images/Rawky_Substance_Graphite_Electric.png)|
 
 ## Download
@@ -61,7 +61,9 @@ It also has frames, which can be previewed above their name.
 
 | | Version |
 |---|---|
-| **Latest** | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.1.0-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.1.0-alpha) |
+| **Latest** | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.3.6-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.3.6-alpha) |
+| | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.1.1-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.1.1-alpha) |
+| | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.1.0-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.1.0-alpha) |
 
 ## Suggestions
 I'm always looking to improve Rawky and the experience of using it, so if you have an idea, feel free to [open an issue](https://github.com/DeflatedPickle/Rawky/issues/new), detailing your idea and we can talk about it.
