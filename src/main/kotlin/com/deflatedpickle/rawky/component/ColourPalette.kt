@@ -39,7 +39,9 @@ class ColourPalette : JPanel() {
 
                 if (e.button == MouseEvent.BUTTON1) {
                     if (e.clickCount == 2) {
-                        Components.colourPicker.color = selectedColour?.colour
+                        if (selectedColour != null) {
+                            Components.colourPicker.color = selectedColour!!.colour
+                        }
                     }
                 }
             }
