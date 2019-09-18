@@ -28,6 +28,7 @@ class PixelGrid : JPanel() {
             ALPHA,
             ALL
         }
+
         var lockType = LockType.OFF
 
         init {
@@ -77,6 +78,8 @@ class PixelGrid : JPanel() {
     var hoverRow = 0
     var hoverColumn = 0
 
+    var scale = 1.0
+
     init {
         isOpaque = false
 
@@ -86,7 +89,11 @@ class PixelGrid : JPanel() {
             override fun mouseMoved(e: MouseEvent) {
                 for ((rowIndex, row) in rectangleMatrix.withIndex()) {
                     for ((columnIndex, column) in row.withIndex()) {
-                        if (column.contains(e.point)) {
+                        if (column.contains(e.point.apply {
+                                    // FIXME: Scale the translation
+                                    translate(-(this@PixelGrid.width / 2 - this@PixelGrid.columnAmount * this@PixelGrid.pixelSize / 2),
+                                            -(this@PixelGrid.height / 2 - this@PixelGrid.rowAmount * this@PixelGrid.pixelSize / 2))
+                                })) {
                             hoverPixel = column
                             hoverRow = rowIndex
                             hoverColumn = columnIndex
@@ -128,6 +135,9 @@ class PixelGrid : JPanel() {
 
     override fun paintComponent(g: Graphics) {
         val g2D = g as Graphics2D
+        g2D.translate(this.width / 2 - this.columnAmount * this.pixelSize / 2, this.height / 2 - this.rowAmount * this.pixelSize / 2)
+        g2D.scale(this.scale, this.scale)
+
         g2D.stroke = BasicStroke(lineThickness)
 
         drawTransparentBackground(g2D)

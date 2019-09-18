@@ -127,14 +127,25 @@ fun main() {
 
             add(JScrollPane(Components.pixelGrid.apply {
                 preferredSize = Dimension(2048, 2048)
-            }))
+            }).apply {
+                SwingUtilities.invokeLater {
+                    for (i in arrayOf(horizontalScrollBar, verticalScrollBar)) {
+                        i.value = i.maximum / 2 - with(i.size) {
+                            when (i.orientation) {
+                                0 -> width
+                                1 -> height
+                                else -> 0
+                            }
+                        } / 2
+                    }
+                }
+            })
 
             add(JToolBar().apply {
-                val slider = JSlider(1, 100).apply {
-                    this.value = Components.pixelGrid.pixelSize
+                val slider = JSlider(25, 300).apply {
+                    this.value = 50
                     addChangeListener {
-                        Components.pixelGrid.pixelSize = this.value
-                        Components.pixelGrid.rectangleMatrix = Components.pixelGrid.refreshMatrix()
+                        Components.pixelGrid.scale = this.value / 50.0
                     }
                 }
                 add(JButton(Icons.zoom_out).apply {
