@@ -15,7 +15,7 @@ class File : JMenu("File") {
         add(JSeparator())
         add(JMenu("Import").apply {
             add(JMenu("Colour Palette").apply {
-                add(JMenuItem("JASC PAL").apply { addActionListener { Commands.import_jasc_pal() } })
+                add(JMenuItem("JASC PAL").apply { addActionListener { Commands.importJascPal() } })
             })
         })
     }

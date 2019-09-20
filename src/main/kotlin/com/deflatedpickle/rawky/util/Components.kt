@@ -24,7 +24,7 @@ object Components {
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         frame.setSize(1200, 800)
 
-        toolbox.pencilButton.isSelected = true
+        // toolbox.pencilButton.isSelected = true
 
         colourPicker.color = Color.WHITE
         colourPicker.addColorListener {

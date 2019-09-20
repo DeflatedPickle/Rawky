@@ -161,15 +161,15 @@ object Commands {
         }
     }
 
-    fun import_jasc_pal() {
+    fun importJascPal() {
         val chooser = JFileChooser().apply {
             addChoosableFileFilter(FileNameExtensionFilter("JASC PAL (*.pal)", "pal").also { this.fileFilter = it })
         }
 
         if (chooser.showOpenDialog(Components.frame) == JFileChooser.APPROVE_OPTION) {
             val lexer = JASC_PALLexer(CharStreams.fromStream(chooser.selectedFile.inputStream()))
-            val token_stream = CommonTokenStream(lexer)
-            val parser = JASC_PALParser(token_stream)
+            val tokenStream = CommonTokenStream(lexer)
+            val parser = JASC_PALParser(tokenStream)
 
             val startContext = parser.start()
 

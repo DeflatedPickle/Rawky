@@ -5,7 +5,6 @@ import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
-import java.util.*
 import javax.swing.JPanel
 import javax.swing.SwingUtilities
 
@@ -19,7 +18,7 @@ class PixelGrid : JPanel() {
     }
 
     class Layer {
-        var pixelMatrix: MutableList<MutableList<Cell>>
+        var pixelMatrix = Components.pixelGrid.initMatrix<Cell>()
         var visible = true
 
         enum class LockType {
@@ -30,18 +29,6 @@ class PixelGrid : JPanel() {
         }
 
         var lockType = LockType.OFF
-
-        init {
-            val rowList = mutableListOf<MutableList<Cell>>()
-            for (row in 0 until Components.pixelGrid.rowAmount) {
-                val columnList = mutableListOf<Cell>()
-                for (column in 0 until Components.pixelGrid.columnAmount) {
-                    columnList.add(Cell())
-                }
-                rowList.add(columnList)
-            }
-            pixelMatrix = rowList
-        }
 
         override fun toString(): String {
             return "Layer { $pixelMatrix, $visible, $lockType }"
@@ -86,6 +73,8 @@ class PixelGrid : JPanel() {
         rectangleMatrix = refreshMatrix()
 
         addMouseMotionListener(object : MouseMotionAdapter() {
+            var lastPoint = Point()
+
             override fun mouseMoved(e: MouseEvent) {
                 for ((rowIndex, row) in rectangleMatrix.withIndex()) {
                     for ((columnIndex, column) in row.withIndex()) {
@@ -104,25 +93,35 @@ class PixelGrid : JPanel() {
 
             override fun mouseDragged(e: MouseEvent) {
                 mouseMoved(e)
+                Components.toolbox.tool.mouseDragged(e.button)
                 when {
-                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.tool.performLeft()
-                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.tool.performMiddle()
-                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.tool.performRight()
+                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.tool.performLeft(true, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.tool.performMiddle(true, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.tool.performRight(true, e.point, lastPoint, e.clickCount)
                 }
+                lastPoint = e.point
             }
         })
 
         addMouseListener(object : MouseAdapter() {
+            var lastPoint = Point()
+
             override fun mousePressed(e: MouseEvent) {
+                Components.toolbox.tool.mouseClicked(e.button)
                 when {
-                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.tool.performLeft()
-                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.tool.performMiddle()
-                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.tool.performRight()
+                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.tool.performLeft(false, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.tool.performMiddle(false, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.tool.performRight(false, e.point, lastPoint, e.clickCount)
                 }
+                lastPoint = e.point
+            }
+
+            override fun mouseReleased(e: MouseEvent) {
+                Components.toolbox.tool.mouseRelease(e.button)
             }
 
             override fun mouseEntered(e: MouseEvent) {
-                cursor = Components.toolbox.tool.icon
+                cursor = Components.toolbox.tool.cursor
             }
 
             override fun mouseExited(e: MouseEvent) {
@@ -214,5 +213,17 @@ class PixelGrid : JPanel() {
                 g2D.drawRect(column.x, column.y, column.width, column.height)
             }
         }
+    }
+
+    inline fun <reified T>initMatrix(value: T? = null): MutableList<MutableList<T>> {
+        val rowList = mutableListOf<MutableList<T>>()
+        for (row in 0 until Components.pixelGrid.rowAmount) {
+            val columnList = mutableListOf<T>()
+            for (column in 0 until Components.pixelGrid.columnAmount) {
+                columnList.add(value ?: T::class.constructors.first().call())
+            }
+            rowList.add(columnList)
+        }
+        return rowList
     }
 }

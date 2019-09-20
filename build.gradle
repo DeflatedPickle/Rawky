@@ -36,6 +36,7 @@ repositories {
 dependencies {
     // Kotlin Standard Library
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.3.41"
 
     // ANTLR4
     antlr "org.antlr:antlr4:4.7.2"
