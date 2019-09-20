@@ -40,6 +40,8 @@ class Toolbox : JPanel() {
                                 .colour
                         != Components.colourShades.selectedShade) {
                     val pixel = object : LockCheck(this.cursor.name) {
+                        var oldValue = Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
+
                         override fun perform() {
                             if (check()) {
                                 Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = Components.colourShades.selectedShade
@@ -48,7 +50,7 @@ class Toolbox : JPanel() {
 
                         override fun cleanup() {
                             if (check()) {
-                                Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = null
+                                Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = oldValue
                             }
                         }
                     }
@@ -68,7 +70,7 @@ class Toolbox : JPanel() {
                                 .colour
                         != null) {
                     val pixel = object : LockCheck(this.cursor.name) {
-                        val colour = Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
+                        var oldValue = Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
 
                         override fun perform() {
                             if (check()) {
@@ -78,7 +80,7 @@ class Toolbox : JPanel() {
 
                         override fun cleanup() {
                             if (check()) {
-                                Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = colour
+                                Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = oldValue
                             }
                         }
                     }
