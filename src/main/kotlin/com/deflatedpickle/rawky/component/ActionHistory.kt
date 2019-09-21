@@ -11,7 +11,9 @@ import javax.swing.JPanel
 
 class ActionHistory : JPanel() {
     val listModel = DefaultListModel<String>()
+    // TODO: Replace with a JTree
     val list = JList<String>(listModel).apply {
+        // TODO: Could probably be replaced with a MultiAction
         val action = object : ActionStack.Action("Mass Undo") {
             val actionList = mutableListOf<ActionStack.Action>()
 

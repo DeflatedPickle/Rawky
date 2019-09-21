@@ -20,6 +20,23 @@ object ActionStack {
         abstract fun cleanup()
     }
 
+    class MultiAction(name: String) : Action(name) {
+        val stack = mutableListOf<Action>()
+        var active = true
+
+        override fun perform() {
+            for (i in this.stack) {
+                i.perform()
+            }
+        }
+
+        override fun cleanup() {
+            for (i in this.stack) {
+                i.cleanup()
+            }
+        }
+    }
+
     val undoQueue = mutableListOf<Action>()
     val redoQueue = mutableListOf<Action>()
 
@@ -29,8 +46,14 @@ object ActionStack {
         }
 
         it.perform()
-        Components.actionHistory.listModel.addElement(it.name)
-        undoQueue.add(it)
+
+        if (undoQueue.isNotEmpty() && undoQueue.last() is MultiAction && (undoQueue.last() as MultiAction).active) {
+            (undoQueue.last() as MultiAction).stack.add(it)
+        }
+        else {
+            Components.actionHistory.listModel.addElement(it.name)
+            undoQueue.add(it)
+        }
 
         Components.actionHistory.list.selectedIndex = Components.actionHistory.listModel.size() - 1
     }

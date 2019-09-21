@@ -129,8 +129,16 @@ class Toolbox : JPanel() {
         open fun performRight(dragged: Boolean, point: Point, lastPoint: Point, clickCount: Int) {}
 
         open fun mouseClicked(button: Int) {}
-        open fun mouseDragged(button: Int) {}
-        open fun mouseRelease(button: Int) {}
+        open fun mouseDragged(button: Int) {
+            if (ActionStack.undoQueue.isNotEmpty() && ActionStack.undoQueue.last() !is ActionStack.MultiAction) {
+                ActionStack.push(ActionStack.MultiAction("MultiAction (${this.name.toLowerCase().capitalize()})"))
+            }
+        }
+        open fun mouseRelease(button: Int) {
+            if (ActionStack.undoQueue.isNotEmpty() && ActionStack.undoQueue.last() is ActionStack.MultiAction) {
+                (ActionStack.undoQueue.last() as ActionStack.MultiAction).active = false
+            }
+        }
 
         open fun render(g2D: Graphics2D) {}
     }
