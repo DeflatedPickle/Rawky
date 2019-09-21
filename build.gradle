@@ -14,7 +14,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 
 group 'deflatedpickle'
-version '0.3.6-alpha'
+version '0.4.2-alpha'
 
 sourceCompatibility = 1.8
 
@@ -30,7 +30,7 @@ repositories {
 
     maven { url 'http://dl.bintray.com/kotlin/kotlin-eap' }
     maven { url 'https://jitpack.io' }
-    maven { url 'http://maven.geotoolkit.org/' }
+    maven { url 'http://maven.geotoolkit.org' }
 }
 
 dependencies {
@@ -70,6 +70,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.5'
 
     // Image Importing/Exporting
+    implementation 'javax.media:jai_imageio:1.1'
     implementation 'com.github.dragon66:icafe:c969c07d7b'
 
     // HTTP
@@ -104,7 +105,7 @@ jar {
                 "Main-Class": "com.deflatedpickle.rawky.Rawky",
                 "Implementation-Vendor": "DeflatedPickle",
                 "Implementation-Title": "Rawky",
-                "Implementation-Version": "0.1.1-alpha"
+                "Implementation-Version": "0.4.2-alpha"
         )
     }
 }
