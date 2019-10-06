@@ -20,10 +20,11 @@ class Toolbox : JPanel() {
         val column = Components.pixelGrid.hoverColumn
 
         override fun check(): Boolean {
+            val colour = Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
             return when (Components.layerList.layerLockType(layer)) {
                 PixelGrid.Layer.LockType.OFF -> true
-                PixelGrid.Layer.LockType.COLOUR -> Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour != null
-                PixelGrid.Layer.LockType.ALPHA -> Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour == null
+                PixelGrid.Layer.LockType.COLOUR -> colour != null
+                PixelGrid.Layer.LockType.ALPHA -> colour == null
                 PixelGrid.Layer.LockType.ALL -> false
             }
         }
@@ -52,6 +53,11 @@ class Toolbox : JPanel() {
                             if (check()) {
                                 Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = oldValue
                             }
+                        }
+
+                        override fun outline(g2D: Graphics2D) {
+                            g2D.color = UIManager.getColor("List.selectionBackground")
+                            g2D.drawRect(this.row * Components.pixelGrid.pixelSize, this.column * Components.pixelGrid.pixelSize, Components.pixelGrid.pixelSize, Components.pixelGrid.pixelSize)
                         }
                     }
 
@@ -82,6 +88,11 @@ class Toolbox : JPanel() {
                             if (check()) {
                                 Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = oldValue
                             }
+                        }
+
+                        override fun outline(g2D: Graphics2D) {
+                            g2D.color = UIManager.getColor("List.selectionBackground")
+                            g2D.drawRect(this.row * Components.pixelGrid.pixelSize, this.column * Components.pixelGrid.pixelSize, Components.pixelGrid.pixelSize, Components.pixelGrid.pixelSize)
                         }
                     }
 

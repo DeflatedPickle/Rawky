@@ -1,5 +1,7 @@
 package com.deflatedpickle.rawky.util
 
+import java.awt.Graphics2D
+
 object ActionStack {
     abstract class Action(val name: String) {
         /**
@@ -18,6 +20,11 @@ object ActionStack {
          * Performed on undo
          */
         abstract fun cleanup()
+
+        /**
+         * Draws an outline around this action
+         */
+        abstract fun outline(g2D: Graphics2D)
     }
 
     class MultiAction(name: String) : Action(name) {
@@ -33,6 +40,12 @@ object ActionStack {
         override fun cleanup() {
             for (i in this.stack) {
                 i.cleanup()
+            }
+        }
+
+        override fun outline(g2D: Graphics2D) {
+            for (i in this.stack) {
+                i.outline(g2D)
             }
         }
     }

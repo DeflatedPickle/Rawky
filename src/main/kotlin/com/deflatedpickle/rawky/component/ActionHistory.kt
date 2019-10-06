@@ -3,6 +3,7 @@ package com.deflatedpickle.rawky.component
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import java.awt.BorderLayout
+import java.awt.Graphics2D
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.DefaultListModel
@@ -35,12 +36,18 @@ class ActionHistory : JPanel() {
                 }
                 this.actionList.clear()
             }
+
+            override fun outline(g2D: Graphics2D) {
+                for (i in this.actionList.reversed()) {
+                    i.outline(g2D)
+                }
+            }
         }
 
         addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) {
-                if (e.clickCount == 2) {
-                    ActionStack.push(action)
+                when (e.clickCount) {
+                    3 -> ActionStack.push(action)
                 }
             }
         })

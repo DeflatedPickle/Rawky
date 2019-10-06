@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.component
 
+import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import java.awt.*
 import java.awt.event.MouseAdapter
@@ -151,6 +152,11 @@ class PixelGrid : JPanel() {
         }
 
         drawGrid(g2D)
+
+        if (!Components.actionHistory.list.isSelectionEmpty) {
+            // TODO: Render a preview of the selected action on-top
+            ActionStack.undoQueue[Components.actionHistory.list.selectedIndex].outline(g2D)
+        }
 
         Components.toolbox.tool.render(g2D)
     }
