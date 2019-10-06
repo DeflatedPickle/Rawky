@@ -88,7 +88,7 @@ object Commands {
                             "colourPalette" -> {
                                 for (i in value as ArrayList<*>) {
                                     val ii = i as LinkedTreeMap<String, Int>
-                                    Components.colourPalette.colourList.add(ColourPalette.ColourSwatch(ii["x"]!!, ii["y"]!!, Color((ii["colour"] as LinkedTreeMap<String, Double>)["value"]!!.toInt())))
+                                    ColourPalette.ColourSwatch(ii["x"]!!, ii["y"]!!, Color((ii["colour"] as LinkedTreeMap<String, Double>)["value"]!!.toInt()))
                                 }
                             }
                         }
@@ -182,7 +182,7 @@ object Commands {
         }
     }
 
-    fun importRexPaintPallete() {
+    fun importRexPaintPallete(component: Component) {
         val chooser = JFileChooser().apply {
             addChoosableFileFilter(FileNameExtensionFilter("RexPaint Palette (*.txt)", "txt").also { this.fileFilter = it })
         }
@@ -195,16 +195,32 @@ object Commands {
             val startContext = parser.start()
 
             Components.colourLibrary.cellList.clear()
-            for (row in startContext.row()) {
-                for (i in row.hex()) {
-                    if (i.text != "#000000") {
-                        Components.colourLibrary.addButton(Color.decode('#' + i.code.text))
+            for ((rowIndex, row) in startContext.row().withIndex()) {
+                for ((columnIndex, i) in row.hex().withIndex()) {
+                    when (component) {
+                        Component.COLOUR_LIBRARY -> {
+                            if (i.text != "#000000") {
+                                Components.colourLibrary.addButton(Color.decode('#' + i.code.text))
+                            }
+                        }
+                        Component.COLOUR_PALETTE -> {
+                            ColourPalette.ColourSwatch(columnIndex * Components.colourPalette.cellSize, rowIndex * Components.colourPalette.cellSize, Color.decode('#' + i.code.text))
+                        }
+                        else -> return
                     }
                 }
 
-                for (i in row.rgb()) {
-                    if (i.text != "{0,0,0}") {
-                        Components.colourLibrary.addButton(Color(i.red.text.toInt(), i.green.text.toInt(), i.blue.text.toInt()))
+                for ((columnIndex, i) in row.rgb().withIndex()) {
+                    when (component) {
+                        Component.COLOUR_LIBRARY -> {
+                            if (i.text != "{0,0,0}") {
+                                Components.colourLibrary.addButton(Color(i.red.text.toInt(), i.green.text.toInt(), i.blue.text.toInt()))
+                            }
+                        }
+                        Component.COLOUR_PALETTE -> {
+                            ColourPalette.ColourSwatch(columnIndex * Components.colourPalette.cellSize, rowIndex * Components.colourPalette.cellSize, Color(i.red.text.toInt(), i.green.text.toInt(), i.blue.text.toInt()))
+                        }
+                        else -> return
                     }
                 }
             }
