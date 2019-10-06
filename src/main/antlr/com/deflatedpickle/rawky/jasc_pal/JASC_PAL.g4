@@ -1,7 +1,7 @@
 grammar JASC_PAL;
 
 @header {
-    package com.deflatedpickle.rawky;
+    package com.deflatedpickle.rawky.jasc_pal;
 }
 
 start: header NEWLINE version NEWLINE colour_count (NEWLINE rgb)+;
@@ -13,4 +13,4 @@ rgb: INT SPACE INT SPACE INT;
 
 SPACE: ' ';
 NEWLINE: '\r\n' | '\n';
-INT: '0'..'9'+;
+INT: [0-9]+;

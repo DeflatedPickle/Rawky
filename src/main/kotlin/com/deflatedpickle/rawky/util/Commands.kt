@@ -1,9 +1,11 @@
 package com.deflatedpickle.rawky.util
 
-import com.deflatedpickle.rawky.JASC_PALLexer
-import com.deflatedpickle.rawky.JASC_PALParser
+import com.deflatedpickle.rawky.jasc_pal.JASC_PALLexer
+import com.deflatedpickle.rawky.jasc_pal.JASC_PALParser
 import com.deflatedpickle.rawky.component.ColourPalette
 import com.deflatedpickle.rawky.component.PixelGrid
+import com.deflatedpickle.rawky.rexpaint_palette.RexPaint_PaletteLexer
+import com.deflatedpickle.rawky.rexpaint_palette.RexPaint_PaletteParser
 import com.google.gson.GsonBuilder
 import com.google.gson.internal.LinkedTreeMap
 import com.icafe4j.image.gif.GIFTweaker
@@ -173,9 +175,38 @@ object Commands {
 
             val startContext = parser.start()
 
+            Components.colourLibrary.cellList.clear()
             for (i in startContext.rgb()) {
-                Components.colourLibrary.cellList.clear()
                 Components.colourLibrary.addButton(Color(i.INT(0).text.toInt(), i.INT(1).text.toInt(), i.INT(2).text.toInt()))
+            }
+        }
+    }
+
+    fun importRexPaintPallete() {
+        val chooser = JFileChooser().apply {
+            addChoosableFileFilter(FileNameExtensionFilter("RexPaint Palette (*.txt)", "txt").also { this.fileFilter = it })
+        }
+
+        if (chooser.showOpenDialog(Components.frame) == JFileChooser.APPROVE_OPTION) {
+            val lexer = RexPaint_PaletteLexer(CharStreams.fromStream(chooser.selectedFile.inputStream()))
+            val tokenStream = CommonTokenStream(lexer)
+            val parser = RexPaint_PaletteParser(tokenStream)
+
+            val startContext = parser.start()
+
+            Components.colourLibrary.cellList.clear()
+            for (row in startContext.row()) {
+                for (i in row.hex()) {
+                    if (i.text != "#000000") {
+                        Components.colourLibrary.addButton(Color.decode('#' + i.code.text))
+                    }
+                }
+
+                for (i in row.rgb()) {
+                    if (i.text != "{0,0,0}") {
+                        Components.colourLibrary.addButton(Color(i.red.text.toInt(), i.green.text.toInt(), i.blue.text.toInt()))
+                    }
+                }
             }
         }
     }

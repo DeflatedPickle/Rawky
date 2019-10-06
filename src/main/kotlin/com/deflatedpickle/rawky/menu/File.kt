@@ -16,6 +16,7 @@ class File : JMenu("File") {
         add(JMenu("Import").apply {
             add(JMenu("Colour Palette").apply {
                 add(JMenuItem("JASC PAL").apply { addActionListener { Commands.importJascPal() } })
+                add(JMenuItem("RexPaint Pallete").apply { addActionListener { Commands.importRexPaintPallete() } })
             })
         })
     }
