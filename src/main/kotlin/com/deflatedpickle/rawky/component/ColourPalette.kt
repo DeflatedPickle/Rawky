@@ -14,7 +14,11 @@ import javax.swing.JPopupMenu
 import javax.swing.UIManager
 
 class ColourPalette : JPanel() {
-    class ColourSwatch(var x: Int, var y: Int, val colour: Color)
+    class ColourSwatch(var x: Int, var y: Int, val colour: Color) {
+        init {
+            Components.colourPalette.colourList.add(this)
+        }
+    }
 
     var cellSize = 40
     val colourList = mutableListOf<ColourSwatch>()
