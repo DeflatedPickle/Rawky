@@ -1,6 +1,7 @@
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.util.ActionStack
+import com.deflatedpickle.rawky.util.EComponent
 import com.deflatedpickle.rawky.util.Components
 import java.awt.*
 import java.awt.event.MouseAdapter
@@ -51,7 +52,7 @@ class PixelGrid : JPanel() {
     var backgroundFillEven = Color.LIGHT_GRAY
     var backgroundFillOdd = Color.WHITE
 
-    var hoverOpacity = 225 / 3
+    var hoverOpacity = 255 // / 3
 
     var rowAmount = 16
     var columnAmount = 16
@@ -67,6 +68,9 @@ class PixelGrid : JPanel() {
     var hoverColumn = 0
 
     var scale = 1.0
+
+    val outlineSize = 4
+    val outlineStroke = BasicStroke(outlineSize.toFloat())
 
     init {
         isOpaque = false
@@ -143,12 +147,7 @@ class PixelGrid : JPanel() {
         drawTransparentBackground(g2D)
 
         for ((layerIndex, layer) in frameList[Components.animationTimeline.list.selectedIndex].layerList.withIndex().reversed()) {
-            drawPixels(layerIndex, layer, g2D)
-        }
-
-        if (hoverPixel != null) {
-            g2D.color = Color(Components.colourShades.selectedShade.red, Components.colourShades.selectedShade.green, Components.colourShades.selectedShade.blue, hoverOpacity)
-            g2D.fillRect(hoverPixel!!.x, hoverPixel!!.y, hoverPixel!!.width, hoverPixel!!.height)
+            drawPixels(layerIndex, layer, g2D, EComponent.PIXEL_GRID)
         }
 
         drawGrid(g2D)
@@ -156,6 +155,16 @@ class PixelGrid : JPanel() {
         if (!Components.actionHistory.list.isSelectionEmpty) {
             // TODO: Render a preview of the selected action on-top
             ActionStack.undoQueue[Components.actionHistory.list.selectedIndex].outline(g2D)
+        }
+
+        if (hoverPixel != null) {
+            g2D.color = Color(Components.colourShades.selectedShade.red, Components.colourShades.selectedShade.green, Components.colourShades.selectedShade.blue, hoverOpacity)
+
+            with(g2D.stroke) {
+                g2D.stroke = outlineStroke
+                g2D.drawRect(hoverPixel!!.x + outlineSize / 2, hoverPixel!!.y + outlineSize / 2, hoverPixel!!.width - outlineSize, hoverPixel!!.height - outlineSize)
+                g2D.stroke = this
+            }
         }
 
         Components.toolbox.tool.render(g2D)
@@ -174,14 +183,26 @@ class PixelGrid : JPanel() {
         return rMatrix
     }
 
-    fun drawPixels(layerIndex: Int, layer: Layer, g2D: Graphics2D) {
+    fun drawPixels(layerIndex: Int, layer: Layer, g2D: Graphics2D, component: EComponent) {
         for (row in 0 until rectangleMatrix.size) {
             for (column in 0 until rectangleMatrix[row].size) {
                 if (Components.layerList.isLayerHidden(layerIndex)) {
                     if (layer.pixelMatrix[row][column].colour != null) {
                         g2D.color = layer.pixelMatrix[row][column].colour
                         val rectangle = rectangleMatrix[row][column]
-                        g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, pixelSmooth, pixelSmooth)
+
+                        val outlineImpact = if (rectangle == hoverPixel) {
+                            if (component == EComponent.PIXEL_GRID) {
+                                outlineSize
+                            }
+                            else {
+                                0
+                            }
+                        }
+                        else {
+                            0
+                        }
+                        g2D.fillRoundRect(rectangle.x + outlineImpact, rectangle.y + outlineImpact, rectangle.width - outlineImpact * 2, rectangle.height - outlineImpact * 2, pixelSmooth, pixelSmooth)
                     }
                 }
             }

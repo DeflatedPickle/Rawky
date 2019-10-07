@@ -1,6 +1,7 @@
 package com.deflatedpickle.rawky.util
 
-enum class Component {
+enum class EComponent {
+    FRAME,
     TOOLBOX,
     PIXEL_GRID,
     TILED_VIEW,
@@ -11,5 +12,5 @@ enum class Component {
     LAYER_LIST,
     ANIMATION_TIMELINE,
     ANIMATION_PREVIEW,
-    ACTION_HISTORY,
+    ACTION_HISTORY;
 }

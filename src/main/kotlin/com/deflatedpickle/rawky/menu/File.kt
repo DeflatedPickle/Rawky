@@ -2,7 +2,7 @@ package com.deflatedpickle.rawky.menu
 
 import com.deflatedpickle.rawky.dialogue.New
 import com.deflatedpickle.rawky.util.Commands
-import com.deflatedpickle.rawky.util.Component
+import com.deflatedpickle.rawky.util.EComponent
 import com.deflatedpickle.rawky.util.Icons
 import javax.swing.JMenu
 import javax.swing.JMenuItem
@@ -17,8 +17,8 @@ class File : JMenu("File") {
         add(JMenu("Import").apply {
             add(JMenu("Colour Palette").apply {
                 add(JMenuItem("JASC PAL").apply { addActionListener { Commands.importJascPal() } })
-                add(JMenuItem("RexPaint Palette (Colour Library)").apply { addActionListener { Commands.importRexPaintPallete(Component.COLOUR_LIBRARY) } })
-                add(JMenuItem("RexPaint Palette (Colour Palette)").apply { addActionListener { Commands.importRexPaintPallete(Component.COLOUR_PALETTE) } })
+                add(JMenuItem("RexPaint Palette (Colour Library)").apply { addActionListener { Commands.importRexPaintPallete(EComponent.COLOUR_LIBRARY) } })
+                add(JMenuItem("RexPaint Palette (Colour Palette)").apply { addActionListener { Commands.importRexPaintPallete(EComponent.COLOUR_PALETTE) } })
             })
         })
     }

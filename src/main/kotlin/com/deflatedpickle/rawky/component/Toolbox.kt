@@ -5,7 +5,6 @@ import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
 import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.*
-import java.util.concurrent.atomic.AtomicInteger
 import javax.swing.*
 
 class Toolbox : JPanel() {
@@ -41,11 +40,12 @@ class Toolbox : JPanel() {
                                 .colour
                         != Components.colourShades.selectedShade) {
                     val pixel = object : LockCheck(this.cursor.name) {
-                        var oldValue = Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
+                        val newValue = Components.colourShades.selectedShade
+                        val oldValue = Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
 
                         override fun perform() {
                             if (check()) {
-                                Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = Components.colourShades.selectedShade
+                                Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour = newValue
                             }
                         }
 
@@ -76,7 +76,7 @@ class Toolbox : JPanel() {
                                 .colour
                         != null) {
                     val pixel = object : LockCheck(this.cursor.name) {
-                        var oldValue = Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
+                        val oldValue = Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
 
                         override fun perform() {
                             if (check()) {

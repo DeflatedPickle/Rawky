@@ -182,7 +182,7 @@ object Commands {
         }
     }
 
-    fun importRexPaintPallete(component: Component) {
+    fun importRexPaintPallete(component: EComponent) {
         val chooser = JFileChooser().apply {
             addChoosableFileFilter(FileNameExtensionFilter("RexPaint Palette (*.txt)", "txt").also { this.fileFilter = it })
         }
@@ -198,12 +198,12 @@ object Commands {
             for ((rowIndex, row) in startContext.row().withIndex()) {
                 for ((columnIndex, i) in row.hex().withIndex()) {
                     when (component) {
-                        Component.COLOUR_LIBRARY -> {
+                        EComponent.COLOUR_LIBRARY -> {
                             if (i.text != "#000000") {
                                 Components.colourLibrary.addButton(Color.decode('#' + i.code.text))
                             }
                         }
-                        Component.COLOUR_PALETTE -> {
+                        EComponent.COLOUR_PALETTE -> {
                             ColourPalette.ColourSwatch(columnIndex * Components.colourPalette.cellSize, rowIndex * Components.colourPalette.cellSize, Color.decode('#' + i.code.text))
                         }
                         else -> return
@@ -212,12 +212,12 @@ object Commands {
 
                 for ((columnIndex, i) in row.rgb().withIndex()) {
                     when (component) {
-                        Component.COLOUR_LIBRARY -> {
+                        EComponent.COLOUR_LIBRARY -> {
                             if (i.text != "{0,0,0}") {
                                 Components.colourLibrary.addButton(Color(i.red.text.toInt(), i.green.text.toInt(), i.blue.text.toInt()))
                             }
                         }
-                        Component.COLOUR_PALETTE -> {
+                        EComponent.COLOUR_PALETTE -> {
                             ColourPalette.ColourSwatch(columnIndex * Components.colourPalette.cellSize, rowIndex * Components.colourPalette.cellSize, Color(i.red.text.toInt(), i.green.text.toInt(), i.blue.text.toInt()))
                         }
                         else -> return

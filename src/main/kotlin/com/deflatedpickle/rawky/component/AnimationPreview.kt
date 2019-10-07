@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.component
 
+import com.deflatedpickle.rawky.util.EComponent
 import com.deflatedpickle.rawky.util.Components
 import java.awt.Graphics
 import java.awt.Graphics2D
@@ -15,7 +16,7 @@ class AnimationPreview : JPanel() {
         Components.pixelGrid.drawTransparentBackground(g2D)
 
         for ((layerIndex, layer) in Components.pixelGrid.frameList[frame].layerList.withIndex().reversed()) {
-            Components.pixelGrid.drawPixels(layerIndex, layer, g2D)
+            Components.pixelGrid.drawPixels(layerIndex, layer, g2D, EComponent.ANIMATION_PREVIEW)
         }
     }
 }

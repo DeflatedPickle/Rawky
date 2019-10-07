@@ -1,6 +1,7 @@
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.util.EComponent
 import com.deflatedpickle.rawky.util.Icons
 import java.awt.*
 import java.util.*
@@ -57,7 +58,7 @@ class LayerList : JPanel() {
 
                         // Components.pixelGrid.drawTransparentBackground(g2D)
 
-                        Components.pixelGrid.drawPixels(row, Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[row], g2D)
+                        Components.pixelGrid.drawPixels(row, Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[row], g2D, EComponent.LAYER_LIST)
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.component
 
+import com.deflatedpickle.rawky.util.EComponent
 import com.deflatedpickle.rawky.util.Components
 import java.awt.*
 import javax.swing.*
@@ -40,7 +41,7 @@ class AnimationTimeline : JPanel() {
                         // Components.pixelGrid.drawTransparentBackground(g2D)
 
                         for ((layerIndex, layer) in Components.pixelGrid.frameList[index].layerList.withIndex().reversed()) {
-                            Components.pixelGrid.drawPixels(layerIndex, layer, g2D)
+                            Components.pixelGrid.drawPixels(layerIndex, layer, g2D, EComponent.ANIMATION_TIMELINE)
                         }
                     }
                 })

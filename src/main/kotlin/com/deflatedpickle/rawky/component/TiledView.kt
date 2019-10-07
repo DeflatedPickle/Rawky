@@ -1,6 +1,7 @@
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.util.EComponent
 import java.awt.Graphics
 import java.awt.Graphics2D
 import javax.swing.JPanel
@@ -23,7 +24,7 @@ class TiledView : JPanel() {
         for (row in 0 until rows) {
             for (column in 0 until columns) {
                 for ((layerIndex, layer) in Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.withIndex().reversed()) {
-                    Components.pixelGrid.drawPixels(layerIndex, layer, g2D)
+                    Components.pixelGrid.drawPixels(layerIndex, layer, g2D, EComponent.TILED_VIEW)
                 }
                 g2D.translate((Components.pixelGrid.pixelSize + padding) * 16, 0)
             }
