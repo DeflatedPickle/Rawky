@@ -3,11 +3,13 @@ package com.deflatedpickle.rawky
 import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
+import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.dialogue.New
 import com.deflatedpickle.rawky.menu.Edit
 import com.deflatedpickle.rawky.menu.File
 import com.deflatedpickle.rawky.menu.Help
 import com.deflatedpickle.rawky.menu.Program
+import com.deflatedpickle.rawky.tool.Pencil
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Commands
 import com.deflatedpickle.rawky.util.Components
@@ -62,7 +64,7 @@ fun main() {
         val toolbox = DefaultSingleCDockable("toolbox", "Toolbox", Components.toolbox)
         cControl.addDockable(toolbox)
         toolbox.isVisible = true
-        grid.add(0.0, 0.0, 2.0, 0.3, toolbox)
+        grid.add(0.0, 0.0, 0.2, 2.0, toolbox)
 
         val tiledView = DefaultSingleCDockable("tiledView", "Tiled View", Components.tiledView)
         cControl.addDockable(tiledView)
@@ -188,7 +190,12 @@ fun main() {
         val colourPicker = DefaultSingleCDockable("colourPicker", "Colour Picker", Components.colourPicker)
         cControl.addDockable(colourPicker)
         colourPicker.isVisible = true
-        grid.add(1.0, 0.3, 0.4, 0.8, colourPicker)
+        grid.add(1.0, 0.3, 0.4, 0.4, colourPicker)
+
+        val toolOptions = DefaultSingleCDockable("toolOptions", "Tool Options", JScrollPane(Components.toolOptions))
+        cControl.addDockable(toolOptions)
+        toolOptions.isVisible = true
+        grid.add(1.0, 0.4, 0.4, 0.4, toolOptions)
 
         val colourShades = DefaultSingleCDockable("colourShades", "Colour Shades", JPanel().apply {
             isOpaque = false

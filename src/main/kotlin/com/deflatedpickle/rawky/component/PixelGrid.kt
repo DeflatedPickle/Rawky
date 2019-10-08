@@ -69,9 +69,6 @@ class PixelGrid : JPanel() {
 
     var scale = 1.0
 
-    val outlineSize = 4
-    val outlineStroke = BasicStroke(outlineSize.toFloat())
-
     init {
         isOpaque = false
 
@@ -98,11 +95,11 @@ class PixelGrid : JPanel() {
 
             override fun mouseDragged(e: MouseEvent) {
                 mouseMoved(e)
-                Components.toolbox.tool.mouseDragged(e.button)
+                Components.toolbox.tool!!.mouseDragged(e.button)
                 when {
-                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.tool.performLeft(true, e.point, lastPoint, e.clickCount)
-                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.tool.performMiddle(true, e.point, lastPoint, e.clickCount)
-                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.tool.performRight(true, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.tool!!.performLeft(true, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.tool!!.performMiddle(true, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.tool!!.performRight(true, e.point, lastPoint, e.clickCount)
                 }
                 lastPoint = e.point
             }
@@ -112,21 +109,21 @@ class PixelGrid : JPanel() {
             var lastPoint = Point()
 
             override fun mousePressed(e: MouseEvent) {
-                Components.toolbox.tool.mouseClicked(e.button)
+                Components.toolbox.tool!!.mouseClicked(e.button)
                 when {
-                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.tool.performLeft(false, e.point, lastPoint, e.clickCount)
-                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.tool.performMiddle(false, e.point, lastPoint, e.clickCount)
-                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.tool.performRight(false, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.tool!!.performLeft(false, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.tool!!.performMiddle(false, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.tool!!.performRight(false, e.point, lastPoint, e.clickCount)
                 }
                 lastPoint = e.point
             }
 
             override fun mouseReleased(e: MouseEvent) {
-                Components.toolbox.tool.mouseRelease(e.button)
+                Components.toolbox.tool!!.mouseRelease(e.button)
             }
 
             override fun mouseEntered(e: MouseEvent) {
-                cursor = Components.toolbox.tool.cursor
+                cursor = Components.toolbox.tool!!.cursor
             }
 
             override fun mouseExited(e: MouseEvent) {
@@ -157,17 +154,7 @@ class PixelGrid : JPanel() {
             ActionStack.undoQueue[Components.actionHistory.list.selectedIndex].outline(g2D)
         }
 
-        if (hoverPixel != null) {
-            g2D.color = Color(Components.colourShades.selectedShade.red, Components.colourShades.selectedShade.green, Components.colourShades.selectedShade.blue, hoverOpacity)
-
-            with(g2D.stroke) {
-                g2D.stroke = outlineStroke
-                g2D.drawRect(hoverPixel!!.x + outlineSize / 2, hoverPixel!!.y + outlineSize / 2, hoverPixel!!.width - outlineSize, hoverPixel!!.height - outlineSize)
-                g2D.stroke = this
-            }
-        }
-
-        Components.toolbox.tool.render(g2D)
+        Components.toolbox.tool!!.render(g2D)
     }
 
     fun refreshMatrix(): MutableList<MutableList<Rectangle>> {
@@ -191,18 +178,19 @@ class PixelGrid : JPanel() {
                         g2D.color = layer.pixelMatrix[row][column].colour
                         val rectangle = rectangleMatrix[row][column]
 
-                        val outlineImpact = if (rectangle == hoverPixel) {
-                            if (component == EComponent.PIXEL_GRID) {
-                                outlineSize
-                            }
-                            else {
-                                0
-                            }
-                        }
-                        else {
-                            0
-                        }
-                        g2D.fillRoundRect(rectangle.x + outlineImpact, rectangle.y + outlineImpact, rectangle.width - outlineImpact * 2, rectangle.height - outlineImpact * 2, pixelSmooth, pixelSmooth)
+                        // TODO: Fix for bigger sized brushes
+                        // val outlineImpact = if (rectangle == hoverPixel) {
+                        //     if (component == EComponent.PIXEL_GRID) {
+                        //         outlineSize
+                        //     }
+                        //     else {
+                        //         0
+                        //     }
+                        // }
+                        // else {
+                        //     0
+                        // }
+                        g2D.fillRoundRect(rectangle.x /* + outlineImpact */, rectangle.y /* + outlineImpact */, rectangle.width /* - outlineImpact * 2 */, rectangle.height /* - outlineImpact * 2 */, pixelSmooth, pixelSmooth)
                     }
                 }
             }

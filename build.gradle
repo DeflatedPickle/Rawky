@@ -75,6 +75,9 @@ dependencies {
 
     // HTTP
     implementation 'com.github.jkcclemens:khttp:0.1.0'
+
+    // Reflections
+    implementation 'org.reflections:reflections:0.9.11'
 }
 
 generateGrammarSource {

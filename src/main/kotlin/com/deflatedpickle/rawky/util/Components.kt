@@ -2,6 +2,7 @@ package com.deflatedpickle.rawky.util
 
 import com.bric.colorpicker.ColorPicker
 import com.deflatedpickle.rawky.component.*
+import org.reflections.Reflections
 import java.awt.Color
 import javax.swing.JFrame
 
@@ -19,6 +20,7 @@ object Components {
     val animationTimeline = AnimationTimeline()
     val animationPreview = AnimationPreview()
     val actionHistory = ActionHistory()
+    val toolOptions = ToolOptions()
 
     init {
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
