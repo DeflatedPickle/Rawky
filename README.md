@@ -61,7 +61,9 @@ It also has frames, which can be previewed above their name.
 
 | | Version |
 |---|---|
-| **Latest** | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.3.6-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.3.6-alpha) |
+| **Latest** | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.6.6-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.6.6-alpha) |
+| | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.4.2-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.4.2-alpha) |
+| | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.3.6-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.3.6-alpha) |
 | | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.1.1-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.1.1-alpha) |
 | | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.1.0-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.1.0-alpha) |
 
