@@ -2,6 +2,7 @@ package com.deflatedpickle.rawky.tool
 
 import com.deflatedpickle.rawky.api.Options
 import com.deflatedpickle.rawky.api.Range
+import com.deflatedpickle.rawky.api.Tooltip
 import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
@@ -16,6 +17,7 @@ class Eraser : HoverOutlineTool(Settings::class.java, "Eraser", Icons.eraser, To
     @Options
     object Settings {
         @Range(1, 9)
+        @Tooltip("Change the size of the eraser")
         @JvmField
         var size = 1
     }

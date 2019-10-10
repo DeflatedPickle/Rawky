@@ -2,12 +2,14 @@ package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.Options
 import com.deflatedpickle.rawky.api.Range
+import com.deflatedpickle.rawky.api.Tooltip
 import com.deflatedpickle.rawky.util.Components
 import org.jdesktop.swingx.JXPanel
 import java.awt.Color
 import java.awt.Component
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
+import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JSlider
 import javax.swing.SwingConstants
@@ -40,9 +42,10 @@ class ToolOptions : JXPanel() {
             if (clazz.annotations.map { it.annotationClass == Options::class }.contains(true)) {
                 for (field in clazz.fields) {
                     if (field.name != "INSTANCE") {
-                        this.add(JLabel(field.name.capitalize() + ":"))
+                        val label = JLabel(field.name.capitalize() + ":")
+                        this.add(label)
                         for (annotation in field.annotations) {
-                            val widget: Component = when (annotation) {
+                            val widget: JComponent = when (annotation) {
                                 // TODO: Add more argument types
                                 is Range -> {
                                     JSlider(annotation.min, annotation.max).apply {
@@ -56,6 +59,13 @@ class ToolOptions : JXPanel() {
                                     }
                                 }
                                 else -> JLabel("$annotation is unsupported!").apply { foreground = Color.RED }
+                            }
+
+                            when(annotation) {
+                                is Tooltip -> {
+                                    label.toolTipText = annotation.string
+                                    widget.toolTipText = annotation.string
+                                }
                             }
                         }
                     }
