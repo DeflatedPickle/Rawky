@@ -14,7 +14,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 
 group 'deflatedpickle'
-version '0.4.2-alpha'
+version '0.6.6-alpha'
 
 sourceCompatibility = 1.8
 
@@ -64,7 +64,7 @@ dependencies {
     implementation 'com.weblookandfeel:weblaf-ui:1.2.8'
 
     // OBJ Models
-    implementation 'de.javagl:obj:0.3.0'
+    // implementation 'de.javagl:obj:0.3.0'
 
     // File Format
     implementation 'com.google.code.gson:gson:2.8.5'
@@ -108,7 +108,7 @@ jar {
                 "Main-Class": "com.deflatedpickle.rawky.Rawky",
                 "Implementation-Vendor": "DeflatedPickle",
                 "Implementation-Title": "Rawky",
-                "Implementation-Version": "0.4.2-alpha"
+                "Implementation-Version": "0.6.6-alpha"
         )
     }
 }
