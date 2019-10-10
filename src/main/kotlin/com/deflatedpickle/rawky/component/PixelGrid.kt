@@ -143,8 +143,12 @@ class PixelGrid : JPanel() {
 
         drawTransparentBackground(g2D)
 
-        for ((layerIndex, layer) in frameList[Components.animationTimeline.list.selectedIndex].layerList.withIndex().reversed()) {
-            drawPixels(layerIndex, layer, g2D, EComponent.PIXEL_GRID)
+        if (Components.animationTimeline.list.selectedIndex >= 0) {
+            for ((layerIndex, layer) in frameList[Components.animationTimeline.list.selectedIndex].layerList.withIndex().reversed()) {
+                if (layerIndex >= 0) {
+                    drawPixels(layerIndex, layer, g2D, EComponent.PIXEL_GRID)
+                }
+            }
         }
 
         drawGrid(g2D)

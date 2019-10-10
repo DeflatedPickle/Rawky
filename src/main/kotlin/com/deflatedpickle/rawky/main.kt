@@ -181,6 +181,12 @@ fun main() {
                         Components.animationTimeline.addFrame()
                     }
                 })
+                add(JButton(Icons.trash).apply {
+                    toolTipText = "Delete Frame"
+                    addActionListener {
+                        Components.animationTimeline.removeFrame()
+                    }
+                })
             }, BorderLayout.PAGE_END)
         })
         cControl.addDockable(animationTimeline)

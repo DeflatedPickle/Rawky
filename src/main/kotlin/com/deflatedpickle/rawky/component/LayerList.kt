@@ -100,15 +100,24 @@ class LayerList : JPanel() {
     }
 
     fun removeLayer() {
-        Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.removeAt(list.selectedRow)
-        listModel.removeRow(list.selectedRow)
+        with(list.selectedRow) {
+            Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.removeAt(this)
+            listModel.removeRow(this)
+
+            if (this < 0) {
+                list.setRowSelectionInterval(this, this)
+            }
+            else {
+                list.setRowSelectionInterval(this - 1, this - 1)
+            }
+        }
     }
 
     fun isLayerHidden(index: Int = list.selectedRow): Boolean {
-        return (listModel.dataVector[index] as Vector<Any>)[2] as Boolean
+        return (listModel.dataVector[index] as Vector<*>)[2] as Boolean
     }
 
     fun layerLockType(index: Int = list.selectedRow): PixelGrid.Layer.LockType {
-        return (listModel.dataVector[index] as Vector<Any>)[3] as PixelGrid.Layer.LockType
+        return (listModel.dataVector[index] as Vector<*>)[3] as PixelGrid.Layer.LockType
     }
 }

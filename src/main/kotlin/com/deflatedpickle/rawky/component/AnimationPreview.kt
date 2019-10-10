@@ -16,7 +16,9 @@ class AnimationPreview : JPanel() {
         Components.pixelGrid.drawTransparentBackground(g2D)
 
         for ((layerIndex, layer) in Components.pixelGrid.frameList[frame].layerList.withIndex().reversed()) {
-            Components.pixelGrid.drawPixels(layerIndex, layer, g2D, EComponent.ANIMATION_PREVIEW)
+            if (layerIndex >= 0) {
+                Components.pixelGrid.drawPixels(layerIndex, layer, g2D, EComponent.ANIMATION_PREVIEW)
+            }
         }
     }
 }
