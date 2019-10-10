@@ -226,12 +226,46 @@ fun main() {
         colourShades.isVisible = true
         grid.add(1.0, 0.8, 0.4, 0.4, colourShades)
 
-        val colourPalette = DefaultSingleCDockable("colourPalette", "Colour Palette", Components.colourPalette)
+        val colourPalette = DefaultSingleCDockable("colourPalette", "Colour Palette", JPanel().apply {
+            isOpaque = false
+            layout = BorderLayout()
+
+            val widget = Components.colourPalette
+            JScrollPane(widget).also { add(it) }
+
+            // TODO: Move toolbars to an object, so this may be referred to when importing a colour palette and changed
+            add(JToolBar().apply {
+                val slider = JSlider(1, 100).apply {
+                    this.value = 10
+                    addChangeListener {
+                        Components.colourPalette.scale = this.value / 10.0
+
+                        with(widget.colourList.size * (widget.cellSize * this.value / 100)) {
+                            widget.preferredSize = Dimension(this, this)
+                        }
+                        widget.revalidate()
+                    }
+                }
+                add(JButton(Icons.zoom_out).apply {
+                    toolTipText = "Zoom Out"
+                    addActionListener {
+                        slider.value--
+                    }
+                })
+                add(slider)
+                add(JButton(Icons.zoom_in).apply {
+                    toolTipText = "Zoom In"
+                    addActionListener {
+                        slider.value++
+                    }
+                })
+            }, BorderLayout.PAGE_END)
+        })
         cControl.addDockable(colourPalette)
         colourPalette.isVisible = true
         grid.add(1.2, 0.3, 0.4, 0.2, colourPalette)
 
-        val colourLibrary = DefaultSingleCDockable("colourLibrary", "Colour Library", Components.colourLibrary)
+        val colourLibrary = DefaultSingleCDockable("colourLibrary", "Colour Library", JScrollPane(Components.colourLibrary))
         cControl.addDockable(colourLibrary)
         colourLibrary.isVisible = true
         grid.add(1.2, 0.7, 0.4, 0.2, colourLibrary)
@@ -275,4 +309,5 @@ fun main() {
     }
 
     Components.frame.isVisible = true
+    Components.frame.setLocationRelativeTo(null)
 }

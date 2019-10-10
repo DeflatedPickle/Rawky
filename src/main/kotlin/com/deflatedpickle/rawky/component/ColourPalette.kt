@@ -20,7 +20,7 @@ class ColourPalette : JPanel() {
         }
     }
 
-    var cellSize = 40
+    var cellSize = 20
     val colourList = mutableListOf<ColourSwatch>()
 
     var mouseX = 0
@@ -30,6 +30,8 @@ class ColourPalette : JPanel() {
     var mouseOffsetY = 0
 
     var selectedColour: ColourSwatch? = null
+
+    var scale = 1.0
 
     init {
         addMouseMotionListener(object : MouseAdapter() {
@@ -105,6 +107,8 @@ class ColourPalette : JPanel() {
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
         val g2D = g as Graphics2D
+
+        g2D.scale(scale, scale)
 
         for (i in this.colourList) {
             g2D.color = i.colour
