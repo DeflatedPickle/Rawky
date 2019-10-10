@@ -1,8 +1,8 @@
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.util.ActionStack
-import com.deflatedpickle.rawky.util.EComponent
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.util.EComponent
 import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
@@ -45,12 +45,19 @@ class PixelGrid : JPanel() {
         }
     }
 
-    var pixelSize = 20
+    val pixelSize = 20
     var pixelSmooth = 0
 
     var backgroundPixelSize = pixelSize / 3
-    var backgroundFillEven = Color.LIGHT_GRAY
-    var backgroundFillOdd = Color.WHITE
+    var backgroundFillEven = Color.LIGHT_GRAY!!
+    var backgroundFillOdd = Color.WHITE!!
+
+    enum class FillType {
+        ALL,
+        GRID
+    }
+
+    var backgroundFillType = FillType.GRID
 
     var hoverOpacity = 255 // / 3
 
@@ -58,7 +65,7 @@ class PixelGrid : JPanel() {
     var columnAmount = 16
 
     var lineThickness = 1f
-    var gridColour = Color.GRAY
+    var gridColour = Color.GRAY!!
 
     var rectangleMatrix: MutableList<MutableList<Rectangle>>
     var frameList = mutableListOf<Frame>()
@@ -136,11 +143,11 @@ class PixelGrid : JPanel() {
 
     override fun paintComponent(g: Graphics) {
         val g2D = g as Graphics2D
-        g2D.translate(this.width / 2 - this.columnAmount * this.pixelSize / 2, this.height / 2 - this.rowAmount * this.pixelSize / 2)
         g2D.scale(this.scale, this.scale)
 
         g2D.stroke = BasicStroke(lineThickness)
 
+        // TODO: Put these in a list and add a drag-and-drop list of items to re-order the list
         drawTransparentBackground(g2D)
 
         if (Components.animationTimeline.list.selectedIndex >= 0) {
@@ -154,7 +161,6 @@ class PixelGrid : JPanel() {
         drawGrid(g2D)
 
         if (!Components.actionHistory.list.isSelectionEmpty) {
-            // TODO: Render a preview of the selected action on-top
             ActionStack.undoQueue[Components.actionHistory.list.selectedIndex].outline(g2D)
         }
 
@@ -182,19 +188,7 @@ class PixelGrid : JPanel() {
                         g2D.color = layer.pixelMatrix[row][column].colour
                         val rectangle = rectangleMatrix[row][column]
 
-                        // TODO: Fix for bigger sized brushes
-                        // val outlineImpact = if (rectangle == hoverPixel) {
-                        //     if (component == EComponent.PIXEL_GRID) {
-                        //         outlineSize
-                        //     }
-                        //     else {
-                        //         0
-                        //     }
-                        // }
-                        // else {
-                        //     0
-                        // }
-                        g2D.fillRoundRect(rectangle.x /* + outlineImpact */, rectangle.y /* + outlineImpact */, rectangle.width /* - outlineImpact * 2 */, rectangle.height /* - outlineImpact * 2 */, pixelSmooth, pixelSmooth)
+                        g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, pixelSmooth, pixelSmooth)
                     }
                 }
             }
@@ -202,26 +196,28 @@ class PixelGrid : JPanel() {
     }
 
     fun drawTransparentBackground(g2D: Graphics2D, rowCount: Int = rowAmount, columnCount: Int = columnAmount) {
-        for (row in 0 until /* this.height */ rowCount * pixelSize / backgroundPixelSize) {
-            for (column in 0 until /* this.width */ columnCount * pixelSize / backgroundPixelSize) {
-                g2D.color = if (row % 2 == 0) {
-                    if (column % 2 == 0) {
-                        backgroundFillEven
-                    }
-                    else {
-                        backgroundFillOdd
-                    }
-                }
-                else {
-                    if (column % 2 == 0) {
-                        backgroundFillOdd
-                    }
-                    else {
-                        backgroundFillEven
-                    }
-                }
+        val fill = when (this.backgroundFillType) {
+            FillType.ALL -> {
+                Pair(g2D.clipBounds.height, g2D.clipBounds.width)
+            }
+            FillType.GRID -> {
+                g2D.translate(this.width / 2 - this.columnAmount * this.pixelSize / 2, this.height / 2 - this.rowAmount * this.pixelSize / 2)
+                Pair(rowCount, columnCount)
+            }
+        }
+
+        for (row in 0 until fill.first * pixelSize / backgroundPixelSize) {
+            for (column in 0 until fill.second * pixelSize / backgroundPixelSize) {
+                g2D.color = if (row % 2 == column % 2) this.backgroundFillEven else this.backgroundFillOdd
                 g2D.fillRect(column * backgroundPixelSize, row * backgroundPixelSize, backgroundPixelSize, backgroundPixelSize)
             }
+        }
+
+        when (this.backgroundFillType) {
+            FillType.ALL -> {
+                g2D.translate(this.width / 2 - this.columnAmount * this.pixelSize / 2, this.height / 2 - this.rowAmount * this.pixelSize / 2)
+            }
+            else -> return
         }
     }
 

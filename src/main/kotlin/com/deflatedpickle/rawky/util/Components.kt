@@ -7,7 +7,7 @@ import java.awt.Color
 import javax.swing.JFrame
 
 object Components {
-    val frame = JFrame("Rawky")
+    val frame = Window()
 
     val toolbox = Toolbox()
     val pixelGrid = PixelGrid()
