@@ -41,9 +41,7 @@ class AnimationTimeline : JPanel() {
                         // Components.pixelGrid.drawTransparentBackground(g2D)
 
                         for ((layerIndex, layer) in Components.pixelGrid.frameList[index].layerList.withIndex().reversed()) {
-                            if (layerIndex > 0) {
-                                Components.pixelGrid.drawPixels(layerIndex, layer, g2D, EComponent.ANIMATION_TIMELINE)
-                            }
+                            Components.pixelGrid.drawPixels(layerIndex, layer, g2D, EComponent.ANIMATION_TIMELINE)
                         }
                     }
                 })
@@ -107,7 +105,7 @@ class AnimationTimeline : JPanel() {
         try {
             Components.layerList.list.setRowSelectionInterval(0, 0)
         }
-        catch (e : Exception) {
+        catch (e: Exception) {
         }
     }
 }

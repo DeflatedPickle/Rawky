@@ -58,6 +58,7 @@ class LayerList : JPanel() {
 
                         // Components.pixelGrid.drawTransparentBackground(g2D)
 
+                        // BUG: Throws an out-of-bounds error when you swap from a frame with more layers
                         Components.pixelGrid.drawPixels(row, Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[row], g2D, EComponent.LAYER_LIST)
                     }
                 }
@@ -96,7 +97,9 @@ class LayerList : JPanel() {
         listModel.insertRow(0, arrayOf(null, "Layer ${listModel.rowCount}", true, PixelGrid.Layer.LockType.OFF))
         list.setRowSelectionInterval(0, 0)
 
-        Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.add(0, PixelGrid.Layer())
+        with(Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex]) {
+            layerList.add(0, PixelGrid.Layer(this))
+        }
     }
 
     fun removeLayer() {
@@ -114,7 +117,12 @@ class LayerList : JPanel() {
     }
 
     fun isLayerHidden(index: Int = list.selectedRow): Boolean {
-        return (listModel.dataVector[index] as Vector<*>)[2] as Boolean
+        return if (index >= list.rowCount) {
+            false
+        }
+        else {
+            !((listModel.dataVector[index] as Vector<*>)[2] as Boolean)
+        }
     }
 
     fun layerLockType(index: Int = list.selectedRow): PixelGrid.Layer.LockType {

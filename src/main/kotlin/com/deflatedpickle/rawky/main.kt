@@ -75,7 +75,7 @@ fun main() {
             isOpaque = false
             layout = BorderLayout()
 
-            add(Components.animationPreview)
+            add(JScrollPane(Components.animationPreview))
 
             add(JToolBar().apply {
                 add(JSpinner(SpinnerNumberModel(1, 1, 240, 1)).apply {

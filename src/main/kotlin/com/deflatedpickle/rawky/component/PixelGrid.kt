@@ -11,6 +11,10 @@ import javax.swing.JPanel
 import javax.swing.SwingUtilities
 
 class PixelGrid : JPanel() {
+    interface MatrixItem<T> {
+        var parent: T
+    }
+
     class Frame {
         var layerList = mutableListOf<Layer>()
 
@@ -19,8 +23,8 @@ class PixelGrid : JPanel() {
         }
     }
 
-    class Layer {
-        var pixelMatrix = Components.pixelGrid.initMatrix<Cell>()
+    class Layer(override var parent: Frame) : MatrixItem<Frame> {
+        var pixelMatrix = Components.pixelGrid.initMatrix<Layer, Cell>(parent = this)
         var visible = true
 
         enum class LockType {
@@ -37,7 +41,7 @@ class PixelGrid : JPanel() {
         }
     }
 
-    class Cell {
+    class Cell(override var parent: Layer) : MatrixItem<Layer> {
         var colour: Color? = null
 
         override fun toString(): String {
@@ -183,7 +187,7 @@ class PixelGrid : JPanel() {
     fun drawPixels(layerIndex: Int, layer: Layer, g2D: Graphics2D, component: EComponent) {
         for (row in 0 until rectangleMatrix.size) {
             for (column in 0 until rectangleMatrix[row].size) {
-                if (Components.layerList.isLayerHidden(layerIndex)) {
+                if (!Components.layerList.isLayerHidden(layerIndex)) {
                     if (layer.pixelMatrix[row][column].colour != null) {
                         g2D.color = layer.pixelMatrix[row][column].colour
                         val rectangle = rectangleMatrix[row][column]
@@ -195,8 +199,8 @@ class PixelGrid : JPanel() {
         }
     }
 
-    fun drawTransparentBackground(g2D: Graphics2D, rowCount: Int = rowAmount, columnCount: Int = columnAmount) {
-        val fill = when (this.backgroundFillType) {
+    fun drawTransparentBackground(g2D: Graphics2D, rowCount: Int = rowAmount, columnCount: Int = columnAmount, fillType: FillType = this.backgroundFillType, backgroundPixelDivider: Int = this.backgroundPixelSize) {
+        val fill = when (fillType) {
             FillType.ALL -> {
                 Pair(g2D.clipBounds.height, g2D.clipBounds.width)
             }
@@ -206,10 +210,10 @@ class PixelGrid : JPanel() {
             }
         }
 
-        for (row in 0 until fill.first * pixelSize / backgroundPixelSize) {
-            for (column in 0 until fill.second * pixelSize / backgroundPixelSize) {
+        for (row in 0 until fill.first * pixelSize / backgroundPixelDivider) {
+            for (column in 0 until fill.second * pixelSize / backgroundPixelDivider) {
                 g2D.color = if (row % 2 == column % 2) this.backgroundFillEven else this.backgroundFillOdd
-                g2D.fillRect(column * backgroundPixelSize, row * backgroundPixelSize, backgroundPixelSize, backgroundPixelSize)
+                g2D.fillRect(column * backgroundPixelDivider, row * backgroundPixelDivider, backgroundPixelDivider, backgroundPixelDivider)
             }
         }
 
@@ -230,12 +234,12 @@ class PixelGrid : JPanel() {
         }
     }
 
-    inline fun <reified T>initMatrix(value: T? = null): MutableList<MutableList<T>> {
+    inline fun <reified P, reified T : MatrixItem<P>>initMatrix(value: T? = null, parent: Any): MutableList<MutableList<T>> {
         val rowList = mutableListOf<MutableList<T>>()
         for (row in 0 until Components.pixelGrid.rowAmount) {
             val columnList = mutableListOf<T>()
             for (column in 0 until Components.pixelGrid.columnAmount) {
-                columnList.add(value ?: T::class.constructors.first().call())
+                columnList.add(value ?: T::class.constructors.first().call(parent))
             }
             rowList.add(columnList)
         }

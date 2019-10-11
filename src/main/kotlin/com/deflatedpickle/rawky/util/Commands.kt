@@ -65,7 +65,7 @@ object Commands {
                                             for (row in castLayer["pixelMatrix"] as MutableList<MutableList<Any>>) {
                                                 val columnList = mutableListOf<PixelGrid.Cell>()
                                                 for (column in row) {
-                                                    columnList.add(PixelGrid.Cell().apply {
+                                                    columnList.add(PixelGrid.Cell(this).apply {
                                                         if (!(column as LinkedTreeMap<String, LinkedTreeMap<Double, Double>>).isEmpty()) {
                                                             colour = (column["colour"] as LinkedTreeMap<String, Double>)["value"]?.toInt()?.let { Color(it) }
                                                         }

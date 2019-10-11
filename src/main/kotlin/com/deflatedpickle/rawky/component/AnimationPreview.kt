@@ -13,12 +13,10 @@ class AnimationPreview : JPanel() {
         val g2D = g as Graphics2D
         g2D.scale(0.5, 0.5)
 
-        Components.pixelGrid.drawTransparentBackground(g2D)
+        Components.pixelGrid.drawTransparentBackground(g2D, fillType = PixelGrid.FillType.ALL, backgroundPixelDivider = 42)
 
         for ((layerIndex, layer) in Components.pixelGrid.frameList[frame].layerList.withIndex().reversed()) {
-            if (layerIndex >= 0) {
-                Components.pixelGrid.drawPixels(layerIndex, layer, g2D, EComponent.ANIMATION_PREVIEW)
-            }
+            Components.pixelGrid.drawPixels(layerIndex, layer, g2D, EComponent.ANIMATION_PREVIEW)
         }
     }
 }
