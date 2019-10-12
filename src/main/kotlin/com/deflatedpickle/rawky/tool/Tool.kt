@@ -26,7 +26,7 @@ abstract class Tool(val name: String, val icon: Icon, val cursor: Cursor, val se
         }
     }
 
-    open fun performLeft(dragged: Boolean, point: Point, lastPoint: Point, clickCount: Int) {}
+    open fun performLeft(dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {}
 
     open fun performMiddle(dragged: Boolean, point: Point, lastPoint: Point, clickCount: Int) {}
     open fun performRight(dragged: Boolean, point: Point, lastPoint: Point, clickCount: Int) {}

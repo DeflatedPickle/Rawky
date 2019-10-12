@@ -22,7 +22,7 @@ class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", Icons.pencil, To
         var size = 1
     }
 
-    override fun performLeft(dragged: Boolean, point: Point, lastPoint: Point, clickCount: Int) {
+    override fun performLeft(dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
         if (Components.pixelGrid
                         .frameList[Components.animationTimeline.list.selectedIndex]
                         .layerList[Components.layerList.list.selectedRow]

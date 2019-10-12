@@ -11,8 +11,8 @@ class Program : JMenu("Program") {
         add(JMenuItem("Settings", Icons.settings).apply {
             addActionListener {
                 with(Settings()) {
-                    isVisible = true
                     setLocationRelativeTo(Components.frame)
+                    isVisible = true
                 }
             }
         })

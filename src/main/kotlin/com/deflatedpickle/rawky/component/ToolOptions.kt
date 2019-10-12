@@ -61,7 +61,7 @@ class ToolOptions : JXPanel() {
                                 else -> JLabel("$annotation is unsupported!").apply { foreground = Color.RED }
                             }
 
-                            when(annotation) {
+                            when (annotation) {
                                 is Tooltip -> {
                                     label.toolTipText = annotation.string
                                     widget.toolTipText = annotation.string

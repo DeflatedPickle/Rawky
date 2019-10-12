@@ -5,13 +5,13 @@ import com.deflatedpickle.rawky.util.Icons
 import java.awt.*
 import javax.swing.SwingUtilities
 
-class Dropper : HoverOutlineTool(Settings::class.java, "Eraser", Icons.colour_picker, Toolkit.getDefaultToolkit().createCustomCursor(Icons.colour_picker.image, Point(8, 16), "Colour Picker")) {
+class Dropper : HoverOutlineTool(Settings::class.java, "Dropper", Icons.colour_picker, Toolkit.getDefaultToolkit().createCustomCursor(Icons.colour_picker.image, Point(8, 16), "Colour Picker")) {
     object Settings {
         @JvmField
         var size = 1
     }
 
-    override fun performLeft(dragged: Boolean, point: Point, lastPoint: Point, clickCount: Int) {
+    override fun performLeft(dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
         // TODO: Should colour picking push/pull to/from the undo/redo stack?
         Components.colourPicker.color = Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.list.selectedRow].pixelMatrix[Components.pixelGrid.hoverRow][Components.pixelGrid.hoverColumn].colour
     }

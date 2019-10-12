@@ -30,7 +30,7 @@ class Settings : JDialog(Components.frame, "Settings") {
         fill = GridBagConstraints.BOTH
     }
 
-    // TODO: Add an annotation system to define categories and pages
+    // TODO: Replace with an annotation system to define categories and pages
     val node = DefaultMutableTreeNode().apply {
         add(DefaultMutableTreeNode("Appearance"))
         add(DefaultMutableTreeNode("Components").apply {

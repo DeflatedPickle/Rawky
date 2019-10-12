@@ -129,6 +129,8 @@ object Commands {
                 "rawr" -> {
                     fileChooser.selectedFile.writeText(gson.toJson(hashMapOf("frameList" to Components.pixelGrid.frameList, "colourLibrary" to Components.colourLibrary.cellList.map { it.colour }, "colourPalette" to Components.colourPalette.colourList)))
                 }
+                // TODO: Move finished files to an export sub-menu of the file menu, this should only be used for raw file types
+                // TODO: Add support for more raw types, such as; PSD, PDN, MDP, XCF, etc
                 "png" -> {
                     ImageIO.write(BufferedImage(Components.pixelGrid.columnAmount, Components.pixelGrid.rowAmount, BufferedImage.TYPE_INT_ARGB).apply {
                         for (row in 0 until Components.pixelGrid.rowAmount) {

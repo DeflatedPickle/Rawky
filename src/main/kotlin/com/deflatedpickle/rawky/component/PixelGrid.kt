@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.component
 
+import com.deflatedpickle.rawky.tool.Tool
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.EComponent
@@ -7,8 +8,7 @@ import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
-import javax.swing.JPanel
-import javax.swing.SwingUtilities
+import javax.swing.*
 
 class PixelGrid : JPanel() {
     interface MatrixItem<T> {
@@ -80,6 +80,26 @@ class PixelGrid : JPanel() {
 
     var scale = 1.0
 
+    val lastCell = Point()
+    val contextMenu = object : JPopupMenu() {
+        init {
+            add(object : JMenu("Quick Action") {
+                init {
+                    for (tool in Tool.list) {
+                        add(JMenuItem(tool.name, tool.icon).apply {
+                            addActionListener {
+                                tool.performLeft(false, Point().also {
+                                    it.x = lastCell.x / (pixelSize / 2)
+                                    it.y = lastCell.y / (pixelSize / 2)
+                                }, null, 1)
+                            }
+                        })
+                    }
+                }
+            })
+        }
+    }
+
     init {
         isOpaque = false
 
@@ -139,10 +159,13 @@ class PixelGrid : JPanel() {
 
             override fun mouseExited(e: MouseEvent) {
                 hoverPixel = null
-                hoverRow = -1
-                hoverColumn = -1
             }
         })
+    }
+
+    override fun getComponentPopupMenu(): JPopupMenu {
+        lastCell.setLocation(this.hoverPixel!!.x, this.hoverPixel!!.y)
+        return this.contextMenu
     }
 
     override fun paintComponent(g: Graphics) {
@@ -234,7 +257,7 @@ class PixelGrid : JPanel() {
         }
     }
 
-    inline fun <reified P, reified T : MatrixItem<P>>initMatrix(value: T? = null, parent: Any): MutableList<MutableList<T>> {
+    inline fun <reified P, reified T : MatrixItem<P>> initMatrix(value: T? = null, parent: Any): MutableList<MutableList<T>> {
         val rowList = mutableListOf<MutableList<T>>()
         for (row in 0 until Components.pixelGrid.rowAmount) {
             val columnList = mutableListOf<T>()

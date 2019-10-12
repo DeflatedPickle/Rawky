@@ -14,8 +14,8 @@ class File : JMenu("File") {
         add(JMenuItem("New", Icons.create_new).apply {
             addActionListener {
                 with(New()) {
-                    isVisible = true
                     setLocationRelativeTo(Components.frame)
+                    isVisible = true
                 }
             }
         })

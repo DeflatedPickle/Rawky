@@ -11,8 +11,8 @@ class Help : JMenu("Help") {
         add(JMenuItem("About").apply {
             addActionListener {
                 with(About()) {
-                    isVisible = true
                     setLocationRelativeTo(Components.frame)
+                    isVisible = true
                 }
             }
         })
