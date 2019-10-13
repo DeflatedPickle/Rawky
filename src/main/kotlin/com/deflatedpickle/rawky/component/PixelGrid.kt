@@ -4,6 +4,7 @@ import com.deflatedpickle.rawky.tool.Tool
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.EComponent
+import com.deflatedpickle.rawky.guide.Guide
 import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
@@ -80,6 +81,8 @@ class PixelGrid : JPanel() {
 
     var scale = 1.0
 
+    val guideList = mutableListOf<Guide>()
+
     val lastCell = Point()
     val contextMenu = object : JPopupMenu() {
         init {
@@ -92,6 +95,26 @@ class PixelGrid : JPanel() {
                                     it.x = lastCell.x / (pixelSize / 2)
                                     it.y = lastCell.y / (pixelSize / 2)
                                 }, null, 1)
+                            }
+                        })
+                    }
+                }
+            })
+
+            add(object : JMenu("Guide") {
+                init {
+                    for (guide in Guide.list) {
+                        add(JMenuItem(guide.getField("name").get("null").toString(), guide.getField("icon").get(null) as Icon?).apply {
+                            addActionListener {
+                                guideList.add(guide.getDeclaredConstructor(
+                                        Guide.Orientation::class.java,
+                                        Point::class.java,
+                                        Dimension::class.java)
+                                        .newInstance(
+                                                Guide.Orientation.VERTICAL,
+                                                Point(0, 0),
+                                                Dimension(this@PixelGrid.width,
+                                                        this@PixelGrid.height)))
                             }
                         })
                     }
@@ -122,13 +145,62 @@ class PixelGrid : JPanel() {
                         }
                     }
                 }
+
+                for (guide in guideList) {
+                    for (rectangle in guide.rectangleList) {
+                        if ((rectangle.clone() as Rectangle).apply {
+                                    x -= guide.stroke.lineWidth.toInt()
+                                    width += guide.stroke.lineWidth.toInt()
+                                }.contains(e.point.apply {
+                                    translate(-(width / 2 - (columnAmount * pixelSize) / 2), 0)
+                                    translate(-(columnAmount * pixelSize) / 2, 0)
+                                    translate(-guide.position.x, 0)
+                                    this.y = 0
+                                })) {
+                            cursor = Cursor(Cursor.W_RESIZE_CURSOR)
+                        }
+                        else {
+                            cursor = Components.toolbox.tool!!.cursor
+                        }
+                    }
+                }
             }
 
             override fun mouseDragged(e: MouseEvent) {
                 mouseMoved(e)
                 Components.toolbox.tool!!.mouseDragged(e.button)
                 when {
-                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.tool!!.performLeft(true, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isLeftMouseButton(e) -> {
+                        var preOccupied = false
+                        // TODO: The guide only seems to be able to move to the left 1 pixel, fix this
+                        for (guide in guideList) {
+                            for (rectangle in guide.rectangleList) {
+                                if ((rectangle.clone() as Rectangle).apply {
+                                            x -= guide.stroke.lineWidth.toInt() * 4
+                                            width += guide.stroke.lineWidth.toInt() * 4
+                                        }.contains(e.point.apply {
+                                            translate(-(width / 2 - (columnAmount * pixelSize) / 2), 0)
+                                            translate(-(columnAmount * pixelSize) / 2, 0)
+                                            this.y = 0
+                                        })) {
+                                    preOccupied = true
+                                    guide.position.setLocation(e.point.apply {
+                                        translate(-(width / 2 - (columnAmount * pixelSize) / 2), 0)
+                                        translate(-(columnAmount * pixelSize) / 2, 0)
+                                        this.y = 0
+                                    }.x, 0)
+                                    break
+                                }
+                                else {
+                                    preOccupied = false
+                                }
+                            }
+                        }
+
+                        if (!preOccupied) {
+                            Components.toolbox.tool!!.performLeft(true, e.point, lastPoint, e.clickCount)
+                        }
+                    }
                     SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.tool!!.performMiddle(true, e.point, lastPoint, e.clickCount)
                     SwingUtilities.isRightMouseButton(e) -> Components.toolbox.tool!!.performRight(true, e.point, lastPoint, e.clickCount)
                 }
@@ -144,7 +216,21 @@ class PixelGrid : JPanel() {
                 when {
                     SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.tool!!.performLeft(false, e.point, lastPoint, e.clickCount)
                     SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.tool!!.performMiddle(false, e.point, lastPoint, e.clickCount)
-                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.tool!!.performRight(false, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isRightMouseButton(e) -> {
+                        for (guide in guideList) {
+                            for (rectangle in guide.rectangleList) {
+                                if (rectangle.contains(e.point.apply {
+                                            translate(-(width / 2 - (columnAmount * pixelSize) / 2), 0)
+                                            translate(-(columnAmount * pixelSize) / 2, 0)
+                                            this.y = 0
+                                        })) {
+                                    // TODO: Add a pop-up menu
+                                }
+                            }
+                        }
+
+                        Components.toolbox.tool!!.performRight(false, e.point, lastPoint, e.clickCount)
+                    }
                 }
                 lastPoint = e.point
             }
@@ -154,6 +240,7 @@ class PixelGrid : JPanel() {
             }
 
             override fun mouseEntered(e: MouseEvent) {
+                // TODO: Draw the cursor on the canvas instead of setting the cursor
                 cursor = Components.toolbox.tool!!.cursor
             }
 
@@ -163,9 +250,15 @@ class PixelGrid : JPanel() {
         })
     }
 
-    override fun getComponentPopupMenu(): JPopupMenu {
-        lastCell.setLocation(this.hoverPixel!!.x, this.hoverPixel!!.y)
-        return this.contextMenu
+    override fun getComponentPopupMenu(): JPopupMenu? {
+        // TODO: Disable the items that require the hover pixel instead
+        return if (hoverPixel != null) {
+            lastCell.setLocation(this.hoverPixel!!.x, this.hoverPixel!!.y)
+            this.contextMenu
+        }
+        else {
+            null
+        }
     }
 
     override fun paintComponent(g: Graphics) {
@@ -192,6 +285,56 @@ class PixelGrid : JPanel() {
         }
 
         Components.toolbox.tool!!.render(g2D)
+
+        val cachedStroke = g2D.stroke
+        val cachedColour = g2D.color
+
+        for (guide in this.guideList) {
+            when (guide.orientation) {
+                Guide.Orientation.HORIZONTAL -> g2D.translate(
+                        rowAmount * pixelSize / 2,
+                        -(this.height / 2 - this.rowAmount * this.pixelSize / 2)
+                )
+
+                Guide.Orientation.VERTICAL -> g2D.translate(
+                        columnAmount * pixelSize / 2,
+                        -(this.height / 2 - this.columnAmount * this.pixelSize / 2)
+                )
+            }
+
+            // g2D.rotate(guide.angle, this@PixelGrid.width / 2.0, this@PixelGrid.height / 2.0)
+
+            g2D.translate(guide.position.x, guide.position.y)
+
+            // Yikes, looping the same list 3 times can't be efficient
+            for (rectangle in guide.rectangleList) {
+                g2D.stroke = guide.stroke
+                g2D.color = guide.colour
+            }
+
+            guide.render(g2D)
+
+            for (rectangle in guide.rectangleList) {
+                g2D.stroke = cachedStroke
+                g2D.color = cachedColour
+            }
+
+            g2D.translate(-guide.position.x, -guide.position.y)
+
+            // g2D.rotate(-guide.angle, this@PixelGrid.width / 2.0, this@PixelGrid.height / 2.0)
+
+            when (guide.orientation) {
+                Guide.Orientation.HORIZONTAL -> g2D.translate(
+                        -(rowAmount * pixelSize / 2),
+                        this.height / 2 - this.rowAmount * this.pixelSize / 2
+                )
+
+                Guide.Orientation.VERTICAL -> g2D.translate(
+                        -(columnAmount * pixelSize / 2),
+                        this.height / 2 - this.columnAmount * this.pixelSize / 2
+                )
+            }
+        }
     }
 
     fun refreshMatrix(): MutableList<MutableList<Rectangle>> {
