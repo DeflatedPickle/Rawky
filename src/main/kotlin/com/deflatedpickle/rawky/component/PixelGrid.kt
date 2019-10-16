@@ -199,7 +199,7 @@ class PixelGrid : JPanel() {
         for (row in 0 until rowAmount) {
             val rectangleCells = mutableListOf<Rectangle>()
             for (column in 0 until columnAmount) {
-                rectangleCells.add(Rectangle(row * pixelSize, column * pixelSize, pixelSize, pixelSize))
+                rectangleCells.add(Rectangle(column * pixelSize, row * pixelSize, pixelSize, pixelSize))
             }
             rMatrix.add(rectangleCells)
         }
@@ -225,7 +225,7 @@ class PixelGrid : JPanel() {
     fun drawTransparentBackground(g2D: Graphics2D, rowCount: Int = rowAmount, columnCount: Int = columnAmount, fillType: FillType = this.backgroundFillType, backgroundPixelDivider: Int = this.backgroundPixelSize) {
         val fill = when (fillType) {
             FillType.ALL -> {
-                Pair(g2D.clipBounds.height, g2D.clipBounds.width)
+                Pair(g2D.clipBounds.width, g2D.clipBounds.height)
             }
             FillType.GRID -> {
                 g2D.translate(this.width / 2 - this.columnAmount * this.pixelSize / 2, this.height / 2 - this.rowAmount * this.pixelSize / 2)

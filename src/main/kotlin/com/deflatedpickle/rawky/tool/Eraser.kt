@@ -25,7 +25,7 @@ class Eraser : HoverOutlineTool(Settings::class.java, "Eraser", Icons.eraser, To
     override fun performLeft(dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
         if (Components.pixelGrid
                         .frameList[Components.animationTimeline.list.selectedIndex]
-                        .layerList[Components.layerList.list.selectedRow]
+                        .layerList[Components.layerList.table.selectedRow]
                         .pixelMatrix[Components.pixelGrid.hoverRow][Components.pixelGrid.hoverColumn]
                         .colour
                 != null) {
@@ -63,7 +63,7 @@ class Eraser : HoverOutlineTool(Settings::class.java, "Eraser", Icons.eraser, To
 
                 override fun outline(g2D: Graphics2D) {
                     g2D.color = UIManager.getColor("List.selectionBackground")
-                    g2D.drawRect(this.row * Components.pixelGrid.pixelSize, this.column * Components.pixelGrid.pixelSize, Components.pixelGrid.pixelSize, Components.pixelGrid.pixelSize)
+                    g2D.drawRect(this.column * Components.pixelGrid.pixelSize, this.row * Components.pixelGrid.pixelSize, Components.pixelGrid.pixelSize, Components.pixelGrid.pixelSize)
                 }
             }
 

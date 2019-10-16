@@ -11,7 +11,7 @@ import javax.swing.table.TableCellEditor
 import javax.swing.table.TableCellRenderer
 
 class LayerList : JPanel() {
-    val listModel = DefaultTableModel(arrayOf(), arrayOf("Preview", "Name", "Visibility", "State")).apply {
+    val tableModel = DefaultTableModel(arrayOf(), arrayOf("Preview", "Name", "Visibility", "State")).apply {
         addTableModelListener {
             when (it.column) {
                 2 -> Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[it.firstRow].visible = this.getValueAt(it.firstRow, it.column) as Boolean
@@ -19,7 +19,7 @@ class LayerList : JPanel() {
             }
         }
     }
-    val list = JTable(listModel).apply {
+    val table = JTable(tableModel).apply {
         autoResizeMode = JTable.AUTO_RESIZE_OFF
         showVerticalLines = false
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION)
@@ -90,12 +90,12 @@ class LayerList : JPanel() {
         isOpaque = false
         layout = BorderLayout()
 
-        add(list)
+        add(table)
     }
 
     fun addLayer() {
-        listModel.insertRow(0, arrayOf(null, "Layer ${listModel.rowCount}", true, PixelGrid.Layer.LockType.OFF))
-        list.setRowSelectionInterval(0, 0)
+        tableModel.insertRow(0, arrayOf(null, "Layer ${tableModel.rowCount}", true, PixelGrid.Layer.LockType.OFF))
+        table.setRowSelectionInterval(0, 0)
 
         with(Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex]) {
             layerList.add(0, PixelGrid.Layer(this))
@@ -103,29 +103,29 @@ class LayerList : JPanel() {
     }
 
     fun removeLayer() {
-        with(list.selectedRow) {
+        with(table.selectedRow) {
             Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.removeAt(this)
-            listModel.removeRow(this)
+            tableModel.removeRow(this)
 
             if (this < 0) {
-                list.setRowSelectionInterval(this, this)
+                table.setRowSelectionInterval(this, this)
             }
             else {
-                list.setRowSelectionInterval(this - 1, this - 1)
+                table.setRowSelectionInterval(this - 1, this - 1)
             }
         }
     }
 
-    fun isLayerHidden(index: Int = list.selectedRow): Boolean {
-        return if (index >= list.rowCount) {
+    fun isLayerHidden(index: Int = table.selectedRow): Boolean {
+        return if (index >= table.rowCount) {
             false
         }
         else {
-            !((listModel.dataVector[index] as Vector<*>)[2] as Boolean)
+            !((tableModel.dataVector[index] as Vector<*>)[2] as Boolean)
         }
     }
 
-    fun layerLockType(index: Int = list.selectedRow): PixelGrid.Layer.LockType {
-        return (listModel.dataVector[index] as Vector<*>)[3] as PixelGrid.Layer.LockType
+    fun layerLockType(index: Int = table.selectedRow): PixelGrid.Layer.LockType {
+        return (tableModel.dataVector[index] as Vector<*>)[3] as PixelGrid.Layer.LockType
     }
 }

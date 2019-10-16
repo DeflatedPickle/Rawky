@@ -16,7 +16,7 @@ class Toolbox : JPanel() {
     // TODO: Maybe merge this into Action, seems useful
     abstract class LockCheck(name: String) : ActionStack.Action(name) {
         val frame = Components.animationTimeline.list.selectedIndex
-        val layer = Components.layerList.list.selectedRow
+        val layer = Components.layerList.table.selectedRow
 
         val row = Components.pixelGrid.hoverRow
         val column = Components.pixelGrid.hoverColumn

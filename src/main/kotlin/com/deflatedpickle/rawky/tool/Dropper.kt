@@ -13,7 +13,7 @@ class Dropper : HoverOutlineTool(Settings::class.java, "Dropper", Icons.colour_p
 
     override fun performLeft(dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
         // TODO: Should colour picking push/pull to/from the undo/redo stack?
-        Components.colourPicker.color = Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.list.selectedRow].pixelMatrix[Components.pixelGrid.hoverRow][Components.pixelGrid.hoverColumn].colour
+        Components.colourPicker.color = Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.table.selectedRow].pixelMatrix[Components.pixelGrid.hoverRow][Components.pixelGrid.hoverColumn].colour
     }
 
     override fun render(g2D: Graphics2D) {

@@ -34,8 +34,8 @@ object Commands {
 
         Components.pixelGrid.frameList = mutableListOf()
 
-        for (i in 0 until Components.layerList.listModel.rowCount) {
-            Components.layerList.listModel.removeRow(i)
+        for (i in 0 until Components.layerList.tableModel.rowCount) {
+            Components.layerList.tableModel.removeRow(i)
         }
         Components.animationTimeline.listModel.removeAllElements()
 

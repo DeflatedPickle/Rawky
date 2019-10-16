@@ -6,8 +6,8 @@ import java.awt.*
 import javax.swing.*
 
 class New : JDialog(Components.frame, "New File", true) {
-    val widthSpinner = JSpinner(SpinnerNumberModel(16, 0, Int.MAX_VALUE, 16))
-    val heightSpinner = JSpinner(SpinnerNumberModel(16, 0, Int.MAX_VALUE, 16))
+    val widthSpinner = JSpinner(SpinnerNumberModel(Components.pixelGrid.columnAmount, 0, Int.MAX_VALUE, 16))
+    val heightSpinner = JSpinner(SpinnerNumberModel(Components.pixelGrid.rowAmount, 0, Int.MAX_VALUE, 16))
 
     val labelConstraints = GridBagConstraints().apply {
         anchor = GridBagConstraints.EAST
@@ -32,6 +32,8 @@ class New : JDialog(Components.frame, "New File", true) {
 
         add(JPanel().apply {
             add(JButton("OK").apply {
+                SwingUtilities.invokeLater { rootPane.defaultButton = this }
+
                 addActionListener {
                     Commands.new(widthSpinner.value as Int, heightSpinner.value as Int)
                     this@New.dispose()
