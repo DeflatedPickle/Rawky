@@ -1,8 +1,11 @@
 package com.deflatedpickle.rawky
 
+import bibliothek.gui.dock.StackDockStation
 import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
+import com.deflatedpickle.rawky.component.MiniMap
+import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.dialogue.New
 import com.deflatedpickle.rawky.menu.Edit
@@ -127,21 +130,7 @@ fun main() {
             isOpaque = false
             layout = BorderLayout()
 
-            add(JScrollPane(Components.pixelGrid.apply {
-                preferredSize = Dimension(2048, 2048)
-            }).apply {
-                SwingUtilities.invokeLater {
-                    for (i in arrayOf(horizontalScrollBar, verticalScrollBar)) {
-                        i.value = i.maximum / 2 - with(i.size) {
-                            when (i.orientation) {
-                                0 -> width
-                                1 -> height
-                                else -> 0
-                            }
-                        } / 2
-                    }
-                }
-            })
+            add(PixelGrid.SCROLLABLE_INSTANCE)
 
             add(JToolBar().apply {
                 val slider = JSlider(25, 300).apply {
@@ -193,6 +182,11 @@ fun main() {
         animationTimeline.isVisible = true
         grid.add(0.6, 1.4, 0.6, 0.6, animationTimeline)
 
+        val miniMap = DefaultSingleCDockable("miniMap", "Mini-Map", Components.miniMap)
+        cControl.addDockable(miniMap)
+        miniMap.isVisible = true
+        grid.add(1.0, 0.0, 0.4, 0.6, miniMap)
+
         val colourPicker = DefaultSingleCDockable("colourPicker", "Colour Picker", Components.colourPicker)
         cControl.addDockable(colourPicker)
         colourPicker.isVisible = true
@@ -201,7 +195,7 @@ fun main() {
         val toolOptions = DefaultSingleCDockable("toolOptions", "Tool Options", JScrollPane(Components.toolOptions))
         cControl.addDockable(toolOptions)
         toolOptions.isVisible = true
-        grid.add(1.0, 0.4, 0.4, 0.4, toolOptions)
+        grid.add(1.0, 0.4, 0.4, 0.6, toolOptions)
 
         val colourShades = DefaultSingleCDockable("colourShades", "Colour Shades", JPanel().apply {
             isOpaque = false
@@ -224,7 +218,7 @@ fun main() {
         })
         cControl.addDockable(colourShades)
         colourShades.isVisible = true
-        grid.add(1.0, 0.8, 0.4, 0.4, colourShades)
+        grid.add(1.2, 0.4, 0.4, 0.2, colourShades)
 
         val colourPalette = DefaultSingleCDockable("colourPalette", "Colour Palette", JPanel().apply {
             isOpaque = false
@@ -263,12 +257,12 @@ fun main() {
         })
         cControl.addDockable(colourPalette)
         colourPalette.isVisible = true
-        grid.add(1.2, 0.3, 0.4, 0.2, colourPalette)
+        grid.add(1.2, 0.5, 0.4, 0.2, colourPalette)
 
         val colourLibrary = DefaultSingleCDockable("colourLibrary", "Colour Library", JScrollPane(Components.colourLibrary))
         cControl.addDockable(colourLibrary)
         colourLibrary.isVisible = true
-        grid.add(1.2, 0.7, 0.4, 0.2, colourLibrary)
+        grid.add(1.2, 0.5, 0.4, 0.2, colourLibrary)
 
         val actionHistory = DefaultSingleCDockable("actionHistory", "Action History", JPanel().apply {
             isOpaque = false
@@ -294,17 +288,20 @@ fun main() {
         })
         cControl.addDockable(actionHistory)
         actionHistory.isVisible = true
-        grid.add(1.2, 0.0, 0.4, 0.8, actionHistory)
+        grid.add(1.2, 0.0, 0.4, 0.4, actionHistory)
 
         cControl.contentArea.deploy(grid)
 
+        // TODO: Add a setting for the refresh interval
         Timer(1000 / 60) {
             Components.pixelGrid.repaint()
+            // TODO: Change all but the PixelGrid to redraw when the tool is performed
             Components.tiledView.repaint()
             Components.colourPalette.repaint()
             Components.layerList.repaint()
             Components.animationPreview.repaint()
             Components.animationTimeline.repaint()
+            Components.miniMap.repaint()
         }.start()
     }
 

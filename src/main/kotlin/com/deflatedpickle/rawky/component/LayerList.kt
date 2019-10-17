@@ -111,7 +111,9 @@ class LayerList : JPanel() {
                 table.setRowSelectionInterval(this, this)
             }
             else {
-                table.setRowSelectionInterval(this - 1, this - 1)
+                if (this - 1 > 0) {
+                    table.setRowSelectionInterval(this - 1, this - 1)
+                }
             }
         }
     }

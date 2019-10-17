@@ -10,7 +10,7 @@ object Components {
     val frame = Window()
 
     val toolbox = Toolbox()
-    val pixelGrid = PixelGrid()
+    val pixelGrid = PixelGrid.INSTANCE
     val tiledView = TiledView()
     val colourPicker = ColorPicker(false, true)
     val colourShades = ColourShades()
@@ -21,6 +21,7 @@ object Components {
     val animationPreview = AnimationPreview()
     val actionHistory = ActionHistory()
     val toolOptions = ToolOptions()
+    val miniMap = MiniMap()
 
     init {
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE

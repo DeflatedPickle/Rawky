@@ -11,6 +11,14 @@ import java.awt.event.MouseMotionAdapter
 import javax.swing.*
 
 class PixelGrid : JPanel() {
+    companion object {
+        val INSTANCE = PixelGrid().apply {
+            preferredSize = Dimension(2048, 2048)
+        }
+
+        val SCROLLABLE_INSTANCE = JScrollPane(INSTANCE)
+    }
+
     interface MatrixItem<T> {
         var parent: T
     }
@@ -113,8 +121,8 @@ class PixelGrid : JPanel() {
                     for ((columnIndex, column) in row.withIndex()) {
                         if (column.contains(e.point.apply {
                                     // FIXME: Scale the translation
-                                    translate(-(this@PixelGrid.width / 2 - this@PixelGrid.columnAmount * this@PixelGrid.pixelSize / 2),
-                                            -(this@PixelGrid.height / 2 - this@PixelGrid.rowAmount * this@PixelGrid.pixelSize / 2))
+                                    // translate(-(this@PixelGrid.width / 2 - this@PixelGrid.columnAmount * this@PixelGrid.pixelSize / 2),
+                                    //         -(this@PixelGrid.height / 2 - this@PixelGrid.rowAmount * this@PixelGrid.pixelSize / 2))
                                 })) {
                             hoverPixel = column
                             hoverRow = rowIndex
@@ -228,7 +236,7 @@ class PixelGrid : JPanel() {
                 Pair(g2D.clipBounds.width, g2D.clipBounds.height)
             }
             FillType.GRID -> {
-                g2D.translate(this.width / 2 - this.columnAmount * this.pixelSize / 2, this.height / 2 - this.rowAmount * this.pixelSize / 2)
+                // g2D.translate(this.width / 2 - this.columnAmount * this.pixelSize / 2, this.height / 2 - this.rowAmount * this.pixelSize / 2)
                 Pair(rowCount, columnCount)
             }
         }
@@ -242,7 +250,7 @@ class PixelGrid : JPanel() {
 
         when (this.backgroundFillType) {
             FillType.ALL -> {
-                g2D.translate(this.width / 2 - this.columnAmount * this.pixelSize / 2, this.height / 2 - this.rowAmount * this.pixelSize / 2)
+                // g2D.translate(this.width / 2 - this.columnAmount * this.pixelSize / 2, this.height / 2 - this.rowAmount * this.pixelSize / 2)
             }
             else -> return
         }

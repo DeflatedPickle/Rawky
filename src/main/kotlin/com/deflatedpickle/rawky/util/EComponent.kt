@@ -13,5 +13,6 @@ enum class EComponent {
     ANIMATION_TIMELINE,
     ANIMATION_PREVIEW,
     ACTION_HISTORY,
-    TOOL_OPTIONS
+    TOOL_OPTIONS,
+    MINI_MAP
 }
