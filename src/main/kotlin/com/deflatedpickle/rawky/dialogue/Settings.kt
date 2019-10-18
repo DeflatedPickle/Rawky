@@ -1,21 +1,22 @@
 package com.deflatedpickle.rawky.dialogue
 
-import com.alee.laf.WebLookAndFeel
-import com.bric.colorpicker.ColorPickerDialog
-import com.bulenkov.darcula.DarculaLaf
-import com.deflatedpickle.rawky.component.PixelGrid
+import com.deflatedpickle.rawky.api.DoubleRange
+import com.deflatedpickle.rawky.api.IntRange
+import com.deflatedpickle.rawky.api.Options
+import com.deflatedpickle.rawky.api.Tooltip
 import com.deflatedpickle.rawky.util.Components
-import org.pushingpixels.substance.api.skin.SubstanceGraphiteElectricLookAndFeel
-import java.awt.BorderLayout
-import java.awt.Dimension
-import java.awt.GridBagConstraints
-import java.awt.GridBagLayout
+import com.deflatedpickle.rawky.widget.DoubleSlider
+import org.reflections.Reflections
+import java.awt.*
 import javax.swing.*
 import javax.swing.tree.DefaultMutableTreeNode
-import javax.swing.tree.TreeNode
-import javax.swing.tree.TreePath
+import javax.swing.tree.DefaultTreeModel
 
 class Settings : JDialog(Components.frame, "Settings") {
+    companion object {
+        val reflections = Reflections("com.deflatedpickle.rawky.component")
+    }
+
     val panel = JPanel().apply {
         layout = GridBagLayout()
     }
@@ -31,19 +32,7 @@ class Settings : JDialog(Components.frame, "Settings") {
     }
 
     // TODO: Replace with an annotation system to define categories and pages
-    val node = DefaultMutableTreeNode().apply {
-        add(DefaultMutableTreeNode("Appearance"))
-        add(DefaultMutableTreeNode("Components").apply {
-            // TODO: Add more settings
-            // add(DefaultMutableTreeNode("Colour Library"))
-            // add(DefaultMutableTreeNode("Colour Palette"))
-            // add(DefaultMutableTreeNode("Colour Shades"))
-            // add(DefaultMutableTreeNode("Layer List"))
-            add(DefaultMutableTreeNode("Pixel Grid"))
-            // add(DefaultMutableTreeNode("Tiled View"))
-            // add(DefaultMutableTreeNode("Toolbox"))
-        })
-    }
+    val node = DefaultMutableTreeNode()
 
     val tree = JTree(node).apply {
         isRootVisible = false
@@ -53,73 +42,60 @@ class Settings : JDialog(Components.frame, "Settings") {
         addTreeSelectionListener {
             panel.removeAll()
 
-            val pathTemp = mutableListOf<String>()
-            for (i in 0 until it.path.pathCount) {
-                pathTemp.add(it.path.getPathComponent(i).toString().replace(" ", "_"))
-            }
+            for (i in reflections.getSubTypesOf(JPanel::class.java)) {
+                for (clazz in i.declaredClasses) {
+                    if (clazz.annotations.map { it.annotationClass == Options::class }.contains(true)) {
+                        for (field in clazz.fields) {
+                            if (field.name != "INSTANCE") {
+                                val label = JLabel(field.name.capitalize() + ":")
+                                panel.add(label, labelConstraints)
 
-            when (pathTemp.joinToString(">").toLowerCase()) {
-                ">appearance" -> {
-                    panel.add(JLabel("Look and Feel:"), labelConstraints)
-                    panel.add(JComboBox<String>(appearanceComboBoxModel).apply {
-                        selectedIndex = Components.frame.theme
+                                loop@ for (annotation in field.annotations) {
+                                    val widget: JComponent = when (annotation) {
+                                        // TODO: Add more argument types
+                                        is IntRange -> {
+                                            JSlider(annotation.min, annotation.max).apply {
+                                                value = field.getInt(null)
 
-                        addActionListener {
-                            when (selectedIndex) {
-                                0 -> UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName())
-                                1 -> UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
-                                2 -> UIManager.setLookAndFeel(DarculaLaf())
-                                3 -> UIManager.setLookAndFeel(SubstanceGraphiteElectricLookAndFeel())
-                                4 -> UIManager.setLookAndFeel(WebLookAndFeel())
+                                                addChangeListener {
+                                                    field.set(null, value)
+                                                }
+                                            }
+                                        }
+                                        is DoubleRange -> {
+                                            DoubleSlider(annotation.min, annotation.max, field.getDouble(null), factor = 100.0).apply {
+                                                value = (field.getDouble(null) * this.factor).toInt()
+
+                                                addChangeListener {
+                                                    field.set(null, value / this.factor)
+                                                }
+                                            }
+                                        }
+                                        is Tooltip -> continue@loop
+                                        else -> JLabel("${annotation.annotationClass.qualifiedName} is unsupported!").apply {
+                                            font = font.deriveFont(Font.BOLD)
+                                            foreground = Color.RED
+                                        }
+                                    }
+                                    panel.add(widget, lineEnd)
+
+                                    when (annotation) {
+                                        is Tooltip -> {
+                                            label.toolTipText = annotation.string
+                                            widget.toolTipText = annotation.string
+                                        }
+                                    }
+                                }
                             }
-                            SwingUtilities.updateComponentTreeUI(Components.frame)
-                            SwingUtilities.updateComponentTreeUI(this@Settings)
                         }
-                    }, lineEnd)
-                }
-                ">components>pixel_grid" -> {
-                    panel.add(JLabel("Pixel Smooth:"), labelConstraints)
-                    panel.add(JSlider(0, 200, Components.pixelGrid.pixelSmooth).apply { addChangeListener { Components.pixelGrid.pixelSmooth = this.value } }, lineEnd)
-
-                    panel.add(JLabel("Hover Opacity:"), labelConstraints)
-                    panel.add(JSlider(1, 255, Components.pixelGrid.hoverOpacity).apply { addChangeListener { Components.pixelGrid.hoverOpacity = this.value } }, lineEnd)
-
-                    panel.add(JLabel("Line Thickness:"), labelConstraints)
-                    panel.add(JSlider(1, 200, Components.pixelGrid.lineThickness.toInt()).apply { addChangeListener { Components.pixelGrid.lineThickness = (this.value / 10).toFloat() } }, lineEnd)
-
-                    panel.add(JLabel("Grid Colour:"), labelConstraints)
-                    panel.add(JButton().apply { addActionListener { Components.pixelGrid.gridColour = ColorPickerDialog.showDialog(this@Settings, Components.pixelGrid.gridColour) } }, lineEnd)
-
-                    panel.add(JPanel().apply {
-                        border = BorderFactory.createTitledBorder("Background")
-                        layout = GridBagLayout()
-
-                        add(JLabel("Pixel Size:"), labelConstraints)
-                        add(JSlider(Components.pixelGrid.pixelSize / 3, 100, Components.pixelGrid.backgroundPixelSize).apply { addChangeListener { Components.pixelGrid.backgroundPixelSize = this.value } }, lineEnd)
-
-                        add(JLabel("Fill Type:"), labelConstraints)
-                        add(JComboBox<String>(PixelGrid.FillType.values().map { i -> i.name.toLowerCase().capitalize() }.toTypedArray()).apply {
-                            selectedIndex = Components.pixelGrid.backgroundFillType.ordinal
-
-                            addActionListener {
-                                Components.pixelGrid.backgroundFillType = PixelGrid.FillType.values()[this.selectedIndex]
-                            }
-                        }, lineEnd)
-
-                        add(JLabel("Colour Even:"), labelConstraints)
-                        add(JButton().apply { addActionListener { Components.pixelGrid.backgroundFillEven = ColorPickerDialog.showDialog(this@Settings, Components.pixelGrid.backgroundFillEven) } }, lineEnd)
-
-                        add(JLabel("Colour Odd:"), labelConstraints)
-                        add(JButton().apply { addActionListener { Components.pixelGrid.backgroundFillOdd = ColorPickerDialog.showDialog(this@Settings, Components.pixelGrid.backgroundFillOdd) } }, lineEnd)
-                    }, lineEnd)
+                    }
                 }
             }
+
             panel.revalidate()
             panel.repaint()
         }
     }
-
-    val appearanceComboBoxModel = DefaultComboBoxModel(arrayOf("Metal", "System", "Dracula", "Substance Graphite Electric", "Web"))
 
     init {
         layout = BorderLayout()
@@ -128,5 +104,31 @@ class Settings : JDialog(Components.frame, "Settings") {
         add(JSplitPane(JSplitPane.HORIZONTAL_SPLIT, JScrollPane(tree), JScrollPane(panel)).apply {
             dividerLocation = 150
         })
+    }
+
+    fun relayout() {
+        this.panel.removeAll()
+
+        for (i in reflections.getSubTypesOf(JPanel::class.java)) {
+            for (clazz in i.declaredClasses) {
+                if (clazz.annotations.map { it.annotationClass == Options::class }.contains(true)) {
+                    with(tree.model as DefaultTreeModel) {
+                        with(tree.model.root as DefaultMutableTreeNode) {
+                            insertNodeInto(DefaultMutableTreeNode(clazz.simpleName.capitalize()), this, this.childCount)
+                        }
+                        reload()
+                    }
+                }
+            }
+        }
+
+        this.invalidate()
+        this.revalidate()
+        this.repaint()
+    }
+
+    override fun setVisible(b: Boolean) {
+        this.relayout()
+        super.setVisible(b)
     }
 }

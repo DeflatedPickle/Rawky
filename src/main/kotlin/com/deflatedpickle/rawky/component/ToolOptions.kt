@@ -1,12 +1,11 @@
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.Options
-import com.deflatedpickle.rawky.api.Range
+import com.deflatedpickle.rawky.api.IntRange
 import com.deflatedpickle.rawky.api.Tooltip
 import com.deflatedpickle.rawky.util.Components
 import org.jdesktop.swingx.JXPanel
 import java.awt.Color
-import java.awt.Component
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.JComponent
@@ -47,7 +46,7 @@ class ToolOptions : JXPanel() {
                         for (annotation in field.annotations) {
                             val widget: JComponent = when (annotation) {
                                 // TODO: Add more argument types
-                                is Range -> {
+                                is IntRange -> {
                                     JSlider(annotation.min, annotation.max).apply {
                                         value = field.getInt(null)
 

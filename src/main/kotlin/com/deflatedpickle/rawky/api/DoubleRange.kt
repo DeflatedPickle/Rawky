@@ -2,4 +2,4 @@ package com.deflatedpickle.rawky.api
 
 @MustBeDocumented
 @Target(AnnotationTarget.FIELD)
-annotation class Tooltip(val string: String)
+annotation class DoubleRange(val min: Double, val max: Double)

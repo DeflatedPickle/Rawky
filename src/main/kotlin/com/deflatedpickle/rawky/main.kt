@@ -1,18 +1,14 @@
 package com.deflatedpickle.rawky
 
-import bibliothek.gui.dock.StackDockStation
 import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
-import com.deflatedpickle.rawky.component.MiniMap
 import com.deflatedpickle.rawky.component.PixelGrid
-import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.dialogue.New
 import com.deflatedpickle.rawky.menu.Edit
 import com.deflatedpickle.rawky.menu.File
 import com.deflatedpickle.rawky.menu.Help
 import com.deflatedpickle.rawky.menu.Program
-import com.deflatedpickle.rawky.tool.Pencil
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Commands
 import com.deflatedpickle.rawky.util.Components

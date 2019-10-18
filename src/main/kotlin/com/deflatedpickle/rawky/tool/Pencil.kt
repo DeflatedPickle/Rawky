@@ -1,7 +1,7 @@
 package com.deflatedpickle.rawky.tool
 
 import com.deflatedpickle.rawky.api.Options
-import com.deflatedpickle.rawky.api.Range
+import com.deflatedpickle.rawky.api.IntRange
 import com.deflatedpickle.rawky.api.Tooltip
 import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.util.ActionStack
@@ -16,7 +16,7 @@ import javax.swing.UIManager
 class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", Icons.pencil, Toolkit.getDefaultToolkit().createCustomCursor(Icons.pencil.image, Point(8, 16), "Pencil"), true) {
     @Options
     object Settings {
-        @Range(1, 9)
+        @IntRange(1, 9)
         @Tooltip("Change the size of the pencil")
         @JvmField
         var size = 1
