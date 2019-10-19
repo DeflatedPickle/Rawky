@@ -10,6 +10,7 @@ import com.deflatedpickle.rawky.api.Tooltip
 import com.deflatedpickle.rawky.component.*
 import com.deflatedpickle.rawky.widget.DoubleSlider
 import com.deflatedpickle.rawky.widget.Slider
+import org.apache.commons.lang3.StringUtils
 import org.jdesktop.swingx.JXButton
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter
@@ -55,7 +56,7 @@ object Components {
     fun processAnnotations(parent: JPanel, field: Field) {
         var label: JLabel? = null
         if (field.annotations.isNotEmpty()) {
-            label = JLabel(field.name.capitalize() + ":")
+            label = JLabel(StringUtils.splitByCharacterTypeCamelCase(field.name.capitalize()).joinToString(" ") + ":")
             parent.add(label, ToolOptions.StickEast)
         }
 
