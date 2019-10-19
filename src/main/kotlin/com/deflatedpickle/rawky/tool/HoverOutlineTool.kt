@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.tool
 
+import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.util.Components
 import java.awt.BasicStroke
 import java.awt.Color
@@ -13,7 +14,7 @@ abstract class HoverOutlineTool(val settings: Class<*>, name: String, icon: Icon
 
     override fun render(g2D: Graphics2D) {
         if (Components.pixelGrid.hoverPixel != null) {
-            g2D.color = Color(Components.colourShades.selectedShade.red, Components.colourShades.selectedShade.green, Components.colourShades.selectedShade.blue, Components.pixelGrid.hoverOpacity)
+            g2D.color = Color(Components.colourShades.selectedShade.red, Components.colourShades.selectedShade.green, Components.colourShades.selectedShade.blue, PixelGrid.Settings.hoverOpacity)
 
             with(g2D.stroke) {
                 g2D.stroke = outlineStroke

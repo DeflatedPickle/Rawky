@@ -47,11 +47,11 @@ class TiledView : JPanel() {
                 for ((layerIndex, layer) in Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.withIndex().reversed()) {
                     Components.pixelGrid.drawPixels(layerIndex, layer, g2D, EComponent.TILED_VIEW)
                 }
-                g2D.translate((Components.pixelGrid.pixelSize + Settings.padding) * Components.pixelGrid.columnAmount, 0.0)
+                g2D.translate((PixelGrid.Settings.pixelSize + Settings.padding) * Components.pixelGrid.columnAmount, 0.0)
             }
-            g2D.translate(0.0, (Components.pixelGrid.pixelSize + Settings.padding) * Components.pixelGrid.rowAmount)
+            g2D.translate(0.0, (PixelGrid.Settings.pixelSize + Settings.padding) * Components.pixelGrid.rowAmount)
             // Moves to the start of the row
-            g2D.translate(-(Components.pixelGrid.pixelSize + Settings.padding) * Components.pixelGrid.columnAmount * Settings.columns, 0.0)
+            g2D.translate(-(PixelGrid.Settings.pixelSize + Settings.padding) * Components.pixelGrid.columnAmount * Settings.columns, 0.0)
         }
     }
 }

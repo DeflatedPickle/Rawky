@@ -7,6 +7,7 @@ import com.deflatedpickle.rawky.api.Tooltip
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.widget.DoubleSlider
 import com.deflatedpickle.rawky.widget.Slider
+import org.apache.commons.lang3.StringUtils
 import org.reflections.Reflections
 import java.awt.*
 import javax.swing.*
@@ -18,9 +19,7 @@ class Settings : JDialog(Components.frame, "Settings") {
         val reflections = Reflections("com.deflatedpickle.rawky.component")
     }
 
-    val panel = JPanel().apply {
-        layout = GridBagLayout()
-    }
+    val panel = JPanel()
 
     val labelConstraints = GridBagConstraints().apply {
         anchor = GridBagConstraints.EAST
@@ -31,6 +30,14 @@ class Settings : JDialog(Components.frame, "Settings") {
         weightx = 1.0
         fill = GridBagConstraints.BOTH
     }
+
+    val fill = GridBagConstraints().apply {
+        weightx = 1.0
+        weighty = 1.0
+        fill = GridBagConstraints.BOTH
+    }
+
+    val panelList = mutableListOf<JPanel>()
 
     // TODO: Replace with an annotation system to define categories and pages
     val node = DefaultMutableTreeNode()
@@ -43,17 +50,7 @@ class Settings : JDialog(Components.frame, "Settings") {
         addTreeSelectionListener {
             panel.removeAll()
 
-            for (i in reflections.getSubTypesOf(JPanel::class.java)) {
-                for (clazz in i.declaredClasses) {
-                    if (clazz.annotations.map { it.annotationClass == Options::class }.contains(true)) {
-                        for (field in clazz.fields) {
-                            if (field.name != "INSTANCE") {
-                                Components.processAnnotations(panel, field)
-                            }
-                        }
-                    }
-                }
-            }
+            panel.add(panelList[this.minSelectionRow], fill)
 
             panel.revalidate()
             panel.repaint()
@@ -67,31 +64,30 @@ class Settings : JDialog(Components.frame, "Settings") {
         add(JSplitPane(JSplitPane.HORIZONTAL_SPLIT, JScrollPane(tree), JScrollPane(panel)).apply {
             dividerLocation = 150
         })
-    }
-
-    fun relayout() {
-        this.panel.removeAll()
 
         for (i in reflections.getSubTypesOf(JPanel::class.java)) {
             for (clazz in i.declaredClasses) {
                 if (clazz.annotations.map { it.annotationClass == Options::class }.contains(true)) {
                     with(tree.model as DefaultTreeModel) {
                         with(tree.model.root as DefaultMutableTreeNode) {
-                            insertNodeInto(DefaultMutableTreeNode(clazz.simpleName.capitalize()), this, this.childCount)
+                            insertNodeInto(DefaultMutableTreeNode(StringUtils.splitByCharacterTypeCamelCase(i.simpleName.capitalize()).joinToString(" ")), this, this.childCount)
                         }
                         reload()
                     }
+
+                    val panel = JPanel().apply {
+                        layout = GridBagLayout()
+                    }
+
+                    for (field in clazz.fields) {
+                        if (field.name != "INSTANCE") {
+                            Components.processAnnotations(panel, field)
+                        }
+                    }
+
+                    panelList.add(panel)
                 }
             }
         }
-
-        this.invalidate()
-        this.revalidate()
-        this.repaint()
-    }
-
-    override fun setVisible(b: Boolean) {
-        this.relayout()
-        super.setVisible(b)
     }
 }

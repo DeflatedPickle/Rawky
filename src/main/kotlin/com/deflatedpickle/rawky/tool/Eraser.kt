@@ -3,6 +3,7 @@ package com.deflatedpickle.rawky.tool
 import com.deflatedpickle.rawky.api.Options
 import com.deflatedpickle.rawky.api.IntRange
 import com.deflatedpickle.rawky.api.Tooltip
+import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
@@ -63,7 +64,7 @@ class Eraser : HoverOutlineTool(Settings::class.java, "Eraser", Icons.eraser, To
 
                 override fun outline(g2D: Graphics2D) {
                     g2D.color = UIManager.getColor("List.selectionBackground")
-                    g2D.drawRect(this.column * Components.pixelGrid.pixelSize, this.row * Components.pixelGrid.pixelSize, Components.pixelGrid.pixelSize, Components.pixelGrid.pixelSize)
+                    g2D.drawRect(this.column * PixelGrid.Settings.pixelSize, this.row * PixelGrid.Settings.pixelSize, PixelGrid.Settings.pixelSize, PixelGrid.Settings.pixelSize)
                 }
             }
 

@@ -18,6 +18,12 @@ import javax.swing.JSlider
 import javax.swing.SwingConstants
 
 class ToolOptions : JXPanel() {
+    object StickEast : GridBagConstraints() {
+        init {
+            anchor = EAST
+        }
+    }
+
     object FillHorizontal : GridBagConstraints() {
         init {
             fill = BOTH

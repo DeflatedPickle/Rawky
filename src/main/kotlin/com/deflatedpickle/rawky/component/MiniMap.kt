@@ -61,7 +61,7 @@ class MiniMap : JPanel() {
 
         g2D.color = this.drawAreaColour
         with(Components.pixelGrid) {
-            g2D.drawRect(0, 0, columnAmount * pixelSize, rowAmount * pixelSize)
+            g2D.drawRect(0, 0, columnAmount * PixelGrid.Settings.pixelSize, rowAmount * PixelGrid.Settings.pixelSize)
         }
 
         g2D.color = this.handleColour

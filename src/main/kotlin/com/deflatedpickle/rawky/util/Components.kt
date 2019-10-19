@@ -1,20 +1,24 @@
 package com.deflatedpickle.rawky.util
 
 import com.bric.colorpicker.ColorPicker
+import com.bric.colorpicker.ColorPickerDialog
+import com.deflatedpickle.rawky.api.Colour
 import com.deflatedpickle.rawky.api.DoubleRange
+import com.deflatedpickle.rawky.api.Enum
 import com.deflatedpickle.rawky.api.IntRange
 import com.deflatedpickle.rawky.api.Tooltip
 import com.deflatedpickle.rawky.component.*
 import com.deflatedpickle.rawky.widget.DoubleSlider
 import com.deflatedpickle.rawky.widget.Slider
+import org.jdesktop.swingx.JXButton
+import org.jdesktop.swingx.painter.CompoundPainter
+import org.jdesktop.swingx.painter.MattePainter
 import org.reflections.Reflections
 import java.awt.Color
+import java.awt.Dimension
 import java.awt.Font
 import java.lang.reflect.Field
-import javax.swing.JComponent
-import javax.swing.JFrame
-import javax.swing.JLabel
-import javax.swing.JPanel
+import javax.swing.*
 
 object Components {
     val frame = Window()
@@ -49,8 +53,11 @@ object Components {
     }
 
     fun processAnnotations(parent: JPanel, field: Field) {
-        val label = JLabel(field.name.capitalize() + ":")
-        parent.add(label)
+        var label: JLabel? = null
+        if (field.annotations.isNotEmpty()) {
+            label = JLabel(field.name.capitalize() + ":")
+            parent.add(label, ToolOptions.StickEast)
+        }
 
         loop@ for (annotation in field.annotations) {
             val widget: JComponent = when (annotation) {
@@ -77,6 +84,26 @@ object Components {
                         }
                     }
                 }
+                is Colour -> {
+                    JXButton().apply {
+                        backgroundPainter = CompoundPainter<JXButton>(MattePainter(field.get(null) as Color))
+
+                        addActionListener {
+                            field.set(null, ColorPickerDialog.showDialog(frame, field.get(null) as Color))
+                            backgroundPainter = CompoundPainter<JXButton>(MattePainter(field.get(null) as Color))
+                        }
+                    }
+                }
+                is Enum -> {
+                    val clazz = Class.forName(annotation.enum)
+                    JComboBox<String>(clazz.enumConstants.map { it.toString().toLowerCase().capitalize() }.toTypedArray()).apply {
+                        selectedIndex = (clazz.cast(field.get(null)) as kotlin.Enum<*>).ordinal
+
+                        addActionListener {
+                            field.set(null, clazz.enumConstants[this.selectedIndex])
+                        }
+                    }
+                }
                 // Tooltips require the widget exist first
                 is Tooltip -> continue@loop
                 else -> JLabel("${annotation.annotationClass.qualifiedName} is unsupported!").apply {
@@ -88,7 +115,7 @@ object Components {
 
             when (annotation) {
                 is Tooltip -> {
-                    label.toolTipText = annotation.string
+                    label?.toolTipText = annotation.string
                     widget.toolTipText = annotation.string
                 }
             }

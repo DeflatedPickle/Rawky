@@ -1,5 +1,8 @@
 package com.deflatedpickle.rawky.component
 
+import com.deflatedpickle.rawky.api.*
+import com.deflatedpickle.rawky.api.Enum
+import com.deflatedpickle.rawky.api.IntRange
 import com.deflatedpickle.rawky.tool.Tool
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
@@ -17,6 +20,54 @@ class PixelGrid : JPanel() {
         }
 
         val SCROLLABLE_INSTANCE = JScrollPane(INSTANCE)
+    }
+
+    @Options
+    object Settings {
+        @IntRange(1, 100)
+        @Tooltip("The size of the pixels")
+        @JvmField
+        var pixelSize = 20
+
+        @IntRange(0, 200)
+        @Tooltip("The smoothness of the pixels")
+        @JvmField
+        var pixelSmooth = 0
+
+        @IntRange(1, 255)
+        @Tooltip("The opacity of the hover mark")
+        @JvmField
+        var hoverOpacity = 255
+
+        @DoubleRange(1.0, 6.0)
+        @Tooltip("The thickness of the grid lines")
+        @JvmField
+        var lineThickness = 1.0
+
+        @Colour
+        @Tooltip("The colour of the grid lines")
+        @JvmField
+        var gridColour = Color.GRAY
+
+        @IntRange(1, 100)
+        @Tooltip("The size of the background pixels")
+        @JvmField
+        var backgroundPixelSize = pixelSize / 3
+
+        @Enum("com.deflatedpickle.rawky.component.PixelGrid\$FillType")
+        @Tooltip("The type of fill the background uses")
+        @JvmField
+        var backgroundFillType = FillType.GRID
+
+        @Colour
+        @Tooltip("The colour of the background even tiles")
+        @JvmField
+        var backgroundFillEven = Color.LIGHT_GRAY
+
+        @Colour
+        @Tooltip("The colour of the background odd tiles")
+        @JvmField
+        var backgroundFillOdd = Color.WHITE
     }
 
     interface MatrixItem<T> {
@@ -57,27 +108,13 @@ class PixelGrid : JPanel() {
         }
     }
 
-    val pixelSize = 20
-    var pixelSmooth = 0
-
-    var backgroundPixelSize = pixelSize / 3
-    var backgroundFillEven = Color.LIGHT_GRAY!!
-    var backgroundFillOdd = Color.WHITE!!
-
     enum class FillType {
         ALL,
         GRID
     }
 
-    var backgroundFillType = FillType.GRID
-
-    var hoverOpacity = 255 // / 3
-
     var rowAmount = 16
     var columnAmount = 16
-
-    var lineThickness = 1f
-    var gridColour = Color.GRAY!!
 
     var rectangleMatrix: MutableList<MutableList<Rectangle>>
     var frameList = mutableListOf<Frame>()
@@ -97,8 +134,8 @@ class PixelGrid : JPanel() {
                         add(JMenuItem(tool.name, tool.icon).apply {
                             addActionListener {
                                 tool.performLeft(false, Point().also {
-                                    it.x = lastCell.x / (pixelSize / 2)
-                                    it.y = lastCell.y / (pixelSize / 2)
+                                    it.x = lastCell.x / (Settings.pixelSize / 2)
+                                    it.y = lastCell.y / (Settings.pixelSize / 2)
                                 }, null, 1)
                             }
                         })
@@ -180,7 +217,7 @@ class PixelGrid : JPanel() {
         val g2D = g as Graphics2D
         g2D.scale(this.scale, this.scale)
 
-        g2D.stroke = BasicStroke(lineThickness)
+        g2D.stroke = BasicStroke(Settings.lineThickness.toFloat())
 
         // TODO: Put these in a list and add a drag-and-drop list of items to re-order the list
         drawTransparentBackground(g2D)
@@ -207,7 +244,7 @@ class PixelGrid : JPanel() {
         for (row in 0 until rowAmount) {
             val rectangleCells = mutableListOf<Rectangle>()
             for (column in 0 until columnAmount) {
-                rectangleCells.add(Rectangle(column * pixelSize, row * pixelSize, pixelSize, pixelSize))
+                rectangleCells.add(Rectangle(column * Settings.pixelSize, row * Settings.pixelSize, Settings.pixelSize, Settings.pixelSize))
             }
             rMatrix.add(rectangleCells)
         }
@@ -223,14 +260,14 @@ class PixelGrid : JPanel() {
                         g2D.color = layer.pixelMatrix[row][column].colour
                         val rectangle = rectangleMatrix[row][column]
 
-                        g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, pixelSmooth, pixelSmooth)
+                        g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, Settings.pixelSmooth, Settings.pixelSmooth)
                     }
                 }
             }
         }
     }
 
-    fun drawTransparentBackground(g2D: Graphics2D, rowCount: Int = rowAmount, columnCount: Int = columnAmount, fillType: FillType = this.backgroundFillType, backgroundPixelDivider: Int = this.backgroundPixelSize) {
+    fun drawTransparentBackground(g2D: Graphics2D, rowCount: Int = rowAmount, columnCount: Int = columnAmount, fillType: FillType = Settings.backgroundFillType, backgroundPixelDivider: Int = Settings.backgroundPixelSize) {
         val fill = when (fillType) {
             FillType.ALL -> {
                 Pair(g2D.clipBounds.width, g2D.clipBounds.height)
@@ -241,14 +278,14 @@ class PixelGrid : JPanel() {
             }
         }
 
-        for (row in 0 until fill.first * pixelSize / backgroundPixelDivider) {
-            for (column in 0 until fill.second * pixelSize / backgroundPixelDivider) {
-                g2D.color = if (row % 2 == column % 2) this.backgroundFillEven else this.backgroundFillOdd
+        for (row in 0 until fill.first * Settings.pixelSize / backgroundPixelDivider) {
+            for (column in 0 until fill.second * Settings.pixelSize / backgroundPixelDivider) {
+                g2D.color = if (row % 2 == column % 2) Settings.backgroundFillEven else Settings.backgroundFillOdd
                 g2D.fillRect(column * backgroundPixelDivider, row * backgroundPixelDivider, backgroundPixelDivider, backgroundPixelDivider)
             }
         }
 
-        when (this.backgroundFillType) {
+        when (Settings.backgroundFillType) {
             FillType.ALL -> {
                 // g2D.translate(this.width / 2 - this.columnAmount * this.pixelSize / 2, this.height / 2 - this.rowAmount * this.pixelSize / 2)
             }
@@ -257,7 +294,7 @@ class PixelGrid : JPanel() {
     }
 
     fun drawGrid(g2D: Graphics2D) {
-        g2D.color = gridColour
+        g2D.color = Settings.gridColour
         for (row in rectangleMatrix) {
             for (column in row) {
                 g2D.drawRect(column.x, column.y, column.width, column.height)
