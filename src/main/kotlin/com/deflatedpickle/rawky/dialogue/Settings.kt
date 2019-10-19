@@ -6,6 +6,7 @@ import com.deflatedpickle.rawky.api.Options
 import com.deflatedpickle.rawky.api.Tooltip
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.widget.DoubleSlider
+import com.deflatedpickle.rawky.widget.Slider
 import org.reflections.Reflections
 import java.awt.*
 import javax.swing.*
@@ -47,45 +48,7 @@ class Settings : JDialog(Components.frame, "Settings") {
                     if (clazz.annotations.map { it.annotationClass == Options::class }.contains(true)) {
                         for (field in clazz.fields) {
                             if (field.name != "INSTANCE") {
-                                val label = JLabel(field.name.capitalize() + ":")
-                                panel.add(label, labelConstraints)
-
-                                loop@ for (annotation in field.annotations) {
-                                    val widget: JComponent = when (annotation) {
-                                        // TODO: Add more argument types
-                                        is IntRange -> {
-                                            JSlider(annotation.min, annotation.max).apply {
-                                                value = field.getInt(null)
-
-                                                addChangeListener {
-                                                    field.set(null, value)
-                                                }
-                                            }
-                                        }
-                                        is DoubleRange -> {
-                                            DoubleSlider(annotation.min, annotation.max, field.getDouble(null), factor = 100.0).apply {
-                                                value = (field.getDouble(null) * this.factor).toInt()
-
-                                                addChangeListener {
-                                                    field.set(null, value / this.factor)
-                                                }
-                                            }
-                                        }
-                                        is Tooltip -> continue@loop
-                                        else -> JLabel("${annotation.annotationClass.qualifiedName} is unsupported!").apply {
-                                            font = font.deriveFont(Font.BOLD)
-                                            foreground = Color.RED
-                                        }
-                                    }
-                                    panel.add(widget, lineEnd)
-
-                                    when (annotation) {
-                                        is Tooltip -> {
-                                            label.toolTipText = annotation.string
-                                            widget.toolTipText = annotation.string
-                                        }
-                                    }
-                                }
+                                Components.processAnnotations(panel, field)
                             }
                         }
                     }

@@ -7,18 +7,21 @@ class DoubleSlider(min: Double, max: Double, _value: Double, val factor: Double)
     var doubleMinimum: Double = min
         get() = field / this.factor
         set(value) {
+            super.setMinimum(value.toInt())
             field = value * this.factor
         }
 
     var doubleMaximum: Double = max
         get() = field / this.factor
         set(value) {
+            super.setMaximum(value.toInt())
             field = value * this.factor
         }
 
     var doubleValue: Double = _value
         get() = field / this.factor
         set(value) {
+            super.setValue((value / this.factor).toInt())
             field = value * this.factor
         }
 }

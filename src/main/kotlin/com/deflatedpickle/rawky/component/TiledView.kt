@@ -13,12 +13,12 @@ import javax.swing.JPanel
 class TiledView : JPanel() {
     @Options
     object Settings {
-        @IntRange(0, 30)
+        @IntRange(2, 30)
         @Tooltip("The amount of rows")
         @JvmField
         var rows = 3
 
-        @IntRange(0, 30)
+        @IntRange(2, 30)
         @Tooltip("The amount of columns")
         @JvmField
         var columns = 3
