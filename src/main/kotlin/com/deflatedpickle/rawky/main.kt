@@ -19,8 +19,6 @@ import javax.swing.*
 
 fun main() {
     SwingUtilities.invokeLater {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
-
         Components.frame.jMenuBar = JMenuBar().apply {
             add(File())
             add(Edit())

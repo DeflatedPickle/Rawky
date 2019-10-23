@@ -2,11 +2,9 @@ package com.deflatedpickle.rawky.util
 
 import com.bric.colorpicker.ColorPicker
 import com.bric.colorpicker.ColorPickerDialog
-import com.deflatedpickle.rawky.api.Colour
-import com.deflatedpickle.rawky.api.DoubleRange
+import com.deflatedpickle.rawky.api.*
 import com.deflatedpickle.rawky.api.Enum
 import com.deflatedpickle.rawky.api.IntRange
-import com.deflatedpickle.rawky.api.Tooltip
 import com.deflatedpickle.rawky.component.*
 import com.deflatedpickle.rawky.widget.DoubleSlider
 import com.deflatedpickle.rawky.widget.Slider
@@ -14,9 +12,7 @@ import org.apache.commons.lang3.StringUtils
 import org.jdesktop.swingx.JXButton
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter
-import org.reflections.Reflections
 import java.awt.Color
-import java.awt.Dimension
 import java.awt.Font
 import java.lang.reflect.Field
 import javax.swing.*
@@ -53,16 +49,21 @@ object Components {
         animationTimeline.addFrame()
     }
 
-    fun processAnnotations(parent: JPanel, field: Field) {
+    fun processAnnotations(parent: JPanel, field: Field): JComponent? {
         var label: JLabel? = null
         if (field.annotations.isNotEmpty()) {
             label = JLabel(StringUtils.splitByCharacterTypeCamelCase(field.name.capitalize()).joinToString(" ") + ":")
             parent.add(label, ToolOptions.StickEast)
         }
 
+        var setter: String? = null
         loop@ for (annotation in field.annotations) {
             val widget: JComponent = when (annotation) {
                 // TODO: Add more argument types
+                is Setter -> {
+                    setter = annotation.value
+                    continue@loop
+                }
                 is IntRange -> {
                     Slider.IntSliderComponent(annotation.min, annotation.max, field.getInt(null)).apply {
                         with(slider) {
@@ -102,6 +103,8 @@ object Components {
 
                         addActionListener {
                             field.set(null, clazz.enumConstants[this.selectedIndex])
+
+                            field.declaringClass.getMethod(setter).invoke(Window.Settings)
                         }
                     }
                 }
@@ -114,12 +117,17 @@ object Components {
             }
             parent.add(widget, ToolOptions.FillHorizontal)
 
+            // Second loop, for not-component annotations
             when (annotation) {
                 is Tooltip -> {
                     label?.toolTipText = annotation.string
                     widget.toolTipText = annotation.string
                 }
             }
+
+            return widget
         }
+
+        return null
     }
 }

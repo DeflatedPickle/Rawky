@@ -1,15 +1,13 @@
 package com.deflatedpickle.rawky.dialogue
 
-import com.deflatedpickle.rawky.api.DoubleRange
-import com.deflatedpickle.rawky.api.IntRange
 import com.deflatedpickle.rawky.api.Options
-import com.deflatedpickle.rawky.api.Tooltip
 import com.deflatedpickle.rawky.util.Components
-import com.deflatedpickle.rawky.widget.DoubleSlider
-import com.deflatedpickle.rawky.widget.Slider
 import org.apache.commons.lang3.StringUtils
 import org.reflections.Reflections
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Dimension
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
 import javax.swing.*
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
@@ -63,7 +61,7 @@ class Settings : JDialog(Components.frame, "Settings") {
             dividerLocation = 150
         })
 
-        for (i in reflections.getSubTypesOf(JPanel::class.java)) {
+        for (i in reflections.getSubTypesOf(JFrame::class.java) + reflections.getSubTypesOf(JPanel::class.java)) {
             for (clazz in i.declaredClasses) {
                 if (clazz.annotations.map { it.annotationClass == Options::class }.contains(true)) {
                     with(tree.model as DefaultTreeModel) {
