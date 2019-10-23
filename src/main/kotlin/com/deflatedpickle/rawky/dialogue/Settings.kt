@@ -45,8 +45,6 @@ class Settings : JDialog(Components.frame, "Settings") {
     val tree = JTree(node).apply {
         isRootVisible = false
 
-        expandRow(1)
-
         addTreeSelectionListener {
             panel.removeAll()
 

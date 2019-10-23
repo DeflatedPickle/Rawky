@@ -29,7 +29,7 @@ class PixelGrid : JPanel() {
         @JvmField
         var pixelSize = 20
 
-        @IntRange(0, 200)
+        @IntRange(0, 42)
         @Tooltip("The smoothness of the pixels")
         @JvmField
         var pixelSmooth = 0
@@ -209,7 +209,9 @@ class PixelGrid : JPanel() {
     }
 
     override fun getComponentPopupMenu(): JPopupMenu {
-        lastCell.setLocation(this.hoverPixel!!.x, this.hoverPixel!!.y)
+        if (this.hoverPixel != null) {
+            lastCell.setLocation(this.hoverPixel!!.x, this.hoverPixel!!.y)
+        }
         return this.contextMenu
     }
 
