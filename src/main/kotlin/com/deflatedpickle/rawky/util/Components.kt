@@ -98,7 +98,12 @@ object Components {
                 }
                 is Enum -> {
                     val clazz = Class.forName(annotation.enum)
-                    JComboBox<String>(clazz.enumConstants.map { it.toString().toLowerCase().capitalize() }.toTypedArray()).apply {
+                    JComboBox<String>(clazz.enumConstants.map { e ->
+                        e.toString()
+                                .toLowerCase()
+                                .split("_")
+                                .joinToString(" ") { it.capitalize() }
+                    }.toTypedArray()).apply {
                         selectedIndex = (clazz.cast(field.get(null)) as kotlin.Enum<*>).ordinal
 
                         addActionListener {
