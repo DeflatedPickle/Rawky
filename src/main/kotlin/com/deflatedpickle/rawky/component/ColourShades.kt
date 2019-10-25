@@ -55,7 +55,8 @@ class ColourShades : JPanel() {
                 }
 
                 addActionListener {
-                    selectedShade = ((backgroundPainter as CompoundPainter<JXButton>).painters[0] as MattePainter).fillPaint as Color
+                    val colour = ((backgroundPainter as CompoundPainter<JXButton>).painters[0] as MattePainter).fillPaint as Color
+                    selectedShade = colour
                     selectedButton = this
 
                     for (b in buttonList) {

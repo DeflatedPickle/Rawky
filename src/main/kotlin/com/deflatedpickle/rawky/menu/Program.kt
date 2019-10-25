@@ -7,14 +7,10 @@ import javax.swing.JMenu
 import javax.swing.JMenuItem
 
 class Program : JMenu("Program") {
-    companion object {
-        val window = Settings()
-    }
-
     init {
         add(JMenuItem("Settings", Icons.settings).apply {
             addActionListener {
-                with(window) {
+                with(Settings) {
                     setLocationRelativeTo(Components.frame)
                     isVisible = true
                 }

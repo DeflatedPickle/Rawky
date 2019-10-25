@@ -12,10 +12,8 @@ import javax.swing.*
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 
-class Settings : JDialog(Components.frame, "Settings") {
-    companion object {
-        val reflections = Reflections("com.deflatedpickle.rawky.component")
-    }
+object Settings : JDialog(Components.frame, "Settings") {
+    val reflections = Reflections("com.deflatedpickle.rawky.component")
 
     val panel = JPanel()
 

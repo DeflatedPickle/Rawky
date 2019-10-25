@@ -181,7 +181,20 @@ fun main() {
         miniMap.isVisible = true
         grid.add(1.0, 0.0, 0.4, 0.6, miniMap)
 
-        val colourPicker = DefaultSingleCDockable("colourPicker", "Colour Picker", Components.colourPicker)
+        val colourPicker = DefaultSingleCDockable("colourPicker", "Colour Picker", JPanel().apply {
+            isOpaque = false
+            layout = BorderLayout()
+
+            add(Components.colourPicker)
+
+            add(JToolBar().apply {
+                add(JCheckBox("Expert Controls").apply {
+                    addActionListener {
+                        Components.colourPicker.setExpertControlsVisible(this.isSelected)
+                    }
+                })
+            }, BorderLayout.PAGE_END)
+        })
         cControl.addDockable(colourPicker)
         colourPicker.isVisible = true
         grid.add(1.0, 0.3, 0.4, 0.4, colourPicker)

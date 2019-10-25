@@ -6,8 +6,8 @@ import com.deflatedpickle.rawky.api.Enum
 import com.deflatedpickle.rawky.api.Options
 import com.deflatedpickle.rawky.api.Setter
 import com.deflatedpickle.rawky.api.Tooltip
-import com.deflatedpickle.rawky.menu.Program
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.dialogue.Settings as SettingsDialogue
 import org.pushingpixels.substance.api.skin.SubstanceGraphiteElectricLookAndFeel
 import javax.swing.JFrame
 import javax.swing.LookAndFeel
@@ -32,7 +32,7 @@ class Window : JFrame("Rawky") {
             }
 
             SwingUtilities.updateComponentTreeUI(Components.frame)
-            SwingUtilities.updateComponentTreeUI(Program.window)
+            SwingUtilities.updateComponentTreeUI(SettingsDialogue)
         }
     }
 
