@@ -33,12 +33,13 @@ class ToolOptions : JXPanel() {
     fun relayout() {
         this.removeAll()
 
-        this.add(JLabel(Components.toolbox.tool!!::class.java.simpleName.capitalize() + ":").apply {
+        // TODO: Add a tabbed pane and add a tab for each tool
+        this.add(JLabel(Components.toolbox.indexList[0]!!::class.java.simpleName.capitalize() + ":").apply {
             font = font.deriveFont(14f)
             horizontalAlignment = SwingConstants.CENTER
         }, FillHorizontal)
 
-        for (clazz in Components.toolbox.tool!!::class.java.declaredClasses) {
+        for (clazz in Components.toolbox.indexList[0]!!::class.java.declaredClasses) {
             if (clazz.annotations.map { it.annotationClass == Options::class }.contains(true)) {
                 for (field in clazz.fields) {
                     if (field.name != "INSTANCE") {

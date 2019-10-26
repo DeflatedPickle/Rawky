@@ -32,6 +32,7 @@ class Window : JFrame("Rawky") {
             }
 
             SwingUtilities.updateComponentTreeUI(Components.frame)
+            SwingUtilities.updateComponentTreeUI(Components.pixelGrid.contextMenu)
             SwingUtilities.updateComponentTreeUI(SettingsDialogue)
         }
     }

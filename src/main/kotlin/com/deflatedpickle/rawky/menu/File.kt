@@ -11,7 +11,7 @@ import javax.swing.JSeparator
 
 class File : JMenu("File") {
     init {
-        add(JMenuItem("New", Icons.create_new).apply {
+        add(JMenuItem("New", Icons.createNew).apply {
             addActionListener {
                 with(New()) {
                     setLocationRelativeTo(Components.frame)
@@ -19,7 +19,7 @@ class File : JMenu("File") {
                 }
             }
         })
-        add(JMenuItem("Open", Icons.opened_folder).apply { addActionListener { Commands.open() } })
+        add(JMenuItem("Open", Icons.openedFolder).apply { addActionListener { Commands.open() } })
         add(JMenuItem("Save As", Icons.picture).apply { addActionListener { Commands.save() } })
         add(JSeparator())
         add(JMenu("Import").apply {

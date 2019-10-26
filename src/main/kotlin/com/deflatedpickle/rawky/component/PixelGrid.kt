@@ -11,6 +11,7 @@ import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
+import java.awt.image.BufferedImage
 import javax.swing.*
 
 class PixelGrid : JPanel() {
@@ -21,6 +22,11 @@ class PixelGrid : JPanel() {
 
         val SCROLLABLE_INSTANCE = JScrollPane(INSTANCE)
     }
+
+    val blankCursor = this.toolkit.createCustomCursor(
+            BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB),
+            Point(),
+            null)
 
     @Options
     object Settings {
@@ -131,7 +137,7 @@ class PixelGrid : JPanel() {
             add(object : JMenu("Quick Action") {
                 init {
                     for (tool in Tool.list) {
-                        add(JMenuItem(tool.name, tool.icon).apply {
+                        add(JMenuItem(tool.name, tool.iconList[0]).apply {
                             addActionListener {
                                 tool.performLeft(false, Point().also {
                                     it.x = lastCell.x / (Settings.pixelSize / 2)
@@ -171,11 +177,11 @@ class PixelGrid : JPanel() {
 
             override fun mouseDragged(e: MouseEvent) {
                 mouseMoved(e)
-                Components.toolbox.tool!!.mouseDragged(e.button)
+                Components.toolbox.indexList[e.button]?.mouseDragged(e.button)
                 when {
-                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.tool!!.performLeft(true, e.point, lastPoint, e.clickCount)
-                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.tool!!.performMiddle(true, e.point, lastPoint, e.clickCount)
-                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.tool!!.performRight(true, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.indexList[0]!!.perform(0, true, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.indexList[1]!!.perform(1, true, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.indexList[2]!!.perform(2, true, e.point, lastPoint, e.clickCount)
                 }
                 lastPoint = e.point
             }
@@ -185,34 +191,29 @@ class PixelGrid : JPanel() {
             var lastPoint = Point()
 
             override fun mousePressed(e: MouseEvent) {
-                Components.toolbox.tool!!.mouseClicked(e.button)
+                Components.toolbox.indexList[e.button]?.mouseClicked(e.button)
                 when {
-                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.tool!!.performLeft(false, e.point, lastPoint, e.clickCount)
-                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.tool!!.performMiddle(false, e.point, lastPoint, e.clickCount)
-                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.tool!!.performRight(false, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.indexList[0]!!.perform(0, false, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.indexList[1]!!.perform(1, false, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.indexList[2]!!.perform(2, false, e.point, lastPoint, e.clickCount)
                 }
                 lastPoint = e.point
             }
 
             override fun mouseReleased(e: MouseEvent) {
-                Components.toolbox.tool!!.mouseRelease(e.button)
+                Components.toolbox.indexList[0]!!.mouseRelease(e.button)
+                Components.toolbox.indexList[1]!!.mouseRelease(e.button)
+                Components.toolbox.indexList[2]!!.mouseRelease(e.button)
             }
 
             override fun mouseEntered(e: MouseEvent) {
-                cursor = Components.toolbox.tool!!.cursor
+                cursor = blankCursor
             }
 
             override fun mouseExited(e: MouseEvent) {
                 hoverPixel = null
             }
         })
-    }
-
-    override fun getComponentPopupMenu(): JPopupMenu {
-        if (this.hoverPixel != null) {
-            lastCell.setLocation(this.hoverPixel!!.x, this.hoverPixel!!.y)
-        }
-        return this.contextMenu
     }
 
     override fun paintComponent(g: Graphics) {
@@ -238,7 +239,21 @@ class PixelGrid : JPanel() {
             ActionStack.undoQueue[Components.actionHistory.list.selectedIndex].outline(g2D)
         }
 
-        Components.toolbox.tool!!.render(g2D)
+        val length = Components.toolbox.indexList.lastIndex
+        for ((index, tool) in Components.toolbox.indexList.reversed().withIndex()) {
+            if (mousePosition != null) {
+                val size = if (index == length) 16 * 3 else 16 * 2
+                g2D.drawImage(tool?.cursor,
+                        mousePosition.x + (16 * 2 / 6) * (if (index == length) 1 else length - index) + (length - index) * 32,
+                        mousePosition.y - (16 * 4 / 2),
+                        size, size, this)
+            }
+        }
+
+        for (tool in Components.toolbox.indexList.reversed()) {
+
+            tool?.render(g2D)
+        }
     }
 
     fun refreshMatrix(): MutableList<MutableList<Rectangle>> {

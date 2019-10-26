@@ -2,13 +2,10 @@ package com.deflatedpickle.rawky.tool
 
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.util.Components
-import java.awt.BasicStroke
-import java.awt.Color
-import java.awt.Cursor
-import java.awt.Graphics2D
+import java.awt.*
 import javax.swing.Icon
 
-abstract class HoverOutlineTool(val settings: Class<*>, name: String, icon: Icon, cursor: Cursor, selected: Boolean = false) : Tool(name, icon, cursor, selected) {
+abstract class HoverOutlineTool(val settings: Class<*>, name: String, iconList: List<Icon>, cursor: Image, selected: Boolean = false) : Tool(name, iconList, cursor, selected) {
     val outlineSize = 4
     val outlineStroke = BasicStroke(outlineSize.toFloat())
 

@@ -7,8 +7,8 @@ import javax.swing.ImageIcon
 object Icons {
     val initialSize = Dimension(24, 24)
 
-    val create_new = icon("paper_new")
-    val opened_folder = icon("folder_open")
+    val createNew = icon("paper_new")
+    val openedFolder = icon("folder_open")
     val picture = icon("save_as")
 
     val cut = icon("cut")
@@ -25,10 +25,12 @@ object Icons {
 
     val pencil = icon("pencil")
     val eraser = icon("eraser")
-    val colour_picker = icon("colour_picker")
+    val colourPicker = icon("colour_picker")
 
-    val zoom_in = icon("zoom_in")
-    val zoom_out = icon("zoom_out")
+    val arrow = icon("arrow")
+
+    val zoomIn = icon("zoom_in")
+    val zoomOut = icon("zoom_out")
 
     val lock = icon("lock_locked")
     val unlock = icon("lock_unlocked")
@@ -36,9 +38,9 @@ object Icons {
     val hide = icon("hide")
     val show = icon("show")
 
-    val add_element = icon("add_element")
+    val addElement = icon("add_element")
     
-    fun icon(name: String): ImageIcon {
+    private fun icon(name: String): ImageIcon {
         return ImageIcon(ImageIO.read(ClassLoader.getSystemResource("friable/icons/$name.png")))
     }
 }

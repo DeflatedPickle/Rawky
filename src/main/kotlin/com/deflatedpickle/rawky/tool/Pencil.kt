@@ -1,7 +1,7 @@
 package com.deflatedpickle.rawky.tool
 
-import com.deflatedpickle.rawky.api.Options
 import com.deflatedpickle.rawky.api.IntRange
+import com.deflatedpickle.rawky.api.Options
 import com.deflatedpickle.rawky.api.Tooltip
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.component.Toolbox
@@ -11,10 +11,9 @@ import com.deflatedpickle.rawky.util.Icons
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Point
-import java.awt.Toolkit
 import javax.swing.UIManager
 
-class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", Icons.pencil, Toolkit.getDefaultToolkit().createCustomCursor(Icons.pencil.image, Point(8, 16), "Pencil"), true) {
+class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", listOf(Icons.pencil), Icons.pencil.image, true) {
     @Options
     object Settings {
         @IntRange(1, 9)
@@ -23,14 +22,14 @@ class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", Icons.pencil, To
         var size = 1
     }
 
-    override fun performLeft(dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
+    override fun perform(button: Int, dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
         if (Components.pixelGrid
                         .frameList[Components.animationTimeline.list.selectedIndex]
                         .layerList[Components.layerList.table.selectedRow]
                         .pixelMatrix[Components.pixelGrid.hoverRow][Components.pixelGrid.hoverColumn]
                         .colour
                 != Components.colourShades.selectedShade) {
-            val pixel = object : Toolbox.LockCheck(this.cursor.name) {
+            val pixel = object : Toolbox.LockCheck(this.name) {
                 // There'll only be one new value
                 val newValue = Components.colourShades.selectedShade
                 // But there can be multiple old values

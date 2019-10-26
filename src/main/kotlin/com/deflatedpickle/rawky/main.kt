@@ -29,11 +29,11 @@ fun main() {
         Components.frame.layout = BorderLayout()
 
         Components.frame.add(JToolBar().apply {
-            add(JButton(Icons.create_new).apply {
+            add(JButton(Icons.createNew).apply {
                 toolTipText = "New File"
                 addActionListener { New().isVisible = true }
             })
-            add(JButton(Icons.opened_folder).apply {
+            add(JButton(Icons.openedFolder).apply {
                 toolTipText = "Open File"
                 addActionListener { Commands.open() }
             })
@@ -58,15 +58,14 @@ fun main() {
 
         val grid = CGrid(cControl)
 
-        val toolbox = DefaultSingleCDockable("toolbox", "Toolbox", Components.toolbox)
+        val toolbox = DefaultSingleCDockable("toolbox", "Toolbox", JScrollPane(Components.toolbox))
         cControl.addDockable(toolbox)
         toolbox.isVisible = true
-        grid.add(0.0, 0.0, 0.2, 2.0, toolbox)
+        grid.add(0.0, 0.2, 0.2, 1.8, toolbox)
 
         val tiledView = DefaultSingleCDockable("tiledView", "Tiled View", Components.tiledView)
         cControl.addDockable(tiledView)
         tiledView.isVisible = true
-        grid.add(0.0, 0.3, 0.6, 1.0, tiledView)
 
         val animationPreview = DefaultSingleCDockable("animationPreview", "Animation Preview", JPanel().apply {
             isOpaque = false
@@ -93,7 +92,7 @@ fun main() {
         })
         cControl.addDockable(animationPreview)
         animationPreview.isVisible = true
-        grid.add(0.0, 0.3, 0.6, 1.0, animationPreview)
+        grid.add(0.0, 0.3, 0.6, 1.0, tiledView, animationPreview)
 
         val layerList = DefaultSingleCDockable("layerList", "Layer List", JPanel().apply {
             isOpaque = false
@@ -102,7 +101,7 @@ fun main() {
             add(JScrollPane(Components.layerList))
 
             add(JToolBar().apply {
-                add(JButton(Icons.create_new).apply {
+                add(JButton(Icons.createNew).apply {
                     toolTipText = "New Layer"
                     addActionListener {
                         Components.layerList.addLayer()
@@ -133,14 +132,14 @@ fun main() {
                         Components.pixelGrid.scale = this.value / 50.0
                     }
                 }
-                add(JButton(Icons.zoom_out).apply {
+                add(JButton(Icons.zoomOut).apply {
                     toolTipText = "Zoom Out"
                     addActionListener {
                         slider.value--
                     }
                 })
                 add(slider)
-                add(JButton(Icons.zoom_in).apply {
+                add(JButton(Icons.zoomIn).apply {
                     toolTipText = "Zoom In"
                     addActionListener {
                         slider.value++
@@ -158,7 +157,7 @@ fun main() {
             add(JScrollPane(Components.animationTimeline))
 
             add(JToolBar().apply {
-                add(JButton(Icons.create_new).apply {
+                add(JButton(Icons.createNew).apply {
                     toolTipText = "New Frame"
                     addActionListener {
                         Components.animationTimeline.addFrame()
@@ -176,7 +175,7 @@ fun main() {
         animationTimeline.isVisible = true
         grid.add(0.6, 1.4, 0.6, 0.6, animationTimeline)
 
-        val miniMap = DefaultSingleCDockable("miniMap", "Mini-Map", Components.miniMap)
+        val miniMap = DefaultSingleCDockable("miniMap", "Mini-Map", JScrollPane(Components.miniMap))
         cControl.addDockable(miniMap)
         miniMap.isVisible = true
         grid.add(1.0, 0.0, 0.4, 0.6, miniMap)
@@ -247,14 +246,14 @@ fun main() {
                         widget.revalidate()
                     }
                 }
-                add(JButton(Icons.zoom_out).apply {
+                add(JButton(Icons.zoomOut).apply {
                     toolTipText = "Zoom Out"
                     addActionListener {
                         slider.value--
                     }
                 })
                 add(slider)
-                add(JButton(Icons.zoom_in).apply {
+                add(JButton(Icons.zoomIn).apply {
                     toolTipText = "Zoom In"
                     addActionListener {
                         slider.value++
@@ -264,12 +263,11 @@ fun main() {
         })
         cControl.addDockable(colourPalette)
         colourPalette.isVisible = true
-        grid.add(1.2, 0.5, 0.4, 0.2, colourPalette)
 
         val colourLibrary = DefaultSingleCDockable("colourLibrary", "Colour Library", JScrollPane(Components.colourLibrary))
         cControl.addDockable(colourLibrary)
         colourLibrary.isVisible = true
-        grid.add(1.2, 0.5, 0.4, 0.2, colourLibrary)
+        grid.add(1.2, 0.5, 0.4, 0.2, colourPalette, colourLibrary)
 
         val actionHistory = DefaultSingleCDockable("actionHistory", "Action History", JPanel().apply {
             isOpaque = false
@@ -309,6 +307,7 @@ fun main() {
             Components.animationPreview.repaint()
             Components.animationTimeline.repaint()
             Components.miniMap.repaint()
+            Components.colourSlots.repaint()
         }.start()
     }
 

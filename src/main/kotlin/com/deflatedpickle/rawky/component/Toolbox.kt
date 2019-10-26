@@ -5,14 +5,13 @@ import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.Dimension
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
 import javax.swing.ButtonGroup
 import javax.swing.JPanel
 import javax.swing.JToggleButton
-import javax.swing.SwingUtilities
 
 class Toolbox : JPanel() {
-    val dimension = Dimension(28, 28)
-
     // TODO: Maybe merge this into Action, seems useful
     abstract class LockCheck(name: String) : ActionStack.Action(name) {
         val frame = Components.animationTimeline.list.selectedIndex
@@ -32,32 +31,50 @@ class Toolbox : JPanel() {
         }
     }
 
-    var tool: Tool? = null
-        set(value) {
-            SwingUtilities.invokeLater {
-                field = value
-                Components.toolOptions.relayout()
-            }
-        }
+    // TODO: This could be expanded to support more buttons
+    var indexList = arrayOfNulls<Tool>(Tool.list.size).toMutableList()
+
+    enum class Group(val dimension: Dimension, val group: ButtonGroup) {
+        PRIMARY(Dimension(28, 28), ButtonGroup()),
+        MIDDLE(Dimension(10, 28), ButtonGroup()),
+        SECONDARY(Dimension(18, 28), ButtonGroup())
+    }
 
     init {
         this.layout = WrapLayout()
 
-        val buttonGroup = ButtonGroup()
-
         for (t in Tool.list) {
-            this.add(JToggleButton(t.icon).apply {
-                preferredSize = dimension
-                toolTipText = t.cursor.name
-                addActionListener { this@Toolbox.tool = t }
+            JPanel().also {
+                it.layout = GridBagLayout()
 
-                buttonGroup.add(this)
+                for ((gi, g) in Group.values().withIndex()) {
+                    it.add(JToggleButton(t.iconList[gi]).apply {
+                        preferredSize = g.dimension
+                        toolTipText = "${g.name.toLowerCase().capitalize()} ${t.name}"
+                        addActionListener {
+                            indexList[gi] = t
 
-                if (t.selected) {
-                    tool = t
-                    buttonGroup.setSelected(this.model, true)
+                            Components.toolOptions.relayout()
+                        }
+
+                        g.group.add(this)
+
+                        if (t.selected) {
+                            indexList[gi] = t
+                            g.group.setSelected(this.model, true)
+                        }
+                    }, GridBagConstraints().apply {
+                        weightx = 1.0
+                        weighty = 1.0
+                        fill = GridBagConstraints.BOTH
+
+                        if (g == Group.SECONDARY) {
+                            gridwidth = GridBagConstraints.REMAINDER
+                        }
+                    })
                 }
-            })
+                add(it)
+            }
         }
     }
 }
