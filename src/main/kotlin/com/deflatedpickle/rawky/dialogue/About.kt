@@ -122,9 +122,11 @@ class About : JDialog(Components.frame, "About", true) {
                             }
                     ).apply {
                         alignmentX = Component.CENTER_ALIGNMENT
+                        resizeWeight = 0.5
                     }
             ).apply {
                 alignmentX = Component.CENTER_ALIGNMENT
+                resizeWeight = 1.0
             })
         })
 

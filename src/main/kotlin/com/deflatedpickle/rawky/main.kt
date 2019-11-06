@@ -3,6 +3,7 @@ package com.deflatedpickle.rawky
 import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
+import com.deflatedpickle.rawky.component.AnimationTimeline
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.dialogue.New
 import com.deflatedpickle.rawky.menu.Edit
@@ -13,8 +14,15 @@ import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Commands
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
+import com.deflatedpickle.rawky.widget.ColourButton
+import com.deflatedpickle.rawky.widget.RangeSlider
+import com.deflatedpickle.rawky.widget.Slider
+import com.pump.swing.MultiThumbSlider
+import org.jdesktop.swingx.JXMultiThumbSlider
 import java.awt.BorderLayout
+import java.awt.Color
 import java.awt.Dimension
+import java.awt.GridBagLayout
 import javax.swing.*
 
 fun main() {
@@ -153,6 +161,14 @@ fun main() {
 
         val animationTimeline = DefaultSingleCDockable("animationTimeline", "Animation Timeline", JPanel().apply {
             layout = BorderLayout()
+
+            add(JToolBar().apply {
+                layout = GridBagLayout()
+
+                add(Components.animationTimeline.pastColour)
+                add(Components.animationTimeline.slider)
+                add(Components.animationTimeline.postColour)
+            }, BorderLayout.PAGE_START)
 
             add(JScrollPane(Components.animationTimeline))
 
@@ -298,6 +314,7 @@ fun main() {
         cControl.contentArea.deploy(grid)
 
         // TODO: Add a setting for the refresh interval
+        // TODO: Only re-draw when an event is performed, and draw onto a buffered image
         Timer(1000 / 60) {
             Components.pixelGrid.repaint()
             // TODO: Change all but the PixelGrid to redraw when the tool is performed
@@ -307,7 +324,6 @@ fun main() {
             Components.animationPreview.repaint()
             Components.animationTimeline.repaint()
             Components.miniMap.repaint()
-            Components.colourSlots.repaint()
         }.start()
     }
 

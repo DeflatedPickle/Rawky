@@ -2,11 +2,18 @@ package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.util.EComponent
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.widget.ColourButton
+import com.deflatedpickle.rawky.widget.RangeSlider
 import java.awt.*
 import javax.swing.*
 import javax.swing.border.LineBorder
 
 class AnimationTimeline : JPanel() {
+    // TODO: Move to a toolbar sub-class
+    val slider = RangeSlider.IntRangeSliderComponent(-10, 10, -2, 2)
+    val pastColour = ColourButton(Color.YELLOW).apply { preferredSize = Dimension(32, slider.preferredSize.height) }
+    val postColour = ColourButton(Color.MAGENTA).apply { preferredSize = Dimension(32, slider.preferredSize.height) }
+
     val listModel = DefaultListModel<String>()
     val list = JList<String>(listModel).apply {
         layoutOrientation = JList.HORIZONTAL_WRAP
@@ -41,7 +48,7 @@ class AnimationTimeline : JPanel() {
                         // Components.pixelGrid.drawTransparentBackground(g2D)
 
                         for ((layerIndex, layer) in Components.pixelGrid.frameList[index].layerList.withIndex().reversed()) {
-                            Components.pixelGrid.drawPixels(layerIndex, layer, g2D, EComponent.ANIMATION_TIMELINE)
+                            Components.pixelGrid.drawPixels(layerIndex, layer, g2D)
                         }
                     }
                 })

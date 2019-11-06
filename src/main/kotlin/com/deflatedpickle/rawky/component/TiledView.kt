@@ -45,7 +45,7 @@ class TiledView : JPanel() {
         for (row in 0 until Settings.rows) {
             for (column in 0 until Settings.columns) {
                 for ((layerIndex, layer) in Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.withIndex().reversed()) {
-                    Components.pixelGrid.drawPixels(layerIndex, layer, g2D, EComponent.TILED_VIEW)
+                    Components.pixelGrid.drawPixels(layerIndex, layer, g2D)
                 }
                 g2D.translate((PixelGrid.Settings.pixelSize + Settings.padding) * Components.pixelGrid.columnAmount, 0.0)
             }

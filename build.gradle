@@ -55,8 +55,8 @@ dependencies {
     implementation 'org.swinglabs:swingx:1.6.1'
     implementation 'com.github.mickleness.pumpernickel:pump-swing:66e5a9641c'
     // implementation 'com.github.piegamesde:swing_library:-SNAPSHOT'
-    // implementation 'org.bidib.com.jidesoft:jide-parent:3.7.6'
-    // implementation 'org.bidib.com.jidesoft:jide-common:3.7.6'
+    implementation 'org.bidib.com.jidesoft:jide-parent:3.7.6'
+    implementation 'org.bidib.com.jidesoft:jide-common:3.7.6'
 
     implementation 'com.github.DeflatedPickle:WrapLayout:master-SNAPSHOT'
 

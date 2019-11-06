@@ -1,8 +1,8 @@
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.util.Components
-import com.deflatedpickle.rawky.util.EComponent
 import java.awt.*
+import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
 import java.awt.geom.Rectangle2D
@@ -20,12 +20,18 @@ class MiniMap : JPanel() {
     init {
         isOpaque = false
 
+        addMouseListener(object : MouseAdapter() {
+            override fun mousePressed(e: MouseEvent) {
+                moveView(e)
+            }
+        })
+
         addMouseMotionListener(object : MouseMotionAdapter() {
             var inside = false
 
             override fun mouseMoved(e: MouseEvent) {
                 with(Components.pixelGrid.visibleRect) {
-                    if (Rectangle2D.Double(x.toDouble(), y.toDouble(), width.toDouble(), height.toDouble()).apply { setFrame(x * scale, y * scale, width * scale, height * scale) }.contains(e.point)) {
+                    if (Rectangle2D.Double((x * Components.pixelGrid.scale) * scale, (y * Components.pixelGrid.scale) * scale, (width * Components.pixelGrid.scale) * scale, (height * Components.pixelGrid.scale) * scale).contains(e.point)) {
                         cursor = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR)
                         inside = true
                     }
@@ -39,13 +45,17 @@ class MiniMap : JPanel() {
             override fun mouseDragged(e: MouseEvent) {
                 if (inside) {
                     // TODO: Properly map points from the mini-map to the pixel grid
-                    PixelGrid.SCROLLABLE_INSTANCE.viewport.viewPosition = Point(
-                            max(0.0, min(e.x / scale, this@MiniMap.width / scale) - Components.pixelGrid.visibleRect.width).toInt(),
-                            max(0.0, min(e.y / scale, this@MiniMap.height / scale) - Components.pixelGrid.visibleRect.height).toInt()
-                    )
+                    moveView(e)
                 }
             }
         })
+    }
+
+    fun moveView(e: MouseEvent) {
+        PixelGrid.SCROLLABLE_INSTANCE.viewport.viewPosition = Point(
+                max(0.0, min((e.x / scale) * Components.pixelGrid.scale, (this@MiniMap.width / scale) * Components.pixelGrid.scale) - Components.pixelGrid.visibleRect.width * Components.pixelGrid.scale).toInt(),
+                max(0.0, min((e.y / scale) * Components.pixelGrid.scale, (this@MiniMap.height / scale) * Components.pixelGrid.scale) - Components.pixelGrid.visibleRect.height * Components.pixelGrid.scale).toInt()
+        )
     }
 
     override fun paintComponent(g: Graphics) {
@@ -56,7 +66,7 @@ class MiniMap : JPanel() {
         g2D.scale(scale, scale)
 
         for ((layerIndex, layer) in Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.withIndex().reversed()) {
-            Components.pixelGrid.drawPixels(layerIndex, layer, g2D, EComponent.MINI_MAP)
+            Components.pixelGrid.drawPixels(layerIndex, layer, g2D)
         }
 
         g2D.color = this.drawAreaColour
@@ -66,6 +76,8 @@ class MiniMap : JPanel() {
 
         g2D.color = this.handleColour
         g2D.stroke = this.handleStroke
-        g2D.draw(Components.pixelGrid.visibleRect)
+        with(Components.pixelGrid.visibleRect) {
+            g2D.draw(Rectangle2D.Double(x * Components.pixelGrid.scale, y * Components.pixelGrid.scale, width * Components.pixelGrid.scale, height * Components.pixelGrid.scale))
+        }
     }
 }

@@ -6,13 +6,14 @@ import com.deflatedpickle.rawky.api.IntRange
 import com.deflatedpickle.rawky.tool.Tool
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
-import com.deflatedpickle.rawky.util.EComponent
 import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
 import java.awt.image.BufferedImage
 import javax.swing.*
+import kotlin.math.abs
+import kotlin.math.min
 
 class PixelGrid : JPanel() {
     companion object {
@@ -218,32 +219,71 @@ class PixelGrid : JPanel() {
 
     override fun paintComponent(g: Graphics) {
         val g2D = g as Graphics2D
-        g2D.scale(this.scale, this.scale)
 
-        g2D.stroke = BasicStroke(Settings.lineThickness.toFloat())
+        val bufferedImage = BufferedImage(min(this.visibleRect.x + this.visibleRect.width, (Settings.pixelSize * columnAmount) * ((this.scale * 10).toInt())), min(this.visibleRect.y + this.visibleRect.height, (Settings.pixelSize * rowAmount) * ((this.scale * 10).toInt())), BufferedImage.TYPE_INT_ARGB)
+        val biG2D = bufferedImage.createGraphics()
+        biG2D.scale(this.scale, this.scale)
 
-        // TODO: Put these in a list and add a drag-and-drop list of items to re-order the list
-        drawTransparentBackground(g2D)
+        biG2D.stroke = BasicStroke(Settings.lineThickness.toFloat())
 
+        drawTransparentBackground(biG2D)
+
+        // Past Frames
+        val pastGraphics = bufferedImage.createGraphics()
+        pastGraphics.scale(this.scale, this.scale)
+        pastGraphics.color = Components.animationTimeline.pastColour.color
+
+        for (i in 1..abs(Components.animationTimeline.slider.pastSpinner.value as Int)) {
+            if (Components.animationTimeline.list.selectedIndex - i >= 0) {
+                pastGraphics.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f / ((i / abs(Components.animationTimeline.slider.pastSpinner.value as Int) + 1) + 1f))
+
+                for ((layerIndex, layer) in frameList[abs(Components.animationTimeline.list.selectedIndex) - i].layerList.withIndex().reversed()) {
+                    if (layerIndex >= 0) {
+                        drawPixels(layerIndex, layer, pastGraphics, false)
+                    }
+                }
+            }
+        }
+        pastGraphics.dispose()
+
+        // Current Frames
         if (Components.animationTimeline.list.selectedIndex >= 0) {
             for ((layerIndex, layer) in frameList[Components.animationTimeline.list.selectedIndex].layerList.withIndex().reversed()) {
                 if (layerIndex >= 0) {
-                    drawPixels(layerIndex, layer, g2D, EComponent.PIXEL_GRID)
+                    drawPixels(layerIndex, layer, biG2D)
                 }
             }
         }
 
-        drawGrid(g2D)
+        // Future Frames
+        val postGraphics = bufferedImage.createGraphics()
+        postGraphics.scale(this.scale, this.scale)
+        postGraphics.color = Components.animationTimeline.postColour.color
+
+        for (i in 1..Components.animationTimeline.slider.postSpinner.value as Int) {
+            if (Components.animationTimeline.list.selectedIndex + i <= frameList.lastIndex) {
+                postGraphics.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f / ((i / Components.animationTimeline.slider.postSpinner.value as Int + 1) + 1f))
+
+                for ((layerIndex, layer) in frameList[Components.animationTimeline.list.selectedIndex + i].layerList.withIndex().reversed()) {
+                    if (layerIndex >= 0) {
+                        drawPixels(layerIndex, layer, postGraphics, false)
+                    }
+                }
+            }
+        }
+        postGraphics.dispose()
+
+        drawGrid(biG2D)
 
         if (!Components.actionHistory.list.isSelectionEmpty) {
-            ActionStack.undoQueue[Components.actionHistory.list.selectedIndex].outline(g2D)
+            ActionStack.undoQueue[Components.actionHistory.list.selectedIndex].outline(biG2D)
         }
 
         val length = Components.toolbox.indexList.lastIndex
         for ((index, tool) in Components.toolbox.indexList.reversed().withIndex()) {
             if (mousePosition != null) {
                 val size = if (index == length) 16 * 3 else 16 * 2
-                g2D.drawImage(tool?.cursor,
+                biG2D.drawImage(tool?.cursor,
                         mousePosition.x + (16 * 2 / 6) * (if (index == length) 1 else length - index) + (length - index) * 32,
                         mousePosition.y - (16 * 4 / 2),
                         size, size, this)
@@ -251,9 +291,11 @@ class PixelGrid : JPanel() {
         }
 
         for (tool in Components.toolbox.indexList.reversed()) {
-
-            tool?.render(g2D)
+            tool?.render(biG2D)
         }
+
+        biG2D.dispose()
+        g2D.drawRenderedImage(bufferedImage, null)
     }
 
     fun refreshMatrix(): MutableList<MutableList<Rectangle>> {
@@ -269,12 +311,12 @@ class PixelGrid : JPanel() {
         return rMatrix
     }
 
-    fun drawPixels(layerIndex: Int, layer: Layer, g2D: Graphics2D, component: EComponent) {
+    fun drawPixels(layerIndex: Int, layer: Layer, g2D: Graphics2D, setColour: Boolean = true) {
         for (row in 0 until rectangleMatrix.size) {
             for (column in 0 until rectangleMatrix[row].size) {
                 if (!Components.layerList.isLayerHidden(layerIndex)) {
                     if (layer.pixelMatrix[row][column].colour != null) {
-                        g2D.color = layer.pixelMatrix[row][column].colour
+                        if (setColour) g2D.color = layer.pixelMatrix[row][column].colour
                         val rectangle = rectangleMatrix[row][column]
 
                         g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, Settings.pixelSmooth, Settings.pixelSmooth)

@@ -88,11 +88,14 @@ object Components {
                 }
                 is Colour -> {
                     JXButton().apply {
-                        backgroundPainter = CompoundPainter<JXButton>(MattePainter(field.get(null) as Color))
+                        val mattePainter = MattePainter(field.get(null) as Color)
+                        val compoundPainter = CompoundPainter<JXButton>(mattePainter)
+
+                        backgroundPainter = compoundPainter
 
                         addActionListener {
                             field.set(null, ColorPickerDialog.showDialog(frame, field.get(null) as Color))
-                            backgroundPainter = CompoundPainter<JXButton>(MattePainter(field.get(null) as Color))
+                            mattePainter.fillPaint = field.get(null) as Color
                         }
                     }
                 }

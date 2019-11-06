@@ -16,7 +16,7 @@ class AnimationPreview : JPanel() {
         Components.pixelGrid.drawTransparentBackground(g2D, fillType = PixelGrid.FillType.ALL, backgroundPixelDivider = 42)
 
         for ((layerIndex, layer) in Components.pixelGrid.frameList[frame].layerList.withIndex().reversed()) {
-            Components.pixelGrid.drawPixels(layerIndex, layer, g2D, EComponent.ANIMATION_PREVIEW)
+            Components.pixelGrid.drawPixels(layerIndex, layer, g2D)
         }
     }
 }

@@ -59,7 +59,7 @@ class LayerList : JPanel() {
                         // Components.pixelGrid.drawTransparentBackground(g2D)
 
                         // BUG: Throws an out-of-bounds error when you swap from a frame with more layers
-                        Components.pixelGrid.drawPixels(row, Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[row], g2D, EComponent.LAYER_LIST)
+                        Components.pixelGrid.drawPixels(row, Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[row], g2D)
                     }
                 }
             }
