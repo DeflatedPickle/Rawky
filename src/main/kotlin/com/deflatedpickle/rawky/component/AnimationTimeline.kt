@@ -1,6 +1,5 @@
 package com.deflatedpickle.rawky.component
 
-import com.deflatedpickle.rawky.util.EComponent
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.widget.ColourButton
 import com.deflatedpickle.rawky.widget.RangeSlider

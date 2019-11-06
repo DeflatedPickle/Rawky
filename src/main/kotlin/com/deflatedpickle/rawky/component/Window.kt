@@ -7,12 +7,12 @@ import com.deflatedpickle.rawky.api.Options
 import com.deflatedpickle.rawky.api.Setter
 import com.deflatedpickle.rawky.api.Tooltip
 import com.deflatedpickle.rawky.util.Components
-import com.deflatedpickle.rawky.dialogue.Settings as SettingsDialogue
 import org.pushingpixels.substance.api.skin.SubstanceGraphiteElectricLookAndFeel
 import javax.swing.JFrame
 import javax.swing.LookAndFeel
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
+import com.deflatedpickle.rawky.dialogue.Settings as SettingsDialogue
 
 class Window : JFrame("Rawky") {
     @Options

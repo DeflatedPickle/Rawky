@@ -3,7 +3,6 @@ package com.deflatedpickle.rawky
 import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
-import com.deflatedpickle.rawky.component.AnimationTimeline
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.dialogue.New
 import com.deflatedpickle.rawky.menu.Edit
@@ -14,13 +13,7 @@ import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Commands
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
-import com.deflatedpickle.rawky.widget.ColourButton
-import com.deflatedpickle.rawky.widget.RangeSlider
-import com.deflatedpickle.rawky.widget.Slider
-import com.pump.swing.MultiThumbSlider
-import org.jdesktop.swingx.JXMultiThumbSlider
 import java.awt.BorderLayout
-import java.awt.Color
 import java.awt.Dimension
 import java.awt.GridBagLayout
 import javax.swing.*

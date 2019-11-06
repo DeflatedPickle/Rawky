@@ -77,7 +77,7 @@ class MiniMap : JPanel() {
         g2D.color = this.handleColour
         g2D.stroke = this.handleStroke
         with(Components.pixelGrid.visibleRect) {
-            g2D.draw(Rectangle2D.Double(x * Components.pixelGrid.scale, y * Components.pixelGrid.scale, width * Components.pixelGrid.scale, height * Components.pixelGrid.scale))
+            g2D.draw(Rectangle2D.Double(x / Components.pixelGrid.scale, y / Components.pixelGrid.scale, width / Components.pixelGrid.scale, height / Components.pixelGrid.scale))
         }
     }
 }

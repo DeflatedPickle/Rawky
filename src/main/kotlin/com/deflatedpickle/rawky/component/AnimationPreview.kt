@@ -1,6 +1,5 @@
 package com.deflatedpickle.rawky.component
 
-import com.deflatedpickle.rawky.util.EComponent
 import com.deflatedpickle.rawky.util.Components
 import java.awt.Graphics
 import java.awt.Graphics2D

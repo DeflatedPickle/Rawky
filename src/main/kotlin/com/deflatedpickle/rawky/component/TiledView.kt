@@ -1,11 +1,10 @@
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.DoubleRange
-import com.deflatedpickle.rawky.api.Options
 import com.deflatedpickle.rawky.api.IntRange
+import com.deflatedpickle.rawky.api.Options
 import com.deflatedpickle.rawky.api.Tooltip
 import com.deflatedpickle.rawky.util.Components
-import com.deflatedpickle.rawky.util.EComponent
 import java.awt.Graphics
 import java.awt.Graphics2D
 import javax.swing.JPanel

@@ -1,7 +1,7 @@
 package com.deflatedpickle.rawky.component
 
-import com.deflatedpickle.rawky.util.Icons
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.util.Icons
 import org.jdesktop.swingx.JXButton
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter

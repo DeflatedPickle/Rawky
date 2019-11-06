@@ -2,7 +2,10 @@ package com.deflatedpickle.rawky.tool
 
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.util.Components
-import java.awt.*
+import java.awt.BasicStroke
+import java.awt.Color
+import java.awt.Graphics2D
+import java.awt.Image
 import javax.swing.Icon
 
 abstract class HoverOutlineTool(val settings: Class<*>, name: String, iconList: List<Icon>, cursor: Image, selected: Boolean = false) : Tool(name, iconList, cursor, selected) {

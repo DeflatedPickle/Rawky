@@ -25,8 +25,8 @@ class File : JMenu("File") {
         add(JMenu("Import").apply {
             add(JMenu("Colour Palette").apply {
                 add(JMenuItem("JASC PAL").apply { addActionListener { Commands.importJascPal() } })
-                add(JMenuItem("RexPaint Palette (Colour Library)").apply { addActionListener { Commands.importRexPaintPallete(EComponent.COLOUR_LIBRARY) } })
-                add(JMenuItem("RexPaint Palette (Colour Palette)").apply { addActionListener { Commands.importRexPaintPallete(EComponent.COLOUR_PALETTE) } })
+                add(JMenuItem("RexPaint Palette (Colour Library)").apply { addActionListener { Commands.importRexPaintPalette(EComponent.COLOUR_LIBRARY) } })
+                add(JMenuItem("RexPaint Palette (Colour Palette)").apply { addActionListener { Commands.importRexPaintPalette(EComponent.COLOUR_PALETTE) } })
             })
         })
     }

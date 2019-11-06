@@ -1,7 +1,6 @@
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.util.Components
-import com.deflatedpickle.rawky.util.EComponent
 import com.deflatedpickle.rawky.util.Icons
 import java.awt.*
 import java.util.*

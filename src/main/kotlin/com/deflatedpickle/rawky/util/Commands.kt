@@ -1,9 +1,9 @@
 package com.deflatedpickle.rawky.util
 
-import com.deflatedpickle.rawky.jasc_pal.JASC_PALLexer
-import com.deflatedpickle.rawky.jasc_pal.JASC_PALParser
 import com.deflatedpickle.rawky.component.ColourPalette
 import com.deflatedpickle.rawky.component.PixelGrid
+import com.deflatedpickle.rawky.jasc_pal.JASC_PALLexer
+import com.deflatedpickle.rawky.jasc_pal.JASC_PALParser
 import com.deflatedpickle.rawky.rexpaint_palette.RexPaint_PaletteLexer
 import com.deflatedpickle.rawky.rexpaint_palette.RexPaint_PaletteParser
 import com.google.gson.GsonBuilder
@@ -99,7 +99,7 @@ object Commands {
                     ImageIO.read(fileChooser.selectedFile).apply {
                         for (row in 0 until Components.pixelGrid.rowAmount) {
                             for (column in 0 until Components.pixelGrid.columnAmount) {
-                                Components.pixelGrid.frameList[0].layerList[0].pixelMatrix[row][column].colour = Color(getRGB(row, column), true)
+                                Components.pixelGrid.frameList[0].layerList[0].pixelMatrix[row][column].colour = Color(getRGB(column, row), true)
                             }
                         }
                     }
@@ -113,7 +113,7 @@ object Commands {
                             Components.animationTimeline.addFrame()
                             for (row in 0 until frame.height) {
                                 for (column in 0 until frame.width) {
-                                    Components.pixelGrid.frameList[frameIndex].layerList[0].pixelMatrix[row][column].colour = Color(frame.getRGB(row, column), true)
+                                    Components.pixelGrid.frameList[frameIndex].layerList[0].pixelMatrix[row][column].colour = Color(frame.getRGB(column, row), true)
                                 }
                             }
                         }
@@ -136,7 +136,7 @@ object Commands {
                         for (row in 0 until Components.pixelGrid.rowAmount) {
                             for (column in 0 until Components.pixelGrid.columnAmount) {
                                 for (layer in Components.pixelGrid.frameList[0].layerList.reversed()) {
-                                    layer.pixelMatrix[row][column].colour?.rgb?.let { setRGB(row, column, it) }
+                                    layer.pixelMatrix[row][column].colour?.rgb?.let { setRGB(column, row, it) }
                                 }
                             }
                         }
@@ -150,7 +150,7 @@ object Commands {
                                 for (row in 0 until Components.pixelGrid.rowAmount) {
                                     for (column in 0 until Components.pixelGrid.columnAmount) {
                                         layer.pixelMatrix[row][column].colour?.rgb?.let {
-                                            setRGB(row, column, it)
+                                            setRGB(column, row, it)
                                         }
                                     }
                                 }
@@ -184,7 +184,7 @@ object Commands {
         }
     }
 
-    fun importRexPaintPallete(component: EComponent) {
+    fun importRexPaintPalette(component: EComponent) {
         val chooser = JFileChooser().apply {
             addChoosableFileFilter(FileNameExtensionFilter("RexPaint Palette (*.txt)", "txt").also { this.fileFilter = it })
         }
