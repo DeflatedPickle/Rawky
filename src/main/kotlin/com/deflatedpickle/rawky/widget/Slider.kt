@@ -9,6 +9,8 @@ import javax.swing.JPanel
 import javax.swing.JSlider
 import javax.swing.JSpinner
 import javax.swing.SpinnerNumberModel
+import kotlin.math.max
+import kotlin.math.min
 
 abstract class Slider<T : Number>(min: T, max: T, value: T) : JPanel() {
     lateinit var slider: JSlider
@@ -28,7 +30,7 @@ abstract class Slider<T : Number>(min: T, max: T, value: T) : JPanel() {
             }
 
             spinner.addChangeListener {
-                slider.value = spinner.value as Int
+                slider.value = max(min, min(spinner.value as Int, max))
             }
 
             this.add(slider, spinner)
@@ -62,7 +64,7 @@ abstract class Slider<T : Number>(min: T, max: T, value: T) : JPanel() {
                 }
             })
             spinner.addChangeListener {
-                slider.value = ((spinner.value as Double) * 100).toInt()
+                slider.value = max(min, max(((spinner.value as Double) * 100), max)).toInt()
             }
 
             this.add(slider, spinner)

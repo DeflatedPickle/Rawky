@@ -73,7 +73,10 @@ object Components {
                                 field.set(null, value)
                             }
 
-                            addMouseWheelListener { slider.value += it.wheelRotation }
+                            addMouseWheelListener {
+                                slider.value += it.wheelRotation
+                                spinner.value = this.value
+                            }
                         }
                     }
                 }
@@ -86,7 +89,10 @@ object Components {
                                 field.set(null, value / this.factor)
                             }
 
-                            addMouseWheelListener { slider.value += it.wheelRotation }
+                            addMouseWheelListener {
+                                slider.value += it.wheelRotation
+                                spinner.value = this.doubleValue
+                            }
                         }
                     }
                 }
