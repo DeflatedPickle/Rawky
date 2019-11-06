@@ -14,7 +14,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 
 group 'deflatedpickle'
-version '0.7.6-alpha'
+version '0.9.1-alpha'
 
 sourceCompatibility = 1.8
 
@@ -115,7 +115,7 @@ jar {
                 "Main-Class": "com.deflatedpickle.rawky.Rawky",
                 "Implementation-Vendor": "DeflatedPickle",
                 "Implementation-Title": "Rawky",
-                "Implementation-Version": "0.7.6-alpha"
+                "Implementation-Version": "0.9.1-alpha"
         )
     }
 }

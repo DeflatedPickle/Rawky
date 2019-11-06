@@ -16,7 +16,7 @@ class About : JDialog(Components.frame, "About", true) {
         add(JXPanel().apply {
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
 
-            add(JLabel("Rawky v0.7.6-alpha").apply {
+            add(JLabel("Rawky v0.9.1-alpha").apply {
                 font = font.deriveFont(Font.BOLD, 18f)
                 alignmentX = Component.CENTER_ALIGNMENT
                 horizontalAlignment = SwingConstants.CENTER
@@ -62,6 +62,7 @@ class About : JDialog(Components.frame, "About", true) {
                                             "ICAFE" to "dragon66/icafe"
                                     )) {
                                         collapsibleContainer.addSection(k.toLowerCase(), k).apply {
+                                            val section = this
                                             collapsibleContainer.getHeader(this).apply {
                                                 putClientProperty(CollapsibleContainer.COLLAPSED, true)
 
@@ -73,21 +74,28 @@ class About : JDialog(Components.frame, "About", true) {
                                                 }, BorderLayout.EAST)
                                             }
                                             body.apply {
+                                                var first = true
                                                 layout = BoxLayout(this, BoxLayout.Y_AXIS)
                                                 border = BorderFactory.createTitledBorder("")
 
-                                                // This could be done better, but whatever, right?
-                                                // It's an about window! Who cares about these?
-                                                var request = khttp.get("https://raw.githubusercontent.com/$v/master/LICENSE")
-                                                if (request.statusCode == 404) {
-                                                    request = khttp.get("https://raw.githubusercontent.com/$v/master/LICENSE.txt")
+                                                collapsibleContainer.getHeader(section).addActionListener {
+                                                    if (first) {
+                                                        first = false
 
-                                                    if (request.statusCode == 404) {
-                                                        request = khttp.get("https://raw.githubusercontent.com/$v/master/License.txt")
+                                                        // This could be done better, but whatever, right?
+                                                        // It's an about window! Who cares about these?
+                                                        var request = khttp.get("https://raw.githubusercontent.com/$v/master/LICENSE")
+                                                        if (request.statusCode == 404) {
+                                                            request = khttp.get("https://raw.githubusercontent.com/$v/master/LICENSE.txt")
+
+                                                            if (request.statusCode == 404) {
+                                                                request = khttp.get("https://raw.githubusercontent.com/$v/master/License.txt")
+                                                            }
+                                                        }
+
+                                                        add(JScrollPane(JTextArea(request.text)))
                                                     }
                                                 }
-
-                                                add(JScrollPane(JTextArea(request.text)))
                                             }
                                         }
                                     }
