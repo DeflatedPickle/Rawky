@@ -24,7 +24,7 @@
     <img src="https://sloc.xyz/github/DeflatedPickle/Rawky/?category=lines">
 </p>
 
-<p align="center"><img src="https://raw.githubusercontent.com/DeflatedPickle/Rawky/master/.github/images/Rawky.png"></p>
+<p align="center"><img src="https://raw.githubusercontent.com/DeflatedPickle/Rawky/master/.github/images/Rawky_v0.9.1-alpha.png"></p>
 
 ## Table of Contents
 - [Key Features](#key-features)
@@ -39,6 +39,8 @@
 - Multiple themes (light and dark)
 - Colour palette - organize your colours how you want
 - Animation preview
+- Timeline with onion skinning
+- Quickly assign different tools to each mouse button
 
 ## About
 Rawky aims to be an easy, fast and smart tool for any aspiring artist, though it is more focused towards pixel art.
@@ -61,11 +63,24 @@ It also has frames, which can be previewed above their name.
 
 | | Version |
 |---|---|
-| **Latest** | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.6.6-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.6.6-alpha) |
+| **Latest** | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.9.1-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.9.1-alpha) |
+| | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.7.6-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.7.6-alpha) |
+| | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.6.7-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.6.7-alpha) |
+| | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.6.6-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.6.6-alpha) |
 | | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.4.2-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.4.2-alpha) |
 | | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.3.6-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.3.6-alpha) |
 | | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.1.1-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.1.1-alpha) |
 | | [![GitHub Releases (by Release)](https://img.shields.io/github/downloads/DeflatedPickle/Rawky/v0.1.0-alpha/total.svg)](https://github.com/DeflatedPickle/Rawky/releases/tag/v0.1.0-alpha) |
+> This table is manually updated and can lag behind, check the releases tab to see if there is a newer version available
+
+## Building From Source
+To build the program from source, you will need:
+- A JDK for Java 9 or above
+- A terminal
+
+Then, after navigating to the source directory with your terminal, run:
+- `gradle generateGrammarSource`
+Then, if you would like a JAR, run `gradle shadowJar`, and if you would like an EXE, run `gradle createExe`.
 
 ## Suggestions
 I'm always looking to improve Rawky and the experience of using it, so if you have an idea, feel free to [open an issue](https://github.com/DeflatedPickle/Rawky/issues/new), detailing your idea and we can talk about it.
