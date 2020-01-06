@@ -6,12 +6,12 @@ import com.deflatedpickle.rawky.api.IntRange
 import com.deflatedpickle.rawky.tool.Tool
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
+import org.jdesktop.swingx.util.ShapeUtils
 import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
 import java.awt.image.BufferedImage
-import java.lang.Math.abs
 import javax.swing.*
 import kotlin.math.*
 
@@ -22,6 +22,10 @@ class PixelGrid : JPanel() {
         }
 
         val SCROLLABLE_INSTANCE = JScrollPane(INSTANCE)
+    }
+
+    object Shape {
+        var points = 4
     }
 
     val blankCursor = this.toolkit.createCustomCursor(
@@ -123,10 +127,10 @@ class PixelGrid : JPanel() {
     var rowAmount = 16
     var columnAmount = 16
 
-    var rectangleMatrix: MutableList<MutableList<Rectangle>>
+    var rectangleMatrix: MutableList<MutableList<Polygon>>
     var frameList = mutableListOf<Frame>()
 
-    var hoverPixel: Rectangle? = null
+    var hoverPixel: Polygon? = null
     var hoverRow = 0
     var hoverColumn = 0
 
@@ -289,8 +293,7 @@ class PixelGrid : JPanel() {
                             mousePosition.x + 6,
                             mousePosition.y,
                             size, size, this)
-                }
-                else {
+                } else {
                     val theta = (PI * 2) * index / Components.toolbox.indexList.count() - 1
 
                     val x = 14 * cos(theta).roundToInt()
@@ -312,12 +315,19 @@ class PixelGrid : JPanel() {
         g2D.drawRenderedImage(bufferedImage, null)
     }
 
-    fun refreshMatrix(): MutableList<MutableList<Rectangle>> {
-        val rMatrix = mutableListOf<MutableList<Rectangle>>()
+    fun refreshMatrix(): MutableList<MutableList<Polygon>> {
+        val rMatrix = mutableListOf<MutableList<Polygon>>()
         for (row in 0 until rowAmount) {
-            val rectangleCells = mutableListOf<Rectangle>()
+            val rectangleCells = mutableListOf<Polygon>()
             for (column in 0 until columnAmount) {
-                rectangleCells.add(Rectangle(column * Settings.pixelSize, row * Settings.pixelSize, Settings.pixelSize, Settings.pixelSize))
+                rectangleCells.add(
+                        (ShapeUtils.generatePolygon(Shape.points, Settings.pixelSize / 2, 0) as Polygon).apply {
+                            translate(
+                                    Settings.pixelSize / 2 + column * Settings.pixelSize,
+                                    Settings.pixelSize / 2 + row * Settings.pixelSize
+                            )
+                        }
+                )
             }
             rMatrix.add(rectangleCells)
         }
@@ -333,7 +343,15 @@ class PixelGrid : JPanel() {
                         if (setColour) g2D.color = layer.pixelMatrix[row][column].colour
                         val rectangle = rectangleMatrix[row][column]
 
-                        g2D.fillRoundRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height, Settings.pixelSmooth, Settings.pixelSmooth)
+                        if (Shape.points == 4) {
+                            with(rectangle.bounds) {
+                                this.grow(3, 3)
+                                g2D.fillRect(this.x, this.y, this.width, this.height)
+                            }
+                        }
+                        else {
+                            g2D.fillPolygon(rectangle)
+                        }
                     }
                 }
             }
@@ -370,7 +388,15 @@ class PixelGrid : JPanel() {
         g2D.color = Settings.gridColour
         for (row in rectangleMatrix) {
             for (column in row) {
-                g2D.drawRect(column.x, column.y, column.width, column.height)
+                if (Shape.points == 4) {
+                    with(column.bounds) {
+                        this.grow(3, 3)
+                        g2D.drawRect(this.x, this.y, this.width, this.height)
+                    }
+                }
+                else {
+                    g2D.drawPolygon(column)
+                }
             }
         }
     }

@@ -13,17 +13,26 @@ abstract class HoverOutlineTool(val settings: Class<*>, name: String, iconList: 
     val outlineStroke = BasicStroke(outlineSize.toFloat())
 
     override fun render(g2D: Graphics2D) {
-        if (Components.pixelGrid.hoverPixel != null) {
-            g2D.color = Color(Components.colourShades.selectedShade.red, Components.colourShades.selectedShade.green, Components.colourShades.selectedShade.blue, PixelGrid.Settings.hoverOpacity)
+        Components.pixelGrid.hoverPixel?.let {
+            g2D.color = Color(
+                    Components.colourShades.selectedShade.red,
+                    Components.colourShades.selectedShade.green,
+                    Components.colourShades.selectedShade.blue,
+                    PixelGrid.Settings.hoverOpacity)
 
             with(g2D.stroke) {
                 g2D.stroke = outlineStroke
-                g2D.drawRect(
-                        Components.pixelGrid.hoverPixel!!.x + outlineSize / 2,
-                        Components.pixelGrid.hoverPixel!!.y + outlineSize / 2,
-                        Components.pixelGrid.hoverPixel!!.width * settings.getField("size").getInt(settings) - outlineSize,
-                        Components.pixelGrid.hoverPixel!!.height * settings.getField("size").getInt(settings) - outlineSize
-                )
+
+                if (PixelGrid.Shape.points == 4) {
+                    with(it.bounds) {
+                        this.grow(3, 3)
+                        g2D.drawRect(this.x, this.y, this.width, this.height)
+                    }
+                }
+                else {
+                    g2D.drawPolygon(it)
+                }
+
                 g2D.stroke = this
             }
         }
