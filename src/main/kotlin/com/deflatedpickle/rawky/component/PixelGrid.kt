@@ -11,9 +11,9 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
 import java.awt.image.BufferedImage
+import java.lang.Math.abs
 import javax.swing.*
-import kotlin.math.abs
-import kotlin.math.min
+import kotlin.math.*
 
 class PixelGrid : JPanel() {
     companion object {
@@ -283,10 +283,24 @@ class PixelGrid : JPanel() {
         for ((index, tool) in Components.toolbox.indexList.reversed().withIndex()) {
             if (mousePosition != null) {
                 val size = if (index == length) 16 * 3 else 16 * 2
-                biG2D.drawImage(tool?.cursor,
-                        mousePosition.x + (16 * 2 / 6) * (if (index == length) 1 else length - index) + (length - index) * 32,
-                        mousePosition.y - (16 * 4 / 2),
-                        size, size, this)
+
+                if (index == length) {
+                    biG2D.drawImage(tool?.cursor,
+                            mousePosition.x + 6,
+                            mousePosition.y,
+                            size, size, this)
+                }
+                else {
+                    val theta = (PI * 2) * index / Components.toolbox.indexList.count() - 1
+
+                    val x = 14 * cos(theta).roundToInt()
+                    val y = 14 * sin(theta).roundToInt()
+
+                    biG2D.drawImage(tool?.cursor,
+                            mousePosition.x + 44 + x,
+                            mousePosition.y + y,
+                            size, size, this)
+                }
             }
         }
 
