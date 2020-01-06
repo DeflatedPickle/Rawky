@@ -35,15 +35,7 @@ class PixelGrid : JPanel() {
 
     @Options
     object Settings {
-        @IntRange(1, 100)
-        @Tooltip("The size of the pixels")
-        @JvmField
         var pixelSize = 20
-
-        @IntRange(0, 42)
-        @Tooltip("The smoothness of the pixels")
-        @JvmField
-        var pixelSmooth = 0
 
         @IntRange(1, 255)
         @Tooltip("The opacity of the hover mark")
@@ -60,7 +52,7 @@ class PixelGrid : JPanel() {
         @JvmField
         var gridColour = Color.GRAY
 
-        @IntRange(1, 100)
+        @IntRange(1, 20 * 8, 20)
         @Tooltip("The size of the background pixels")
         @JvmField
         var backgroundPixelSize = pixelSize / 3

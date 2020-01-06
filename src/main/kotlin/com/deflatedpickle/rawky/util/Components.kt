@@ -69,6 +69,15 @@ object Components {
                         with(slider) {
                             value = field.getInt(null)
 
+                            if (annotation.step > 1) {
+                                majorTickSpacing = annotation.step
+                                minorTickSpacing = annotation.step / 2
+                                snapToTicks = true
+
+                                paintTicks = true
+                                paintLabels = true
+                            }
+
                             addChangeListener {
                                 field.set(null, value)
                             }
