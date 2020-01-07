@@ -1,5 +1,7 @@
 package com.deflatedpickle.rawky.component
 
+import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
+import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import java.awt.BorderLayout
@@ -10,7 +12,7 @@ import javax.swing.DefaultListModel
 import javax.swing.JList
 import javax.swing.JPanel
 
-class ActionHistory : JPanel() {
+class ActionHistory : Component() {
     val listModel = DefaultListModel<String>()
     // TODO: Replace with a JTree
     // TODO: Add a tooltip that shows the change the action made
@@ -48,6 +50,7 @@ class ActionHistory : JPanel() {
         addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent) {
                 when (e.clickCount) {
+                    1 -> PixelGrid.repaint()
                     3 -> ActionStack.push(action)
                 }
             }

@@ -2,10 +2,10 @@ package com.deflatedpickle.rawky.component
 
 import com.alee.laf.WebLookAndFeel
 import com.bulenkov.darcula.DarculaLaf
-import com.deflatedpickle.rawky.api.Enum
-import com.deflatedpickle.rawky.api.Options
-import com.deflatedpickle.rawky.api.Setter
-import com.deflatedpickle.rawky.api.Tooltip
+import com.deflatedpickle.rawky.api.annotations.Enum
+import com.deflatedpickle.rawky.api.annotations.Options
+import com.deflatedpickle.rawky.api.annotations.Setter
+import com.deflatedpickle.rawky.api.annotations.Tooltip
 import com.deflatedpickle.rawky.util.Components
 import org.pushingpixels.substance.api.skin.SubstanceGraphiteElectricLookAndFeel
 import javax.swing.JFrame
@@ -32,7 +32,7 @@ class Window : JFrame("Rawky") {
             }
 
             SwingUtilities.updateComponentTreeUI(Components.frame)
-            SwingUtilities.updateComponentTreeUI(Components.pixelGrid.contextMenu)
+            SwingUtilities.updateComponentTreeUI(PixelGrid.contextMenu)
             SwingUtilities.updateComponentTreeUI(SettingsDialogue)
         }
     }

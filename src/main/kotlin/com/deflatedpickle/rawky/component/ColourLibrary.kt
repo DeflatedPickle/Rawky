@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.component
 
+import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
 import org.jdesktop.swingx.JXButton
@@ -11,7 +12,7 @@ import java.awt.Dimension
 import javax.swing.*
 import javax.swing.border.TitledBorder
 
-class ColourLibrary : JPanel() {
+class ColourLibrary : Component() {
     class Cell(val colour: Color, val button: JXButton)
 
     var cellSize = 28

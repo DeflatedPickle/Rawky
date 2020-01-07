@@ -1,8 +1,8 @@
 package com.deflatedpickle.rawky.tool
 
-import com.deflatedpickle.rawky.api.IntRange
-import com.deflatedpickle.rawky.api.Options
-import com.deflatedpickle.rawky.api.Tooltip
+import com.deflatedpickle.rawky.api.annotations.IntRange
+import com.deflatedpickle.rawky.api.annotations.Options
+import com.deflatedpickle.rawky.api.annotations.Tooltip
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.util.ActionStack
@@ -23,10 +23,10 @@ class Eraser : HoverOutlineTool(Settings::class.java, "Eraser", listOf(Icons.era
     }
 
     override fun perform(button: Int, dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
-        if (Components.pixelGrid
+        if (PixelGrid
                         .frameList[Components.animationTimeline.list.selectedIndex]
                         .layerList[Components.layerList.table.selectedRow]
-                        .pixelMatrix[Components.pixelGrid.hoverRow][Components.pixelGrid.hoverColumn]
+                        .pixelMatrix[PixelGrid.hoverRow][PixelGrid.hoverColumn]
                         .colour
                 != null) {
             val pixel = object : Toolbox.LockCheck(this.name) {
@@ -39,7 +39,7 @@ class Eraser : HoverOutlineTool(Settings::class.java, "Eraser", listOf(Icons.era
                         for (sizeRow in 0 until size) {
                             val list = mutableListOf<Color?>()
                             for (sizeColumn in 0 until size) {
-                                with(Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row + sizeRow][column + sizeColumn]) {
+                                with(PixelGrid.frameList[frame].layerList[layer].pixelMatrix[row + sizeRow][column + sizeColumn]) {
                                     list.add(this.colour)
                                     colour = null
                                 }
@@ -53,7 +53,7 @@ class Eraser : HoverOutlineTool(Settings::class.java, "Eraser", listOf(Icons.era
                     if (check()) {
                         for ((rowIndex, sizeRow) in (0 until size).withIndex()) {
                             for ((rowColumn, sizeColumn) in (0 until size).withIndex()) {
-                                with(Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row + sizeRow][column + sizeColumn]) {
+                                with(PixelGrid.frameList[frame].layerList[layer].pixelMatrix[row + sizeRow][column + sizeColumn]) {
                                     colour = oldValues[rowIndex][rowColumn]
                                 }
                             }
@@ -63,7 +63,7 @@ class Eraser : HoverOutlineTool(Settings::class.java, "Eraser", listOf(Icons.era
 
                 override fun outline(g2D: Graphics2D) {
                     g2D.color = UIManager.getColor("List.selectionBackground")
-                    g2D.drawRect(this.column * PixelGrid.Settings.pixelSize, this.row * PixelGrid.Settings.pixelSize, PixelGrid.Settings.pixelSize, PixelGrid.Settings.pixelSize)
+                    g2D.drawRect(this.row * PixelGrid.Settings.pixelSize, this.column * PixelGrid.Settings.pixelSize, PixelGrid.Settings.pixelSize, PixelGrid.Settings.pixelSize)
                 }
             }
 

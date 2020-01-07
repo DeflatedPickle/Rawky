@@ -1,6 +1,7 @@
 package com.deflatedpickle.rawky.component
 
-import com.deflatedpickle.rawky.api.Options
+import com.deflatedpickle.rawky.api.annotations.Options
+import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
 import org.jdesktop.swingx.JXPanel
 import java.awt.GridBagConstraints
@@ -8,7 +9,7 @@ import java.awt.GridBagLayout
 import javax.swing.JLabel
 import javax.swing.SwingConstants
 
-class ToolOptions : JXPanel() {
+class ToolOptions : Component() {
     object StickEast : GridBagConstraints() {
         init {
             anchor = EAST

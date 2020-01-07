@@ -28,11 +28,11 @@ object Commands {
     val gson = GsonBuilder().setPrettyPrinting().create()
 
     fun new(width: Int = 16, height: Int = 16, withFrame: Boolean = true) {
-        Components.pixelGrid.columnAmount = width
-        Components.pixelGrid.rowAmount = height
-        Components.pixelGrid.rectangleMatrix = Components.pixelGrid.refreshMatrix()
+        PixelGrid.columnAmount = width
+        PixelGrid.rowAmount = height
+        PixelGrid.rectangleMatrix = PixelGrid.refreshMatrix()
 
-        Components.pixelGrid.frameList = mutableListOf()
+        PixelGrid.frameList = mutableListOf()
 
         for (i in 0 until Components.layerList.tableModel.rowCount) {
             Components.layerList.tableModel.removeRow(i)
@@ -60,7 +60,7 @@ object Commands {
                                         val castLayer = layer as LinkedTreeMap<Any, Any>
                                         Components.layerList.addLayer()
 
-                                        Components.pixelGrid.frameList[frameIndex].layerList[layerIndex].apply {
+                                        PixelGrid.frameList[frameIndex].layerList[layerIndex].apply {
                                             val rowList = mutableListOf<MutableList<PixelGrid.Cell>>()
                                             for (row in castLayer["pixelMatrix"] as MutableList<MutableList<Any>>) {
                                                 val columnList = mutableListOf<PixelGrid.Cell>()
@@ -97,9 +97,9 @@ object Commands {
                 "png" -> {
                     Components.animationTimeline.addFrame()
                     ImageIO.read(fileChooser.selectedFile).apply {
-                        for (row in 0 until Components.pixelGrid.rowAmount) {
-                            for (column in 0 until Components.pixelGrid.columnAmount) {
-                                Components.pixelGrid.frameList[0].layerList[0].pixelMatrix[row][column].colour = Color(getRGB(column, row), true)
+                        for (row in 0 until PixelGrid.rowAmount) {
+                            for (column in 0 until PixelGrid.columnAmount) {
+                                PixelGrid.frameList[0].layerList[0].pixelMatrix[row][column].colour = Color(getRGB(column, row), true)
                             }
                         }
                     }
@@ -108,12 +108,12 @@ object Commands {
                     GIFReader().apply {
                         read(fileChooser.selectedFile.inputStream())
 
-                        Components.pixelGrid.frameList.clear()
+                        PixelGrid.frameList.clear()
                         for ((frameIndex, frame) in frames.withIndex()) {
                             Components.animationTimeline.addFrame()
                             for (row in 0 until frame.height) {
                                 for (column in 0 until frame.width) {
-                                    Components.pixelGrid.frameList[frameIndex].layerList[0].pixelMatrix[row][column].colour = Color(frame.getRGB(column, row), true)
+                                    PixelGrid.frameList[frameIndex].layerList[0].pixelMatrix[row][column].colour = Color(frame.getRGB(column, row), true)
                                 }
                             }
                         }
@@ -127,15 +127,15 @@ object Commands {
         if (fileChooser.showSaveDialog(Components.frame) == JFileChooser.APPROVE_OPTION) {
             when (fileChooser.selectedFile.extension) {
                 "rawr" -> {
-                    fileChooser.selectedFile.writeText(gson.toJson(hashMapOf("frameList" to Components.pixelGrid.frameList, "colourLibrary" to Components.colourLibrary.cellList.map { it.colour }, "colourPalette" to Components.colourPalette.colourList)))
+                    fileChooser.selectedFile.writeText(gson.toJson(hashMapOf("frameList" to PixelGrid.frameList, "colourLibrary" to Components.colourLibrary.cellList.map { it.colour }, "colourPalette" to Components.colourPalette.colourList)))
                 }
                 // TODO: Move finished files to an export sub-menu of the file menu, this should only be used for raw file types
                 // TODO: Add support for more raw types, such as; PSD, PDN, MDP, XCF, etc
                 "png" -> {
-                    ImageIO.write(BufferedImage(Components.pixelGrid.columnAmount, Components.pixelGrid.rowAmount, BufferedImage.TYPE_INT_ARGB).apply {
-                        for (row in 0 until Components.pixelGrid.rowAmount) {
-                            for (column in 0 until Components.pixelGrid.columnAmount) {
-                                for (layer in Components.pixelGrid.frameList[0].layerList.reversed()) {
+                    ImageIO.write(BufferedImage(PixelGrid.columnAmount, PixelGrid.rowAmount, BufferedImage.TYPE_INT_ARGB).apply {
+                        for (row in 0 until PixelGrid.rowAmount) {
+                            for (column in 0 until PixelGrid.columnAmount) {
+                                for (layer in PixelGrid.frameList[0].layerList.reversed()) {
                                     layer.pixelMatrix[row][column].colour?.rgb?.let { setRGB(column, row, it) }
                                 }
                             }
@@ -144,11 +144,11 @@ object Commands {
                 }
                 "gif" -> {
                     val frameList = mutableListOf<BufferedImage>()
-                    for (frame in Components.pixelGrid.frameList) {
-                        BufferedImage(Components.pixelGrid.columnAmount, Components.pixelGrid.rowAmount, BufferedImage.TYPE_INT_ARGB).apply {
+                    for (frame in PixelGrid.frameList) {
+                        BufferedImage(PixelGrid.columnAmount, PixelGrid.rowAmount, BufferedImage.TYPE_INT_ARGB).apply {
                             for (layer in frame.layerList.reversed()) {
-                                for (row in 0 until Components.pixelGrid.rowAmount) {
-                                    for (column in 0 until Components.pixelGrid.columnAmount) {
+                                for (row in 0 until PixelGrid.rowAmount) {
+                                    for (column in 0 until PixelGrid.columnAmount) {
                                         layer.pixelMatrix[row][column].colour?.rgb?.let {
                                             setRGB(column, row, it)
                                         }
@@ -159,7 +159,7 @@ object Commands {
                         }
                     }
                     // TODO: Add an option for delay
-                    GIFTweaker.writeAnimatedGIF(frameList.toTypedArray(), IntArray(Components.pixelGrid.frameList.size) { 1000 / 60 }, fileChooser.selectedFile.outputStream())
+                    GIFTweaker.writeAnimatedGIF(frameList.toTypedArray(), IntArray(PixelGrid.frameList.size) { 1000 / 60 }, fileChooser.selectedFile.outputStream())
                 }
             }
         }

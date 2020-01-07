@@ -2,9 +2,10 @@ package com.deflatedpickle.rawky.util
 
 import com.bric.colorpicker.ColorPicker
 import com.bric.colorpicker.ColorPickerDialog
-import com.deflatedpickle.rawky.api.*
-import com.deflatedpickle.rawky.api.Enum
-import com.deflatedpickle.rawky.api.IntRange
+import com.deflatedpickle.rawky.api.annotations.*
+import com.deflatedpickle.rawky.api.annotations.Enum
+import com.deflatedpickle.rawky.api.annotations.IntRange
+import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.component.*
 import com.deflatedpickle.rawky.widget.DoubleSlider
 import com.deflatedpickle.rawky.widget.Slider
@@ -16,12 +17,12 @@ import java.awt.Color
 import java.awt.Font
 import java.lang.reflect.Field
 import javax.swing.*
+import kotlin.math.roundToInt
 
 object Components {
     val frame = Window()
 
     val toolbox = Toolbox()
-    val pixelGrid = PixelGrid.INSTANCE
     val tiledView = TiledView()
     val colourPicker = ColorPicker(false, true)
     val colourShades = ColourShades()
@@ -99,7 +100,7 @@ object Components {
                             }
 
                             addMouseWheelListener {
-                                slider.value += it.wheelRotation
+                                slider.value += (it.wheelRotation * factor).roundToInt()
                                 spinner.value = this.doubleValue
                             }
                         }

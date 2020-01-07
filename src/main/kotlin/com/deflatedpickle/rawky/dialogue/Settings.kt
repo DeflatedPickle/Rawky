@@ -1,6 +1,6 @@
 package com.deflatedpickle.rawky.dialogue
 
-import com.deflatedpickle.rawky.api.Options
+import com.deflatedpickle.rawky.api.annotations.Options
 import com.deflatedpickle.rawky.util.Components
 import org.apache.commons.lang3.StringUtils
 import org.reflections.Reflections

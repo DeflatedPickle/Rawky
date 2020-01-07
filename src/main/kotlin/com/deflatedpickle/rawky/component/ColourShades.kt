@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.component
 
+import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
 import org.jdesktop.swingx.JXButton
 import org.jdesktop.swingx.painter.CompoundPainter
@@ -16,7 +17,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-class ColourShades : JPanel() {
+class ColourShades : Component() {
     // TODO: Split the amount for darker and lighter shades
     var amount = 14
     val buttonSize = Dimension(40, 20)

@@ -1,5 +1,7 @@
 package com.deflatedpickle.rawky.component
 
+import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
+import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.widget.ColourButton
 import com.deflatedpickle.rawky.widget.RangeSlider
@@ -7,7 +9,8 @@ import java.awt.*
 import javax.swing.*
 import javax.swing.border.LineBorder
 
-class AnimationTimeline : JPanel() {
+@RedrawSensitive<PixelGrid>(PixelGrid::class)
+class AnimationTimeline : Component() {
     // TODO: Move to a toolbar sub-class
     val slider = RangeSlider.IntRangeSliderComponent(-10, 10, -2, 2)
     val pastColour = ColourButton(Color.YELLOW).apply { preferredSize = Dimension(32, slider.preferredSize.height) }
@@ -18,6 +21,8 @@ class AnimationTimeline : JPanel() {
         layoutOrientation = JList.HORIZONTAL_WRAP
         visibleRowCount = -1
         selectionMode = ListSelectionModel.SINGLE_SELECTION
+
+        addListSelectionListener { PixelGrid.repaint() }
 
         cellRenderer = ListCellRenderer<String> { _, value, index, isSelected, _ ->
             JPanel().apply {
@@ -44,10 +49,10 @@ class AnimationTimeline : JPanel() {
 
                         g2D.scale(0.24, 0.24)
 
-                        // Components.pixelGrid.drawTransparentBackground(g2D)
+                        // PixelGrid.drawTransparentBackground(g2D)
 
-                        for ((layerIndex, layer) in Components.pixelGrid.frameList[index].layerList.withIndex().reversed()) {
-                            Components.pixelGrid.drawPixels(layerIndex, layer, g2D)
+                        for ((layerIndex, layer) in PixelGrid.frameList[index].layerList.withIndex().reversed()) {
+                            PixelGrid.drawPixels(layerIndex, layer, g2D)
                         }
                     }
                 })
@@ -73,7 +78,7 @@ class AnimationTimeline : JPanel() {
         listModel.addElement("Frame ${listModel.size()}")
         list.selectedIndex = listModel.size() - 1
 
-        Components.pixelGrid.frameList.add(PixelGrid.Frame())
+        PixelGrid.frameList.add(PixelGrid.Frame())
         if (addLayer) {
             Components.layerList.addLayer()
         }
@@ -83,7 +88,7 @@ class AnimationTimeline : JPanel() {
 
     fun removeFrame() {
         with(list.selectedIndex) {
-            Components.pixelGrid.frameList.removeAt(this)
+            PixelGrid.frameList.removeAt(this)
             listModel.remove(this)
 
             if (this > 0) {
@@ -100,10 +105,10 @@ class AnimationTimeline : JPanel() {
     fun changeFrame() {
         Components.layerList.tableModel.rowCount = 0
 
-        if (Components.pixelGrid.frameList.size > list.selectedIndex) {
+        if (PixelGrid.frameList.size > list.selectedIndex) {
             if (list.selectedIndex >= 0) {
-                for (i in 0 until Components.pixelGrid.frameList[list.selectedIndex].layerList.size) {
-                    Components.layerList.tableModel.insertRow(0, arrayOf(null, "Layer ${Components.layerList.tableModel.rowCount}", Components.pixelGrid.frameList[list.selectedIndex].layerList[i].visible, Components.pixelGrid.frameList[list.selectedIndex].layerList[i].lockType))
+                for (i in 0 until PixelGrid.frameList[list.selectedIndex].layerList.size) {
+                    Components.layerList.tableModel.insertRow(0, arrayOf(null, "Layer ${Components.layerList.tableModel.rowCount}", PixelGrid.frameList[list.selectedIndex].layerList[i].visible, PixelGrid.frameList[list.selectedIndex].layerList[i].lockType))
                 }
             }
         }

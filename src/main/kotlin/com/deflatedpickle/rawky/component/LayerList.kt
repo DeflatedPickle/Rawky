@@ -1,5 +1,7 @@
 package com.deflatedpickle.rawky.component
 
+import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
+import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
 import java.awt.*
@@ -9,12 +11,13 @@ import javax.swing.table.DefaultTableModel
 import javax.swing.table.TableCellEditor
 import javax.swing.table.TableCellRenderer
 
-class LayerList : JPanel() {
+@RedrawSensitive<PixelGrid>(PixelGrid::class)
+class LayerList : Component() {
     val tableModel = DefaultTableModel(arrayOf(), arrayOf("Preview", "Name", "Visibility", "State")).apply {
         addTableModelListener {
             when (it.column) {
-                2 -> Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[it.firstRow].visible = this.getValueAt(it.firstRow, it.column) as Boolean
-                3 -> Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[it.firstRow].lockType = this.getValueAt(it.firstRow, it.column) as PixelGrid.Layer.LockType
+                2 -> PixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[it.firstRow].visible = this.getValueAt(it.firstRow, it.column) as Boolean
+                3 -> PixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[it.firstRow].lockType = this.getValueAt(it.firstRow, it.column) as PixelGrid.Layer.LockType
             }
         }
     }
@@ -34,7 +37,7 @@ class LayerList : JPanel() {
                 }
 
                 override fun getTableCellEditorComponent(table: JTable?, value: Any?, isSelected: Boolean, row: Int, column: Int): Component {
-                    return JPanel()
+                    return JPanel() as Component
                 }
 
                 override fun getCellEditorValue(): Any {
@@ -52,13 +55,13 @@ class LayerList : JPanel() {
 
                         g2D.color = Color.WHITE
                         g2D.fillRect(0, 0, width, height)
-                        
+
                         g2D.scale(0.12, 0.12)
 
-                        // Components.pixelGrid.drawTransparentBackground(g2D)
+                        // PixelGrid.drawTransparentBackground(g2D)
 
                         // BUG: Throws an out-of-bounds error when you swap from a frame with more layers
-                        Components.pixelGrid.drawPixels(row, Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[row], g2D)
+                        PixelGrid.drawPixels(row, PixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[row], g2D, true, true)
                     }
                 }
             }
@@ -67,14 +70,18 @@ class LayerList : JPanel() {
         columnModel.getColumn(2).apply {
             maxWidth = 30
 
-            cellEditor = DefaultCellEditor(JCheckBox().apply { isVisible = false })
+            cellEditor = DefaultCellEditor(JCheckBox().apply {
+                isVisible = false
+
+                addChangeListener { PixelGrid.repaintWithChildren() }
+            })
             cellRenderer = TableCellRenderer { _, value, _, _, _, _ ->
                 JCheckBox(if (value as Boolean) {
                     Icons.show
                 }
                 else {
                     Icons.hide
-                }).apply { isOpaque = false }
+                }).apply {isOpaque = false }
             }
         }
         columnModel.getColumn(3).apply {
@@ -96,14 +103,14 @@ class LayerList : JPanel() {
         tableModel.insertRow(0, arrayOf(null, "Layer ${tableModel.rowCount}", true, PixelGrid.Layer.LockType.OFF))
         table.setRowSelectionInterval(0, 0)
 
-        with(Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex]) {
+        with(PixelGrid.frameList[Components.animationTimeline.list.selectedIndex]) {
             layerList.add(0, PixelGrid.Layer(this))
         }
     }
 
     fun removeLayer() {
         with(table.selectedRow) {
-            Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.removeAt(this)
+            PixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.removeAt(this)
             tableModel.removeRow(this)
 
             if (this < 0) {

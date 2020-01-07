@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.util
 
+import com.deflatedpickle.rawky.component.PixelGrid
 import java.awt.Graphics2D
 
 object ActionStack {
@@ -80,6 +81,8 @@ object ActionStack {
             })
 
             Components.actionHistory.list.selectedIndex = Components.actionHistory.listModel.size() - 1
+
+            PixelGrid.repaintWithChildren()
         }
     }
 
@@ -92,6 +95,8 @@ object ActionStack {
             })
 
             Components.actionHistory.list.selectedIndex = Components.actionHistory.listModel.size() - 1
+
+            PixelGrid.repaintWithChildren()
         }
     }
 

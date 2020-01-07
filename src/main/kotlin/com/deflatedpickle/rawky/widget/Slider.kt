@@ -59,12 +59,12 @@ abstract class Slider<T : Number>(min: T, max: T, value: T) : JPanel() {
 
             spinner.addMouseMotionListener(object : MouseMotionAdapter() {
                 override fun mouseMoved(e: MouseEvent) {
-                    slider.value = ((spinner.value as Double) * 100).toInt()
+                    slider.value = ((spinner.value as Double) * (slider as DoubleSlider).factor).toInt()
                     switch = true
                 }
             })
             spinner.addChangeListener {
-                slider.value = max(min, max(((spinner.value as Double) * 100), max)).toInt()
+                slider.value = max(min, max(((spinner.value as Double) * (slider as DoubleSlider).factor), max)).toInt()
             }
 
             this.add(slider, spinner)

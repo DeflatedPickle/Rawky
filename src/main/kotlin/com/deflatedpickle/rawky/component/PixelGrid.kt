@@ -1,11 +1,13 @@
 package com.deflatedpickle.rawky.component
 
-import com.deflatedpickle.rawky.api.*
-import com.deflatedpickle.rawky.api.Enum
-import com.deflatedpickle.rawky.api.IntRange
+import com.deflatedpickle.rawky.api.annotations.*
+import com.deflatedpickle.rawky.api.annotations.Enum
+import com.deflatedpickle.rawky.api.annotations.IntRange
+import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.tool.Tool
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.util.LayoutMethod
 import org.jdesktop.swingx.util.ShapeUtils
 import java.awt.*
 import java.awt.event.MouseAdapter
@@ -15,13 +17,13 @@ import java.awt.image.BufferedImage
 import javax.swing.*
 import kotlin.math.*
 
-class PixelGrid : JPanel() {
-    companion object {
-        val INSTANCE = PixelGrid().apply {
-            preferredSize = Dimension(2048, 2048)
-        }
-
-        val SCROLLABLE_INSTANCE = JScrollPane(INSTANCE)
+@RedrawActive
+object PixelGrid : Component() {
+    val SCROLLABLE_INSTANCE = JScrollPane(this.apply {
+        preferredSize = Dimension(2048, 2048)
+    }).apply {
+        horizontalScrollBarPolicy = JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS
+        verticalScrollBarPolicy = JScrollPane.VERTICAL_SCROLLBAR_ALWAYS
     }
 
     object Shape {
@@ -86,7 +88,7 @@ class PixelGrid : JPanel() {
     }
 
     class Layer(override var parent: Frame) : MatrixItem<Frame> {
-        var pixelMatrix = Components.pixelGrid.initMatrix<Layer, Cell>(parent = this)
+        var pixelMatrix = PixelGrid.initMatrix<Layer, Cell>(parent = this)
         var visible = true
 
         enum class LockType {
@@ -127,6 +129,8 @@ class PixelGrid : JPanel() {
     var hoverColumn = 0
 
     var scale = 1.0
+
+    var layout = LayoutMethod.GRID
 
     val lastCell = Point()
     val contextMenu = object : JPopupMenu() {
@@ -204,7 +208,7 @@ class PixelGrid : JPanel() {
             }
 
             override fun mouseEntered(e: MouseEvent) {
-                cursor = blankCursor
+                // cursor = blankCursor
             }
 
             override fun mouseExited(e: MouseEvent) {
@@ -310,13 +314,17 @@ class PixelGrid : JPanel() {
     fun refreshMatrix(): MutableList<MutableList<Polygon>> {
         val rMatrix = mutableListOf<MutableList<Polygon>>()
         for (row in 0 until rowAmount) {
+            val y = if (row % 2 == 0) layout.columnOffsetEven else layout.columnOffsetOdd
+
             val rectangleCells = mutableListOf<Polygon>()
             for (column in 0 until columnAmount) {
+                val x = if (column % 2 == 0) layout.rowOffsetEven else layout.rowOffsetOdd
+
                 rectangleCells.add(
                         (ShapeUtils.generatePolygon(Shape.points, Settings.pixelSize / 2, 0) as Polygon).apply {
                             translate(
-                                    Settings.pixelSize / 2 + column * Settings.pixelSize,
-                                    Settings.pixelSize / 2 + row * Settings.pixelSize
+                                    Settings.pixelSize / 2 + row * Settings.pixelSize + x,
+                                    Settings.pixelSize / 2 + column * Settings.pixelSize + y
                             )
                         }
                 )
@@ -327,10 +335,10 @@ class PixelGrid : JPanel() {
         return rMatrix
     }
 
-    fun drawPixels(layerIndex: Int, layer: Layer, g2D: Graphics2D, setColour: Boolean = true) {
+    fun drawPixels(layerIndex: Int, layer: Layer, g2D: Graphics2D, setColour: Boolean = true, showHidden: Boolean = false) {
         for (row in 0 until rectangleMatrix.size) {
             for (column in 0 until rectangleMatrix[row].size) {
-                if (!Components.layerList.isLayerHidden(layerIndex)) {
+                if (showHidden || !Components.layerList.isLayerHidden(layerIndex)) {
                     if (layer.pixelMatrix[row][column].colour != null) {
                         if (setColour) g2D.color = layer.pixelMatrix[row][column].colour
                         val rectangle = rectangleMatrix[row][column]
@@ -395,9 +403,9 @@ class PixelGrid : JPanel() {
 
     inline fun <reified P, reified T : MatrixItem<P>> initMatrix(value: T? = null, parent: Any): MutableList<MutableList<T>> {
         val rowList = mutableListOf<MutableList<T>>()
-        for (row in 0 until Components.pixelGrid.rowAmount) {
+        for (row in 0 until PixelGrid.rowAmount) {
             val columnList = mutableListOf<T>()
-            for (column in 0 until Components.pixelGrid.columnAmount) {
+            for (column in 0 until PixelGrid.columnAmount) {
                 columnList.add(value ?: T::class.constructors.first().call(parent))
             }
             rowList.add(columnList)

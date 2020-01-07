@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.tool
 
+import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
 import java.awt.*
@@ -13,22 +14,22 @@ class Dropper : HoverOutlineTool(Settings::class.java, "Dropper", listOf(Icons.c
 
     override fun perform(button: Int, dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
         // TODO: Should colour picking push/pull to/from the undo/redo stack?
-        Components.colourPicker.color = Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.table.selectedRow].pixelMatrix[Components.pixelGrid.hoverRow][Components.pixelGrid.hoverColumn].colour
+        Components.colourPicker.color = PixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.table.selectedRow].pixelMatrix[PixelGrid.hoverRow][PixelGrid.hoverColumn].colour
     }
 
     override fun render(g2D: Graphics2D) {
         super.render(g2D)
 
         val mouse = MouseInfo.getPointerInfo().location.apply {
-            SwingUtilities.convertPointFromScreen(this, Components.pixelGrid)
+            SwingUtilities.convertPointFromScreen(this, PixelGrid)
             translate(-25, 20)
         }
 
-        if (Components.pixelGrid.hoverRow >= 0 && Components.pixelGrid.hoverColumn >= 0) {
-            val layerList = Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList
+        if (PixelGrid.hoverRow >= 0 && PixelGrid.hoverColumn >= 0) {
+            val layerList = PixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList
 
             for ((index, layer) in layerList.withIndex()) {
-                val hoverColour = layerList[index].pixelMatrix[Components.pixelGrid.hoverRow][Components.pixelGrid.hoverColumn].colour
+                val hoverColour = layerList[index].pixelMatrix[PixelGrid.hoverRow][PixelGrid.hoverColumn].colour
 
                 if (hoverColour != null) {
                     g2D.color = Color.BLACK

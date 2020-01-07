@@ -1,15 +1,14 @@
 package com.deflatedpickle.rawky.component
 
-import com.deflatedpickle.rawky.api.DoubleRange
-import com.deflatedpickle.rawky.api.IntRange
-import com.deflatedpickle.rawky.api.Options
-import com.deflatedpickle.rawky.api.Tooltip
+import com.deflatedpickle.rawky.api.annotations.*
+import com.deflatedpickle.rawky.api.annotations.IntRange
+import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
 import java.awt.Graphics
 import java.awt.Graphics2D
-import javax.swing.JPanel
 
-class TiledView : JPanel() {
+@RedrawSensitive<PixelGrid>(PixelGrid::class)
+class TiledView : Component() {
     @Options
     object Settings {
         @IntRange(2, 30)
@@ -43,14 +42,14 @@ class TiledView : JPanel() {
 
         for (row in 0 until Settings.rows) {
             for (column in 0 until Settings.columns) {
-                for ((layerIndex, layer) in Components.pixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.withIndex().reversed()) {
-                    Components.pixelGrid.drawPixels(layerIndex, layer, g2D)
+                for ((layerIndex, layer) in PixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList.withIndex().reversed()) {
+                    PixelGrid.drawPixels(layerIndex, layer, g2D)
                 }
-                g2D.translate((PixelGrid.Settings.pixelSize + Settings.padding) * Components.pixelGrid.columnAmount, 0.0)
+                g2D.translate((PixelGrid.Settings.pixelSize + Settings.padding) * PixelGrid.columnAmount, 0.0)
             }
-            g2D.translate(0.0, (PixelGrid.Settings.pixelSize + Settings.padding) * Components.pixelGrid.rowAmount)
+            g2D.translate(0.0, (PixelGrid.Settings.pixelSize + Settings.padding) * PixelGrid.rowAmount)
             // Moves to the start of the row
-            g2D.translate(-(PixelGrid.Settings.pixelSize + Settings.padding) * Components.pixelGrid.columnAmount * Settings.columns, 0.0)
+            g2D.translate(-(PixelGrid.Settings.pixelSize + Settings.padding) * PixelGrid.columnAmount * Settings.columns, 0.0)
         }
     }
 }

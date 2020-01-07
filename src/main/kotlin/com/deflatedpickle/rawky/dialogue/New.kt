@@ -1,13 +1,14 @@
 package com.deflatedpickle.rawky.dialogue
 
+import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.util.Commands
 import com.deflatedpickle.rawky.util.Components
 import java.awt.*
 import javax.swing.*
 
 class New : JDialog(Components.frame, "New File", true) {
-    val widthSpinner = JSpinner(SpinnerNumberModel(Components.pixelGrid.columnAmount, 0, Int.MAX_VALUE, 16))
-    val heightSpinner = JSpinner(SpinnerNumberModel(Components.pixelGrid.rowAmount, 0, Int.MAX_VALUE, 16))
+    val widthSpinner = JSpinner(SpinnerNumberModel(PixelGrid.columnAmount, 0, Int.MAX_VALUE, 16))
+    val heightSpinner = JSpinner(SpinnerNumberModel(PixelGrid.rowAmount, 0, Int.MAX_VALUE, 16))
 
     val labelConstraints = GridBagConstraints().apply {
         anchor = GridBagConstraints.EAST

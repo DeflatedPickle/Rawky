@@ -130,7 +130,8 @@ fun main() {
                 val slider = JSlider(25, 300).apply {
                     this.value = 50
                     addChangeListener {
-                        Components.pixelGrid.scale = this.value / 50.0
+                        PixelGrid.scale = this.value / 50.0
+                        PixelGrid.repaint()
                     }
                 }
                 add(JButton(Icons.zoomOut).apply {
@@ -305,19 +306,6 @@ fun main() {
         grid.add(1.2, 0.0, 0.4, 0.4, actionHistory)
 
         cControl.contentArea.deploy(grid)
-
-        // TODO: Add a setting for the refresh interval
-        // TODO: Only re-draw when an event is performed, and draw onto a buffered image
-        Timer(1000 / 60) {
-            Components.pixelGrid.repaint()
-            // TODO: Change all but the PixelGrid to redraw when the tool is performed
-            Components.tiledView.repaint()
-            Components.colourPalette.repaint()
-            Components.layerList.repaint()
-            Components.animationPreview.repaint()
-            Components.animationTimeline.repaint()
-            Components.miniMap.repaint()
-        }.start()
     }
 
     Components.frame.isVisible = true

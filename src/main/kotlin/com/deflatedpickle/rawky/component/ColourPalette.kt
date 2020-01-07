@@ -1,5 +1,7 @@
 package com.deflatedpickle.rawky.component
 
+import com.deflatedpickle.rawky.api.annotations.RedrawActive
+import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
 import java.awt.BasicStroke
 import java.awt.Color
@@ -13,7 +15,8 @@ import javax.swing.JPanel
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
 
-class ColourPalette : JPanel() {
+@RedrawActive
+class ColourPalette : Component() {
     class ColourSwatch(var x: Int, var y: Int, val colour: Color) {
         init {
             Components.colourPalette.colourList.add(this)

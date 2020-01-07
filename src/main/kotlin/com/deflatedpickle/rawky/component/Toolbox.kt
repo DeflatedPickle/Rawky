@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.component
 
+import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.tool.Tool
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
@@ -11,17 +12,17 @@ import javax.swing.ButtonGroup
 import javax.swing.JPanel
 import javax.swing.JToggleButton
 
-class Toolbox : JPanel() {
+class Toolbox : Component() {
     // TODO: Maybe merge this into Action, seems useful
     abstract class LockCheck(name: String) : ActionStack.Action(name) {
         val frame = Components.animationTimeline.list.selectedIndex
         val layer = Components.layerList.table.selectedRow
 
-        val row = Components.pixelGrid.hoverRow
-        val column = Components.pixelGrid.hoverColumn
+        val row = PixelGrid.hoverRow
+        val column = PixelGrid.hoverColumn
 
         override fun check(): Boolean {
-            val colour = Components.pixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
+            val colour = PixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
             return when (Components.layerList.layerLockType(layer)) {
                 PixelGrid.Layer.LockType.OFF -> true
                 PixelGrid.Layer.LockType.COLOUR -> colour != null

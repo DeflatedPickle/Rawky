@@ -1,4 +1,4 @@
-package com.deflatedpickle.rawky.api
+package com.deflatedpickle.rawky.api.annotations
 
 @MustBeDocumented
 @Repeatable
