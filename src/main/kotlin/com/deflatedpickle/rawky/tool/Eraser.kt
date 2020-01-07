@@ -1,3 +1,5 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.tool
 
 import com.deflatedpickle.rawky.api.annotations.IntRange

@@ -5,6 +5,8 @@ plugins {
 
     id 'application'
 
+    id 'com.diffplug.gradle.spotless' version '3.27.0'
+
     id 'com.stehno.natives' version '0.3.1'
 
     id "com.github.johnrengelman.shadow" version "4.0.4"
@@ -122,6 +124,14 @@ jar {
 
 application {
     mainClassName = 'com.deflatedpickle.rawky.MainKt'
+}
+
+spotless {
+    kotlin {
+        ktlint()
+
+        licenseHeader '/* Copyright (c) $YEAR DeflatedPickle under the MIT license */\n\n'
+    }
 }
 
 shadowJar {

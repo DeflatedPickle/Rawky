@@ -1,9 +1,15 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.tool
 
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
-import java.awt.*
+import java.awt.BasicStroke
+import java.awt.Color
+import java.awt.Graphics2D
+import java.awt.MouseInfo
+import java.awt.Point
 import javax.swing.SwingUtilities
 
 class Dropper : HoverOutlineTool(Settings::class.java, "Dropper", listOf(Icons.colourPicker), Icons.colourPicker.image) {

@@ -1,14 +1,16 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.tool
 
 import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.util.ActionStack
-import org.reflections.Reflections
 import java.awt.Graphics2D
 import java.awt.Image
 import java.awt.Point
 import java.lang.reflect.Modifier
 import javax.swing.Icon
 import javax.swing.ImageIcon
+import org.reflections.Reflections
 
 abstract class Tool(val name: String, var iconList: List<Icon>, val cursor: Image, val selected: Boolean = false) {
     companion object {

@@ -1,3 +1,5 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
@@ -5,8 +7,19 @@ import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.widget.ColourButton
 import com.deflatedpickle.rawky.widget.RangeSlider
-import java.awt.*
-import javax.swing.*
+import java.awt.BorderLayout
+import java.awt.Color
+import java.awt.Dimension
+import java.awt.Graphics
+import java.awt.Graphics2D
+import javax.swing.BoxLayout
+import javax.swing.DefaultListModel
+import javax.swing.JLabel
+import javax.swing.JList
+import javax.swing.JPanel
+import javax.swing.ListCellRenderer
+import javax.swing.ListSelectionModel
+import javax.swing.UIManager
 import javax.swing.border.LineBorder
 
 @RedrawSensitive<PixelGrid>(PixelGrid::class)
@@ -31,8 +44,7 @@ class AnimationTimeline : Component() {
                 if (isSelected) {
                     background = UIManager.getColor("List.selectionBackground")
                     border = LineBorder(UIManager.getColor("List.selectionBackground"), 2)
-                }
-                else {
+                } else {
                     border = LineBorder(Color.BLACK, 2)
                 }
 
@@ -93,8 +105,7 @@ class AnimationTimeline : Component() {
 
             if (this > 0) {
                 list.addSelectionInterval(this - 1, this - 1)
-            }
-            else {
+            } else {
                 list.addSelectionInterval(0, 0)
             }
         }
@@ -115,8 +126,7 @@ class AnimationTimeline : Component() {
 
         try {
             Components.layerList.table.setRowSelectionInterval(0, 0)
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
         }
     }
 }

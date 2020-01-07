@@ -1,9 +1,12 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.api.component
 
 import com.deflatedpickle.rawky.api.annotations.RedrawActive
 import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import org.jdesktop.swingx.JXPanel
-import java.awt.event.*
 
 open class Component : JXPanel() {
     val sensitiveChildren = mutableListOf<Component>()

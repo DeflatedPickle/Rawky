@@ -1,3 +1,5 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.annotations.RedrawActive
@@ -9,9 +11,8 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
-import java.util.*
+import java.util.Collections
 import javax.swing.JMenuItem
-import javax.swing.JPanel
 import javax.swing.JPopupMenu
 import javax.swing.UIManager
 
@@ -59,8 +60,8 @@ class ColourPalette : Component() {
                 mouseToggled = false
 
                 for (i in colourList) {
-                    if (e.x > i.x && e.x < i.x + cellSize
-                            && e.y > i.y && e.y < i.y + cellSize) {
+                    if (e.x > i.x && e.x < i.x + cellSize &&
+                            e.y > i.y && e.y < i.y + cellSize) {
                         selectedColour = i
                         Collections.swap(colourList, colourList.indexOf(i), colourList.size - 1)
                         mouseOffsetX = e.x - i.x
@@ -96,8 +97,8 @@ class ColourPalette : Component() {
             add(JMenuItem("Delete").apply {
                 addActionListener {
                     for (i in colourList) {
-                        if (mouseX > i.x && mouseX < i.x + cellSize
-                                && mouseY > i.y && mouseY < i.y + cellSize) {
+                        if (mouseX > i.x && mouseX < i.x + cellSize &&
+                                mouseY > i.y && mouseY < i.y + cellSize) {
                             colourList.remove(i)
                             break
                         }
@@ -120,8 +121,8 @@ class ColourPalette : Component() {
             g2D.color = UIManager.getColor("List.selectionBackground")
             val strokeThickness = if (i == selectedColour) {
                 3f
-            } else if (mouseX > i.x && mouseX < i.x + cellSize
-                    && mouseY > i.y && mouseY < i.y + cellSize) {
+            } else if (mouseX > i.x && mouseX < i.x + cellSize &&
+                    mouseY > i.y && mouseY < i.y + cellSize) {
                 2f
             } else {
                 0f

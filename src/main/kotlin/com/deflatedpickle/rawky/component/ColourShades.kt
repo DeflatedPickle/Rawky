@@ -1,21 +1,22 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
-import org.jdesktop.swingx.JXButton
-import org.jdesktop.swingx.painter.CompoundPainter
-import org.jdesktop.swingx.painter.MattePainter
-import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.event.ActionEvent
-import javax.swing.JPanel
 import javax.swing.UIManager
 import javax.swing.border.Border
 import javax.swing.border.LineBorder
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
+import org.jdesktop.swingx.JXButton
+import org.jdesktop.swingx.painter.CompoundPainter
+import org.jdesktop.swingx.painter.MattePainter
+import uk.co.timwise.wraplayout.WrapLayout
 
 class ColourShades : Component() {
     // TODO: Split the amount for darker and lighter shades

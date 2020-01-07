@@ -1,10 +1,22 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.dialogue
 
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.util.Commands
 import com.deflatedpickle.rawky.util.Components
-import java.awt.*
-import javax.swing.*
+import java.awt.BorderLayout
+import java.awt.Dimension
+import java.awt.GridBagConstraints
+import java.awt.GridBagLayout
+import java.awt.Insets
+import javax.swing.JButton
+import javax.swing.JDialog
+import javax.swing.JLabel
+import javax.swing.JPanel
+import javax.swing.JSpinner
+import javax.swing.SpinnerNumberModel
+import javax.swing.SwingUtilities
 
 class New : JDialog(Components.frame, "New File", true) {
     val widthSpinner = JSpinner(SpinnerNumberModel(PixelGrid.columnAmount, 0, Int.MAX_VALUE, 16))

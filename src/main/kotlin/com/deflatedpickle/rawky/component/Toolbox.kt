@@ -1,16 +1,18 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.tool.Tool
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
-import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.ButtonGroup
 import javax.swing.JPanel
 import javax.swing.JToggleButton
+import uk.co.timwise.wraplayout.WrapLayout
 
 class Toolbox : Component() {
     // TODO: Maybe merge this into Action, seems useful

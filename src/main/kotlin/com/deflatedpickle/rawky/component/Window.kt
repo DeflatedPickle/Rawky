@@ -1,3 +1,5 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.component
 
 import com.alee.laf.WebLookAndFeel
@@ -6,13 +8,13 @@ import com.deflatedpickle.rawky.api.annotations.Enum
 import com.deflatedpickle.rawky.api.annotations.Options
 import com.deflatedpickle.rawky.api.annotations.Setter
 import com.deflatedpickle.rawky.api.annotations.Tooltip
+import com.deflatedpickle.rawky.dialogue.Settings as SettingsDialogue
 import com.deflatedpickle.rawky.util.Components
-import org.pushingpixels.substance.api.skin.SubstanceGraphiteElectricLookAndFeel
 import javax.swing.JFrame
 import javax.swing.LookAndFeel
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
-import com.deflatedpickle.rawky.dialogue.Settings as SettingsDialogue
+import org.pushingpixels.substance.api.skin.SubstanceGraphiteElectricLookAndFeel
 
 class Window : JFrame("Rawky") {
     @Options
@@ -26,8 +28,7 @@ class Window : JFrame("Rawky") {
         fun themeSetter() {
             if (laf.string != null) {
                 UIManager.setLookAndFeel(laf.string)
-            }
-            else if (laf.laf != null) {
+            } else if (laf.laf != null) {
                 UIManager.setLookAndFeel(laf.laf)
             }
 

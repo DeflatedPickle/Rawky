@@ -1,16 +1,21 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
+import java.awt.Color
+import java.awt.Dimension
+import javax.swing.JButton
+import javax.swing.JMenuItem
+import javax.swing.JPopupMenu
+import javax.swing.JSeparator
+import javax.swing.border.TitledBorder
 import org.jdesktop.swingx.JXButton
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter
 import uk.co.timwise.wraplayout.WrapLayout
-import java.awt.Color
-import java.awt.Dimension
-import javax.swing.*
-import javax.swing.border.TitledBorder
 
 class ColourLibrary : Component() {
     class Cell(val colour: Color, val button: JXButton)

@@ -1,3 +1,5 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.util
 
 import java.awt.Dimension
@@ -39,7 +41,7 @@ object Icons {
     val show = icon("show")
 
     val addElement = icon("add_element")
-    
+
     private fun icon(name: String): ImageIcon {
         return ImageIcon(ImageIO.read(ClassLoader.getSystemResource("friable/icons/$name.png")))
     }

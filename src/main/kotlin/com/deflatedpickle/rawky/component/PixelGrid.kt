@@ -1,21 +1,43 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.component
 
-import com.deflatedpickle.rawky.api.annotations.*
+import com.deflatedpickle.rawky.api.annotations.Colour
+import com.deflatedpickle.rawky.api.annotations.DoubleRange
 import com.deflatedpickle.rawky.api.annotations.Enum
 import com.deflatedpickle.rawky.api.annotations.IntRange
+import com.deflatedpickle.rawky.api.annotations.Options
+import com.deflatedpickle.rawky.api.annotations.RedrawActive
+import com.deflatedpickle.rawky.api.annotations.Tooltip
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.tool.Tool
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.LayoutMethod
-import org.jdesktop.swingx.util.ShapeUtils
-import java.awt.*
+import java.awt.AlphaComposite
+import java.awt.BasicStroke
+import java.awt.Color
+import java.awt.Dimension
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.awt.Point
+import java.awt.Polygon
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
 import java.awt.image.BufferedImage
-import javax.swing.*
-import kotlin.math.*
+import javax.swing.JMenu
+import javax.swing.JMenuItem
+import javax.swing.JPopupMenu
+import javax.swing.JScrollPane
+import javax.swing.SwingUtilities
+import kotlin.math.PI
+import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.min
+import kotlin.math.roundToInt
+import kotlin.math.sin
+import org.jdesktop.swingx.util.ShapeUtils
 
 @RedrawActive
 object PixelGrid : Component() {
@@ -348,8 +370,7 @@ object PixelGrid : Component() {
                                 this.grow(3, 3)
                                 g2D.fillRect(this.x, this.y, this.width, this.height)
                             }
-                        }
-                        else {
+                        } else {
                             g2D.fillPolygon(rectangle)
                         }
                     }
@@ -393,8 +414,7 @@ object PixelGrid : Component() {
                         this.grow(3, 3)
                         g2D.drawRect(this.x, this.y, this.width, this.height)
                     }
-                }
-                else {
+                } else {
                     g2D.drawPolygon(column)
                 }
             }

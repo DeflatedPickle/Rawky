@@ -1,3 +1,5 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.util
 
 import com.deflatedpickle.rawky.component.PixelGrid
@@ -63,8 +65,7 @@ object ActionStack {
 
         if (undoQueue.isNotEmpty() && undoQueue.last() is MultiAction && (undoQueue.last() as MultiAction).active) {
             (undoQueue.last() as MultiAction).stack.add(it)
-        }
-        else {
+        } else {
             Components.actionHistory.listModel.addElement(it.name)
             undoQueue.add(it)
         }

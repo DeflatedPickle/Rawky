@@ -1,7 +1,12 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.component
 
-import com.deflatedpickle.rawky.api.annotations.*
+import com.deflatedpickle.rawky.api.annotations.DoubleRange
 import com.deflatedpickle.rawky.api.annotations.IntRange
+import com.deflatedpickle.rawky.api.annotations.Options
+import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
+import com.deflatedpickle.rawky.api.annotations.Tooltip
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
 import java.awt.Graphics

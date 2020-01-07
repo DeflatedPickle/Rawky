@@ -1,12 +1,28 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.dialogue
 
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.widget.HyperLabel
 import com.pump.swing.CollapsibleContainer
-import org.jdesktop.swingx.JXPanel
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Component
+import java.awt.Desktop
+import java.awt.Dimension
+import java.awt.Font
 import java.net.URI
-import javax.swing.*
+import javax.swing.BorderFactory
+import javax.swing.BoxLayout
+import javax.swing.JButton
+import javax.swing.JDialog
+import javax.swing.JLabel
+import javax.swing.JPanel
+import javax.swing.JScrollPane
+import javax.swing.JSplitPane
+import javax.swing.JTextArea
+import javax.swing.SwingConstants
+import khttp.get
+import org.jdesktop.swingx.JXPanel
 
 class About : JDialog(Components.frame, "About", true) {
     init {
@@ -31,7 +47,7 @@ class About : JDialog(Components.frame, "About", true) {
             add(JSplitPane(JSplitPane.VERTICAL_SPLIT,
                     JScrollPane(
                             JTextArea(
-                                    khttp.get("https://raw.githubusercontent.com/DeflatedPickle/Rawky/master/LICENSE").text
+                                    get("https://raw.githubusercontent.com/DeflatedPickle/Rawky/master/LICENSE").text
                             )
                     ).apply {
                         border = BorderFactory.createTitledBorder("License")
@@ -84,12 +100,12 @@ class About : JDialog(Components.frame, "About", true) {
 
                                                         // This could be done better, but whatever, right?
                                                         // It's an about window! Who cares about these?
-                                                        var request = khttp.get("https://raw.githubusercontent.com/$v/master/LICENSE")
+                                                        var request = get("https://raw.githubusercontent.com/$v/master/LICENSE")
                                                         if (request.statusCode == 404) {
-                                                            request = khttp.get("https://raw.githubusercontent.com/$v/master/LICENSE.txt")
+                                                            request = get("https://raw.githubusercontent.com/$v/master/LICENSE.txt")
 
                                                             if (request.statusCode == 404) {
-                                                                request = khttp.get("https://raw.githubusercontent.com/$v/master/License.txt")
+                                                                request = get("https://raw.githubusercontent.com/$v/master/License.txt")
                                                             }
                                                         }
 

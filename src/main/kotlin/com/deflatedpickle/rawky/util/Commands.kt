@@ -1,3 +1,5 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.util
 
 import com.deflatedpickle.rawky.component.ColourPalette
@@ -10,13 +12,13 @@ import com.google.gson.GsonBuilder
 import com.google.gson.internal.LinkedTreeMap
 import com.icafe4j.image.gif.GIFTweaker
 import com.icafe4j.image.reader.GIFReader
-import org.antlr.v4.runtime.CharStreams
-import org.antlr.v4.runtime.CommonTokenStream
 import java.awt.Color
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import javax.swing.JFileChooser
 import javax.swing.filechooser.FileNameExtensionFilter
+import org.antlr.v4.runtime.CharStreams
+import org.antlr.v4.runtime.CommonTokenStream
 
 object Commands {
     val fileChooser = JFileChooser().apply {

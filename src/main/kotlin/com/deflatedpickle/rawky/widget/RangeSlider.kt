@@ -1,11 +1,13 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.widget
 
+import com.jidesoft.swing.RangeSlider as JRangeSlider
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.JPanel
 import javax.swing.JSpinner
 import javax.swing.SpinnerNumberModel
-import com.jidesoft.swing.RangeSlider as JRangeSlider
 
 abstract class RangeSlider<T : Number> : JPanel() {
     lateinit var slider: JRangeSlider

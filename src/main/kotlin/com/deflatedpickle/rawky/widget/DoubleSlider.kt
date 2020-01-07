@@ -1,9 +1,11 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.widget
 
 import javax.swing.JSlider
 
-class DoubleSlider(min: Double, max: Double, _value: Double, val factor: Double)
-    : JSlider((min * factor).toInt(), (max * factor).toInt(), (_value * factor).toInt()) {
+class DoubleSlider(min: Double, max: Double, _value: Double, val factor: Double) :
+    JSlider((min * factor).toInt(), (max * factor).toInt(), (_value * factor).toInt()) {
     var doubleMinimum: Double = min
         get() = field / this.factor
         set(value) {

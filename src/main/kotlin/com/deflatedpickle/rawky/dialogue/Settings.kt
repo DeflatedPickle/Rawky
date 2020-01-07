@@ -1,16 +1,23 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.dialogue
 
 import com.deflatedpickle.rawky.api.annotations.Options
 import com.deflatedpickle.rawky.util.Components
-import org.apache.commons.lang3.StringUtils
-import org.reflections.Reflections
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
-import javax.swing.*
+import javax.swing.JDialog
+import javax.swing.JFrame
+import javax.swing.JPanel
+import javax.swing.JScrollPane
+import javax.swing.JSplitPane
+import javax.swing.JTree
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
+import org.apache.commons.lang3.StringUtils
+import org.reflections.Reflections
 
 object Settings : JDialog(Components.frame, "Settings") {
     val reflections = Reflections("com.deflatedpickle.rawky.component")

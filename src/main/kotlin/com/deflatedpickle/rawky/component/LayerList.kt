@@ -1,12 +1,26 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
-import java.awt.*
-import java.util.*
-import javax.swing.*
+import java.awt.BorderLayout
+import java.awt.Color
+import java.awt.Dimension
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.util.EventObject
+import java.util.Vector
+import javax.swing.AbstractCellEditor
+import javax.swing.DefaultCellEditor
+import javax.swing.DefaultComboBoxModel
+import javax.swing.JCheckBox
+import javax.swing.JComboBox
+import javax.swing.JPanel
+import javax.swing.JTable
+import javax.swing.ListSelectionModel
 import javax.swing.table.DefaultTableModel
 import javax.swing.table.TableCellEditor
 import javax.swing.table.TableCellRenderer
@@ -78,10 +92,9 @@ class LayerList : Component() {
             cellRenderer = TableCellRenderer { _, value, _, _, _, _ ->
                 JCheckBox(if (value as Boolean) {
                     Icons.show
-                }
-                else {
+                } else {
                     Icons.hide
-                }).apply {isOpaque = false }
+                }).apply { isOpaque = false }
             }
         }
         columnModel.getColumn(3).apply {
@@ -115,8 +128,7 @@ class LayerList : Component() {
 
             if (this < 0) {
                 table.setRowSelectionInterval(this, this)
-            }
-            else {
+            } else {
                 if (this - 1 > 0) {
                     table.setRowSelectionInterval(this - 1, this - 1)
                 }
@@ -127,8 +139,7 @@ class LayerList : Component() {
     fun isLayerHidden(index: Int = table.selectedRow): Boolean {
         return if (index >= table.rowCount) {
             false
-        }
-        else {
+        } else {
             !((tableModel.dataVector[index] as Vector<*>)[2] as Boolean)
         }
     }

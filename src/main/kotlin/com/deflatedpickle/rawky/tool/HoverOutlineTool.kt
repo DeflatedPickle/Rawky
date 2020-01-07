@@ -1,3 +1,5 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.tool
 
 import com.deflatedpickle.rawky.component.PixelGrid
@@ -29,8 +31,7 @@ abstract class HoverOutlineTool(val settings: Class<*>, name: String, iconList: 
                         this.grow(3, 3)
                         g2D.drawRect(this.x, this.y, this.width, this.height)
                     }
-                }
-                else {
+                } else {
                     g2D.drawPolygon(it)
                 }
 

@@ -1,9 +1,10 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.annotations.Options
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
-import org.jdesktop.swingx.JXPanel
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.JLabel

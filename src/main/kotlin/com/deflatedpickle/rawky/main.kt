@@ -1,3 +1,5 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky
 
 import bibliothek.gui.dock.common.CControl
@@ -16,7 +18,17 @@ import com.deflatedpickle.rawky.util.Icons
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.awt.GridBagLayout
-import javax.swing.*
+import javax.swing.JButton
+import javax.swing.JCheckBox
+import javax.swing.JMenuBar
+import javax.swing.JPanel
+import javax.swing.JScrollPane
+import javax.swing.JSlider
+import javax.swing.JSpinner
+import javax.swing.JToolBar
+import javax.swing.SpinnerNumberModel
+import javax.swing.SwingUtilities
+import javax.swing.Timer
 
 fun main() {
     SwingUtilities.invokeLater {
@@ -79,9 +91,12 @@ fun main() {
                     val timer = Timer(1000 / this.value as Int) {
                         if (Components.animationPreview.frame < Components.animationTimeline.listModel.size() - 1) {
                             Components.animationPreview.frame++
-                        }
-                        else {
+
+                            Components.animationPreview.repaintWithChildren()
+                        } else {
                             Components.animationPreview.frame = 0
+
+                            Components.animationPreview.repaintWithChildren()
                         }
                     }.apply { start() }
 

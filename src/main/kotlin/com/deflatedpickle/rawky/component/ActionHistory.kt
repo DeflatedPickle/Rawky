@@ -1,6 +1,7 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.component
 
-import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
@@ -10,7 +11,6 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.DefaultListModel
 import javax.swing.JList
-import javax.swing.JPanel
 
 class ActionHistory : Component() {
     val listModel = DefaultListModel<String>()

@@ -1,15 +1,20 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.component
 
-import com.deflatedpickle.rawky.api.annotations.RedrawActive
 import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
-import java.awt.*
+import java.awt.BasicStroke
+import java.awt.Color
+import java.awt.Cursor
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.awt.Point
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
 import java.awt.geom.Rectangle2D
-import javax.swing.JPanel
 import kotlin.math.max
 import kotlin.math.min
 
@@ -38,8 +43,7 @@ class MiniMap : Component() {
                     if (Rectangle2D.Double((x * PixelGrid.scale) * scale, (y * PixelGrid.scale) * scale, (width * PixelGrid.scale) * scale, (height * PixelGrid.scale) * scale).contains(e.point)) {
                         cursor = Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR)
                         inside = true
-                    }
-                    else {
+                    } else {
                         cursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR)
                         inside = false
                     }

@@ -1,23 +1,42 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.util
 
 import com.bric.colorpicker.ColorPicker
 import com.bric.colorpicker.ColorPickerDialog
-import com.deflatedpickle.rawky.api.annotations.*
+import com.deflatedpickle.rawky.api.annotations.Colour
+import com.deflatedpickle.rawky.api.annotations.DoubleRange
 import com.deflatedpickle.rawky.api.annotations.Enum
 import com.deflatedpickle.rawky.api.annotations.IntRange
-import com.deflatedpickle.rawky.api.component.Component
-import com.deflatedpickle.rawky.component.*
+import com.deflatedpickle.rawky.api.annotations.Setter
+import com.deflatedpickle.rawky.api.annotations.Tooltip
+import com.deflatedpickle.rawky.component.ActionHistory
+import com.deflatedpickle.rawky.component.AnimationPreview
+import com.deflatedpickle.rawky.component.AnimationTimeline
+import com.deflatedpickle.rawky.component.ColourLibrary
+import com.deflatedpickle.rawky.component.ColourPalette
+import com.deflatedpickle.rawky.component.ColourShades
+import com.deflatedpickle.rawky.component.LayerList
+import com.deflatedpickle.rawky.component.MiniMap
+import com.deflatedpickle.rawky.component.TiledView
+import com.deflatedpickle.rawky.component.ToolOptions
+import com.deflatedpickle.rawky.component.Toolbox
+import com.deflatedpickle.rawky.component.Window
 import com.deflatedpickle.rawky.widget.DoubleSlider
 import com.deflatedpickle.rawky.widget.Slider
+import java.awt.Color
+import java.awt.Font
+import java.lang.reflect.Field
+import javax.swing.JComboBox
+import javax.swing.JComponent
+import javax.swing.JFrame
+import javax.swing.JLabel
+import javax.swing.JPanel
+import kotlin.math.roundToInt
 import org.apache.commons.lang3.StringUtils
 import org.jdesktop.swingx.JXButton
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter
-import java.awt.Color
-import java.awt.Font
-import java.lang.reflect.Field
-import javax.swing.*
-import kotlin.math.roundToInt
 
 object Components {
     val frame = Window()

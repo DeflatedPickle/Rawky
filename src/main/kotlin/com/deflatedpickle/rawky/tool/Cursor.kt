@@ -1,7 +1,8 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.tool
 
 import com.deflatedpickle.rawky.component.PixelGrid
-import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
 import java.awt.Point
 
