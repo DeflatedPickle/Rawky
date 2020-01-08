@@ -4,9 +4,11 @@ package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
+import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.event.ActionEvent
+import javax.swing.JSlider
 import javax.swing.UIManager
 import javax.swing.border.Border
 import javax.swing.border.LineBorder
@@ -19,6 +21,17 @@ import org.jdesktop.swingx.painter.MattePainter
 import uk.co.timwise.wraplayout.WrapLayout
 
 class ColourShades : Component() {
+    val shadesSlider = JSlider(3, 3 * 31).apply {
+        value = amount
+
+        addChangeListener {
+            Components.colourShades.amount = this.value
+            Components.colourShades.createShades()
+            Components.colourShades.updateShades()
+            Components.colourShades.repaint()
+        }
+    }
+
     // TODO: Split the amount for darker and lighter shades
     var amount = 14
     val buttonSize = Dimension(40, 20)
@@ -32,7 +45,10 @@ class ColourShades : Component() {
     lateinit var selectedButton: JXButton
 
     init {
-        isOpaque = false
+        toolbarWidgets[BorderLayout.PAGE_END] = listOf(
+                shadesSlider
+        )
+
         this.layout = WrapLayout(WrapLayout.LEFT, 0, 0)
 
         createShades()

@@ -5,14 +5,31 @@ package com.deflatedpickle.rawky.component
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.util.Icons
 import java.awt.BorderLayout
 import java.awt.Graphics2D
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import javax.swing.DefaultListModel
+import javax.swing.JButton
 import javax.swing.JList
 
 class ActionHistory : Component() {
+    val buttonUndo = JButton(Icons.undo).apply {
+        toolTipText = "Undo Action"
+        addActionListener { ActionStack.undo() }
+    }
+
+    val buttonRedo = JButton(Icons.redo).apply {
+        toolTipText = "Redo Action"
+        addActionListener { ActionStack.redo() }
+    }
+
+    val buttonTrash = JButton(Icons.trash).apply {
+        toolTipText = "Delete Action"
+        addActionListener { ActionStack.pop(Components.actionHistory.list.selectedIndex) }
+    }
+
     val listModel = DefaultListModel<String>()
     // TODO: Replace with a JTree
     // TODO: Add a tooltip that shows the change the action made
@@ -58,6 +75,13 @@ class ActionHistory : Component() {
     }
 
     init {
+        toolbarWidgets[BorderLayout.PAGE_START] = listOf(
+                buttonUndo,
+                buttonRedo,
+                "---",
+                buttonTrash
+        )
+
         isOpaque = false
         layout = BorderLayout()
 

@@ -5,19 +5,50 @@ package com.deflatedpickle.rawky.component
 import com.deflatedpickle.rawky.api.annotations.RedrawActive
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.util.Icons
 import java.awt.BasicStroke
+import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.util.Collections
+import javax.swing.JButton
 import javax.swing.JMenuItem
 import javax.swing.JPopupMenu
+import javax.swing.JSlider
 import javax.swing.UIManager
 
 @RedrawActive
 class ColourPalette : Component() {
+    val slider = JSlider(1, 100).apply {
+        this.value = 10
+        addChangeListener {
+            Components.colourPalette.scale = this.value / 10.0
+
+            with(this@ColourPalette.colourList.size * (this@ColourPalette.cellSize * this.value / 100)) {
+                this@ColourPalette.preferredSize = java.awt.Dimension(this, this)
+            }
+
+            this@ColourPalette.repaintWithChildren()
+        }
+    }
+
+    val buttonZoomOut = JButton(Icons.zoomOut).apply {
+        toolTipText = "Zoom Out"
+        addActionListener {
+            slider.value--
+        }
+    }
+
+    val buttonZoomIn = JButton(Icons.zoomIn).apply {
+        toolTipText = "Zoom In"
+        addActionListener {
+            slider.value++
+        }
+    }
+
     class ColourSwatch(var x: Int, var y: Int, val colour: Color) {
         init {
             Components.colourPalette.colourList.add(this)
@@ -38,6 +69,12 @@ class ColourPalette : Component() {
     var scale = 1.0
 
     init {
+        toolbarWidgets[BorderLayout.PAGE_END] = listOf(
+                buttonZoomOut,
+                slider,
+                buttonZoomIn
+        )
+
         addMouseMotionListener(object : MouseAdapter() {
             override fun mouseMoved(e: MouseEvent) {
                 mouseX = e.x

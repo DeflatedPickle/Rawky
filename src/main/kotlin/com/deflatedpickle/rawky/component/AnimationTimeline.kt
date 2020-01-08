@@ -5,6 +5,7 @@ package com.deflatedpickle.rawky.component
 import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.util.Icons
 import com.deflatedpickle.rawky.widget.ColourButton
 import com.deflatedpickle.rawky.widget.RangeSlider
 import java.awt.BorderLayout
@@ -14,6 +15,7 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 import javax.swing.BoxLayout
 import javax.swing.DefaultListModel
+import javax.swing.JButton
 import javax.swing.JLabel
 import javax.swing.JList
 import javax.swing.JPanel
@@ -28,6 +30,20 @@ class AnimationTimeline : Component() {
     val slider = RangeSlider.IntRangeSliderComponent(-10, 10, -2, 2)
     val pastColour = ColourButton(Color.YELLOW).apply { preferredSize = Dimension(32, slider.preferredSize.height) }
     val postColour = ColourButton(Color.MAGENTA).apply { preferredSize = Dimension(32, slider.preferredSize.height) }
+
+    val buttonNew = JButton(Icons.createNew).apply {
+        toolTipText = "New Frame"
+        addActionListener {
+            Components.animationTimeline.addFrame()
+        }
+    }
+
+    val buttonDelete = JButton(Icons.trash).apply {
+        toolTipText = "Delete Frame"
+        addActionListener {
+            Components.animationTimeline.removeFrame()
+        }
+    }
 
     val listModel = DefaultListModel<String>()
     val list = JList<String>(listModel).apply {
@@ -74,6 +90,17 @@ class AnimationTimeline : Component() {
     }
 
     init {
+        toolbarWidgets[BorderLayout.PAGE_START] = listOf(
+                pastColour,
+                slider,
+                postColour
+        )
+
+        toolbarWidgets[BorderLayout.PAGE_END] = listOf(
+                buttonNew,
+                buttonDelete
+        )
+
         isOpaque = false
         layout = BorderLayout()
 

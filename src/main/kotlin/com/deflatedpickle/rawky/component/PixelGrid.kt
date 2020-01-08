@@ -13,9 +13,11 @@ import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.tool.Tool
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.util.Icons
 import com.deflatedpickle.rawky.util.LayoutMethod
 import java.awt.AlphaComposite
 import java.awt.BasicStroke
+import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
@@ -26,10 +28,12 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
 import java.awt.image.BufferedImage
+import javax.swing.JButton
 import javax.swing.JMenu
 import javax.swing.JMenuItem
 import javax.swing.JPopupMenu
 import javax.swing.JScrollPane
+import javax.swing.JSlider
 import javax.swing.SwingUtilities
 import kotlin.math.PI
 import kotlin.math.abs
@@ -41,6 +45,28 @@ import org.jdesktop.swingx.util.ShapeUtils
 
 @RedrawActive
 object PixelGrid : Component() {
+    val slider = JSlider(25, 300).apply {
+        this.value = 50
+        addChangeListener {
+            scale = this.value / 50.0
+            PixelGrid.repaintWithChildren()
+        }
+    }
+
+    val buttonZoomOut = JButton(Icons.zoomOut).apply {
+        toolTipText = "Zoom Out"
+        addActionListener {
+            slider.value--
+        }
+    }
+
+    val buttonZoomIn = JButton(Icons.zoomIn).apply {
+        toolTipText = "Zoom In"
+        addActionListener {
+            slider.value++
+        }
+    }
+
     val SCROLLABLE_INSTANCE = JScrollPane(this.apply {
         preferredSize = Dimension(2048, 2048)
     }).apply {
@@ -175,7 +201,11 @@ object PixelGrid : Component() {
     }
 
     init {
-        isOpaque = false
+        toolbarWidgets[BorderLayout.PAGE_END] = listOf(
+                buttonZoomOut,
+                slider,
+                buttonZoomIn
+        )
 
         rectangleMatrix = refreshMatrix()
 

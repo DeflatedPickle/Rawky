@@ -16,6 +16,7 @@ import java.util.Vector
 import javax.swing.AbstractCellEditor
 import javax.swing.DefaultCellEditor
 import javax.swing.DefaultComboBoxModel
+import javax.swing.JButton
 import javax.swing.JCheckBox
 import javax.swing.JComboBox
 import javax.swing.JPanel
@@ -27,6 +28,27 @@ import javax.swing.table.TableCellRenderer
 
 @RedrawSensitive<PixelGrid>(PixelGrid::class)
 class LayerList : Component() {
+    val addButton = JButton(Icons.createNew).apply {
+        toolTipText = "New Layer"
+        addActionListener {
+            Components.layerList.addLayer()
+        }
+    }
+
+    val deleteButton = JButton(Icons.trash).apply {
+        toolTipText = "Delete Layer"
+        addActionListener {
+            Components.layerList.removeLayer()
+        }
+    }
+
+    init {
+        toolbarWidgets[BorderLayout.PAGE_END] = listOf(
+                addButton,
+                deleteButton
+        )
+    }
+
     val tableModel = DefaultTableModel(arrayOf(), arrayOf("Preview", "Name", "Visibility", "State")).apply {
         addTableModelListener {
             when (it.column) {

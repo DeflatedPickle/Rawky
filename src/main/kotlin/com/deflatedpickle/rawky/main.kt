@@ -5,6 +5,7 @@ package com.deflatedpickle.rawky
 import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
+import com.deflatedpickle.rawky.api.component.ComponentFrame
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.dialogue.New
 import com.deflatedpickle.rawky.menu.Edit
@@ -16,19 +17,13 @@ import com.deflatedpickle.rawky.util.Commands
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
 import java.awt.BorderLayout
-import java.awt.Dimension
-import java.awt.GridBagLayout
 import javax.swing.JButton
 import javax.swing.JCheckBox
 import javax.swing.JMenuBar
 import javax.swing.JPanel
 import javax.swing.JScrollPane
-import javax.swing.JSlider
-import javax.swing.JSpinner
 import javax.swing.JToolBar
-import javax.swing.SpinnerNumberModel
 import javax.swing.SwingUtilities
-import javax.swing.Timer
 
 fun main() {
     SwingUtilities.invokeLater {
@@ -80,127 +75,27 @@ fun main() {
         cControl.addDockable(tiledView)
         tiledView.isVisible = true
 
-        val animationPreview = DefaultSingleCDockable("animationPreview", "Animation Preview", JPanel().apply {
-            isOpaque = false
-            layout = BorderLayout()
-
-            add(JScrollPane(Components.animationPreview))
-
-            add(JToolBar().apply {
-                add(JSpinner(SpinnerNumberModel(1, 1, 240, 1)).apply {
-                    val timer = Timer(1000 / this.value as Int) {
-                        if (Components.animationPreview.frame < Components.animationTimeline.listModel.size() - 1) {
-                            Components.animationPreview.frame++
-
-                            Components.animationPreview.repaintWithChildren()
-                        } else {
-                            Components.animationPreview.frame = 0
-
-                            Components.animationPreview.repaintWithChildren()
-                        }
-                    }.apply { start() }
-
-                    addChangeListener {
-                        timer.delay = 1000 / this.value as Int
-                    }
-                })
-            }, BorderLayout.PAGE_END)
-        })
+        val animationPreview = DefaultSingleCDockable("animationPreview", "Animation Preview", ComponentFrame(Components.animationPreview))
         cControl.addDockable(animationPreview)
         animationPreview.isVisible = true
         grid.add(0.0, 0.3, 0.6, 1.0, tiledView, animationPreview)
 
-        val layerList = DefaultSingleCDockable("layerList", "Layer List", JPanel().apply {
-            isOpaque = false
-            layout = BorderLayout()
-
-            add(JScrollPane(Components.layerList))
-
-            add(JToolBar().apply {
-                add(JButton(Icons.createNew).apply {
-                    toolTipText = "New Layer"
-                    addActionListener {
-                        Components.layerList.addLayer()
-                    }
-                })
-                add(JButton(Icons.trash).apply {
-                    toolTipText = "Delete Layer"
-                    addActionListener {
-                        Components.layerList.removeLayer()
-                    }
-                })
-            }, BorderLayout.PAGE_END)
-        })
+        val layerList = DefaultSingleCDockable("layerList", "Layer List", ComponentFrame(Components.layerList))
         cControl.addDockable(layerList)
         layerList.isVisible = true
         grid.add(0.0, 1.0, 0.6, 1.0, layerList)
 
-        val pixelGrid = DefaultSingleCDockable("pixelGrid", "Pixel Grid", JPanel().apply {
-            isOpaque = false
-            layout = BorderLayout()
-
-            add(PixelGrid.SCROLLABLE_INSTANCE)
-
-            add(JToolBar().apply {
-                val slider = JSlider(25, 300).apply {
-                    this.value = 50
-                    addChangeListener {
-                        PixelGrid.scale = this.value / 50.0
-                        PixelGrid.repaint()
-                    }
-                }
-                add(JButton(Icons.zoomOut).apply {
-                    toolTipText = "Zoom Out"
-                    addActionListener {
-                        slider.value--
-                    }
-                })
-                add(slider)
-                add(JButton(Icons.zoomIn).apply {
-                    toolTipText = "Zoom In"
-                    addActionListener {
-                        slider.value++
-                    }
-                })
-            }, BorderLayout.PAGE_END)
-        })
+        val pixelGrid = DefaultSingleCDockable("pixelGrid", "Pixel Grid", ComponentFrame(PixelGrid))
         cControl.addDockable(pixelGrid)
         pixelGrid.isVisible = true
         grid.add(0.6, 0.3, 0.6, 1.4, pixelGrid)
 
-        val animationTimeline = DefaultSingleCDockable("animationTimeline", "Animation Timeline", JPanel().apply {
-            layout = BorderLayout()
-
-            add(JToolBar().apply {
-                layout = GridBagLayout()
-
-                add(Components.animationTimeline.pastColour)
-                add(Components.animationTimeline.slider)
-                add(Components.animationTimeline.postColour)
-            }, BorderLayout.PAGE_START)
-
-            add(JScrollPane(Components.animationTimeline))
-
-            add(JToolBar().apply {
-                add(JButton(Icons.createNew).apply {
-                    toolTipText = "New Frame"
-                    addActionListener {
-                        Components.animationTimeline.addFrame()
-                    }
-                })
-                add(JButton(Icons.trash).apply {
-                    toolTipText = "Delete Frame"
-                    addActionListener {
-                        Components.animationTimeline.removeFrame()
-                    }
-                })
-            }, BorderLayout.PAGE_END)
-        })
+        val animationTimeline = DefaultSingleCDockable("animationTimeline", "Animation Timeline", ComponentFrame(Components.animationTimeline))
         cControl.addDockable(animationTimeline)
         animationTimeline.isVisible = true
         grid.add(0.6, 1.4, 0.6, 0.6, animationTimeline)
 
-        val miniMap = DefaultSingleCDockable("miniMap", "Mini-Map", JScrollPane(Components.miniMap))
+        val miniMap = DefaultSingleCDockable("miniMap", "Mini-Map", ComponentFrame(Components.miniMap))
         cControl.addDockable(miniMap)
         miniMap.isVisible = true
         grid.add(1.0, 0.0, 0.4, 0.6, miniMap)
@@ -228,94 +123,21 @@ fun main() {
         toolOptions.isVisible = true
         grid.add(1.0, 0.4, 0.4, 0.6, toolOptions)
 
-        val colourShades = DefaultSingleCDockable("colourShades", "Colour Shades", JPanel().apply {
-            isOpaque = false
-            layout = BorderLayout()
-
-            add(JScrollPane(Components.colourShades))
-
-            add(JToolBar().apply {
-                add(JSlider(3, 3 * 31).apply {
-                    value = Components.colourShades.amount
-
-                    addChangeListener {
-                        Components.colourShades.amount = this.value
-                        Components.colourShades.createShades()
-                        Components.colourShades.updateShades()
-                        Components.colourShades.repaint()
-                    }
-                })
-            }, BorderLayout.PAGE_END)
-        })
+        val colourShades = DefaultSingleCDockable("colourShades", "Colour Shades", ComponentFrame(Components.colourShades))
         cControl.addDockable(colourShades)
         colourShades.isVisible = true
         grid.add(1.2, 0.4, 0.4, 0.2, colourShades)
 
-        val colourPalette = DefaultSingleCDockable("colourPalette", "Colour Palette", JPanel().apply {
-            isOpaque = false
-            layout = BorderLayout()
-
-            val widget = Components.colourPalette
-            JScrollPane(widget).also { add(it) }
-
-            // TODO: Move toolbars to an object, so this may be referred to when importing a colour palette and changed
-            add(JToolBar().apply {
-                val slider = JSlider(1, 100).apply {
-                    this.value = 10
-                    addChangeListener {
-                        Components.colourPalette.scale = this.value / 10.0
-
-                        with(widget.colourList.size * (widget.cellSize * this.value / 100)) {
-                            widget.preferredSize = Dimension(this, this)
-                        }
-                        widget.revalidate()
-                    }
-                }
-                add(JButton(Icons.zoomOut).apply {
-                    toolTipText = "Zoom Out"
-                    addActionListener {
-                        slider.value--
-                    }
-                })
-                add(slider)
-                add(JButton(Icons.zoomIn).apply {
-                    toolTipText = "Zoom In"
-                    addActionListener {
-                        slider.value++
-                    }
-                })
-            }, BorderLayout.PAGE_END)
-        })
+        val colourPalette = DefaultSingleCDockable("colourPalette", "Colour Palette", ComponentFrame(Components.colourPalette))
         cControl.addDockable(colourPalette)
         colourPalette.isVisible = true
 
-        val colourLibrary = DefaultSingleCDockable("colourLibrary", "Colour Library", JScrollPane(Components.colourLibrary))
+        val colourLibrary = DefaultSingleCDockable("colourLibrary", "Colour Library", ComponentFrame(Components.colourLibrary))
         cControl.addDockable(colourLibrary)
         colourLibrary.isVisible = true
         grid.add(1.2, 0.5, 0.4, 0.2, colourPalette, colourLibrary)
 
-        val actionHistory = DefaultSingleCDockable("actionHistory", "Action History", JPanel().apply {
-            isOpaque = false
-            layout = BorderLayout()
-
-            add(JScrollPane(Components.actionHistory))
-
-            add(JToolBar().apply {
-                add(JButton(Icons.undo).apply {
-                    toolTipText = "Undo Action"
-                    addActionListener { ActionStack.undo() }
-                })
-                add(JButton(Icons.redo).apply {
-                    toolTipText = "Redo Action"
-                    addActionListener { ActionStack.redo() }
-                })
-                addSeparator()
-                add(JButton(Icons.trash).apply {
-                    toolTipText = "Delete Action"
-                    addActionListener { ActionStack.pop(Components.actionHistory.list.selectedIndex) }
-                })
-            }, BorderLayout.PAGE_START)
-        })
+        val actionHistory = DefaultSingleCDockable("actionHistory", "Action History", ComponentFrame(Components.actionHistory))
         cControl.addDockable(actionHistory)
         actionHistory.isVisible = true
         grid.add(1.2, 0.0, 0.4, 0.4, actionHistory)

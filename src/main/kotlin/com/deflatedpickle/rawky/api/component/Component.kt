@@ -11,6 +11,10 @@ import org.jdesktop.swingx.JXPanel
 open class Component : JXPanel() {
     val sensitiveChildren = mutableListOf<Component>()
 
+    var toolbarWidgets = mutableMapOf<String, List<*>>()
+
+    lateinit var componentFrame: ComponentFrame
+
     init {
         for (i in this::class.annotations) {
             when (i) {
@@ -39,5 +43,9 @@ open class Component : JXPanel() {
     fun repaintWithChildren() {
         this.repaint()
         this.sensitiveChildren.forEach { it.repaint() }
+    }
+
+    open fun afterInit() {
+        componentFrame.makeToolbars()
     }
 }
