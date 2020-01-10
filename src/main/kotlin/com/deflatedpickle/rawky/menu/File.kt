@@ -25,11 +25,15 @@ class File : JMenu("File") {
         add(JMenuItem("Save As", Icons.picture).apply { addActionListener { Commands.save() } })
         add(JSeparator())
         add(JMenu("Import").apply {
+            add(JMenuItem("Image").apply { addActionListener { Commands.importImage() } })
             add(JMenu("Colour Palette").apply {
                 add(JMenuItem("JASC PAL").apply { addActionListener { Commands.importJascPal() } })
                 add(JMenuItem("RexPaint Palette (Colour Library)").apply { addActionListener { Commands.importRexPaintPalette(EComponent.COLOUR_LIBRARY) } })
                 add(JMenuItem("RexPaint Palette (Colour Palette)").apply { addActionListener { Commands.importRexPaintPalette(EComponent.COLOUR_PALETTE) } })
             })
+        })
+        add(JMenu("Export").apply {
+            add(JMenuItem("Image").apply { addActionListener { Commands.exportImage() } })
         })
     }
 }

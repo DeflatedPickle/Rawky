@@ -57,7 +57,7 @@ object Components {
 
     init {
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
-        frame.setSize(1200, 800)
+        frame.setSize(1400, 800)
 
         // toolbox.pencilButton.isSelected = true
 

@@ -98,7 +98,7 @@ fun main() {
         val miniMap = DefaultSingleCDockable("miniMap", "Mini-Map", ComponentFrame(Components.miniMap))
         cControl.addDockable(miniMap)
         miniMap.isVisible = true
-        grid.add(1.0, 0.0, 0.4, 0.6, miniMap)
+        grid.add(1.0, 0.1, 0.4, 0.3, miniMap)
 
         val colourPicker = DefaultSingleCDockable("colourPicker", "Colour Picker", JPanel().apply {
             isOpaque = false
@@ -116,31 +116,32 @@ fun main() {
         })
         cControl.addDockable(colourPicker)
         colourPicker.isVisible = true
-        grid.add(1.0, 0.3, 0.4, 0.4, colourPicker)
+        grid.add(1.0, 0.3, 0.4, 0.6, colourPicker)
 
         val toolOptions = DefaultSingleCDockable("toolOptions", "Tool Options", JScrollPane(Components.toolOptions))
         cControl.addDockable(toolOptions)
         toolOptions.isVisible = true
-        grid.add(1.0, 0.4, 0.4, 0.6, toolOptions)
+        grid.add(1.0, 0.7, 0.4, 0.4, toolOptions)
 
         val colourShades = DefaultSingleCDockable("colourShades", "Colour Shades", ComponentFrame(Components.colourShades))
         cControl.addDockable(colourShades)
         colourShades.isVisible = true
-        grid.add(1.2, 0.4, 0.4, 0.2, colourShades)
+        grid.add(1.2, 0.3, 0.4, 0.2, colourShades)
 
         val colourPalette = DefaultSingleCDockable("colourPalette", "Colour Palette", ComponentFrame(Components.colourPalette))
         cControl.addDockable(colourPalette)
         colourPalette.isVisible = true
+        grid.add(1.2, 0.5, 0.4, 0.2, colourPalette)
 
         val colourLibrary = DefaultSingleCDockable("colourLibrary", "Colour Library", ComponentFrame(Components.colourLibrary))
         cControl.addDockable(colourLibrary)
         colourLibrary.isVisible = true
-        grid.add(1.2, 0.5, 0.4, 0.2, colourPalette, colourLibrary)
+        grid.add(1.2, 0.6, 0.4, 0.2, colourLibrary)
 
         val actionHistory = DefaultSingleCDockable("actionHistory", "Action History", ComponentFrame(Components.actionHistory))
         cControl.addDockable(actionHistory)
         actionHistory.isVisible = true
-        grid.add(1.2, 0.0, 0.4, 0.4, actionHistory)
+        grid.add(1.6, 0.0, 0.4, 0.4, actionHistory)
 
         cControl.contentArea.deploy(grid)
     }
