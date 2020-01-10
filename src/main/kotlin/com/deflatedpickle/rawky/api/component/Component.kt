@@ -40,6 +40,13 @@ open class Component : JXPanel() {
         }
     }
 
+    override fun repaint() {
+        super.invalidate()
+        super.revalidate()
+
+        super.repaint()
+    }
+
     fun repaintWithChildren() {
         this.repaint()
         this.sensitiveChildren.forEach { it.repaint() }

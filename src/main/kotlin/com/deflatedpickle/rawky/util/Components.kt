@@ -22,6 +22,7 @@ import com.deflatedpickle.rawky.component.TiledView
 import com.deflatedpickle.rawky.component.ToolOptions
 import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.component.Window
+import com.deflatedpickle.rawky.transfer.ColourTransfer
 import com.deflatedpickle.rawky.widget.DoubleSlider
 import com.deflatedpickle.rawky.widget.Slider
 import java.awt.Color
@@ -65,6 +66,8 @@ object Components {
             colourShades.colour = colourPicker.color
             colourShades.updateShades()
         }
+
+        colourPicker.transferHandler = ColourTransfer.Import()
 
         animationTimeline.addFrame()
     }

@@ -4,6 +4,7 @@ package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.annotations.RedrawActive
 import com.deflatedpickle.rawky.api.component.Component
+import com.deflatedpickle.rawky.transfer.ColourTransfer
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
 import java.awt.BasicStroke
@@ -74,6 +75,8 @@ class ColourPalette : Component() {
                 slider,
                 buttonZoomIn
         )
+
+        transferHandler = ColourTransfer.Import()
 
         addMouseMotionListener(object : MouseAdapter() {
             override fun mouseMoved(e: MouseEvent) {
