@@ -136,7 +136,7 @@ object PixelGrid : Component() {
     }
 
     class Layer(override var parent: Frame) : MatrixItem<Frame> {
-        var pixelMatrix = PixelGrid.initMatrix<Layer, Cell>(parent = this)
+        var pixelMatrix = initMatrix<Layer, Cell>(parent = this)
         var visible = true
 
         enum class LockType {

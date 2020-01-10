@@ -59,7 +59,8 @@ fun main() {
                 addActionListener { ActionStack.redo() }
             })
         }, BorderLayout.PAGE_START)
-
+        
+        Components.frame.add(cControl.contentArea)
         val grid = CGrid(cControl)
 
         val toolbox = DefaultSingleCDockable("toolbox", "Toolbox", JScrollPane(Components.toolbox))

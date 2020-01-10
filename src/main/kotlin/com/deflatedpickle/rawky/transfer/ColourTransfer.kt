@@ -18,7 +18,7 @@ import javax.swing.TransferHandler
 
 class ColourTransfer(val colour: Color) : Transferable {
     companion object {
-        val dataFlavor = DataFlavor(Color::class.java, Color::class.java.canonicalName)
+        val dataFlavor = DataFlavor(Color::class.java, this::class.java.canonicalName)
 
         fun pressedExport(component: JComponent, colour: Color) {
             component.transferHandler = Export(colour)

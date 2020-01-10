@@ -4,6 +4,7 @@ package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
 import com.deflatedpickle.rawky.api.component.Component
+import com.deflatedpickle.rawky.transfer.RowTransfer
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
 import java.awt.BorderLayout
@@ -16,6 +17,7 @@ import java.util.Vector
 import javax.swing.AbstractCellEditor
 import javax.swing.DefaultCellEditor
 import javax.swing.DefaultComboBoxModel
+import javax.swing.DropMode
 import javax.swing.JButton
 import javax.swing.JCheckBox
 import javax.swing.JComboBox
@@ -42,13 +44,6 @@ class LayerList : Component() {
         }
     }
 
-    init {
-        toolbarWidgets[BorderLayout.PAGE_END] = listOf(
-                addButton,
-                deleteButton
-        )
-    }
-
     val tableModel = DefaultTableModel(arrayOf(), arrayOf("Preview", "Name", "Visibility", "State")).apply {
         addTableModelListener {
             when (it.column) {
@@ -57,6 +52,7 @@ class LayerList : Component() {
             }
         }
     }
+
     val table = JTable(tableModel).apply {
         autoResizeMode = JTable.AUTO_RESIZE_OFF
         showVerticalLines = false
@@ -128,6 +124,15 @@ class LayerList : Component() {
     }
 
     init {
+        toolbarWidgets[BorderLayout.PAGE_END] = listOf(
+                addButton,
+                deleteButton
+        )
+
+        table.dragEnabled = true
+        table.dropMode = DropMode.INSERT_ROWS
+        table.transferHandler = RowTransfer.ExportImport(table)
+
         isOpaque = false
         layout = BorderLayout()
 

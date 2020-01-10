@@ -4,6 +4,7 @@ package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
 import com.deflatedpickle.rawky.api.component.Component
+import com.deflatedpickle.rawky.transfer.RowTransfer
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
 import com.deflatedpickle.rawky.widget.ColourButton
@@ -15,6 +16,7 @@ import java.awt.Graphics
 import java.awt.Graphics2D
 import javax.swing.BoxLayout
 import javax.swing.DefaultListModel
+import javax.swing.DropMode
 import javax.swing.JButton
 import javax.swing.JLabel
 import javax.swing.JList
@@ -100,6 +102,10 @@ class AnimationTimeline : Component() {
                 buttonNew,
                 buttonDelete
         )
+
+        list.dragEnabled = true
+        list.dropMode = DropMode.INSERT
+        list.transferHandler = RowTransfer.ExportImport(list)
 
         isOpaque = false
         layout = BorderLayout()

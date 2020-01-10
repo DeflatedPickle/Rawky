@@ -63,7 +63,6 @@ object Components {
         frame.setSize(1400, 800)
 
         cControl.contentArea.isOpaque = false
-        frame.add(cControl.contentArea)
 
         // toolbox.pencilButton.isSelected = true
 
