@@ -19,6 +19,7 @@ import javax.swing.JButton
 import javax.swing.JMenuItem
 import javax.swing.JPopupMenu
 import javax.swing.JSlider
+import javax.swing.TransferHandler
 import javax.swing.UIManager
 
 @RedrawActive
@@ -62,10 +63,9 @@ class ColourPalette : Component() {
     var mouseX = 0
     var mouseY = 0
     var mouseToggled = false
-    var mouseOffsetX = 0
-    var mouseOffsetY = 0
 
     var selectedColour: ColourSwatch? = null
+    var hoverColour: ColourSwatch? = null
 
     var scale = 1.0
 
@@ -76,16 +76,30 @@ class ColourPalette : Component() {
                 buttonZoomIn
         )
 
-        transferHandler = ColourTransfer.Import()
+        transferHandler = ColourTransfer.Import
 
         addMouseMotionListener(object : MouseAdapter() {
             override fun mouseMoved(e: MouseEvent) {
                 mouseX = e.x
                 mouseY = e.y
+
+                for (i in colourList) {
+                    if (e.x > i.x && e.x < i.x + cellSize &&
+                            e.y > i.y && e.y < i.y + cellSize) {
+                        hoverColour = i
+                        break
+                    }
+                    else {
+                        hoverColour = null
+                    }
+                }
             }
 
             override fun mousePressed(e: MouseEvent) {
                 mouseToggled = true
+
+                transferHandler = hoverColour?.colour?.let { ColourTransfer.ExportImport(it) }
+                transferHandler?.let { (e.source as ColourPalette).transferHandler.exportAsDrag(e.source as ColourPalette, e, TransferHandler.MOVE) }
 
                 if (e.button == MouseEvent.BUTTON1) {
                     if (e.clickCount == 2) {
@@ -104,13 +118,9 @@ class ColourPalette : Component() {
                             e.y > i.y && e.y < i.y + cellSize) {
                         selectedColour = i
                         Collections.swap(colourList, colourList.indexOf(i), colourList.size - 1)
-                        mouseOffsetX = e.x - i.x
-                        mouseOffsetY = e.y - i.y
                         break
                     } else {
                         selectedColour = null
-                        mouseOffsetX = 0
-                        mouseOffsetY = 0
                     }
                 }
             }
@@ -118,11 +128,6 @@ class ColourPalette : Component() {
             override fun mouseDragged(e: MouseEvent) {
                 if (mouseToggled) {
                     mouseReleased(e)
-                }
-
-                if (selectedColour != null) {
-                    selectedColour!!.x = e.x - mouseOffsetX
-                    selectedColour!!.y = e.y - mouseOffsetY
                 }
             }
         }.apply { addMouseListener(this) })

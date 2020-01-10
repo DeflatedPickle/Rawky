@@ -42,7 +42,7 @@ class ColourLibrary : Component() {
     }
 
     init {
-        transferHandler = ColourTransfer.Import()
+        transferHandler = ColourTransfer.Import
 
         this.layout = WrapLayout()
         add(newButton)

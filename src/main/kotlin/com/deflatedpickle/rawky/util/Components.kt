@@ -67,7 +67,7 @@ object Components {
             colourShades.updateShades()
         }
 
-        colourPicker.transferHandler = ColourTransfer.Import()
+        colourPicker.transferHandler = ColourTransfer.Import
 
         animationTimeline.addFrame()
     }
