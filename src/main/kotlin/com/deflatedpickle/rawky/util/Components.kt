@@ -2,6 +2,7 @@
 
 package com.deflatedpickle.rawky.util
 
+import bibliothek.gui.dock.common.CControl
 import com.bric.colorpicker.ColorPicker
 import com.bric.colorpicker.ColorPickerDialog
 import com.deflatedpickle.rawky.api.annotations.Colour
@@ -42,6 +43,8 @@ import org.jdesktop.swingx.painter.MattePainter
 object Components {
     val frame = Window()
 
+    val cControl = CControl(frame)
+
     val toolbox = Toolbox()
     val tiledView = TiledView()
     val colourPicker = ColorPicker(false, true)
@@ -58,6 +61,9 @@ object Components {
     init {
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
         frame.setSize(1400, 800)
+
+        cControl.contentArea.isOpaque = false
+        frame.add(cControl.contentArea)
 
         // toolbox.pencilButton.isSelected = true
 

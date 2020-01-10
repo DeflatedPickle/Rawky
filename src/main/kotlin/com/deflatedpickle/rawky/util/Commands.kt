@@ -30,6 +30,10 @@ object Commands {
         addChoosableFileFilter(FileNameExtensionFilter("GIF (*.gif)", "gif"))
     }
 
+    val gridChooser = JFileChooser().apply {
+        addChoosableFileFilter(FileNameExtensionFilter("XML (*.xml)", "xml").also { this.fileFilter = it })
+    }
+
     val gson = GsonBuilder().setPrettyPrinting().create()
 
     fun new(width: Int = 16, height: Int = 16, withFrame: Boolean = true) {
@@ -243,6 +247,26 @@ object Commands {
                     }
                     // TODO: Add an option for delay
                     GIFTweaker.writeAnimatedGIF(frameList.toTypedArray(), IntArray(PixelGrid.frameList.size) { 1000 / 60 }, imageChooser.selectedFile.outputStream())
+                }
+            }
+        }
+    }
+
+    fun importGridLayout() {
+        if (gridChooser.showOpenDialog(Components.frame) == JFileChooser.APPROVE_OPTION) {
+            when (gridChooser.selectedFile.extension) {
+                "xml" -> {
+                    Components.cControl.readXML(gridChooser.selectedFile)
+                }
+            }
+        }
+    }
+
+    fun exportGridLayout() {
+        if (gridChooser.showSaveDialog(Components.frame) == JFileChooser.APPROVE_OPTION) {
+            when (gridChooser.selectedFile.extension) {
+                "xml" -> {
+                    Components.cControl.writeXML(gridChooser.selectedFile)
                 }
             }
         }

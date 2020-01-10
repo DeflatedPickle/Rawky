@@ -2,7 +2,6 @@
 
 package com.deflatedpickle.rawky
 
-import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
 import com.deflatedpickle.rawky.api.component.ComponentFrame
@@ -15,6 +14,7 @@ import com.deflatedpickle.rawky.menu.Program
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Commands
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.util.Components.cControl
 import com.deflatedpickle.rawky.util.Icons
 import java.awt.BorderLayout
 import javax.swing.JButton
@@ -59,10 +59,6 @@ fun main() {
                 addActionListener { ActionStack.redo() }
             })
         }, BorderLayout.PAGE_START)
-
-        val cControl = CControl(Components.frame)
-        cControl.contentArea.isOpaque = false
-        Components.frame.add(cControl.contentArea)
 
         val grid = CGrid(cControl)
 

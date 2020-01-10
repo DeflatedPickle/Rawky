@@ -31,9 +31,13 @@ class File : JMenu("File") {
                 add(JMenuItem("RexPaint Palette (Colour Library)").apply { addActionListener { Commands.importRexPaintPalette(EComponent.COLOUR_LIBRARY) } })
                 add(JMenuItem("RexPaint Palette (Colour Palette)").apply { addActionListener { Commands.importRexPaintPalette(EComponent.COLOUR_PALETTE) } })
             })
+            add(JSeparator())
+            add(JMenuItem("Dock Layout").apply { addActionListener { Commands.importGridLayout() } })
         })
         add(JMenu("Export").apply {
             add(JMenuItem("Image").apply { addActionListener { Commands.exportImage() } })
+            add(JSeparator())
+            add(JMenuItem("Dock Layout").apply { addActionListener { Commands.exportGridLayout() } })
         })
     }
 }
