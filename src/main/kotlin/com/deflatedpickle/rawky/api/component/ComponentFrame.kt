@@ -3,6 +3,7 @@
 package com.deflatedpickle.rawky.api.component
 
 import java.awt.BorderLayout
+import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.JComponent
 import javax.swing.JPanel
@@ -26,11 +27,12 @@ class ComponentFrame(val component: Component) : JPanel() {
                 layout = GridBagLayout()
             }
 
-            for (i in v) {
-                if (i is JComponent) {
-                    toolbar.add(i)
-                } else if (i == "---") {
-                    toolbar.addSeparator()
+            for ((comp, const) in v) {
+                when (comp) {
+                    is JComponent -> {
+                        toolbar.add(comp, const)
+                    }
+                    "---" -> toolbar.addSeparator()
                 }
             }
 

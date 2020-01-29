@@ -71,9 +71,9 @@ class ColourPalette : Component() {
 
     init {
         toolbarWidgets[BorderLayout.PAGE_END] = listOf(
-                buttonZoomOut,
-                slider,
-                buttonZoomIn
+                Pair(buttonZoomOut, null),
+                Pair(slider, fillX),
+                Pair(buttonZoomIn, null)
         )
 
         transferHandler = ColourTransfer.Import

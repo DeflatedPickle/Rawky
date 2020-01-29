@@ -34,6 +34,7 @@ class Window : JFrame("Rawky") {
 
             SwingUtilities.updateComponentTreeUI(Components.frame)
             SwingUtilities.updateComponentTreeUI(PixelGrid.contextMenu)
+            SwingUtilities.updateComponentTreeUI(Components.layerList.mergeButton.popupMenu)
             SwingUtilities.updateComponentTreeUI(SettingsDialogue)
         }
     }

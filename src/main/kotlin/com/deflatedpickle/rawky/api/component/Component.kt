@@ -7,11 +7,19 @@ import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import org.jdesktop.swingx.JXPanel
+import java.awt.GridBagConstraints
 
 open class Component : JXPanel() {
+    companion object {
+        val fillX = GridBagConstraints().apply {
+            fill = GridBagConstraints.HORIZONTAL
+            weightx = 1.0
+        }
+    }
+
     val sensitiveChildren = mutableListOf<Component>()
 
-    var toolbarWidgets = mutableMapOf<String, List<*>>()
+    var toolbarWidgets = mutableMapOf<String, List<Pair<*, GridBagConstraints?>>>()
 
     lateinit var componentFrame: ComponentFrame
 

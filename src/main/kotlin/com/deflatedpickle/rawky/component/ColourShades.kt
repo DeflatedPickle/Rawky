@@ -51,7 +51,7 @@ class ColourShades : Component() {
 
     init {
         toolbarWidgets[BorderLayout.PAGE_END] = listOf(
-                shadesSlider
+                Pair(shadesSlider, null)
         )
 
         this.layout = WrapLayout(WrapLayout.LEFT, 0, 0)

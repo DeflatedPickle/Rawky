@@ -76,10 +76,10 @@ class ActionHistory : Component() {
 
     init {
         toolbarWidgets[BorderLayout.PAGE_START] = listOf(
-                buttonUndo,
-                buttonRedo,
-                "---",
-                buttonTrash
+                Pair(buttonUndo, null),
+                Pair(buttonRedo, null),
+                Pair("---", null),
+                Pair(buttonTrash, null)
         )
 
         isOpaque = false

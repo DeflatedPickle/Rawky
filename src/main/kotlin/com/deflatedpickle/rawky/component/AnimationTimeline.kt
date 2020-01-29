@@ -93,14 +93,14 @@ class AnimationTimeline : Component() {
 
     init {
         toolbarWidgets[BorderLayout.PAGE_START] = listOf(
-                pastColour,
-                slider,
-                postColour
+                Pair(pastColour, null),
+                Pair(slider, fillX),
+                Pair(postColour, null)
         )
 
         toolbarWidgets[BorderLayout.PAGE_END] = listOf(
-                buttonNew,
-                buttonDelete
+                Pair(buttonNew, null),
+                Pair(buttonDelete, null)
         )
 
         list.dragEnabled = true

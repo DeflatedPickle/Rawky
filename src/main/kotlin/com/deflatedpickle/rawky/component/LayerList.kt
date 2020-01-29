@@ -2,11 +2,13 @@
 
 package com.deflatedpickle.rawky.component
 
+import com.alexandriasoftware.swing.JSplitButton
 import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.transfer.RowTransfer
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
+import com.deflatedpickle.rawky.util.VerticalDirection
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Dimension
@@ -21,9 +23,12 @@ import javax.swing.DropMode
 import javax.swing.JButton
 import javax.swing.JCheckBox
 import javax.swing.JComboBox
+import javax.swing.JMenuItem
 import javax.swing.JPanel
+import javax.swing.JPopupMenu
 import javax.swing.JTable
 import javax.swing.ListSelectionModel
+import javax.swing.SwingUtilities
 import javax.swing.table.DefaultTableModel
 import javax.swing.table.TableCellEditor
 import javax.swing.table.TableCellRenderer
@@ -42,6 +47,19 @@ class LayerList : Component() {
         addActionListener {
             Components.layerList.removeLayer()
         }
+    }
+
+    val mergeButton = JSplitButton("Merge").apply {
+        preferredSize = Dimension(80, 20)
+
+        popupMenu = (JPopupMenu().apply {
+            add(JMenuItem("Up").apply {
+                addActionListener { mergeLayers(VerticalDirection.NORTH) }
+            })
+            add(JMenuItem("Down").apply {
+                addActionListener { mergeLayers(VerticalDirection.SOUTH) }
+            })
+        })
     }
 
     val tableModel = DefaultTableModel(arrayOf(), arrayOf("Preview", "Name", "Visibility", "State")).apply {
@@ -124,17 +142,18 @@ class LayerList : Component() {
     }
 
     init {
+        isOpaque = false
+        layout = BorderLayout()
+
         toolbarWidgets[BorderLayout.PAGE_END] = listOf(
-                addButton,
-                deleteButton
+                Pair(addButton, null),
+                Pair(deleteButton, null),
+                Pair(mergeButton, null)
         )
 
         table.dragEnabled = true
         table.dropMode = DropMode.INSERT_ROWS
         table.transferHandler = RowTransfer.ExportImport(table)
-
-        isOpaque = false
-        layout = BorderLayout()
 
         add(table)
     }
@@ -173,5 +192,24 @@ class LayerList : Component() {
 
     fun layerLockType(index: Int = table.selectedRow): PixelGrid.Layer.LockType {
         return (tableModel.dataVector[index] as Vector<*>)[3] as PixelGrid.Layer.LockType
+    }
+
+    fun mergeLayers(direction: VerticalDirection) {
+        for (row in 0 until PixelGrid.rowAmount) {
+            for (column in 0 until PixelGrid.columnAmount) {
+                val cell = PixelGrid.frameList[Components.animationTimeline.list.selectedIndex]
+                        .layerList[table.selectedRow]
+                        .pixelMatrix[row][column]
+
+                if (cell.colour != null) {
+                    PixelGrid.frameList[Components.animationTimeline.list.selectedIndex]
+                            .layerList[table.selectedRow + if (direction == VerticalDirection.SOUTH) 1 else -1]
+                            .pixelMatrix[row][column] = cell
+                }
+            }
+        }
+
+        removeLayer()
+        PixelGrid.repaintWithChildren()
     }
 }

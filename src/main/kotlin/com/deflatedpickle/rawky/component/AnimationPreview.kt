@@ -33,7 +33,7 @@ class AnimationPreview : Component() {
     }
 
     init {
-        toolbarWidgets[BorderLayout.PAGE_END] = listOf(spinner)
+        toolbarWidgets[BorderLayout.PAGE_END] = listOf(Pair(spinner, fillX))
     }
 
     var frame = 0
