@@ -28,6 +28,7 @@ object Icons {
     val pencil = icon("pencil")
     val eraser = icon("eraser")
     val colourPicker = icon("colour_picker")
+    val bucket = icon("paint_bucket")
 
     val arrow = icon("arrow")
 
