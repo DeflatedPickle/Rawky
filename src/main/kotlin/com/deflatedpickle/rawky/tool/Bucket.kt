@@ -3,6 +3,7 @@
 package com.deflatedpickle.rawky.tool
 
 import com.deflatedpickle.rawky.api.annotations.Category
+import com.deflatedpickle.rawky.api.annotations.IntOpt
 import com.deflatedpickle.rawky.api.annotations.IntRangeOpt
 import com.deflatedpickle.rawky.api.annotations.Options
 import com.deflatedpickle.rawky.api.annotations.Tooltip
@@ -11,6 +12,7 @@ import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
+import me.xdrop.fuzzywuzzy.FuzzySearch
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Point
@@ -21,12 +23,45 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
     @Options
     object Settings {
         @Category
-        object Ranges {
+        object RGB {
             @IntRangeOpt(0, 255)
-            @Tooltip("Change the range of opacity to fill")
+            @Tooltip("Change the range of red to fill")
             @JvmField
-            var alphaRange = 0..255
+            var red = 0..255
+
+            @IntRangeOpt(0, 255)
+            @Tooltip("Change the range of green to fill")
+            @JvmField
+            var green = 0..255
+
+            @IntRangeOpt(0, 255)
+            @Tooltip("Change the range of blue to fill")
+            @JvmField
+            var blue = 0..255
         }
+
+        @Category
+        object HSB {
+            @IntRangeOpt(0, 360)
+            @Tooltip("Change the range of hue to fill")
+            @JvmField
+            var hue = 0..360
+
+            @IntRangeOpt(0, 360)
+            @Tooltip("Change the range of saturation to fill")
+            @JvmField
+            var saturation = 0..360
+
+            @IntRangeOpt(0, 360)
+            @Tooltip("Change the range of brightness to fill")
+            @JvmField
+            var brightness = 0..360
+        }
+
+        @IntRangeOpt(0, 255)
+        @Tooltip("Change the range of opacity to fill")
+        @JvmField
+        var alpha = 0..255
     }
 
     override fun perform(button: Int, dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
@@ -49,7 +84,18 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
                                 this.second in 0 until PixelGrid.columnAmount) {
                             val cell = PixelGrid.frameList[frame].layerList[layer].pixelMatrix[this.first][this.second]
 
-                            if (cell.colour.rgb == clickedColour.rgb && cell.colour.alpha in Settings.Ranges.alphaRange) {
+                            val colour = cell.colour
+                            val rgb = cell.colour.rgb
+                            val hsb = Color.RGBtoHSB(colour.red, colour.green, colour.blue, null)
+
+                            if (rgb == clickedColour.rgb
+                                    && colour.red in Settings.RGB.red
+                                    && colour.green in Settings.RGB.green
+                                    && colour.blue in Settings.RGB.blue
+                                    && hsb[0] in (Settings.HSB.hue.first.toFloat() / 360)..(Settings.HSB.hue.last.toFloat() / 360)
+                                    && hsb[1] in (Settings.HSB.saturation.first.toFloat() / 360)..(Settings.HSB.saturation.last.toFloat() / 360)
+                                    && hsb[2] in (Settings.HSB.brightness.first.toFloat() / 360)..(Settings.HSB.brightness.last.toFloat() / 360)
+                                    && colour.alpha in Settings.alpha) {
                                 oldColours[cell] = cell.colour
                                 cell.colour = shade
 

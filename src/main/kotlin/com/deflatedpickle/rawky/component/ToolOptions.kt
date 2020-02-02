@@ -4,11 +4,13 @@ package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.annotations.Options
 import com.deflatedpickle.rawky.api.component.Component
+import com.deflatedpickle.rawky.tool.Tool
 import com.deflatedpickle.rawky.util.Components
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.JLabel
 import javax.swing.SwingConstants
+import kotlin.reflect.full.allSupertypes
 
 class ToolOptions : Component() {
     object StickEast : GridBagConstraints() {
