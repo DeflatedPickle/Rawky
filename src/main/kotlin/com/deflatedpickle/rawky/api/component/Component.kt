@@ -4,10 +4,10 @@ package com.deflatedpickle.rawky.api.component
 
 import com.deflatedpickle.rawky.api.annotations.RedrawActive
 import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
+import java.awt.GridBagConstraints
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import org.jdesktop.swingx.JXPanel
-import java.awt.GridBagConstraints
 
 open class Component : JXPanel() {
     companion object {

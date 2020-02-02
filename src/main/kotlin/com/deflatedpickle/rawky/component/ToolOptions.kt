@@ -48,6 +48,10 @@ class ToolOptions : Component() {
                         Components.processAnnotations(this, field)
                     }
                 }
+
+                for (subClazz in clazz.classes) {
+                    Components.processAnnotations(this, subClazz)
+                }
             }
         }
 

@@ -17,14 +17,6 @@ import org.jdesktop.swingx.JXButton
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter
 import uk.co.timwise.wraplayout.WrapLayout
-import java.awt.datatransfer.DataFlavor
-import java.awt.datatransfer.StringSelection
-import java.awt.datatransfer.Transferable
-import java.awt.dnd.DnDConstants
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
-import javax.swing.JComponent
-import javax.swing.TransferHandler
 
 class ColourLibrary : Component() {
     class Cell(val colour: Color, val button: JXButton)

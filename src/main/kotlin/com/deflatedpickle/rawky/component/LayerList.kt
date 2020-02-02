@@ -28,7 +28,6 @@ import javax.swing.JPanel
 import javax.swing.JPopupMenu
 import javax.swing.JTable
 import javax.swing.ListSelectionModel
-import javax.swing.SwingUtilities
 import javax.swing.table.DefaultTableModel
 import javax.swing.table.TableCellEditor
 import javax.swing.table.TableCellRenderer

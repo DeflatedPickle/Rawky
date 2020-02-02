@@ -3,7 +3,6 @@
 package com.deflatedpickle.rawky.api.component
 
 import java.awt.BorderLayout
-import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.JComponent
 import javax.swing.JPanel

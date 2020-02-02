@@ -2,7 +2,7 @@
 
 package com.deflatedpickle.rawky.tool
 
-import com.deflatedpickle.rawky.api.annotations.IntRange
+import com.deflatedpickle.rawky.api.annotations.IntOpt
 import com.deflatedpickle.rawky.api.annotations.Options
 import com.deflatedpickle.rawky.api.annotations.Tooltip
 import com.deflatedpickle.rawky.component.PixelGrid
@@ -18,13 +18,13 @@ import javax.swing.UIManager
 class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", listOf(Icons.pencil), Icons.pencil.image, true) {
     @Options
     object Settings {
-        @IntRange(1, 9)
+        @IntOpt(1, 9)
         @Tooltip("Change the size of the pencil")
         @JvmField
         var size = 1
     }
 
-    override fun perform(button: Int, dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
+    override fun perform(button: kotlin.Int, dragged: Boolean, point: Point, lastPoint: Point?, clickCount: kotlin.Int) {
         if (PixelGrid
                         .frameList[Components.animationTimeline.list.selectedIndex]
                         .layerList[Components.layerList.table.selectedRow]
@@ -35,14 +35,14 @@ class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", listOf(Icons.pen
                 // There'll only be one new value
                 val newValue = Components.colourShades.selectedShade
                 // But there can be multiple old values
-                val oldValues = mutableListOf<MutableList<Color?>>()
+                val oldValues = mutableListOf<MutableList<Color>>()
 
                 val size = Settings.size
 
                 override fun perform() {
                     if (check()) {
                         for (sizeRow in 0 until size) {
-                            val list = mutableListOf<Color?>()
+                            val list = mutableListOf<Color>()
                             for (sizeColumn in 0 until size) {
                                 with(PixelGrid.frameList[frame].layerList[layer].pixelMatrix[row + sizeRow][column + sizeColumn]) {
                                     list.add(this.colour)

@@ -5,10 +5,12 @@ package com.deflatedpickle.rawky.util
 import bibliothek.gui.dock.common.CControl
 import com.bric.colorpicker.ColorPicker
 import com.bric.colorpicker.ColorPickerDialog
+import com.deflatedpickle.rawky.api.annotations.Category
 import com.deflatedpickle.rawky.api.annotations.Colour
-import com.deflatedpickle.rawky.api.annotations.DoubleRange
+import com.deflatedpickle.rawky.api.annotations.DoubleOpt
 import com.deflatedpickle.rawky.api.annotations.Enum
-import com.deflatedpickle.rawky.api.annotations.IntRange
+import com.deflatedpickle.rawky.api.annotations.IntOpt
+import com.deflatedpickle.rawky.api.annotations.IntRangeOpt
 import com.deflatedpickle.rawky.api.annotations.Setter
 import com.deflatedpickle.rawky.api.annotations.Tooltip
 import com.deflatedpickle.rawky.component.ActionHistory
@@ -25,18 +27,27 @@ import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.component.Window
 import com.deflatedpickle.rawky.transfer.ColourTransfer
 import com.deflatedpickle.rawky.widget.DoubleSlider
+import com.deflatedpickle.rawky.widget.RangeSlider
 import com.deflatedpickle.rawky.widget.Slider
 import java.awt.Color
 import java.awt.Font
+import java.awt.GridBagLayout
 import java.lang.reflect.Field
+import javax.swing.BorderFactory
+import javax.swing.JButton
 import javax.swing.JComboBox
 import javax.swing.JComponent
 import javax.swing.JFrame
 import javax.swing.JLabel
 import javax.swing.JPanel
+import javax.swing.JScrollPane
+import javax.swing.border.EtchedBorder
 import kotlin.math.roundToInt
 import org.apache.commons.lang3.StringUtils
 import org.jdesktop.swingx.JXButton
+import org.jdesktop.swingx.JXCollapsiblePane
+import org.jdesktop.swingx.JXPanel
+import org.jdesktop.swingx.VerticalLayout
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter
 
@@ -92,7 +103,7 @@ object Components {
                     setter = annotation.value
                     continue@loop
                 }
-                is IntRange -> {
+                is IntOpt -> {
                     Slider.IntSliderComponent(annotation.min, annotation.max, field.getInt(null)).apply {
                         with(slider) {
                             value = field.getInt(null)
@@ -117,7 +128,7 @@ object Components {
                         }
                     }
                 }
-                is DoubleRange -> {
+                is DoubleOpt -> {
                     Slider.DoubleSliderComponent(annotation.min, annotation.max, field.getDouble(null)).apply {
                         with(slider as DoubleSlider) {
                             value = (field.getDouble(null) * factor).toInt()
@@ -129,6 +140,25 @@ object Components {
                             addMouseWheelListener {
                                 slider.value += (it.wheelRotation * factor).roundToInt()
                                 spinner.value = this.doubleValue
+                            }
+                        }
+                    }
+                }
+                is IntRangeOpt -> {
+                    val range = field.get(null) as IntRange
+                    RangeSlider.IntRangeSliderComponent(annotation.min, annotation.max, range.first, range.last).apply {
+                        with(slider) {
+                            addChangeListener {
+                                field.set(null, lowValue..highValue)
+                            }
+
+                            addMouseWheelListener {
+                                if (slider.lowValue + it.wheelRotation in range) {
+                                    slider.lowValue += it.wheelRotation
+                                }
+                                slider.highValue += it.wheelRotation
+                                pastSpinner.value = this.lowValue
+                                postSpinner.value = this.highValue
                             }
                         }
                     }
@@ -172,7 +202,7 @@ object Components {
             }
             parent.add(widget, ToolOptions.FillHorizontal)
 
-            // Second loop, for not-component annotations
+            // Second loop, for non-component annotations
             when (annotation) {
                 is Tooltip -> {
                     label?.toolTipText = annotation.string
@@ -181,6 +211,50 @@ object Components {
             }
 
             return widget
+        }
+
+        return null
+    }
+
+    fun processAnnotations(parent: JPanel, clazz: Class<*>): JComponent? {
+        loop@ for (annotation in clazz.annotations) {
+            val widget: JComponent = when (annotation) {
+                is Category -> JPanel().apply {
+                    val collapsible = object : JXCollapsiblePane() {
+                        init {
+                            isCollapsed = true
+
+                            val frame = JXPanel().apply {
+                                layout = GridBagLayout()
+                            }
+
+                            for (field in clazz.declaredFields) {
+                                if (field.name != "INSTANCE") {
+                                    processAnnotations(frame, field)
+                                }
+                            }
+
+                            add(JScrollPane(frame).apply {
+                                border = BorderFactory.createEmptyBorder()
+                            })
+                        }
+                    }
+
+                    layout = VerticalLayout()
+                    border = BorderFactory.createTitledBorder(EtchedBorder(), clazz.simpleName)
+
+                    add(JButton(collapsible.actionMap[JXCollapsiblePane.TOGGLE_ACTION]).apply {
+                        text = text.capitalize()
+                    })
+                    add(collapsible)
+                }
+                is Metadata -> continue@loop
+                else -> JLabel("${annotation.annotationClass.qualifiedName} is unsupported!").apply {
+                    font = font.deriveFont(Font.BOLD)
+                    foreground = Color.RED
+                }
+            }
+            parent.add(widget, ToolOptions.FillHorizontal)
         }
 
         return null
