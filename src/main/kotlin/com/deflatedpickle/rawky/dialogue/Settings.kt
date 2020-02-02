@@ -18,6 +18,7 @@ import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.DefaultTreeModel
 import org.apache.commons.lang3.StringUtils
 import org.reflections.Reflections
+import kotlin.reflect.KClass
 
 object Settings : JDialog(Components.frame, "Settings") {
     val reflections = Reflections("com.deflatedpickle.rawky.component")

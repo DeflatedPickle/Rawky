@@ -3,12 +3,17 @@
 package com.deflatedpickle.rawky.tool
 
 import com.deflatedpickle.rawky.api.annotations.Category
+import com.deflatedpickle.rawky.api.annotations.Enum
 import com.deflatedpickle.rawky.api.annotations.IntOpt
 import com.deflatedpickle.rawky.api.annotations.IntRangeOpt
 import com.deflatedpickle.rawky.api.annotations.Options
+import com.deflatedpickle.rawky.api.annotations.Setter
 import com.deflatedpickle.rawky.api.annotations.Tooltip
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.component.Toolbox
+import com.deflatedpickle.rawky.tool.fill.Fill
+import com.deflatedpickle.rawky.tool.fill.Solid
+import com.deflatedpickle.rawky.tool.fill.Stipple
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
@@ -22,6 +27,11 @@ import javax.swing.UIManager
 class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.bucket), Icons.bucket.image, false) {
     @Options
     object Settings {
+        @Enum("com.deflatedpickle.rawky.tool.Bucket\$FillType")
+        @Tooltip("Changes the fill the bucket uses")
+        @JvmField
+        var fill = FillType.SOLID
+
         @Category
         object RGB {
             @IntRangeOpt(0, 255)
@@ -64,6 +74,11 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
         var alpha = 0..255
     }
 
+    enum class FillType(val instance: Fill) {
+        SOLID(Solid()),
+        STIPPLE(Stipple())
+    }
+
     override fun perform(button: Int, dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
         val pixel = object : Toolbox.LockCheck(this.name) {
             val shade = Components.colourShades.selectedShade
@@ -97,7 +112,8 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
                                     && hsb[2] in (Settings.HSB.brightness.first.toFloat() / 360)..(Settings.HSB.brightness.last.toFloat() / 360)
                                     && colour.alpha in Settings.alpha) {
                                 oldColours[cell] = cell.colour
-                                cell.colour = shade
+
+                                Settings.fill.instance.perform(cell, this.first, this.second, shade)
 
                                 cellList.add(Pair(this.first, this.second + 1))
                                 cellList.add(Pair(this.first, this.second - 1))

@@ -50,6 +50,8 @@ import org.jdesktop.swingx.JXPanel
 import org.jdesktop.swingx.VerticalLayout
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter
+import kotlin.reflect.KClass
+import kotlin.reflect.full.companionObjectInstance
 
 object Components {
     val frame = Window()
@@ -95,14 +97,9 @@ object Components {
             parent.add(label, ToolOptions.StickEast)
         }
 
-        var setter: String? = null
         loop@ for (annotation in field.annotations) {
             val widget: JComponent = when (annotation) {
                 // TODO: Add more argument types
-                is Setter -> {
-                    setter = annotation.value
-                    continue@loop
-                }
                 is IntOpt -> {
                     Slider.IntSliderComponent(annotation.min, annotation.max, field.getInt(null)).apply {
                         with(slider) {
@@ -189,7 +186,9 @@ object Components {
                         addActionListener {
                             field.set(null, clazz.enumConstants[this.selectedIndex])
 
-                            field.declaringClass.getMethod(setter).invoke(Window.Settings)
+                            if (annotation.setter != StringUtils.EMPTY) {
+                                field.declaringClass.getMethod(annotation.setter).invoke(field.declaringClass.kotlin.objectInstance)
+                            }
                         }
                     }
                 }

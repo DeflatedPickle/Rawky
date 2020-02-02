@@ -19,8 +19,7 @@ import org.pushingpixels.substance.api.skin.SubstanceGraphiteElectricLookAndFeel
 class Window : JFrame("Rawky") {
     @Options
     object Settings {
-        @Setter("themeSetter")
-        @Enum("com.deflatedpickle.rawky.component.Window\$LAF")
+        @Enum("com.deflatedpickle.rawky.component.Window\$LAF", "themeSetter")
         @Tooltip("Changes how the program looks")
         @JvmField
         var laf = LAF.NATIVE
