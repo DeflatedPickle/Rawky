@@ -17,7 +17,6 @@ import com.deflatedpickle.rawky.tool.fill.Stipple
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
-import me.xdrop.fuzzywuzzy.FuzzySearch
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Point
@@ -87,6 +86,8 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
             // The cell and the colour it used to be
             val oldColours = mutableMapOf<PixelGrid.Cell, Color>()
 
+            val colourList = mutableMapOf<Pair<Int, Int>, PixelGrid.Cell>()
+
             override fun perform() {
                 val cellList = ArrayDeque<Pair<Int, Int>>()
 
@@ -99,21 +100,8 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
                                 this.second in 0 until PixelGrid.columnAmount) {
                             val cell = PixelGrid.frameList[frame].layerList[layer].pixelMatrix[this.first][this.second]
 
-                            val colour = cell.colour
-                            val rgb = cell.colour.rgb
-                            val hsb = Color.RGBtoHSB(colour.red, colour.green, colour.blue, null)
-
-                            if (rgb == clickedColour.rgb
-                                    && colour.red in Settings.RGB.red
-                                    && colour.green in Settings.RGB.green
-                                    && colour.blue in Settings.RGB.blue
-                                    && hsb[0] in (Settings.HSB.hue.first.toFloat() / 360)..(Settings.HSB.hue.last.toFloat() / 360)
-                                    && hsb[1] in (Settings.HSB.saturation.first.toFloat() / 360)..(Settings.HSB.saturation.last.toFloat() / 360)
-                                    && hsb[2] in (Settings.HSB.brightness.first.toFloat() / 360)..(Settings.HSB.brightness.last.toFloat() / 360)
-                                    && colour.alpha in Settings.alpha) {
-                                oldColours[cell] = cell.colour
-
-                                Settings.fill.instance.perform(cell, this.first, this.second, shade)
+                            if (!colourList.containsKey(this)) {
+                                colourList[this] = cell
 
                                 cellList.add(Pair(this.first, this.second + 1))
                                 cellList.add(Pair(this.first, this.second - 1))
@@ -121,6 +109,25 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
                                 cellList.add(Pair(this.first - 1, this.second))
                             }
                         }
+                    }
+                }
+
+                for ((pair, cell) in colourList) {
+                    val colour = cell.colour
+                    val rgb = colour.rgb
+                    val hsb = Color.RGBtoHSB(colour.red, colour.green, colour.blue, null)
+
+                    if (rgb == clickedColour.rgb
+                            && colour.red in Settings.RGB.red
+                            && colour.green in Settings.RGB.green
+                            && colour.blue in Settings.RGB.blue
+                            && hsb[0] in (Settings.HSB.hue.first.toFloat() / 360)..(Settings.HSB.hue.last.toFloat() / 360)
+                            && hsb[1] in (Settings.HSB.saturation.first.toFloat() / 360)..(Settings.HSB.saturation.last.toFloat() / 360)
+                            && hsb[2] in (Settings.HSB.brightness.first.toFloat() / 360)..(Settings.HSB.brightness.last.toFloat() / 360)
+                            && colour.alpha in Settings.alpha) {
+                        oldColours[cell] = cell.colour
+
+                        Settings.fill.instance.perform(cell, pair.first, pair.second, shade)
                     }
                 }
             }

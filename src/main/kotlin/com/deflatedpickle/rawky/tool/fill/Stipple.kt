@@ -8,8 +8,5 @@ class Stipple : Fill {
         if (row % 2 == column % 2) {
             cell.colour = shade
         }
-        else {
-            cell.colour = Color(shade.red, shade.green, shade.blue, 0)
-        }
     }
 }
