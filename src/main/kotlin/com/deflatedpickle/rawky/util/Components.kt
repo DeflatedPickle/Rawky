@@ -11,7 +11,7 @@ import com.deflatedpickle.rawky.api.annotations.DoubleOpt
 import com.deflatedpickle.rawky.api.annotations.Enum
 import com.deflatedpickle.rawky.api.annotations.IntOpt
 import com.deflatedpickle.rawky.api.annotations.IntRangeOpt
-import com.deflatedpickle.rawky.api.annotations.Setter
+import com.deflatedpickle.rawky.api.annotations.Toggle
 import com.deflatedpickle.rawky.api.annotations.Tooltip
 import com.deflatedpickle.rawky.component.ActionHistory
 import com.deflatedpickle.rawky.component.AnimationPreview
@@ -26,6 +26,7 @@ import com.deflatedpickle.rawky.component.ToolOptions
 import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.component.Window
 import com.deflatedpickle.rawky.transfer.ColourTransfer
+import com.deflatedpickle.rawky.util.extension.fromEnum
 import com.deflatedpickle.rawky.widget.DoubleSlider
 import com.deflatedpickle.rawky.widget.RangeSlider
 import com.deflatedpickle.rawky.widget.Slider
@@ -48,10 +49,9 @@ import org.jdesktop.swingx.JXButton
 import org.jdesktop.swingx.JXCollapsiblePane
 import org.jdesktop.swingx.JXPanel
 import org.jdesktop.swingx.VerticalLayout
+import org.jdesktop.swingx.painter.CheckerboardPainter
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter
-import kotlin.reflect.KClass
-import kotlin.reflect.full.companionObjectInstance
 
 object Components {
     val frame = Window()
@@ -97,11 +97,17 @@ object Components {
             parent.add(label, ToolOptions.StickEast)
         }
 
+        var returnWidget: JComponent? = null
+        var widget: JComponent? = null
+
+        var toggleButton: JButton? = null
+        var collapsible: JXCollapsiblePane? = null
+
         loop@ for (annotation in field.annotations) {
-            val widget: JComponent = when (annotation) {
+            when (annotation) {
                 // TODO: Add more argument types
                 is IntOpt -> {
-                    Slider.IntSliderComponent(annotation.min, annotation.max, field.getInt(null)).apply {
+                    widget = Slider.IntSliderComponent(annotation.min, annotation.max, field.getInt(null)).apply {
                         with(slider) {
                             value = field.getInt(null)
 
@@ -126,7 +132,7 @@ object Components {
                     }
                 }
                 is DoubleOpt -> {
-                    Slider.DoubleSliderComponent(annotation.min, annotation.max, field.getDouble(null)).apply {
+                    widget = Slider.DoubleSliderComponent(annotation.min, annotation.max, field.getDouble(null)).apply {
                         with(slider as DoubleSlider) {
                             value = (field.getDouble(null) * factor).toInt()
 
@@ -143,7 +149,7 @@ object Components {
                 }
                 is IntRangeOpt -> {
                     val range = field.get(null) as IntRange
-                    RangeSlider.IntRangeSliderComponent(annotation.min, annotation.max, range.first, range.last).apply {
+                    widget = RangeSlider.IntRangeSliderComponent(annotation.min, annotation.max, range.first, range.last).apply {
                         with(slider) {
                             addChangeListener {
                                 field.set(null, lowValue..highValue)
@@ -161,26 +167,24 @@ object Components {
                     }
                 }
                 is Colour -> {
-                    JXButton().apply {
+                    widget = JXButton().apply {
                         val mattePainter = MattePainter(field.get(null) as Color)
-                        val compoundPainter = CompoundPainter<JXButton>(mattePainter)
+                        val compoundPainter = CompoundPainter<JXButton>(CheckerboardPainter(), mattePainter)
 
                         backgroundPainter = compoundPainter
 
                         addActionListener {
-                            field.set(null, ColorPickerDialog.showDialog(frame, field.get(null) as Color))
-                            mattePainter.fillPaint = field.get(null) as Color
+                            ColorPickerDialog.showDialog(frame, field.get(null) as Color)?.let {
+                                field.set(null, it)
+                                mattePainter.fillPaint = it
+                            }
                         }
                     }
                 }
                 is Enum -> {
                     val clazz = Class.forName(annotation.enum)
-                    JComboBox<String>(clazz.enumConstants.map { e ->
-                        e.toString()
-                                .toLowerCase()
-                                .split("_")
-                                .joinToString(" ") { it.capitalize() }
-                    }.toTypedArray()).apply {
+                    widget = JComboBox<String>(clazz.enumConstants.map { e -> e.toString().fromEnum() }
+                            .toTypedArray()).apply {
                         selectedIndex = (clazz.cast(field.get(null)) as kotlin.Enum<*>).ordinal
 
                         addActionListener {
@@ -192,27 +196,73 @@ object Components {
                         }
                     }
                 }
-                // Tooltips require the widget exist first
-                is Tooltip -> continue@loop
-                else -> JLabel("${annotation.annotationClass.qualifiedName} is unsupported!").apply {
+                // These require the widget to exist first, skip them to not add a warning label
+                is Toggle -> {}
+                is Tooltip -> {}
+                else -> widget = JLabel("${annotation.annotationClass.qualifiedName} is unsupported!").apply {
                     font = font.deriveFont(Font.BOLD)
                     foreground = Color.RED
                 }
             }
-            parent.add(widget, ToolOptions.FillHorizontal)
 
             // Second loop, for non-component annotations
-            when (annotation) {
-                is Tooltip -> {
-                    label?.toolTipText = annotation.string
-                    widget.toolTipText = annotation.string
+            widget?.let {
+                when (annotation) {
+                    is Toggle -> {
+                        when (widget) {
+                            is JComboBox<*> -> {
+                                val frame = JXPanel().apply {
+                                    layout = GridBagLayout()
+                                    border = BorderFactory.createTitledBorder("${field.name.fromEnum()} Settings")
+                                }
+
+                                collapsible = object : JXCollapsiblePane() {
+                                    init {
+                                        isCollapsed = true
+
+                                        add(JScrollPane(frame).apply {
+                                            border = BorderFactory.createEmptyBorder()
+                                        })
+                                    }
+                                }
+
+                                toggleButton = JButton(collapsible?.actionMap?.get(JXCollapsiblePane.TOGGLE_ACTION)).apply {
+                                    text = text.capitalize()
+                                }
+
+                                widget.addActionListener {
+                                    field.declaringClass.getMethod(annotation.method, Int::class.java, JPanel::class.java).invoke(field.declaringClass.kotlin.objectInstance, widget.selectedIndex, frame)
+                                }
+                            }
+                        }
+                    }
+                    is Tooltip -> {
+                        label?.toolTipText = annotation.string
+                        widget.toolTipText = annotation.string
+                    }
+                }
+
+                if (field.annotations.map { it.annotationClass == Toggle::class }.contains(true)) {
+                    if (toggleButton != null && collapsible != null) {
+                        if (toggleButton!!.parent == null && collapsible!!.parent == null) {
+                            parent.add(JPanel().apply {
+                                layout = GridBagLayout()
+
+                                add(widget, ToolOptions.FillHorizontal)
+                                add(toggleButton, ToolOptions.FinishLine)
+                                add(collapsible, ToolOptions.FillHorizontalFinishLine)
+                            }, ToolOptions.FillHorizontalFinishLine)
+                        }
+                    }
+                } else {
+                    parent.add(widget, ToolOptions.FillHorizontalFinishLine)
                 }
             }
 
-            return widget
+            returnWidget = widget
         }
 
-        return null
+        return returnWidget
     }
 
     fun processAnnotations(parent: JPanel, clazz: Class<*>): JComponent? {
@@ -253,7 +303,7 @@ object Components {
                     foreground = Color.RED
                 }
             }
-            parent.add(widget, ToolOptions.FillHorizontal)
+            parent.add(widget, ToolOptions.FillHorizontalFinishLine)
         }
 
         return null

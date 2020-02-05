@@ -1,3 +1,5 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.tool.fill
 
 import com.deflatedpickle.rawky.component.PixelGrid

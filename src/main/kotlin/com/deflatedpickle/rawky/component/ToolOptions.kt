@@ -4,14 +4,11 @@ package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.annotations.Options
 import com.deflatedpickle.rawky.api.component.Component
-import com.deflatedpickle.rawky.tool.Tool
 import com.deflatedpickle.rawky.util.Components
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
 import javax.swing.JLabel
 import javax.swing.SwingConstants
-import kotlin.reflect.KClass
-import kotlin.reflect.full.allSupertypes
 
 class ToolOptions : Component() {
     object StickEast : GridBagConstraints() {
@@ -20,10 +17,23 @@ class ToolOptions : Component() {
         }
     }
 
+    object FillHorizontalFinishLine : GridBagConstraints() {
+        init {
+            fill = BOTH
+            weightx = 1.0
+            gridwidth = REMAINDER
+        }
+    }
+
     object FillHorizontal : GridBagConstraints() {
         init {
             fill = BOTH
             weightx = 1.0
+        }
+    }
+
+    object FinishLine : GridBagConstraints() {
+        init {
             gridwidth = REMAINDER
         }
     }
@@ -42,7 +52,7 @@ class ToolOptions : Component() {
         this.add(JLabel(Components.toolbox.indexList[0]!!::class.java.simpleName.capitalize() + ":").apply {
             font = font.deriveFont(14f)
             horizontalAlignment = SwingConstants.CENTER
-        }, FillHorizontal)
+        }, FillHorizontalFinishLine)
 
         for (clazz in Components.toolbox.indexList[0]!!::class.java.declaredClasses) {
             if (clazz.annotations.map { it.annotationClass == Options::class }.contains(true)) {
