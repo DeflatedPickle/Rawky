@@ -4,12 +4,14 @@ package com.deflatedpickle.rawky.tool
 
 import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.util.ActionStack
+import com.deflatedpickle.rawky.util.Components
 import java.awt.Graphics2D
 import java.awt.Image
 import java.awt.Point
 import java.lang.reflect.Modifier
 import javax.swing.Icon
 import javax.swing.ImageIcon
+import javax.swing.SwingUtilities
 import org.reflections.Reflections
 
 abstract class Tool(val name: String, var iconList: List<Icon>, val cursor: Image, val selected: Boolean = false) {
@@ -21,8 +23,8 @@ abstract class Tool(val name: String, var iconList: List<Icon>, val cursor: Imag
 
             for (i in reflections.getSubTypesOf(Tool::class.java)) {
                 if (!Modifier.isAbstract(i.modifiers)) {
-                    with(i.newInstance()) {
-                        list.add(this)
+                    with(i.declaredConstructors.first().newInstance()) {
+                        list.add(this as Tool)
                     }
                 }
             }
@@ -35,6 +37,12 @@ abstract class Tool(val name: String, var iconList: List<Icon>, val cursor: Imag
             tempList.add(ImageIcon())
         }
         iconList = tempList
+
+        SwingUtilities.invokeLater {
+            if (this.selected) {
+                Components.toolOptions.relayout()
+            }
+        }
     }
 
     open fun perform(button: Int, dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {}

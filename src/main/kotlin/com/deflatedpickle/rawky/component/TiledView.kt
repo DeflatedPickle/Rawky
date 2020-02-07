@@ -2,8 +2,8 @@
 
 package com.deflatedpickle.rawky.component
 
-import com.deflatedpickle.rawky.api.annotations.DoubleRange
-import com.deflatedpickle.rawky.api.annotations.IntRange
+import com.deflatedpickle.rawky.api.annotations.DoubleOpt
+import com.deflatedpickle.rawky.api.annotations.IntOpt
 import com.deflatedpickle.rawky.api.annotations.Options
 import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
 import com.deflatedpickle.rawky.api.annotations.Tooltip
@@ -16,22 +16,22 @@ import java.awt.Graphics2D
 class TiledView : Component() {
     @Options
     object Settings {
-        @IntRange(2, 30)
+        @IntOpt(2, 30)
         @Tooltip("The amount of rows")
         @JvmField
         var rows = 3
 
-        @IntRange(2, 30)
+        @IntOpt(2, 30)
         @Tooltip("The amount of columns")
         @JvmField
         var columns = 3
 
-        @DoubleRange(0.0, 25.0)
+        @DoubleOpt(0.0, 25.0)
         @Tooltip("The padding between the tiles")
         @JvmField
         var padding = 0.0
 
-        @DoubleRange(0.1, 4.0)
+        @DoubleOpt(0.1, 4.0)
         @Tooltip("The scale of the tiles")
         @JvmField
         var scale = 0.2

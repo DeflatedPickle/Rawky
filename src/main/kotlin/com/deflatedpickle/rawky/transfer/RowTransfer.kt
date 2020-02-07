@@ -1,3 +1,5 @@
+/* Copyright (c) 2020 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.transfer
 
 import com.deflatedpickle.rawky.component.PixelGrid
@@ -27,11 +29,9 @@ class RowTransfer(val index: Int) : Transferable {
         override fun createTransferable(c: JComponent?): Transferable? {
             return if (component is JTable) {
                 RowTransfer(component.selectedRow)
-            }
-            else if (component is JList<*>) {
+            } else if (component is JList<*>) {
                 RowTransfer(component.selectedIndex)
-            }
-            else {
+            } else {
                 null
             }
         }

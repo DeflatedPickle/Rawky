@@ -2,8 +2,8 @@
 
 package com.deflatedpickle.rawky.api.annotations
 
-import org.apache.commons.lang3.StringUtils
+import kotlin.Int
 
 @MustBeDocumented
 @Target(AnnotationTarget.FIELD)
-annotation class Enum(val enum: String, val setter: String = StringUtils.EMPTY, vararg val value: String)
+annotation class IntOpt(val min: Int, val max: Int, val step: Int = 1)

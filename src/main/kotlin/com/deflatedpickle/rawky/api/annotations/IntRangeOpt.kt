@@ -4,4 +4,4 @@ package com.deflatedpickle.rawky.api.annotations
 
 @MustBeDocumented
 @Target(AnnotationTarget.FIELD)
-annotation class DoubleRange(val min: Double, val max: Double)
+annotation class IntRangeOpt(val min: Int, val max: Int)

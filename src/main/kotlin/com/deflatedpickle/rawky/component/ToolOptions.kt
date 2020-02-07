@@ -17,10 +17,23 @@ class ToolOptions : Component() {
         }
     }
 
+    object FillHorizontalFinishLine : GridBagConstraints() {
+        init {
+            fill = BOTH
+            weightx = 1.0
+            gridwidth = REMAINDER
+        }
+    }
+
     object FillHorizontal : GridBagConstraints() {
         init {
             fill = BOTH
             weightx = 1.0
+        }
+    }
+
+    object FinishLine : GridBagConstraints() {
+        init {
             gridwidth = REMAINDER
         }
     }
@@ -39,7 +52,7 @@ class ToolOptions : Component() {
         this.add(JLabel(Components.toolbox.indexList[0]!!::class.java.simpleName.capitalize() + ":").apply {
             font = font.deriveFont(14f)
             horizontalAlignment = SwingConstants.CENTER
-        }, FillHorizontal)
+        }, FillHorizontalFinishLine)
 
         for (clazz in Components.toolbox.indexList[0]!!::class.java.declaredClasses) {
             if (clazz.annotations.map { it.annotationClass == Options::class }.contains(true)) {
@@ -47,6 +60,10 @@ class ToolOptions : Component() {
                     if (field.name != "INSTANCE") {
                         Components.processAnnotations(this, field)
                     }
+                }
+
+                for (subClazz in clazz.classes) {
+                    Components.processAnnotations(this, subClazz)
                 }
             }
         }

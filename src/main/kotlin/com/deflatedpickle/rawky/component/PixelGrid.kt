@@ -3,9 +3,9 @@
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.annotations.Colour
-import com.deflatedpickle.rawky.api.annotations.DoubleRange
+import com.deflatedpickle.rawky.api.annotations.DoubleOpt
 import com.deflatedpickle.rawky.api.annotations.Enum
-import com.deflatedpickle.rawky.api.annotations.IntRange
+import com.deflatedpickle.rawky.api.annotations.IntOpt
 import com.deflatedpickle.rawky.api.annotations.Options
 import com.deflatedpickle.rawky.api.annotations.RedrawActive
 import com.deflatedpickle.rawky.api.annotations.Tooltip
@@ -87,12 +87,12 @@ object PixelGrid : Component() {
     object Settings {
         var pixelSize = 20
 
-        @IntRange(1, 255)
+        @IntOpt(1, 255)
         @Tooltip("The opacity of the hover mark")
         @JvmField
         var hoverOpacity = 255
 
-        @DoubleRange(1.0, 6.0)
+        @DoubleOpt(1.0, 6.0)
         @Tooltip("The thickness of the grid lines")
         @JvmField
         var lineThickness = 1.0
@@ -102,7 +102,7 @@ object PixelGrid : Component() {
         @JvmField
         var gridColour = Color.GRAY
 
-        @IntRange(1, 20 * 8, 20)
+        @IntOpt(1, 20 * 8, 20)
         @Tooltip("The size of the background pixels")
         @JvmField
         var backgroundPixelSize = pixelSize / 3
@@ -154,7 +154,7 @@ object PixelGrid : Component() {
     }
 
     class Cell(override var parent: Layer) : MatrixItem<Layer> {
-        var colour: Color? = null
+        var colour: Color = defaultColour()
 
         override fun toString(): String {
             return "Cell { $colour }"
@@ -165,6 +165,8 @@ object PixelGrid : Component() {
         ALL,
         GRID
     }
+
+    fun defaultColour(): Color = Color(0, 0, 0, 0)
 
     var rowAmount = 16
     var columnAmount = 16
@@ -285,9 +287,9 @@ object PixelGrid : Component() {
         pastGraphics.scale(this.scale, this.scale)
         pastGraphics.color = Components.animationTimeline.pastColour.color
 
-        for (i in 1..abs(Components.animationTimeline.slider.pastSpinner.value as Int)) {
+        for (i in 1..abs(Components.animationTimeline.slider.pastSpinner.value as kotlin.Int)) {
             if (Components.animationTimeline.list.selectedIndex - i >= 0) {
-                pastGraphics.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f / ((i / abs(Components.animationTimeline.slider.pastSpinner.value as Int) + 1) + 1f))
+                pastGraphics.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f / ((i / abs(Components.animationTimeline.slider.pastSpinner.value as kotlin.Int) + 1) + 1f))
 
                 for ((layerIndex, layer) in frameList[abs(Components.animationTimeline.list.selectedIndex) - i].layerList.withIndex().reversed()) {
                     if (layerIndex >= 0) {
@@ -312,9 +314,9 @@ object PixelGrid : Component() {
         postGraphics.scale(this.scale, this.scale)
         postGraphics.color = Components.animationTimeline.postColour.color
 
-        for (i in 1..Components.animationTimeline.slider.postSpinner.value as Int) {
+        for (i in 1..Components.animationTimeline.slider.postSpinner.value as kotlin.Int) {
             if (Components.animationTimeline.list.selectedIndex + i <= frameList.lastIndex) {
-                postGraphics.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f / ((i / Components.animationTimeline.slider.postSpinner.value as Int + 1) + 1f))
+                postGraphics.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f / ((i / Components.animationTimeline.slider.postSpinner.value as kotlin.Int + 1) + 1f))
 
                 for ((layerIndex, layer) in frameList[Components.animationTimeline.list.selectedIndex + i].layerList.withIndex().reversed()) {
                     if (layerIndex >= 0) {
@@ -387,7 +389,7 @@ object PixelGrid : Component() {
         return rMatrix
     }
 
-    fun drawPixels(layerIndex: Int, layer: Layer, g2D: Graphics2D, setColour: Boolean = true, showHidden: Boolean = false) {
+    fun drawPixels(layerIndex: kotlin.Int, layer: Layer, g2D: Graphics2D, setColour: Boolean = true, showHidden: Boolean = false) {
         for (row in 0 until rectangleMatrix.size) {
             for (column in 0 until rectangleMatrix[row].size) {
                 if (showHidden || !Components.layerList.isLayerHidden(layerIndex)) {
@@ -409,7 +411,7 @@ object PixelGrid : Component() {
         }
     }
 
-    fun drawTransparentBackground(g2D: Graphics2D, rowCount: Int = rowAmount, columnCount: Int = columnAmount, fillType: FillType = Settings.backgroundFillType, backgroundPixelDivider: Int = Settings.backgroundPixelSize) {
+    fun drawTransparentBackground(g2D: Graphics2D, rowCount: kotlin.Int = rowAmount, columnCount: kotlin.Int = columnAmount, fillType: FillType = Settings.backgroundFillType, backgroundPixelDivider: kotlin.Int = Settings.backgroundPixelSize) {
         val fill = when (fillType) {
             FillType.ALL -> {
                 Pair(g2D.clipBounds.width, g2D.clipBounds.height)

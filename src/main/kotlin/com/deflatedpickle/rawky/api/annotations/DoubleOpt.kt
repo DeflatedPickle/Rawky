@@ -2,6 +2,8 @@
 
 package com.deflatedpickle.rawky.api.annotations
 
+import kotlin.Double
+
 @MustBeDocumented
 @Target(AnnotationTarget.FIELD)
-annotation class IntRange(val min: Int, val max: Int, val step: Int = 1)
+annotation class DoubleOpt(val min: Double, val max: Double)

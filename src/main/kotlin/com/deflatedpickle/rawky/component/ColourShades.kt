@@ -20,10 +20,6 @@ import org.jdesktop.swingx.JXButton
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter
 import uk.co.timwise.wraplayout.WrapLayout
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
-import javax.swing.JButton
-import javax.swing.TransferHandler
 
 class ColourShades : Component() {
     val shadesSlider = JSlider(3, 3 * 31).apply {

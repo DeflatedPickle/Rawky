@@ -88,8 +88,7 @@ class ColourPalette : Component() {
                             e.y > i.y && e.y < i.y + cellSize) {
                         hoverColour = i
                         break
-                    }
-                    else {
+                    } else {
                         hoverColour = null
                     }
                 }

@@ -77,7 +77,7 @@ object Commands {
                                                 for (column in row) {
                                                     columnList.add(PixelGrid.Cell(this).apply {
                                                         if (!(column as LinkedTreeMap<String, LinkedTreeMap<Double, Double>>).isEmpty()) {
-                                                            colour = (column["colour"] as LinkedTreeMap<String, Double>)["value"]?.toInt()?.let { Color(it) }
+                                                            colour = (column["colour"] as LinkedTreeMap<String, Double>)["value"]?.toInt()?.let { Color(it) }!!
                                                         }
                                                     })
                                                 }
