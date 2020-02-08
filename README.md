@@ -14,6 +14,7 @@
     <a href="http://hits.dwyl.io/DeflatedPickle/Rawky"><img src="http://hits.dwyl.io/DeflatedPickle/Rawky.svg"></a>
     <a href="https://github.com/DeflatedPickle/Rawky/commits/master"><img src="https://img.shields.io/github/last-commit/DeflatedPickle/Rawky.svg"></a>
     <a href="https://travis-ci.org/DeflatedPickle/Rawky"><img src="https://travis-ci.org/DeflatedPickle/Rawky.svg?branch=master"></a>
+    <a href="https://www.codefactor.io/repository/github/deflatedpickle/rawky/overview/master"><img src="https://www.codefactor.io/repository/github/deflatedpickle/rawky/badge/master" alt="CodeFactor" /></a>
     <a href="https://codeclimate.com/github/DeflatedPickle/Rawky/maintainability"><img src="https://api.codeclimate.com/v1/badges/b5f7de56e73e0c459a9e/maintainability"></a>
 </p>
 
