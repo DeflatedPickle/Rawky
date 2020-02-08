@@ -42,6 +42,7 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.math.sin
 import org.jdesktop.swingx.util.ShapeUtils
+import kotlin.math.max
 
 @RedrawActive
 object PixelGrid : Component() {
@@ -314,9 +315,9 @@ object PixelGrid : Component() {
         postGraphics.scale(this.scale, this.scale)
         postGraphics.color = Components.animationTimeline.postColour.color
 
-        for (i in 1..Components.animationTimeline.slider.postSpinner.value as kotlin.Int) {
+        for (i in 1..Components.animationTimeline.slider.postSpinner.value as Int) {
             if (Components.animationTimeline.list.selectedIndex + i <= frameList.lastIndex) {
-                postGraphics.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f / ((i / Components.animationTimeline.slider.postSpinner.value as kotlin.Int + 1) + 1f))
+                postGraphics.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f / ((i / Components.animationTimeline.slider.postSpinner.value as Int + 1) + 1f))
 
                 for ((layerIndex, layer) in frameList[Components.animationTimeline.list.selectedIndex + i].layerList.withIndex().reversed()) {
                     if (layerIndex >= 0) {
@@ -375,7 +376,8 @@ object PixelGrid : Component() {
                 val x = if (column % 2 == 0) layout.rowOffsetEven else layout.rowOffsetOdd
 
                 rectangleCells.add(
-                        (ShapeUtils.generatePolygon(Shape.points, Settings.pixelSize / 2, 0) as Polygon).apply {
+                        (ShapeUtils.generatePolygon(Shape.points,
+                                Settings.pixelSize / 2, 0) as Polygon).apply {
                             translate(
                                     Settings.pixelSize / 2 + row * Settings.pixelSize + x,
                                     Settings.pixelSize / 2 + column * Settings.pixelSize + y
@@ -389,11 +391,11 @@ object PixelGrid : Component() {
         return rMatrix
     }
 
-    fun drawPixels(layerIndex: kotlin.Int, layer: Layer, g2D: Graphics2D, setColour: Boolean = true, showHidden: Boolean = false) {
+    fun drawPixels(layerIndex: Int, layer: Layer, g2D: Graphics2D, setColour: Boolean = true, showHidden: Boolean = false) {
         for (row in 0 until rectangleMatrix.size) {
             for (column in 0 until rectangleMatrix[row].size) {
                 if (showHidden || !Components.layerList.isLayerHidden(layerIndex)) {
-                    if (layer.pixelMatrix[row][column].colour != null) {
+                    if (layer.pixelMatrix[row][column].colour != defaultColour()) {
                         if (setColour) g2D.color = layer.pixelMatrix[row][column].colour
                         val rectangle = rectangleMatrix[row][column]
 
@@ -411,7 +413,7 @@ object PixelGrid : Component() {
         }
     }
 
-    fun drawTransparentBackground(g2D: Graphics2D, rowCount: kotlin.Int = rowAmount, columnCount: kotlin.Int = columnAmount, fillType: FillType = Settings.backgroundFillType, backgroundPixelDivider: kotlin.Int = Settings.backgroundPixelSize) {
+    fun drawTransparentBackground(g2D: Graphics2D, rowCount: Int = rowAmount, columnCount: Int = columnAmount, fillType: FillType = Settings.backgroundFillType, backgroundPixelDivider: Int = Settings.backgroundPixelSize) {
         val fill = when (fillType) {
             FillType.ALL -> {
                 Pair(g2D.clipBounds.width, g2D.clipBounds.height)
@@ -425,7 +427,11 @@ object PixelGrid : Component() {
         for (row in 0 until fill.first * Settings.pixelSize / backgroundPixelDivider) {
             for (column in 0 until fill.second * Settings.pixelSize / backgroundPixelDivider) {
                 g2D.color = if (row % 2 == column % 2) Settings.backgroundFillEven else Settings.backgroundFillOdd
-                g2D.fillRect(column * backgroundPixelDivider, row * backgroundPixelDivider, backgroundPixelDivider, backgroundPixelDivider)
+                g2D.fillRect(
+                        column * backgroundPixelDivider,
+                        row * backgroundPixelDivider,
+                        backgroundPixelDivider, backgroundPixelDivider
+                )
             }
         }
 

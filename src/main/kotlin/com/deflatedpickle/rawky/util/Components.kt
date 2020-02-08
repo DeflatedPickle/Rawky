@@ -107,102 +107,26 @@ object Components {
             when (annotation) {
                 // TODO: Add more argument types
                 is IntOpt -> {
-                    widget = Slider.IntSliderComponent(annotation.min, annotation.max, field.getInt(null)).apply {
-                        with(slider) {
-                            value = field.getInt(null)
-
-                            if (annotation.step > 1) {
-                                majorTickSpacing = annotation.step
-                                minorTickSpacing = annotation.step / 2
-                                snapToTicks = true
-
-                                paintTicks = true
-                                paintLabels = true
-                            }
-
-                            addChangeListener {
-                                field.set(null, value)
-                            }
-
-                            addMouseWheelListener {
-                                slider.value += it.wheelRotation
-                                spinner.value = this.value
-                            }
-                        }
-                    }
+                    widget = addInt(annotation, field)
                 }
                 is DoubleOpt -> {
-                    widget = Slider.DoubleSliderComponent(annotation.min, annotation.max, field.getDouble(null)).apply {
-                        with(slider as DoubleSlider) {
-                            value = (field.getDouble(null) * factor).toInt()
-
-                            addChangeListener {
-                                field.set(null, value / this.factor)
-                            }
-
-                            addMouseWheelListener {
-                                slider.value += (it.wheelRotation * factor).roundToInt()
-                                spinner.value = this.doubleValue
-                            }
-                        }
-                    }
+                    widget = addDouble(annotation, field)
                 }
                 is IntRangeOpt -> {
-                    val range = field.get(null) as IntRange
-                    widget = RangeSlider.IntRangeSliderComponent(annotation.min, annotation.max, range.first, range.last).apply {
-                        with(slider) {
-                            addChangeListener {
-                                field.set(null, lowValue..highValue)
-                            }
-
-                            addMouseWheelListener {
-                                if (slider.lowValue + it.wheelRotation in range) {
-                                    slider.lowValue += it.wheelRotation
-                                }
-                                slider.highValue += it.wheelRotation
-                                pastSpinner.value = this.lowValue
-                                postSpinner.value = this.highValue
-                            }
-                        }
-                    }
+                    widget = addIntRange(annotation, field, field.get(null) as IntRange)
                 }
                 is Colour -> {
-                    widget = JXButton().apply {
-                        val mattePainter = MattePainter(field.get(null) as Color)
-                        val compoundPainter = CompoundPainter<JXButton>(CheckerboardPainter(), mattePainter)
-
-                        backgroundPainter = compoundPainter
-
-                        addActionListener {
-                            ColorPickerDialog.showDialog(frame, field.get(null) as Color)?.let {
-                                field.set(null, it)
-                                mattePainter.fillPaint = it
-                            }
-                        }
-                    }
+                    widget = addColour(annotation, field)
                 }
                 is Enum -> {
-                    val clazz = Class.forName(annotation.enum)
-                    widget = JComboBox<String>(clazz.enumConstants.map { e -> e.toString().fromEnum() }
-                            .toTypedArray()).apply {
-                        selectedIndex = (clazz.cast(field.get(null)) as kotlin.Enum<*>).ordinal
-
-                        addActionListener {
-                            field.set(null, clazz.enumConstants[this.selectedIndex])
-
-                            if (annotation.setter != StringUtils.EMPTY) {
-                                field.declaringClass.getMethod(annotation.setter).invoke(field.declaringClass.kotlin.objectInstance)
-                            }
-                        }
-                    }
+                    widget = addEnum(annotation, field, Class.forName(annotation.enum))
                 }
                 // These require the widget to exist first, skip them to not add a warning label
-                is Toggle -> {}
-                is Tooltip -> {}
-                else -> widget = JLabel("${annotation.annotationClass.qualifiedName} is unsupported!").apply {
-                    font = font.deriveFont(Font.BOLD)
-                    foreground = Color.RED
+                is Toggle -> {
                 }
+                is Tooltip -> {
+                }
+                else -> widget = addErrorLabel(annotation)
             }
 
             // Second loop, for non-component annotations
@@ -298,14 +222,103 @@ object Components {
                     add(collapsible)
                 }
                 is Metadata -> continue@loop
-                else -> JLabel("${annotation.annotationClass.qualifiedName} is unsupported!").apply {
-                    font = font.deriveFont(Font.BOLD)
-                    foreground = Color.RED
-                }
+                else -> addErrorLabel(annotation)
             }
             parent.add(widget, ToolOptions.FillHorizontalFinishLine)
         }
 
         return null
+    }
+
+    fun addInt(annotation: IntOpt, field: Field): JComponent = Slider.IntSliderComponent(
+            annotation.min, annotation.max, field.getInt(null)).apply {
+        with(slider) {
+            value = field.getInt(null)
+
+            if (annotation.step > 1) {
+                majorTickSpacing = annotation.step
+                minorTickSpacing = annotation.step / 2
+                snapToTicks = true
+
+                paintTicks = true
+                paintLabels = true
+            }
+
+            addChangeListener {
+                field.set(null, value)
+            }
+
+            addMouseWheelListener {
+                slider.value += it.wheelRotation
+                spinner.value = this.value
+            }
+        }
+    }
+
+    fun addDouble(annotation: DoubleOpt, field: Field): JComponent = Slider.DoubleSliderComponent(
+            annotation.min, annotation.max, field.getDouble(null)).apply {
+        with(slider as DoubleSlider) {
+            value = (field.getDouble(null) * factor).toInt()
+
+            addChangeListener {
+                field.set(null, value / this.factor)
+            }
+
+            addMouseWheelListener {
+                slider.value += (it.wheelRotation * factor).roundToInt()
+                spinner.value = this.doubleValue
+            }
+        }
+    }
+
+    fun addIntRange(annotation: IntRangeOpt, field: Field, range: IntRange): JComponent = RangeSlider.IntRangeSliderComponent(
+            annotation.min, annotation.max, range.first, range.last).apply {
+        with(slider) {
+            addChangeListener {
+                field.set(null, lowValue..highValue)
+            }
+
+            addMouseWheelListener {
+                if (slider.lowValue + it.wheelRotation in range) {
+                    slider.lowValue += it.wheelRotation
+                }
+                slider.highValue += it.wheelRotation
+                pastSpinner.value = this.lowValue
+                postSpinner.value = this.highValue
+            }
+        }
+    }
+
+    fun addColour(annotation: Colour, field: Field): JComponent = JXButton().apply {
+        val mattePainter = MattePainter(field.get(null) as Color)
+        val compoundPainter = CompoundPainter<JXButton>(CheckerboardPainter(), mattePainter)
+
+        backgroundPainter = compoundPainter
+
+        addActionListener {
+            ColorPickerDialog.showDialog(frame, field.get(null) as Color)?.let {
+                field.set(null, it)
+                mattePainter.fillPaint = it
+            }
+        }
+    }
+
+    fun addEnum(annotation: Enum, field: Field, clazz: Class<*>): JComponent = JComboBox<String>(
+            clazz.enumConstants.map { e -> e.toString().fromEnum() }
+            .toTypedArray()).apply {
+        selectedIndex = (clazz.cast(field.get(null)) as kotlin.Enum<*>).ordinal
+
+        addActionListener {
+            field.set(null, clazz.enumConstants[this.selectedIndex])
+
+            if (annotation.setter != StringUtils.EMPTY) {
+                field.declaringClass.getMethod(annotation.setter).invoke(field.declaringClass.kotlin.objectInstance)
+            }
+        }
+    }
+
+    fun addErrorLabel(annotation: Annotation): JLabel = JLabel("${annotation.annotationClass.qualifiedName} is unsupported!").apply {
+        font = font.deriveFont(Font.BOLD)
+        foreground = Color.RED
     }
 }

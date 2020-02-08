@@ -140,14 +140,14 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
                     val rgb = colour.rgb
                     val hsb = Color.RGBtoHSB(colour.red, colour.green, colour.blue, null)
 
-                    if (rgb == clickedColour.rgb
-                            && colour.red in Settings.RGB.red
-                            && colour.green in Settings.RGB.green
-                            && colour.blue in Settings.RGB.blue
-                            && hsb[0] in (Settings.HSB.hue.first.toFloat() / 360)..(Settings.HSB.hue.last.toFloat() / 360)
-                            && hsb[1] in (Settings.HSB.saturation.first.toFloat() / 360)..(Settings.HSB.saturation.last.toFloat() / 360)
-                            && hsb[2] in (Settings.HSB.brightness.first.toFloat() / 360)..(Settings.HSB.brightness.last.toFloat() / 360)
-                            && colour.alpha in Settings.alpha) {
+                    if (rgb == clickedColour.rgb &&
+                            colour.red in Settings.RGB.red &&
+                            colour.green in Settings.RGB.green &&
+                            colour.blue in Settings.RGB.blue &&
+                            hsb[0] in (Settings.HSB.hue.first.toFloat() / 360)..(Settings.HSB.hue.last.toFloat() / 360) &&
+                            hsb[1] in (Settings.HSB.saturation.first.toFloat() / 360)..(Settings.HSB.saturation.last.toFloat() / 360) &&
+                            hsb[2] in (Settings.HSB.brightness.first.toFloat() / 360)..(Settings.HSB.brightness.last.toFloat() / 360) &&
+                            colour.alpha in Settings.alpha) {
                         oldColours[cell] = cell.colour
 
                         Settings.fill.instance.perform(cell, pair.first, pair.second, shade)
