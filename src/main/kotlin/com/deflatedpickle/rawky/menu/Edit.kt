@@ -2,7 +2,7 @@
 
 package com.deflatedpickle.rawky.menu
 
-import com.deflatedpickle.rawky.util.ActionStack
+import com.deflatedpickle.rawky.component.ActionHistory
 import com.deflatedpickle.rawky.util.Icons
 import java.awt.Event
 import java.awt.event.KeyEvent
@@ -14,11 +14,11 @@ class Edit : JMenu("Edit") {
     init {
         add(JMenuItem("Undo", Icons.undo).apply {
             accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK)
-            addActionListener { ActionStack.undo() }
+            addActionListener { ActionHistory.currentWidget.actionStack.undo() }
         })
         add(JMenuItem("Redo", Icons.redo).apply {
             accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_Z, Event.CTRL_MASK or Event.SHIFT_MASK)
-            addActionListener { ActionStack.redo() }
+            addActionListener { ActionHistory.currentWidget.actionStack.redo() }
         })
     }
 }

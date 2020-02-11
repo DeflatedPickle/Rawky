@@ -4,6 +4,7 @@ package com.deflatedpickle.rawky.component
 
 import com.alexandriasoftware.swing.JSplitButton
 import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
+import com.deflatedpickle.rawky.api.component.ActionComponent
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.transfer.RowTransfer
 import com.deflatedpickle.rawky.util.Components
@@ -33,7 +34,7 @@ import javax.swing.table.TableCellEditor
 import javax.swing.table.TableCellRenderer
 
 @RedrawSensitive<PixelGrid>(PixelGrid::class)
-class LayerList : Component() {
+class LayerList : ActionComponent() {
     val addButton = JButton(Icons.createNew).apply {
         toolTipText = "New Layer"
         addActionListener {

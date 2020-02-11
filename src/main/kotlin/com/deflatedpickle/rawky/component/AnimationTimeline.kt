@@ -3,7 +3,7 @@
 package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
-import com.deflatedpickle.rawky.api.component.Component
+import com.deflatedpickle.rawky.api.component.ActionComponent
 import com.deflatedpickle.rawky.transfer.RowTransfer
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
@@ -27,7 +27,7 @@ import javax.swing.UIManager
 import javax.swing.border.LineBorder
 
 @RedrawSensitive<PixelGrid>(PixelGrid::class)
-class AnimationTimeline : Component() {
+class AnimationTimeline : ActionComponent() {
     // TODO: Move to a toolbar sub-class
     val slider = RangeSlider.IntRangeSliderComponent(-10, 10, -2, 2)
     val pastColour = ColourButton(Color.YELLOW).apply { preferredSize = Dimension(32, slider.preferredSize.height) }

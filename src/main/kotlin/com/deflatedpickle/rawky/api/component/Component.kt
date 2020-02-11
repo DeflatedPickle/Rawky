@@ -4,6 +4,7 @@ package com.deflatedpickle.rawky.api.component
 
 import com.deflatedpickle.rawky.api.annotations.RedrawActive
 import com.deflatedpickle.rawky.api.annotations.RedrawSensitive
+import java.awt.BorderLayout
 import java.awt.GridBagConstraints
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
@@ -24,6 +25,12 @@ open class Component : JXPanel() {
     lateinit var componentFrame: ComponentFrame
 
     init {
+        this.isOpaque = false
+        this.layout = BorderLayout()
+
+        this.isFocusable = true
+        this.isEnabled = true
+
         for (i in this::class.annotations) {
             when (i) {
                 is RedrawActive -> {

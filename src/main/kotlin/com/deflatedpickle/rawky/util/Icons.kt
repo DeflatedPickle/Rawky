@@ -43,6 +43,9 @@ object Icons {
 
     val addElement = icon("add_element")
 
+    val backArrow = icon("back_arrow")
+    val forwardArrow = icon("forward_arrow")
+
     private fun icon(name: String): ImageIcon {
         return ImageIcon(ImageIO.read(ClassLoader.getSystemResource("friable/icons/$name.png")))
     }

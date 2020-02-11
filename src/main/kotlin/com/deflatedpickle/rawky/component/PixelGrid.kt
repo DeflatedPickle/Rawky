@@ -9,7 +9,7 @@ import com.deflatedpickle.rawky.api.annotations.IntOpt
 import com.deflatedpickle.rawky.api.annotations.Options
 import com.deflatedpickle.rawky.api.annotations.RedrawActive
 import com.deflatedpickle.rawky.api.annotations.Tooltip
-import com.deflatedpickle.rawky.api.component.Component
+import com.deflatedpickle.rawky.api.component.ActionComponent
 import com.deflatedpickle.rawky.tool.Tool
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
@@ -42,10 +42,9 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.math.sin
 import org.jdesktop.swingx.util.ShapeUtils
-import kotlin.math.max
 
 @RedrawActive
-object PixelGrid : Component() {
+object PixelGrid : ActionComponent() {
     val slider = JSlider(25, 300).apply {
         this.value = 50
         addChangeListener {
@@ -116,12 +115,12 @@ object PixelGrid : Component() {
         @Colour
         @Tooltip("The colour of the background even tiles")
         @JvmField
-        var backgroundFillEven = Color.LIGHT_GRAY
+        var backgroundFillEven: Color = Color.LIGHT_GRAY
 
         @Colour
         @Tooltip("The colour of the background odd tiles")
         @JvmField
-        var backgroundFillOdd = Color.WHITE
+        var backgroundFillOdd: Color = Color.WHITE
     }
 
     interface MatrixItem<T> {
@@ -288,9 +287,9 @@ object PixelGrid : Component() {
         pastGraphics.scale(this.scale, this.scale)
         pastGraphics.color = Components.animationTimeline.pastColour.color
 
-        for (i in 1..abs(Components.animationTimeline.slider.pastSpinner.value as kotlin.Int)) {
+        for (i in 1..abs(Components.animationTimeline.slider.pastSpinner.value as Int)) {
             if (Components.animationTimeline.list.selectedIndex - i >= 0) {
-                pastGraphics.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f / ((i / abs(Components.animationTimeline.slider.pastSpinner.value as kotlin.Int) + 1) + 1f))
+                pastGraphics.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 1f / ((i / abs(Components.animationTimeline.slider.pastSpinner.value as Int) + 1) + 1f))
 
                 for ((layerIndex, layer) in frameList[abs(Components.animationTimeline.list.selectedIndex) - i].layerList.withIndex().reversed()) {
                     if (layerIndex >= 0) {
@@ -330,8 +329,8 @@ object PixelGrid : Component() {
 
         drawGrid(biG2D)
 
-        if (!Components.actionHistory.list.isSelectionEmpty) {
-            ActionStack.undoQueue[Components.actionHistory.list.selectedIndex].outline(biG2D)
+        if (!ActionHistory.list.isSelectionEmpty) {
+            ActionStack.undoQueue[ActionHistory.list.selectedIndex].outline(biG2D)
         }
 
         val length = Components.toolbox.indexList.lastIndex

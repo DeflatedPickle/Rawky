@@ -5,6 +5,7 @@ package com.deflatedpickle.rawky
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
 import com.deflatedpickle.rawky.api.component.ComponentFrame
+import com.deflatedpickle.rawky.component.ActionHistory
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.dialogue.New
 import com.deflatedpickle.rawky.menu.Edit
@@ -135,7 +136,7 @@ fun main() {
         colourLibrary.isVisible = true
         grid.add(1.2, 0.6, 0.4, 0.2, colourLibrary)
 
-        val actionHistory = DefaultSingleCDockable("actionHistory", "Action History", ComponentFrame(Components.actionHistory))
+        val actionHistory = DefaultSingleCDockable("actionHistory", "Action History", ComponentFrame(ActionHistory))
         cControl.addDockable(actionHistory)
         actionHistory.isVisible = true
         grid.add(1.6, 0.0, 0.4, 0.4, actionHistory)

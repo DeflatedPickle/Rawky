@@ -21,16 +21,18 @@ import com.deflatedpickle.rawky.component.ColourPalette
 import com.deflatedpickle.rawky.component.ColourShades
 import com.deflatedpickle.rawky.component.LayerList
 import com.deflatedpickle.rawky.component.MiniMap
+import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.component.TiledView
 import com.deflatedpickle.rawky.component.ToolOptions
 import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.component.Window
 import com.deflatedpickle.rawky.transfer.ColourTransfer
-import com.deflatedpickle.rawky.util.extension.fromEnum
+import com.deflatedpickle.rawky.util.extension.fromCamelCaseToConstantCase
 import com.deflatedpickle.rawky.widget.DoubleSlider
 import com.deflatedpickle.rawky.widget.RangeSlider
 import com.deflatedpickle.rawky.widget.Slider
 import java.awt.Color
+import java.awt.Component
 import java.awt.Font
 import java.awt.GridBagLayout
 import java.lang.reflect.Field
@@ -67,9 +69,25 @@ object Components {
     val layerList = LayerList()
     val animationTimeline = AnimationTimeline()
     val animationPreview = AnimationPreview()
-    val actionHistory = ActionHistory()
     val toolOptions = ToolOptions()
     val miniMap = MiniMap()
+
+    fun componentToInstance(component: EComponent): Component = when (component) {
+        EComponent.FRAME -> frame
+        EComponent.TOOLBOX -> toolbox
+        EComponent.PIXEL_GRID -> PixelGrid
+        EComponent.TILED_VIEW -> tiledView
+        EComponent.COLOUR_PICKER -> colourPicker
+        EComponent.COLOUR_SHADES -> colourShades
+        EComponent.COLOUR_LIBRARY -> colourLibrary
+        EComponent.COLOUR_PALETTE -> colourPalette
+        EComponent.LAYER_LIST -> layerList
+        EComponent.ANIMATION_TIMELINE -> animationTimeline
+        EComponent.ANIMATION_PREVIEW -> animationPreview
+        EComponent.ACTION_HISTORY -> ActionHistory
+        EComponent.TOOL_OPTIONS -> toolOptions
+        EComponent.MINI_MAP -> miniMap
+    }
 
     init {
         frame.defaultCloseOperation = JFrame.EXIT_ON_CLOSE
@@ -137,7 +155,7 @@ object Components {
                             is JComboBox<*> -> {
                                 val frame = JXPanel().apply {
                                     layout = GridBagLayout()
-                                    border = BorderFactory.createTitledBorder("${field.name.fromEnum()} Settings")
+                                    border = BorderFactory.createTitledBorder("${field.name.fromCamelCaseToConstantCase()} Settings")
                                 }
 
                                 collapsible = object : JXCollapsiblePane() {
@@ -304,8 +322,8 @@ object Components {
     }
 
     fun addEnum(annotation: Enum, field: Field, clazz: Class<*>): JComponent = JComboBox<String>(
-            clazz.enumConstants.map { e -> e.toString().fromEnum() }
-            .toTypedArray()).apply {
+            clazz.enumConstants.map { e -> e.toString().fromCamelCaseToConstantCase() }
+                    .toTypedArray()).apply {
         selectedIndex = (clazz.cast(field.get(null)) as kotlin.Enum<*>).ordinal
 
         addActionListener {

@@ -2,10 +2,45 @@
 
 package com.deflatedpickle.rawky.util
 
+import com.deflatedpickle.rawky.component.ActionHistory
 import com.deflatedpickle.rawky.component.PixelGrid
 import java.awt.Graphics2D
 
-object ActionStack {
+class ActionStack {
+    companion object {
+        fun push(action: Action) {
+            ActionHistory.currentWidget.actionStack.push(action)
+
+            ActionHistory.refresh()
+        }
+
+        fun undo() {
+            if (ActionHistory.currentWidget.actionStack.undo()) {
+                ActionHistory.refresh()
+            }
+        }
+
+        fun redo() {
+            if (ActionHistory.currentWidget.actionStack.redo()) {
+                ActionHistory.refresh()
+            }
+        }
+
+        fun pop(index: Int): Action {
+            ActionHistory.listModel.remove(index)
+
+            val pop = ActionHistory.currentWidget.actionStack.pop(index)
+
+            ActionHistory.list.selectedIndex = ActionHistory.listModel.size() - 1
+            ActionHistory.refresh()
+
+            return pop
+        }
+
+        val undoQueue: MutableList<Action>
+            get() = ActionHistory.currentWidget.actionStack.undoQueue
+    }
+
     abstract class Action(val name: String) {
         /**
          * A check to see if the action should happen
@@ -66,47 +101,39 @@ object ActionStack {
         if (undoQueue.isNotEmpty() && undoQueue.last() is MultiAction && (undoQueue.last() as MultiAction).active) {
             (undoQueue.last() as MultiAction).stack.add(it)
         } else {
-            Components.actionHistory.listModel.addElement(it.name)
             undoQueue.add(it)
         }
-
-        Components.actionHistory.list.selectedIndex = Components.actionHistory.listModel.size() - 1
     }
 
-    fun undo() {
+    fun undo(): Boolean {
         if (undoQueue.isNotEmpty()) {
             redoQueue.add(undoQueue.last().apply {
                 undoQueue.remove(this)
-                Components.actionHistory.listModel.remove(Components.actionHistory.listModel.size - 1)
                 cleanup()
             })
 
-            Components.actionHistory.list.selectedIndex = Components.actionHistory.listModel.size() - 1
-
             PixelGrid.repaintWithChildren()
         }
+
+        return undoQueue.isNotEmpty()
     }
 
-    fun redo() {
+    fun redo(): Boolean {
         if (redoQueue.isNotEmpty()) {
             undoQueue.add(redoQueue.last().apply {
                 redoQueue.remove(this)
-                Components.actionHistory.listModel.addElement(name)
                 perform()
             })
 
-            Components.actionHistory.list.selectedIndex = Components.actionHistory.listModel.size() - 1
-
             PixelGrid.repaintWithChildren()
         }
+
+        return redoQueue.isNotEmpty()
     }
 
     fun pop(index: Int): Action {
-        Components.actionHistory.listModel.remove(index)
         val item = undoQueue.elementAt(index)
         undoQueue.remove(item)
-
-        Components.actionHistory.list.selectedIndex = Components.actionHistory.listModel.size() - 1
 
         return item
     }
