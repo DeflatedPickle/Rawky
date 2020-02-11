@@ -28,3 +28,10 @@ deploy:
     repo: DeflatedPickle/Rawky
   draft: true
   skip_cleanup: true
+notifications:
+  webhooks:
+    urls:
+      - 'https://webhooks.gitter.im/e/7d5a60d6ef739e27f6c8'
+    on_success: change
+    on_failure: always
+    on_start: never
