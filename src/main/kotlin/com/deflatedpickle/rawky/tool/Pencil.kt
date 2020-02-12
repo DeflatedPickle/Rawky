@@ -13,6 +13,7 @@ import com.deflatedpickle.rawky.util.Icons
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Point
+import java.awt.Polygon
 import javax.swing.UIManager
 
 class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", listOf(Icons.pencil), Icons.pencil.image, true) {
@@ -24,7 +25,7 @@ class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", listOf(Icons.pen
         var size = 1
     }
 
-    override fun perform(button: kotlin.Int, dragged: Boolean, point: Point, lastPoint: Point?, clickCount: kotlin.Int) {
+    override fun perform(button: Int, dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
         if (PixelGrid
                         .frameList[Components.animationTimeline.list.selectedIndex]
                         .layerList[Components.layerList.table.selectedRow]
@@ -75,6 +76,12 @@ class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", listOf(Icons.pen
             if (pixel.check()) {
                 ActionStack.push(pixel)
             }
+        }
+    }
+
+    override fun mouseMoved(polygon: Polygon, row: Int, column: Int) {
+        with(PixelGrid.tempRectangleMatrix[row][column]) {
+            colour = Components.colourShades.selectedShade
         }
     }
 }

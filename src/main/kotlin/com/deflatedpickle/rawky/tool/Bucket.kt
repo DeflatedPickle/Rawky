@@ -19,6 +19,7 @@ import com.deflatedpickle.rawky.util.Icons
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Point
+import java.awt.Polygon
 import java.util.ArrayDeque
 import javax.swing.JPanel
 import javax.swing.UIManager
@@ -101,6 +102,15 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
         STIPPLE(Stipple)
     }
 
+    fun fillCheck(colour: Color, hsb: FloatArray): Boolean =
+            colour.red in Settings.RGB.red &&
+                    colour.green in Settings.RGB.green &&
+                    colour.blue in Settings.RGB.blue &&
+                    hsb[0] in (Settings.HSB.hue.first.toFloat() / 360)..(Settings.HSB.hue.last.toFloat() / 360) &&
+                    hsb[1] in (Settings.HSB.saturation.first.toFloat() / 360)..(Settings.HSB.saturation.last.toFloat() / 360) &&
+                    hsb[2] in (Settings.HSB.brightness.first.toFloat() / 360)..(Settings.HSB.brightness.last.toFloat() / 360) &&
+                    colour.alpha in Settings.alpha
+
     override fun perform(button: Int, dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
         val pixel = object : Toolbox.LockCheck(this.name) {
             val shade = Components.colourShades.selectedShade
@@ -123,8 +133,13 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
                                 this.second in 0 until PixelGrid.columnAmount) {
                             val cell = PixelGrid.frameList[frame].layerList[layer].pixelMatrix[this.first][this.second]
 
-                            if (!colourList.containsKey(this)) {
-                                colourList[this] = cell
+                            val colour = cell.colour
+                            val rgb = colour.rgb
+                            val hsb = Color.RGBtoHSB(colour.red, colour.green, colour.blue, null)
+
+                            if (rgb == clickedColour.rgb &&
+                                    fillCheck(colour, hsb)) {
+                                Settings.fill.instance.perform(cell, this.first, this.second, shade)
 
                                 cellList.add(Pair(this.first, this.second + 1))
                                 cellList.add(Pair(this.first, this.second - 1))
@@ -132,25 +147,6 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
                                 cellList.add(Pair(this.first - 1, this.second))
                             }
                         }
-                    }
-                }
-
-                for ((pair, cell) in colourList) {
-                    val colour = cell.colour
-                    val rgb = colour.rgb
-                    val hsb = Color.RGBtoHSB(colour.red, colour.green, colour.blue, null)
-
-                    if (rgb == clickedColour.rgb &&
-                            colour.red in Settings.RGB.red &&
-                            colour.green in Settings.RGB.green &&
-                            colour.blue in Settings.RGB.blue &&
-                            hsb[0] in (Settings.HSB.hue.first.toFloat() / 360)..(Settings.HSB.hue.last.toFloat() / 360) &&
-                            hsb[1] in (Settings.HSB.saturation.first.toFloat() / 360)..(Settings.HSB.saturation.last.toFloat() / 360) &&
-                            hsb[2] in (Settings.HSB.brightness.first.toFloat() / 360)..(Settings.HSB.brightness.last.toFloat() / 360) &&
-                            colour.alpha in Settings.alpha) {
-                        oldColours[cell] = cell.colour
-
-                        Settings.fill.instance.perform(cell, pair.first, pair.second, shade)
                     }
                 }
             }
@@ -169,6 +165,44 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
 
         if (pixel.check()) {
             ActionStack.push(pixel)
+        }
+    }
+
+    override fun mouseMoved(polygon: Polygon, row: Int, column: Int) {
+        val colourList = mutableMapOf<Pair<Int, Int>, PixelGrid.Cell>()
+
+        val cellList = ArrayDeque<Pair<Int, Int>>()
+
+        cellList.add(Pair(row, column))
+
+        while (cellList.isNotEmpty()) {
+            with(cellList.poll()) {
+                if (this.first in 0 until PixelGrid.rowAmount &&
+                        this.second in 0 until PixelGrid.columnAmount) {
+                    val cell = PixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList[Components.layerList.table.selectedRow].pixelMatrix[this.first][this.second]
+
+                    val colour = cell.colour
+                    val rgb = colour.rgb
+                    val hsb = Color.RGBtoHSB(colour.red, colour.green, colour.blue, null)
+
+                    if (!colourList.containsKey(this) &&
+                            rgb == PixelGrid.frameList[Components.animationTimeline.list.selectedIndex]
+                                    .layerList[Components.layerList.table.selectedRow]
+                                    .pixelMatrix[column][row].colour.rgb &&
+                            fillCheck(colour, hsb)) {
+                        colourList[this] = PixelGrid.tempRectangleMatrix[this.first][this.second]
+
+                        cellList.add(Pair(this.first, this.second + 1))
+                        cellList.add(Pair(this.first, this.second - 1))
+                        cellList.add(Pair(this.first + 1, this.second))
+                        cellList.add(Pair(this.first - 1, this.second))
+                    }
+                }
+            }
+        }
+
+        for ((pair, cell) in colourList) {
+            Settings.fill.instance.perform(cell, pair.first, pair.second, Components.colourShades.selectedShade)
         }
     }
 }

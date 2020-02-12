@@ -27,8 +27,8 @@ class Toolbox : Component() {
             val colour = PixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
             return when (Components.layerList.layerLockType(layer)) {
                 PixelGrid.Layer.LockType.OFF -> true
-                PixelGrid.Layer.LockType.COLOUR -> colour != null
-                PixelGrid.Layer.LockType.ALPHA -> colour == null
+                PixelGrid.Layer.LockType.COLOUR -> colour != PixelGrid.defaultColour()
+                PixelGrid.Layer.LockType.ALPHA -> colour == PixelGrid.defaultColour()
                 PixelGrid.Layer.LockType.ALL -> false
             }
         }

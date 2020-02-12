@@ -34,10 +34,10 @@ class Dropper : HoverOutlineTool(Settings::class.java, "Dropper", listOf(Icons.c
         if (PixelGrid.hoverRow >= 0 && PixelGrid.hoverColumn >= 0) {
             val layerList = PixelGrid.frameList[Components.animationTimeline.list.selectedIndex].layerList
 
-            for ((index, layer) in layerList.withIndex()) {
+            for ((index, _) in layerList.withIndex()) {
                 val hoverColour = layerList[index].pixelMatrix[PixelGrid.hoverRow][PixelGrid.hoverColumn].colour
 
-                if (hoverColour != null) {
+                if (hoverColour != PixelGrid.defaultColour()) {
                     g2D.color = Color.BLACK
                     g2D.stroke = BasicStroke(4f)
                     g2D.drawRect(mouse.x, mouse.y, 20, 20)

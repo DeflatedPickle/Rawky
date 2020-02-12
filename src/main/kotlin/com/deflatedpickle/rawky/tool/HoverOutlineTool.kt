@@ -11,32 +11,40 @@ import java.awt.Image
 import javax.swing.Icon
 
 abstract class HoverOutlineTool(val settings: Class<*>?, name: String, iconList: List<Icon>, cursor: Image, selected: Boolean = false) : Tool(name, iconList, cursor, selected) {
-    val outlineSize = 4
+    val outlineSize = 1
     val outlineStroke = BasicStroke(outlineSize.toFloat())
 
     override fun render(g2D: Graphics2D) {
-        PixelGrid.hoverPixel?.let {
-            g2D.color = Color(
-                    Components.colourShades.selectedShade.red,
-                    Components.colourShades.selectedShade.green,
-                    Components.colourShades.selectedShade.blue,
-                    PixelGrid.Settings.hoverOpacity
-            )
+        g2D.color = Color(
+                Components.colourShades.selectedShade.red,
+                Components.colourShades.selectedShade.green,
+                Components.colourShades.selectedShade.blue,
+                PixelGrid.Settings.hoverOpacity
+        )
 
-            with(g2D.stroke) {
-                g2D.stroke = outlineStroke
+        with(g2D.stroke) {
+            g2D.stroke = outlineStroke
 
-                if (PixelGrid.Shape.points == 4) {
-                    with(it.bounds) {
-                        this.grow(3, 3)
-                        g2D.drawRect(this.x, this.y, this.width, this.height)
+            for (row in 0 until PixelGrid.tempRectangleMatrix.size) {
+                for (column in 0 until PixelGrid.tempRectangleMatrix[row].size) {
+                    val rectangle = PixelGrid.tempRectangleMatrix[row][column].polygon
+
+                    if (PixelGrid.tempRectangleMatrix[row][column].colour.rgb != PixelGrid.defaultColour().rgb &&
+                            PixelGrid.tempRectangleMatrix[row][column].colour.alpha != PixelGrid.defaultColour().alpha) {
+                        if (PixelGrid.Shape.points == 4) {
+                            if (rectangle != null) {
+                                with(rectangle.bounds) {
+                                    g2D.draw(this)
+                                }
+                            }
+                        } else {
+                            g2D.drawPolygon(rectangle)
+                        }
                     }
-                } else {
-                    g2D.drawPolygon(it)
                 }
-
-                g2D.stroke = this
             }
+
+            g2D.stroke = this
         }
     }
 }

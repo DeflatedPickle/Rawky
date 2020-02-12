@@ -8,6 +8,7 @@ import com.deflatedpickle.rawky.util.Components
 import java.awt.Graphics2D
 import java.awt.Image
 import java.awt.Point
+import java.awt.Polygon
 import java.lang.reflect.Modifier
 import javax.swing.Icon
 import javax.swing.ImageIcon
@@ -66,6 +67,8 @@ abstract class Tool(val name: String, var iconList: List<Icon>, val cursor: Imag
             (ActionStack.undoQueue.last() as ActionStack.MultiAction).active = false
         }
     }
+
+    open fun mouseMoved(polygon: Polygon, row: Int, column: Int) {}
 
     open fun render(g2D: Graphics2D) {}
 }

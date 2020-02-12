@@ -27,7 +27,7 @@ import com.deflatedpickle.rawky.component.ToolOptions
 import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.component.Window
 import com.deflatedpickle.rawky.transfer.ColourTransfer
-import com.deflatedpickle.rawky.util.extension.fromCamelCaseToConstantCase
+import com.deflatedpickle.rawky.util.extension.toCamelCase
 import com.deflatedpickle.rawky.widget.DoubleSlider
 import com.deflatedpickle.rawky.widget.RangeSlider
 import com.deflatedpickle.rawky.widget.Slider
@@ -155,7 +155,7 @@ object Components {
                             is JComboBox<*> -> {
                                 val frame = JXPanel().apply {
                                     layout = GridBagLayout()
-                                    border = BorderFactory.createTitledBorder("${field.name.fromCamelCaseToConstantCase()} Settings")
+                                    border = BorderFactory.createTitledBorder("${field.name.toCamelCase()} Settings")
                                 }
 
                                 collapsible = object : JXCollapsiblePane() {
@@ -322,7 +322,7 @@ object Components {
     }
 
     fun addEnum(annotation: Enum, field: Field, clazz: Class<*>): JComponent = JComboBox<String>(
-            clazz.enumConstants.map { e -> e.toString().fromCamelCaseToConstantCase() }
+            clazz.enumConstants.map { e -> e.toString().toCamelCase() }
                     .toTypedArray()).apply {
         selectedIndex = (clazz.cast(field.get(null)) as kotlin.Enum<*>).ordinal
 

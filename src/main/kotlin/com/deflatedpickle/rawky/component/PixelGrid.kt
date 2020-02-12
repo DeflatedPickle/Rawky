@@ -136,7 +136,7 @@ object PixelGrid : ActionComponent() {
     }
 
     class Layer(override var parent: Frame) : MatrixItem<Frame> {
-        var pixelMatrix = initMatrix<Layer, Cell>(parent = this)
+        var pixelMatrix = initMatrix<Layer?, Cell>(parent = this)
         var visible = true
 
         enum class LockType {
@@ -153,12 +153,14 @@ object PixelGrid : ActionComponent() {
         }
     }
 
-    class Cell(override var parent: Layer) : MatrixItem<Layer> {
+    class Cell(override var parent: Layer?) : MatrixItem<Layer?> {
         var colour: Color = defaultColour()
 
-        override fun toString(): String {
-            return "Cell { $colour }"
-        }
+        var polygon: Polygon? = null
+
+        // override fun toString(): String {
+        //     return "Cell { $colour }"
+        // }
     }
 
     enum class FillType {
@@ -173,6 +175,8 @@ object PixelGrid : ActionComponent() {
 
     var rectangleMatrix: MutableList<MutableList<Polygon>>
     var frameList = mutableListOf<Frame>()
+
+    var tempRectangleMatrix: MutableList<MutableList<Cell>>
 
     var hoverPixel: Polygon? = null
     var hoverRow = 0
@@ -210,11 +214,30 @@ object PixelGrid : ActionComponent() {
         )
 
         rectangleMatrix = refreshMatrix()
+        tempRectangleMatrix = initMatrix(parent = null)
+        for ((rowIndex, row) in refreshMatrix().withIndex()) {
+            for ((columnIndex, column) in row.withIndex()) {
+                tempRectangleMatrix[rowIndex][columnIndex].polygon = column
+            }
+        }
 
         addMouseMotionListener(object : MouseMotionAdapter() {
             var lastPoint = Point()
 
             override fun mouseMoved(e: MouseEvent) {
+                for ((rowIndex, row) in tempRectangleMatrix.withIndex()) {
+                    for ((columnIndex, _) in row.withIndex()) {
+                        with(tempRectangleMatrix[rowIndex][columnIndex]) {
+                            val bounds = this.polygon!!.bounds
+                            bounds.grow(3, 3)
+
+                            if (!bounds.contains(e.point)) {
+                                tempRectangleMatrix[rowIndex][columnIndex].colour = defaultColour()
+                            }
+                        }
+                    }
+                }
+
                 for ((rowIndex, row) in rectangleMatrix.withIndex()) {
                     for ((columnIndex, column) in row.withIndex()) {
                         if (column.contains(e.point.apply {
@@ -225,6 +248,8 @@ object PixelGrid : ActionComponent() {
                             hoverPixel = column
                             hoverRow = rowIndex
                             hoverColumn = columnIndex
+
+                            Components.toolbox.indexList[0]!!.mouseMoved(column, rowIndex, columnIndex)
                         }
                     }
                 }
@@ -357,9 +382,12 @@ object PixelGrid : ActionComponent() {
             }
         }
 
+        val toolGraphics = bufferedImage.createGraphics()
+        toolGraphics.scale(this.scale, this.scale)
         for (tool in Components.toolbox.indexList.reversed()) {
             tool?.render(biG2D)
         }
+        toolGraphics.dispose()
 
         biG2D.dispose()
         g2D.drawRenderedImage(bufferedImage, null)
@@ -458,11 +486,11 @@ object PixelGrid : ActionComponent() {
         }
     }
 
-    inline fun <reified P, reified T : MatrixItem<P>> initMatrix(value: T? = null, parent: Any): MutableList<MutableList<T>> {
+    inline fun <reified P, reified T : MatrixItem<P>> initMatrix(value: T? = null, parent: Any? = null): MutableList<MutableList<T>> {
         val rowList = mutableListOf<MutableList<T>>()
-        for (row in 0 until PixelGrid.rowAmount) {
+        for (row in 0 until rowAmount) {
             val columnList = mutableListOf<T>()
-            for (column in 0 until PixelGrid.columnAmount) {
+            for (column in 0 until columnAmount) {
                 columnList.add(value ?: T::class.constructors.first().call(parent))
             }
             rowList.add(columnList)
