@@ -16,7 +16,7 @@ import uk.co.timwise.wraplayout.WrapLayout
 
 class Toolbox : Component() {
     // TODO: Maybe merge this into Action, seems useful
-    abstract class LockCheck(name: String) : ActionStack.Action(name) {
+    abstract class LockCheck(name: String, canMerge: Boolean = true) : ActionStack.Action(name, canMerge) {
         val frame = Components.animationTimeline.list.selectedIndex
         val layer = Components.layerList.table.selectedRow
 

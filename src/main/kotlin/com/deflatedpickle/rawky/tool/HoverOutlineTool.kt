@@ -25,12 +25,12 @@ abstract class HoverOutlineTool(val settings: Class<*>?, name: String, iconList:
         with(g2D.stroke) {
             g2D.stroke = outlineStroke
 
-            for (row in 0 until PixelGrid.tempRectangleMatrix.size) {
-                for (column in 0 until PixelGrid.tempRectangleMatrix[row].size) {
-                    val rectangle = PixelGrid.tempRectangleMatrix[row][column].polygon
+            for (row in 0 until PixelGrid.previewRectangleMatrix.size) {
+                for (column in 0 until PixelGrid.previewRectangleMatrix[row].size) {
+                    val rectangle = PixelGrid.previewRectangleMatrix[row][column].polygon
 
-                    if (PixelGrid.tempRectangleMatrix[row][column].colour.rgb != PixelGrid.defaultColour().rgb &&
-                            PixelGrid.tempRectangleMatrix[row][column].colour.alpha != PixelGrid.defaultColour().alpha) {
+                    if (PixelGrid.previewRectangleMatrix[row][column].colour.rgb != PixelGrid.defaultColour().rgb &&
+                            PixelGrid.previewRectangleMatrix[row][column].colour.alpha != PixelGrid.defaultColour().alpha) {
                         if (PixelGrid.Shape.points == 4) {
                             if (rectangle != null) {
                                 with(rectangle.bounds) {

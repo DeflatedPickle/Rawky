@@ -81,7 +81,8 @@ object PixelGrid : ActionComponent() {
     val blankCursor = this.toolkit.createCustomCursor(
             BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB),
             Point(),
-            null)
+            null
+    )
 
     @Options
     object Settings {
@@ -153,14 +154,14 @@ object PixelGrid : ActionComponent() {
         }
     }
 
-    class Cell(override var parent: Layer?) : MatrixItem<Layer?> {
+    class Cell(override var parent: Layer?, val row: Int, val column: Int) : MatrixItem<Layer?> {
         var colour: Color = defaultColour()
 
         var polygon: Polygon? = null
 
-        // override fun toString(): String {
-        //     return "Cell { $colour }"
-        // }
+        override fun toString(): String {
+            return "Cell { $colour }"
+        }
     }
 
     enum class FillType {
@@ -176,7 +177,7 @@ object PixelGrid : ActionComponent() {
     var rectangleMatrix: MutableList<MutableList<Polygon>>
     var frameList = mutableListOf<Frame>()
 
-    var tempRectangleMatrix: MutableList<MutableList<Cell>>
+    var previewRectangleMatrix: MutableList<MutableList<Cell>>
 
     var hoverPixel: Polygon? = null
     var hoverRow = 0
@@ -214,10 +215,10 @@ object PixelGrid : ActionComponent() {
         )
 
         rectangleMatrix = refreshMatrix()
-        tempRectangleMatrix = initMatrix(parent = null)
+        previewRectangleMatrix = initMatrix(parent = null)
         for ((rowIndex, row) in refreshMatrix().withIndex()) {
             for ((columnIndex, column) in row.withIndex()) {
-                tempRectangleMatrix[rowIndex][columnIndex].polygon = column
+                previewRectangleMatrix[rowIndex][columnIndex].polygon = column
             }
         }
 
@@ -225,14 +226,14 @@ object PixelGrid : ActionComponent() {
             var lastPoint = Point()
 
             override fun mouseMoved(e: MouseEvent) {
-                for ((rowIndex, row) in tempRectangleMatrix.withIndex()) {
+                for ((rowIndex, row) in previewRectangleMatrix.withIndex()) {
                     for ((columnIndex, _) in row.withIndex()) {
-                        with(tempRectangleMatrix[rowIndex][columnIndex]) {
+                        with(previewRectangleMatrix[rowIndex][columnIndex]) {
                             val bounds = this.polygon!!.bounds
                             bounds.grow(3, 3)
 
                             if (!bounds.contains(e.point)) {
-                                tempRectangleMatrix[rowIndex][columnIndex].colour = defaultColour()
+                                previewRectangleMatrix[rowIndex][columnIndex].colour = defaultColour()
                             }
                         }
                     }
@@ -271,7 +272,7 @@ object PixelGrid : ActionComponent() {
             var lastPoint = Point()
 
             override fun mousePressed(e: MouseEvent) {
-                Components.toolbox.indexList[e.button]?.mouseClicked(e.button)
+                Components.toolbox.indexList[e.button]?.mouseClicked(e.button, hoverPixel!!, hoverRow, hoverColumn, e.clickCount)
                 when {
                     SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.indexList[0]!!.perform(0, false, e.point, lastPoint, e.clickCount)
                     SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.indexList[1]!!.perform(1, false, e.point, lastPoint, e.clickCount)
@@ -281,9 +282,13 @@ object PixelGrid : ActionComponent() {
             }
 
             override fun mouseReleased(e: MouseEvent) {
-                Components.toolbox.indexList[0]!!.mouseRelease(e.button)
-                Components.toolbox.indexList[1]!!.mouseRelease(e.button)
-                Components.toolbox.indexList[2]!!.mouseRelease(e.button)
+                Components.toolbox.indexList[0]!!.mouseRelease(e.button, hoverPixel, hoverRow, hoverColumn)
+                Components.toolbox.indexList[1]!!.mouseRelease(e.button, hoverPixel, hoverRow, hoverColumn)
+                Components.toolbox.indexList[2]!!.mouseRelease(e.button, hoverPixel, hoverRow, hoverColumn)
+
+                when {
+                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.indexList[0]!!.releaseLeft(e.point, lastPoint)
+                }
             }
 
             override fun mouseEntered(e: MouseEvent) {
@@ -491,7 +496,7 @@ object PixelGrid : ActionComponent() {
         for (row in 0 until rowAmount) {
             val columnList = mutableListOf<T>()
             for (column in 0 until columnAmount) {
-                columnList.add(value ?: T::class.constructors.first().call(parent))
+                columnList.add(value ?: T::class.constructors.first().call(parent, row, column))
             }
             rowList.add(columnList)
         }

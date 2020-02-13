@@ -80,7 +80,7 @@ class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", listOf(Icons.pen
     }
 
     override fun mouseMoved(polygon: Polygon, row: Int, column: Int) {
-        with(PixelGrid.tempRectangleMatrix[row][column]) {
+        with(PixelGrid.previewRectangleMatrix[row][column]) {
             colour = Components.colourShades.selectedShade
         }
     }

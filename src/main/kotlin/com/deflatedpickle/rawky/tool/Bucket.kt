@@ -119,8 +119,6 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
             // The cell and the colour it used to be
             val oldColours = mutableMapOf<PixelGrid.Cell, Color>()
 
-            val colourList = mutableMapOf<Pair<Int, Int>, PixelGrid.Cell>()
-
             override fun perform() {
                 val cellList = ArrayDeque<Pair<Int, Int>>()
 
@@ -190,7 +188,7 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
                                     .layerList[Components.layerList.table.selectedRow]
                                     .pixelMatrix[column][row].colour.rgb &&
                             fillCheck(colour, hsb)) {
-                        colourList[this] = PixelGrid.tempRectangleMatrix[this.first][this.second]
+                        colourList[this] = PixelGrid.previewRectangleMatrix[this.first][this.second]
 
                         cellList.add(Pair(this.first, this.second + 1))
                         cellList.add(Pair(this.first, this.second - 1))

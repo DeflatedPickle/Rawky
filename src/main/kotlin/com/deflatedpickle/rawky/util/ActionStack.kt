@@ -41,13 +41,15 @@ class ActionStack {
             get() = ActionHistory.currentWidget.actionStack.undoQueue
     }
 
-    abstract class Action(val name: String) {
+    abstract class Action(val name: String, var canMerge: Boolean = true) {
         /**
          * A check to see if the action should happen
          */
         open fun check(): Boolean {
             return true
         }
+
+        open fun mouseDown() {}
 
         /**
          * Performed on redo
