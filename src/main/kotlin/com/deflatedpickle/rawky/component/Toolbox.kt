@@ -13,6 +13,7 @@ import javax.swing.ButtonGroup
 import javax.swing.JPanel
 import javax.swing.JToggleButton
 import uk.co.timwise.wraplayout.WrapLayout
+import javax.swing.SwingUtilities
 
 class Toolbox : Component() {
     // TODO: Maybe merge this into Action, seems useful
@@ -35,9 +36,9 @@ class Toolbox : Component() {
     }
 
     // TODO: This could be expanded to support more buttons
-    var indexList = arrayOfNulls<Tool>(Tool.list.size).toMutableList()
+    var toolIndexList = arrayOfNulls<Tool>(3).toMutableList()
 
-    enum class Group(val dimension: Dimension, val group: ButtonGroup) {
+    enum class Group(val dimension: Dimension, val buttonGroup: ButtonGroup) {
         PRIMARY(Dimension(28, 28), ButtonGroup()),
         MIDDLE(Dimension(10, 28), ButtonGroup()),
         SECONDARY(Dimension(18, 28), ButtonGroup())
@@ -46,38 +47,42 @@ class Toolbox : Component() {
     init {
         this.layout = WrapLayout()
 
-        for (t in Tool.list) {
-            JPanel().also {
+        // Loops through all the tools, sorted alphabetically
+        // NOTE: Could add a program option for how tools are sorted, eg. most used
+        for (tool in Tool.list.sortedBy { it.name }) {
+            add(JPanel().also {
                 it.layout = GridBagLayout()
 
-                for ((gi, g) in Group.values().withIndex()) {
-                    it.add(JToggleButton(t.iconList[gi]).apply {
-                        preferredSize = g.dimension
-                        toolTipText = "${g.name.toLowerCase().capitalize()} ${t.name}"
-                        addActionListener {
-                            indexList[gi] = t
+                for ((groupIndex, group) in Group.values().withIndex()) {
+                    it.add(JToggleButton(tool.iconList[groupIndex]).apply {
+                        preferredSize = group.dimension
+                        toolTipText = "${group.name.toLowerCase().capitalize()} ${tool.name}"
 
-                            Components.toolOptions.relayout()
+                        addActionListener {
+                            toolIndexList[groupIndex] = tool
                         }
 
-                        g.group.add(this)
+                        group.buttonGroup.add(this)
 
-                        if (t.selected) {
-                            indexList[gi] = t
-                            g.group.setSelected(this.model, true)
+                        // Checks the tool belongs to a group and that the group's index is the same as the current one
+                        if (tool.group != null && tool.group.ordinal == groupIndex) {
+                            toolIndexList[groupIndex] = tool
+
+                            SwingUtilities.invokeLater {
+                                group.buttonGroup.setSelected(this.model, true)
+                            }
                         }
                     }, GridBagConstraints().apply {
                         weightx = 1.0
                         weighty = 1.0
                         fill = GridBagConstraints.BOTH
 
-                        if (g == Group.SECONDARY) {
+                        if (group.ordinal % 3 == 2) {
                             gridwidth = GridBagConstraints.REMAINDER
                         }
                     })
                 }
-                add(it)
-            }
+            })
         }
     }
 }

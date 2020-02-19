@@ -250,7 +250,9 @@ object PixelGrid : ActionComponent() {
                             hoverRow = rowIndex
                             hoverColumn = columnIndex
 
-                            Components.toolbox.indexList[0]!!.mouseMoved(column, rowIndex, columnIndex)
+                            Components.toolbox.toolIndexList[0]!!.mouseMoved(column, rowIndex, columnIndex)
+                            Components.toolbox.toolIndexList[1]!!.mouseMoved(column, rowIndex, columnIndex)
+                            Components.toolbox.toolIndexList[2]!!.mouseMoved(column, rowIndex, columnIndex)
                         }
                     }
                 }
@@ -258,11 +260,11 @@ object PixelGrid : ActionComponent() {
 
             override fun mouseDragged(e: MouseEvent) {
                 mouseMoved(e)
-                Components.toolbox.indexList[e.button]?.mouseDragged(e.button)
+                Components.toolbox.toolIndexList[e.button]?.mouseDragged(e.button, hoverPixel, hoverRow, hoverColumn)
                 when {
-                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.indexList[0]!!.perform(0, true, e.point, lastPoint, e.clickCount)
-                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.indexList[1]!!.perform(1, true, e.point, lastPoint, e.clickCount)
-                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.indexList[2]!!.perform(2, true, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.toolIndexList[0]!!.perform(0, true, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.toolIndexList[1]!!.perform(1, true, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.toolIndexList[2]!!.perform(2, true, e.point, lastPoint, e.clickCount)
                 }
                 lastPoint = e.point
             }
@@ -272,22 +274,21 @@ object PixelGrid : ActionComponent() {
             var lastPoint = Point()
 
             override fun mousePressed(e: MouseEvent) {
-                Components.toolbox.indexList[e.button]?.mouseClicked(e.button, hoverPixel!!, hoverRow, hoverColumn, e.clickCount)
+                Components.toolbox.toolIndexList[e.button - 1]?.mouseClicked(e.button, hoverPixel!!, hoverRow, hoverColumn, e.clickCount)
                 when {
-                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.indexList[0]!!.perform(0, false, e.point, lastPoint, e.clickCount)
-                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.indexList[1]!!.perform(1, false, e.point, lastPoint, e.clickCount)
-                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.indexList[2]!!.perform(2, false, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.toolIndexList[0]!!.perform(0, false, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.toolIndexList[1]!!.perform(1, false, e.point, lastPoint, e.clickCount)
+                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.toolIndexList[2]!!.perform(2, false, e.point, lastPoint, e.clickCount)
                 }
                 lastPoint = e.point
             }
 
             override fun mouseReleased(e: MouseEvent) {
-                Components.toolbox.indexList[0]!!.mouseRelease(e.button, hoverPixel, hoverRow, hoverColumn)
-                Components.toolbox.indexList[1]!!.mouseRelease(e.button, hoverPixel, hoverRow, hoverColumn)
-                Components.toolbox.indexList[2]!!.mouseRelease(e.button, hoverPixel, hoverRow, hoverColumn)
-
+                Components.toolbox.toolIndexList[e.button - 1]?.mouseRelease(e.button, hoverPixel, hoverRow, hoverColumn)
                 when {
-                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.indexList[0]!!.releaseLeft(e.point, lastPoint)
+                    SwingUtilities.isLeftMouseButton(e) -> Components.toolbox.toolIndexList[0]!!.release(0, e.point, lastPoint)
+                    SwingUtilities.isMiddleMouseButton(e) -> Components.toolbox.toolIndexList[1]!!.release(1, e.point, lastPoint)
+                    SwingUtilities.isRightMouseButton(e) -> Components.toolbox.toolIndexList[2]!!.release(2, e.point, lastPoint)
                 }
             }
 
@@ -363,8 +364,8 @@ object PixelGrid : ActionComponent() {
             ActionStack.undoQueue[ActionHistory.list.selectedIndex].outline(biG2D)
         }
 
-        val length = Components.toolbox.indexList.lastIndex
-        for ((index, tool) in Components.toolbox.indexList.reversed().withIndex()) {
+        val length = Components.toolbox.toolIndexList.lastIndex
+        for ((index, tool) in Components.toolbox.toolIndexList.reversed().withIndex()) {
             if (mousePosition != null) {
                 val size = if (index == length) 16 * 3 else 16 * 2
 
@@ -374,7 +375,7 @@ object PixelGrid : ActionComponent() {
                             mousePosition.y,
                             size, size, this)
                 } else {
-                    val theta = (PI * 2) * index / Components.toolbox.indexList.count() - 1
+                    val theta = (PI * 2) * index / Components.toolbox.toolIndexList.count() - 1
 
                     val x = 14 * cos(theta).roundToInt()
                     val y = 14 * sin(theta).roundToInt()
@@ -389,7 +390,7 @@ object PixelGrid : ActionComponent() {
 
         val toolGraphics = bufferedImage.createGraphics()
         toolGraphics.scale(this.scale, this.scale)
-        for (tool in Components.toolbox.indexList.reversed()) {
+        for (tool in Components.toolbox.toolIndexList.reversed()) {
             tool?.render(biG2D)
         }
         toolGraphics.dispose()

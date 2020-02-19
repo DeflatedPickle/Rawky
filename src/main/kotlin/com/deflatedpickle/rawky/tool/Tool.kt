@@ -17,7 +17,8 @@ import javax.swing.SwingUtilities
 import org.reflections.Reflections
 import java.awt.Color
 
-abstract class Tool(val name: String, var iconList: List<Icon>, val cursor: Image, val selected: Boolean = false) {
+abstract class Tool(val name: String, var iconList: List<Icon>, val cursor: Image,
+                    val group: Toolbox.Group? = null) {
     companion object {
         val list = mutableListOf<Tool>()
 
@@ -42,13 +43,14 @@ abstract class Tool(val name: String, var iconList: List<Icon>, val cursor: Imag
         iconList = tempList
 
         SwingUtilities.invokeLater {
-            if (this.selected) {
+            if (this.group != null) {
                 Components.toolOptions.relayout()
             }
         }
     }
 
     open fun perform(button: Int, dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {}
+    open fun release(button: Int, point: Point, lastPoint: Point?) {}
 
     open fun performLeft(dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {}
     open fun releaseLeft(point: Point, lastPoint: Point?) {}
@@ -65,6 +67,10 @@ abstract class Tool(val name: String, var iconList: List<Icon>, val cursor: Imag
                 stack.add(ActionStack.pop(ActionStack.undoQueue.size - 1))
             })
         }
+    }
+
+    open fun mouseDragged(button: Int, polygon: Polygon?, row: Int, column: Int) {
+        mouseDragged(button)
     }
 
 

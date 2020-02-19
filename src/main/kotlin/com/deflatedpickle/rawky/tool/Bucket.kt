@@ -24,7 +24,7 @@ import java.util.ArrayDeque
 import javax.swing.JPanel
 import javax.swing.UIManager
 
-class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.bucket), Icons.bucket.image, false) {
+class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.bucket), Icons.bucket.image) {
     @Options
     object Settings {
         @Enum("com.deflatedpickle.rawky.tool.Bucket\$FillType")

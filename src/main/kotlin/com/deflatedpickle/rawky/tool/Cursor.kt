@@ -3,10 +3,11 @@
 package com.deflatedpickle.rawky.tool
 
 import com.deflatedpickle.rawky.component.PixelGrid
+import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.util.Icons
 import java.awt.Point
 
-class Cursor : Tool("Cursor", listOf(Icons.arrow), Icons.arrow.image, false) {
+class Cursor : Tool("Cursor", listOf(Icons.arrow), Icons.arrow.image, group = Toolbox.Group.SECONDARY) {
     override fun perform(button: Int, dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
         if (PixelGrid.hoverPixel != null) {
             PixelGrid.lastCell.setLocation(

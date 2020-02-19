@@ -16,7 +16,8 @@ import java.awt.Point
 import java.awt.Polygon
 import javax.swing.UIManager
 
-class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", listOf(Icons.pencil), Icons.pencil.image, true) {
+class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", listOf(Icons.pencil), Icons.pencil.image,
+        Toolbox.Group.PRIMARY) {
     @Options
     object Settings {
         @IntOpt(1, 9)

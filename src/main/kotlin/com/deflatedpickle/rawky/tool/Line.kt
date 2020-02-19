@@ -4,7 +4,6 @@ package com.deflatedpickle.rawky.tool
 
 import com.deflatedpickle.rawky.api.annotations.Enum
 import com.deflatedpickle.rawky.api.annotations.Options
-import com.deflatedpickle.rawky.api.annotations.Toggle
 import com.deflatedpickle.rawky.api.annotations.Tooltip
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.component.Toolbox
@@ -13,12 +12,11 @@ import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
 import java.awt.Color
 import java.awt.Graphics2D
-import java.awt.Point
 import java.awt.Polygon
 import javax.swing.UIManager
 import kotlin.math.abs
 
-class Line : HoverOutlineTool(null, "Line", listOf(Icons.pencil), Icons.pencil.image, true) {
+class Line : HoverOutlineTool(null, "Line", listOf(Icons.pencil), Icons.pencil.image) {
     // @Options
     // object Settings {
     //     @Enum("com.deflatedpickle.rawky.tool.Line\$Mode")
@@ -26,7 +24,7 @@ class Line : HoverOutlineTool(null, "Line", listOf(Icons.pencil), Icons.pencil.i
     //     @JvmField
     //     var mode = Mode.SINGLE
     // }
-
+    
     // enum class Mode {
     //     SINGLE,
     //     CONTINUOUS
@@ -34,11 +32,17 @@ class Line : HoverOutlineTool(null, "Line", listOf(Icons.pencil), Icons.pencil.i
 
     var clickedCell: Pair<Int, Int>? = null
 
+    var button = 1
+
     override fun mouseClicked(button: Int, polygon: Polygon, row: Int, column: Int, clickCount: Int) {
         clickedCell = Pair(row, column)
     }
 
-    override fun releaseLeft(point: Point, lastPoint: Point?) {
+    override fun mouseRelease(button: Int, polygon: Polygon?, row: Int, column: Int) {
+        super.mouseRelease(button, polygon, row, column)
+
+        if (button != this.button) return
+
         val pixel = object : Toolbox.LockCheck(this.name, false) {
             var oldColours = mutableMapOf<PixelGrid.Cell, Color>()
 
@@ -74,7 +78,9 @@ class Line : HoverOutlineTool(null, "Line", listOf(Icons.pencil), Icons.pencil.i
         clickedCell = null
     }
 
-    override fun mouseMoved(polygon: Polygon, row: Int, column: Int) {
+    override fun mouseDragged(button: Int, polygon: Polygon?, row: Int, column: Int) {
+        super.mouseDragged(button, polygon, row, column)
+
         clickedCell?.let {
             with(PixelGrid.previewRectangleMatrix[it.first][it.second]) {
                 colour = Components.colourShades.selectedShade
@@ -82,7 +88,9 @@ class Line : HoverOutlineTool(null, "Line", listOf(Icons.pencil), Icons.pencil.i
 
             process(column, row, it.second, it.first, PixelGrid.previewRectangleMatrix)
         }
+    }
 
+    override fun mouseMoved(polygon: Polygon, row: Int, column: Int) {
         with(PixelGrid.previewRectangleMatrix[row][column]) {
             colour = Components.colourShades.selectedShade
         }
