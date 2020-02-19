@@ -66,8 +66,10 @@ object Settings : JDialog(Components.frame, "Settings") {
             dividerLocation = 150
         })
 
+        // Gets the options for the window/s and panels
         for (i in reflections.getSubTypesOf(JFrame::class.java) + reflections.getSubTypesOf(JPanel::class.java)) {
             for (clazz in i.declaredClasses) {
+                // Checks if a declared class is annotated as Options
                 if (clazz.annotations.map { it.annotationClass == Options::class }.contains(true)) {
                     with(tree.model as DefaultTreeModel) {
                         with(tree.model.root as DefaultMutableTreeNode) {
@@ -80,7 +82,10 @@ object Settings : JDialog(Components.frame, "Settings") {
                         layout = GridBagLayout()
                     }
 
+                    // Loops each field and processes the annotations
                     for (field in clazz.fields) {
+                        // To make them discoverable, the options class has to be an object
+                        // This means we have to find and forget the INSTANCE field
                         if (field.name != "INSTANCE") {
                             Components.processAnnotations(panel, field)
                         }

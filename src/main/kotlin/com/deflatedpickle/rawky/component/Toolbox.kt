@@ -60,6 +60,7 @@ class Toolbox : Component() {
 
                         addActionListener {
                             toolIndexList[groupIndex] = tool
+                            Components.toolOptions.relayout(groupIndex)
                         }
 
                         group.buttonGroup.add(this)
@@ -69,6 +70,7 @@ class Toolbox : Component() {
                             toolIndexList[groupIndex] = tool
 
                             SwingUtilities.invokeLater {
+                                Components.toolOptions.relayout(groupIndex)
                                 group.buttonGroup.setSelected(this.model, true)
                             }
                         }

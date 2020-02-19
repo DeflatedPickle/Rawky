@@ -44,7 +44,7 @@ abstract class Tool(val name: String, var iconList: List<Icon>, val cursor: Imag
 
         SwingUtilities.invokeLater {
             if (this.group != null) {
-                Components.toolOptions.relayout()
+                Components.toolOptions.relayout(0)
             }
         }
     }

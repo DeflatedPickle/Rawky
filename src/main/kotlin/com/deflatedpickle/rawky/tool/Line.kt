@@ -2,9 +2,6 @@
 
 package com.deflatedpickle.rawky.tool
 
-import com.deflatedpickle.rawky.api.annotations.Enum
-import com.deflatedpickle.rawky.api.annotations.Options
-import com.deflatedpickle.rawky.api.annotations.Tooltip
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.util.ActionStack
@@ -24,7 +21,7 @@ class Line : HoverOutlineTool(null, "Line", listOf(Icons.pencil), Icons.pencil.i
     //     @JvmField
     //     var mode = Mode.SINGLE
     // }
-    
+
     // enum class Mode {
     //     SINGLE,
     //     CONTINUOUS
