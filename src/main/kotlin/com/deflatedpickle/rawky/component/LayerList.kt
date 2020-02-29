@@ -35,6 +35,12 @@ import javax.swing.table.TableCellRenderer
 
 @RedrawSensitive<PixelGrid>(PixelGrid::class)
 class LayerList : ActionComponent() {
+    companion object {
+        fun getLayer(index: Int, frame: Int): PixelGrid.Layer = PixelGrid.frameList[frame].layerList[index]
+        fun getCurrentLayer(frame: Int): PixelGrid.Layer = PixelGrid.frameList[frame]
+                .layerList[Components.layerList.table.selectedRow]
+    }
+
     val addButton = JButton(Icons.createNew).apply {
         toolTipText = "New Layer"
         addActionListener {
@@ -163,7 +169,7 @@ class LayerList : ActionComponent() {
         table.setRowSelectionInterval(0, 0)
 
         with(PixelGrid.frameList[Components.animationTimeline.list.selectedIndex]) {
-            layerList.add(0, PixelGrid.Layer(this))
+            layerList.add(0, PixelGrid.Layer(this, tableModel.rowCount))
         }
     }
 

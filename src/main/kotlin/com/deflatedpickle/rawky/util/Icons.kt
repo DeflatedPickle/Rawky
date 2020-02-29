@@ -18,6 +18,8 @@ object Icons {
     val paste = icon("paste")
     val trash = icon("delete")
 
+    val boxSelect = icon("box_select")
+
     val settings = icon("settings")
 
     val crop = icon("crop")
