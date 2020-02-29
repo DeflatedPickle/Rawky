@@ -10,6 +10,7 @@ import com.deflatedpickle.rawky.api.annotations.Options
 import com.deflatedpickle.rawky.api.annotations.RedrawActive
 import com.deflatedpickle.rawky.api.annotations.Tooltip
 import com.deflatedpickle.rawky.api.component.ActionComponent
+import com.deflatedpickle.rawky.tool.Move
 import com.deflatedpickle.rawky.tool.Tool
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
@@ -42,6 +43,7 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.math.sin
 import org.jdesktop.swingx.util.ShapeUtils
+import javax.swing.UIManager
 
 @RedrawActive
 object PixelGrid : ActionComponent() {
@@ -122,21 +124,33 @@ object PixelGrid : ActionComponent() {
         @Tooltip("The colour of the background odd tiles")
         @JvmField
         var backgroundFillOdd: Color = Color.WHITE
+
+        @IntOpt(1, 10)
+        @Tooltip("The size of the main tool icon")
+        @JvmField
+        var mainIconSize: Int = 3
+
+        @IntOpt(1, 10)
+        @Tooltip("The size of the sub tool icons")
+        @JvmField
+        var subIconSize: Int = 2
     }
 
     interface MatrixItem<T> {
         var parent: T
     }
 
-    class Frame {
+    class Frame(var index: Int) {
         var layerList = mutableListOf<Layer>()
+
+        fun getCurrentLayer() = LayerList.getCurrentLayer(0)
 
         override fun toString(): String {
             return "Frame { $layerList }"
         }
     }
 
-    class Layer(override var parent: Frame) : MatrixItem<Frame> {
+    data class Layer(override var parent: Frame, var index: Int) : MatrixItem<Frame> {
         var pixelMatrix = initMatrix<Layer?, Cell>(parent = this)
         var visible = true
 
@@ -149,13 +163,26 @@ object PixelGrid : ActionComponent() {
 
         var lockType = LockType.OFF
 
+        fun getCellAt(mouseX: Int, mouseY: Int): Cell? {
+            for ((rowIndex, row) in rectangleMatrix.withIndex()) {
+                for ((columnIndex, column) in row.withIndex()) {
+                    // println("The cell is $columnIndex, $rowIndex ${column.bounds}")
+                    if (column.contains(mouseX, mouseY)) {
+                        return LayerList.getCurrentLayer(parent.index).pixelMatrix[rowIndex][columnIndex]
+                    }
+                }
+            }
+            return null
+        }
+
         override fun toString(): String {
             return "Layer { $pixelMatrix, $visible, $lockType }"
         }
     }
 
-    class Cell(override var parent: Layer?, val row: Int, val column: Int) : MatrixItem<Layer?> {
+    data class Cell(override var parent: Layer?, val row: Int, val column: Int) : MatrixItem<Layer?> {
         var colour: Color = defaultColour()
+        var selected: Boolean = false
 
         var polygon: Polygon? = null
 
@@ -186,6 +213,11 @@ object PixelGrid : ActionComponent() {
     var scale = 1.0
 
     var layout = LayoutMethod.GRID
+
+    var isSelectingFinished = false
+    // This stops the need for looping over all cells
+    // Actions can also be performed easier on all selected cells with Iterable#map, etc
+    val selectedCells = mutableListOf<Cell>()
 
     val lastCell = Point()
     val contextMenu = object : JPopupMenu() {
@@ -233,7 +265,13 @@ object PixelGrid : ActionComponent() {
                             bounds.grow(3, 3)
 
                             if (!bounds.contains(e.point)) {
-                                previewRectangleMatrix[rowIndex][columnIndex].colour = defaultColour()
+                                with(previewRectangleMatrix[rowIndex][columnIndex]) {
+                                    colour = defaultColour()
+
+                                    if (!isSelectingFinished && Components.toolbox.toolIndexList[0] !is Move) {
+                                        selected = false
+                                    }
+                                }
                             }
                         }
                     }
@@ -305,7 +343,17 @@ object PixelGrid : ActionComponent() {
     override fun paintComponent(g: Graphics) {
         val g2D = g as Graphics2D
 
-        val bufferedImage = BufferedImage(min(this.visibleRect.x + this.visibleRect.width, (Settings.pixelSize * columnAmount) * ((this.scale * 10).toInt())), min(this.visibleRect.y + this.visibleRect.height, (Settings.pixelSize * rowAmount) * ((this.scale * 10).toInt())), BufferedImage.TYPE_INT_ARGB)
+        val bufferedImage = BufferedImage(
+                min(this.visibleRect.x
+                        + this.visibleRect.width,
+                        (Settings.pixelSize * columnAmount)
+                                * ((this.scale * 10).toInt())),
+                min(this.visibleRect.y
+                        + this.visibleRect.height,
+                        (Settings.pixelSize * rowAmount)
+                                * ((this.scale * 10).toInt())),
+                BufferedImage.TYPE_INT_ARGB
+        )
         val biG2D = bufferedImage.createGraphics()
         biG2D.scale(this.scale, this.scale)
 
@@ -358,32 +406,42 @@ object PixelGrid : ActionComponent() {
         }
         postGraphics.dispose()
 
+        drawSelection(bufferedImage, biG2D)
         drawGrid(biG2D)
 
-        if (!ActionHistory.list.isSelectionEmpty) {
+        if (!ActionHistory.list.isSelectionEmpty &&
+                ActionHistory.listModel.size > ActionHistory.list.selectedIndex + 1) {
             ActionStack.undoQueue[ActionHistory.list.selectedIndex].outline(biG2D)
         }
 
         val length = Components.toolbox.toolIndexList.lastIndex
         for ((index, tool) in Components.toolbox.toolIndexList.reversed().withIndex()) {
             if (mousePosition != null) {
-                val size = if (index == length) 16 * 3 else 16 * 2
+                val size = if (index == length) 16 * Settings.mainIconSize else 16 * Settings.subIconSize
 
                 if (index == length) {
-                    biG2D.drawImage(tool?.cursor,
-                            mousePosition.x + 6,
-                            mousePosition.y,
-                            size, size, this)
+                    tool?.let {
+                        mousePosition?.let {
+                            biG2D.drawImage(tool.cursor,
+                                    mousePosition.x + 6,
+                                    mousePosition.y,
+                                    size, size, this)
+                        }
+                    }
                 } else {
-                    val theta = (PI * 2) * index / Components.toolbox.toolIndexList.count() - 1
+                    val theta = (PI * 2) * index / Components.toolbox.toolIndexList.count()
 
                     val x = 14 * cos(theta).roundToInt()
                     val y = 14 * sin(theta).roundToInt()
 
-                    biG2D.drawImage(tool?.cursor,
-                            mousePosition.x + 44 + x,
-                            mousePosition.y + y,
-                            size, size, this)
+                    tool?.let {
+                        mousePosition?.let {
+                            biG2D.drawImage(tool.cursor,
+                                    mousePosition.x + 44 + x,
+                                    mousePosition.y + y,
+                                    size, size, this)
+                        }
+                    }
                 }
             }
         }
@@ -391,7 +449,7 @@ object PixelGrid : ActionComponent() {
         val toolGraphics = bufferedImage.createGraphics()
         toolGraphics.scale(this.scale, this.scale)
         for (tool in Components.toolbox.toolIndexList.reversed()) {
-            tool?.render(biG2D)
+            tool?.render(toolGraphics)
         }
         toolGraphics.dispose()
 
@@ -441,6 +499,23 @@ object PixelGrid : ActionComponent() {
                             g2D.fillPolygon(rectangle)
                         }
                     }
+                }
+            }
+        }
+    }
+
+    fun drawSelection(image: BufferedImage, g2D: Graphics2D) {
+        for (row in previewRectangleMatrix) {
+            for (column in row) {
+                if (column.selected) {
+                    val selectionGraphics = image.createGraphics()
+
+                    selectionGraphics.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.3f)
+
+                    selectionGraphics.color = UIManager.getColor("List.selectionBackground")
+                    selectionGraphics.fillPolygon(column.polygon)
+
+                    selectionGraphics.dispose()
                 }
             }
         }
@@ -502,5 +577,21 @@ object PixelGrid : ActionComponent() {
             rowList.add(columnList)
         }
         return rowList
+    }
+
+    fun getPolygonAt(x: Int, y: Int): Polygon? {
+        for ((rowIndex, _) in rectangleMatrix.withIndex()) {
+            for (column in rectangleMatrix[rowIndex]) {
+                if (column.contains(x, y)) {
+                    return column
+                }
+            }
+        }
+
+        return null
+    }
+
+    fun getPolygonAt(point: Point) {
+        getPolygonAt(point.x, point.y)
     }
 }

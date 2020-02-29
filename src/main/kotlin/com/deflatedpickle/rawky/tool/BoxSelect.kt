@@ -12,26 +12,17 @@ import java.awt.Graphics2D
 import java.awt.Polygon
 import javax.swing.UIManager
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
-class Line : HoverOutlineTool(null, "Line", listOf(Icons.pencil), Icons.pencil.image) {
-    // @Options
-    // object Settings {
-    //     @Enum("com.deflatedpickle.rawky.tool.Line\$Mode")
-    //     @Tooltip("Changes the mode for the line")
-    //     @JvmField
-    //     var mode = Mode.SINGLE
-    // }
-
-    // enum class Mode {
-    //     SINGLE,
-    //     CONTINUOUS
-    // }
-
+class BoxSelect : HoverOutlineTool(null, "Box Select", listOf(Icons.boxSelect), Icons.boxSelect.image) {
     var clickedCell: Pair<Int, Int>? = null
 
     var button = 1
 
     override fun mouseClicked(button: Int, polygon: Polygon, row: Int, column: Int, clickCount: Int) {
+        PixelGrid.isSelectingFinished = false
+        PixelGrid.selectedCells.clear()
         clickedCell = Pair(row, column)
     }
 
@@ -40,23 +31,25 @@ class Line : HoverOutlineTool(null, "Line", listOf(Icons.pencil), Icons.pencil.i
 
         if (button != this.button) return
 
+        PixelGrid.isSelectingFinished = true
+
         val pixel = object : Toolbox.LockCheck(this.name, false) {
-            var oldColours = mutableMapOf<PixelGrid.Cell, Color>()
+            var selectedCells = mutableMapOf<PixelGrid.Cell, Boolean>()
 
             override fun perform() {
                 clickedCell?.let {
-                    oldColours = process(column, row, it.second, it.first, PixelGrid.frameList[frame].layerList[layer].pixelMatrix)
+                    selectedCells = process(column, row, it.second, it.first, PixelGrid.frameList[frame].layerList[layer].pixelMatrix)
                 }
             }
 
             override fun cleanup() {
-                for ((cell, colour) in oldColours) {
-                    cell.colour = colour
+                for ((cell, selected) in selectedCells) {
+                    cell.selected = selected
                 }
             }
 
             override fun outline(g2D: Graphics2D) {
-                for ((cell, _) in oldColours) {
+                for ((cell, _) in selectedCells) {
                     g2D.color = UIManager.getColor("List.selectionBackground")
                     g2D.drawRect(
                             cell.row * PixelGrid.Settings.pixelSize,
@@ -83,7 +76,7 @@ class Line : HoverOutlineTool(null, "Line", listOf(Icons.pencil), Icons.pencil.i
                 colour = Components.colourShades.selectedShade
             }
 
-            process<Color>(column, row, it.second, it.first, PixelGrid.previewRectangleMatrix)
+            process<Boolean>(column, row, it.second, it.first, PixelGrid.previewRectangleMatrix)
         }
     }
 
@@ -94,39 +87,28 @@ class Line : HoverOutlineTool(null, "Line", listOf(Icons.pencil), Icons.pencil.i
     }
 
     override fun <T> process(x0: Int, y0: Int, x1: Int?, y1: Int?, cellMatrix: MutableList<MutableList<PixelGrid.Cell>>): MutableMap<PixelGrid.Cell, T> {
-        // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#External_links
-        var tempX0 = x0
-        var tempY0 = y0
+        val cellMap = mutableMapOf<PixelGrid.Cell, T>()
 
-        val dx = abs(x1!! - tempX0)
-        val sx = if (tempX0 < x1) 1 else -1
-        val dy = -abs(y1!! - tempY0)
-        val sy = if (tempY0 < y1) 1 else -1
-        var err = dx + dy
+        y1?.let { y1NonNull ->
+            x1?.let { x1NonNull ->
+                val y0Temp = min(y0, y1NonNull)
+                val y1Temp = max(y0, y1NonNull)
 
-        val cellMap = mutableMapOf<PixelGrid.Cell, Color>()
+                for (row in y0Temp..y1Temp) {
+                    val x0Temp = min(x0, x1NonNull)
+                    val x1Temp = max(x0, x1NonNull)
 
-        while (true) {
-            with(cellMatrix[tempY0][tempX0]) {
-                cellMap[this] = colour
-                colour = Components.colourShades.selectedShade
-            }
-
-            if (tempX0 == x1 && tempY0 == y1) break
-
-            val e2 = 2 * err
-
-            if (e2 >= dy) {
-                err += dy
-                tempX0 += sx
-            }
-
-            if (e2 <= dx) {
-                err += dx
-                tempY0 += sy
+                    for (column in x0Temp..x1Temp) {
+                        with(cellMatrix[row][column]) {
+                            selected = true
+                            PixelGrid.selectedCells.add(this)
+                        }
+                        cellMap[cellMatrix[row][column]] = true as T
+                    }
+                }
             }
         }
 
-        return cellMap as MutableMap<PixelGrid.Cell, T>
+        return cellMap
     }
 }

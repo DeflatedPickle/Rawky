@@ -12,6 +12,7 @@ import com.deflatedpickle.rawky.widget.RangeSlider
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Dimension
+import java.awt.Frame
 import java.awt.Graphics
 import java.awt.Graphics2D
 import javax.swing.BoxLayout
@@ -28,6 +29,11 @@ import javax.swing.border.LineBorder
 
 @RedrawSensitive<PixelGrid>(PixelGrid::class)
 class AnimationTimeline : ActionComponent() {
+    companion object {
+        fun getFrame(index: Int): PixelGrid.Frame = PixelGrid.frameList[index]
+        fun getCurrentFrame(): PixelGrid.Frame = PixelGrid.frameList[Components.animationTimeline.list.selectedIndex]
+    }
+
     // TODO: Move to a toolbar sub-class
     val slider = RangeSlider.IntRangeSliderComponent(-10, 10, -2, 2)
     val pastColour = ColourButton(Color.YELLOW).apply { preferredSize = Dimension(32, slider.preferredSize.height) }
@@ -123,7 +129,7 @@ class AnimationTimeline : ActionComponent() {
         listModel.addElement("Frame ${listModel.size()}")
         list.selectedIndex = listModel.size() - 1
 
-        PixelGrid.frameList.add(PixelGrid.Frame())
+        PixelGrid.frameList.add(PixelGrid.Frame(listModel.capacity()))
         if (addLayer) {
             Components.layerList.addLayer()
         }

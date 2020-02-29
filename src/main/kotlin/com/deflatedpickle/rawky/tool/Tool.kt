@@ -85,8 +85,8 @@ abstract class Tool(val name: String, var iconList: List<Icon>, val cursor: Imag
     open fun render(g2D: Graphics2D) {}
 
     var isCached = false
-    open fun process(x0: Int, y0: Int, x1: Int?, y1: Int?,
+    open fun <T> process(x0: Int, y0: Int, x1: Int?, y1: Int?,
                      cellMatrix: MutableList<MutableList<PixelGrid.Cell>>)
-            : MutableMap<PixelGrid.Cell, Color> = mutableMapOf()
+            : MutableMap<PixelGrid.Cell, T> = mutableMapOf()
 
 }

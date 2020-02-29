@@ -12,8 +12,10 @@ import java.awt.Color
 import java.awt.FlowLayout
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
+import javax.swing.BorderFactory
 import javax.swing.BoxLayout
 import javax.swing.JLabel
+import javax.swing.JScrollPane
 import javax.swing.JTabbedPane
 import javax.swing.SwingConstants
 
@@ -54,14 +56,14 @@ class ToolOptions : Component() {
         this.addChangeListener { relayout(this.selectedIndex) }
 
         for ((groupIndex, group) in Toolbox.Group.values().withIndex()) {
-            this.addTab(group.name.toLowerCase().capitalize(), JXPanel().apply {
+            this.addTab(group.name.toLowerCase().capitalize(), JScrollPane(JXPanel().apply {
                 this.layout = GridBagLayout()
 
                 this.scrollableTracksViewportWidth = true
                 this.scrollableTracksViewportHeight = false
 
                 tabList[groupIndex] = this
-            })
+            }).apply { border = BorderFactory.createEmptyBorder() })
         }
     }
 
