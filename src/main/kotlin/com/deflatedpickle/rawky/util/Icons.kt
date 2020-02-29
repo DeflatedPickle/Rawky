@@ -19,6 +19,7 @@ object Icons {
     val trash = icon("delete")
 
     val boxSelect = icon("box_select")
+    val move = icon("move")
 
     val settings = icon("settings")
 
