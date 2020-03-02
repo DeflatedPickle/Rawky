@@ -7,7 +7,6 @@ import bibliothek.gui.dock.common.DefaultSingleCDockable
 import com.deflatedpickle.rawky.api.component.ComponentFrame
 import com.deflatedpickle.rawky.component.ActionHistory
 import com.deflatedpickle.rawky.component.PixelGrid
-import com.deflatedpickle.rawky.dialogue.New
 import com.deflatedpickle.rawky.menu.Edit
 import com.deflatedpickle.rawky.menu.File
 import com.deflatedpickle.rawky.menu.Help
@@ -40,7 +39,7 @@ fun main() {
         Components.frame.add(JToolBar().apply {
             add(JButton(Icons.createNew).apply {
                 toolTipText = "New File"
-                addActionListener { New().isVisible = true }
+                addActionListener { Commands.newDialog() }
             })
             add(JButton(Icons.openedFolder).apply {
                 toolTipText = "Open File"

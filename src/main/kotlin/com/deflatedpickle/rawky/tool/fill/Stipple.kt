@@ -9,7 +9,7 @@ import com.deflatedpickle.rawky.api.annotations.Tooltip
 import com.deflatedpickle.rawky.component.PixelGrid
 import java.awt.Color
 
-object Stipple : Fill {
+object Stipple : IFill {
     @Options
     object Settings {
         @Colour

@@ -5,17 +5,31 @@ package com.deflatedpickle.rawky.dialogue
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.component.ToolOptions
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.util.extension.toCamelCase
 import com.deflatedpickle.rawky.widget.Slider
 import java.awt.GridBagLayout
+import java.awt.image.AffineTransformOp
+import javax.swing.JComboBox
 import javax.swing.JLabel
 import javax.swing.JPanel
 import org.oxbow.swingbits.dialog.task.TaskDialog
 
-class New : TaskDialog(Components.frame, "New File") {
-    val widthSpinner = Slider.IntSliderComponent(0, 16 * 16, PixelGrid.columnAmount).apply {
+class ScaleImage : TaskDialog(Components.frame, "Scale Image") {
+    enum class ScaleType(val type: Int) {
+        NEAREST_NEIGHBOR(AffineTransformOp.TYPE_NEAREST_NEIGHBOR),
+        BILINEAR(AffineTransformOp.TYPE_BILINEAR),
+        BICUBIC(AffineTransformOp.TYPE_BICUBIC),
+    }
+
+    val scaleCombobox = JComboBox<String>(
+            ScaleType::class.java.enumConstants.map { e -> e.toString().toCamelCase() }
+                    .toTypedArray()
+    )
+
+    val widthSlider = Slider.IntSliderComponent(0, 16 * 16, PixelGrid.columnAmount).apply {
         this.slider.value = PixelGrid.columnAmount
     }
-    val heightSpinner = Slider.IntSliderComponent(0, 16 * 16, PixelGrid.rowAmount).apply {
+    val heightSlider = Slider.IntSliderComponent(0, 16 * 16, PixelGrid.rowAmount).apply {
         this.slider.value = PixelGrid.rowAmount
     }
 
@@ -29,7 +43,7 @@ class New : TaskDialog(Components.frame, "New File") {
     }
 
     init {
-        for (i in setOf(widthSpinner, heightSpinner)) {
+        for (i in setOf(widthSlider, heightSlider)) {
             i.slider.majorTickSpacing = 32
             i.slider.minorTickSpacing = 16
             i.slider.snapToTicks = true
@@ -41,17 +55,21 @@ class New : TaskDialog(Components.frame, "New File") {
             i.slider.isOpaque = false
         }
 
+        // TODO: Add a copy button so it doesn't have to be saved
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
 
         fixedComponent = JPanel().apply {
             layout = GridBagLayout()
             isOpaque = false
 
+            add(JLabel("Scale Type:"), ToolOptions.StickEast)
+            add(scaleCombobox, ToolOptions.FillHorizontalFinishLine)
+
             add(JLabel("Width:"), ToolOptions.StickEast)
-            add(widthSpinner, ToolOptions.FinishLine)
+            add(widthSlider, ToolOptions.FillHorizontalFinishLine)
 
             add(JLabel("Height:"), ToolOptions.StickEast)
-            add(heightSpinner, ToolOptions.FinishLine)
+            add(heightSlider, ToolOptions.FillHorizontalFinishLine)
         }
     }
 

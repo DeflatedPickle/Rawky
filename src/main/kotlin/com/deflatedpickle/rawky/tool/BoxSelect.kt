@@ -7,11 +7,9 @@ import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
-import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Polygon
 import javax.swing.UIManager
-import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 

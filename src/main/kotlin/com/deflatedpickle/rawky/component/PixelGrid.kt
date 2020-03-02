@@ -35,6 +35,7 @@ import javax.swing.JPopupMenu
 import javax.swing.JScrollPane
 import javax.swing.JSlider
 import javax.swing.SwingUtilities
+import javax.swing.UIManager
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
@@ -42,7 +43,6 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlin.math.sin
 import org.jdesktop.swingx.util.ShapeUtils
-import javax.swing.UIManager
 
 @RedrawActive
 object PixelGrid : ActionComponent() {
@@ -343,14 +343,14 @@ object PixelGrid : ActionComponent() {
         val g2D = g as Graphics2D
 
         val bufferedImage = BufferedImage(
-                min(this.visibleRect.x
-                        + this.visibleRect.width,
-                        (Settings.pixelSize * columnAmount)
-                                * ((this.scale * 10).toInt())),
-                min(this.visibleRect.y
-                        + this.visibleRect.height,
-                        (Settings.pixelSize * rowAmount)
-                                * ((this.scale * 10).toInt())),
+                min(this.visibleRect.x +
+                        this.visibleRect.width,
+                        (Settings.pixelSize * columnAmount) *
+                                ((this.scale * 10).toInt())),
+                min(this.visibleRect.y +
+                        this.visibleRect.height,
+                        (Settings.pixelSize * rowAmount) *
+                                ((this.scale * 10).toInt())),
                 BufferedImage.TYPE_INT_ARGB
         )
         val biG2D = bufferedImage.createGraphics()

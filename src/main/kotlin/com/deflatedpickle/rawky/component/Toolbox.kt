@@ -12,8 +12,8 @@ import java.awt.GridBagLayout
 import javax.swing.ButtonGroup
 import javax.swing.JPanel
 import javax.swing.JToggleButton
-import uk.co.timwise.wraplayout.WrapLayout
 import javax.swing.SwingUtilities
+import uk.co.timwise.wraplayout.WrapLayout
 
 class Toolbox : Component() {
     // TODO: Maybe merge this into Action, seems useful

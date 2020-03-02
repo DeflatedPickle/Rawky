@@ -2,9 +2,7 @@
 
 package com.deflatedpickle.rawky.menu
 
-import com.deflatedpickle.rawky.dialogue.New
 import com.deflatedpickle.rawky.util.Commands
-import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.EComponent
 import com.deflatedpickle.rawky.util.Icons
 import javax.swing.JMenu
@@ -13,14 +11,7 @@ import javax.swing.JSeparator
 
 class File : JMenu("File") {
     init {
-        add(JMenuItem("New", Icons.createNew).apply {
-            addActionListener {
-                with(New()) {
-                    setLocationRelativeTo(Components.frame)
-                    isVisible = true
-                }
-            }
-        })
+        add(JMenuItem("New", Icons.createNew).apply { addActionListener { Commands.newDialog() } })
         add(JMenuItem("Open", Icons.openedFolder).apply { addActionListener { Commands.open() } })
         add(JMenuItem("Save As", Icons.picture).apply { addActionListener { Commands.save() } })
         add(JSeparator())
@@ -36,6 +27,7 @@ class File : JMenu("File") {
         })
         add(JMenu("Export").apply {
             add(JMenuItem("Image").apply { addActionListener { Commands.exportImage() } })
+            add(JMenuItem("Image (Scaled)").apply { addActionListener { Commands.scaledImage() } })
             add(JSeparator())
             add(JMenuItem("Dock Layout").apply { addActionListener { Commands.exportGridLayout() } })
         })

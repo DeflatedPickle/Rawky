@@ -33,6 +33,7 @@ repositories {
     maven { url 'http://dl.bintray.com/kotlin/kotlin-eap' }
     maven { url 'https://jitpack.io' }
     maven { url 'http://maven.geotoolkit.org' }
+    maven { url 'https://github.com/eugener/oxbow/raw/master/maven/repository' }
 }
 
 dependencies {
@@ -63,10 +64,13 @@ dependencies {
 
     implementation 'com.github.DeflatedPickle:WrapLayout:master-SNAPSHOT'
 
+    // Dialogs
+    implementation 'org.oxbow:swing-bits:1.0.0-SNAPSHOT'
+
     // Themes
     implementation 'com.github.lkishalmi:Darcula:gradle-SNAPSHOT'
     implementation 'org.pushing-pixels:radiance-substance:2.0.1'
-    //nimplementation 'com.github.vincenzopalazzo:material-ui-swing:V1.0.Beta1.4.1'
+    // implementation 'com.github.vincenzopalazzo:material-ui-swing:V1.0.Beta1.4.1'
     implementation 'com.weblookandfeel:weblaf-core:1.2.8'
     implementation 'com.weblookandfeel:weblaf-ui:1.2.8'
 

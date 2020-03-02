@@ -11,8 +11,13 @@ import java.awt.Graphics2D
 import java.awt.Image
 import javax.swing.Icon
 
-abstract class HoverOutlineTool(val settings: Class<*>?, name: String, iconList: List<Icon>, cursor: Image,
-                                selected: Toolbox.Group? = null) : Tool(name, iconList, cursor, selected) {
+abstract class HoverOutlineTool(
+    val settings: Class<*>?,
+    name: String,
+    iconList: List<Icon>,
+    cursor: Image,
+    selected: Toolbox.Group? = null
+) : Tool(name, iconList, cursor, selected) {
     val outlineSize = 1
     val outlineStroke = BasicStroke(outlineSize.toFloat())
 

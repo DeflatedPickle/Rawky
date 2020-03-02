@@ -5,19 +5,15 @@ package com.deflatedpickle.rawky.component
 import com.deflatedpickle.rawky.api.annotations.Options
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.util.Components
-import org.jdesktop.swingx.JXPanel
-import java.awt.BorderLayout
-import java.awt.CardLayout
-import java.awt.Color
-import java.awt.FlowLayout
 import java.awt.GridBagConstraints
 import java.awt.GridBagLayout
+import java.awt.Insets
 import javax.swing.BorderFactory
-import javax.swing.BoxLayout
 import javax.swing.JLabel
 import javax.swing.JScrollPane
 import javax.swing.JTabbedPane
 import javax.swing.SwingConstants
+import org.jdesktop.swingx.JXPanel
 
 class ToolOptions : Component() {
     object StickEast : GridBagConstraints() {
@@ -31,6 +27,7 @@ class ToolOptions : Component() {
             fill = HORIZONTAL
             weightx = 1.0
             gridwidth = REMAINDER
+            insets = Insets(2, 2, 2, 2)
         }
     }
 

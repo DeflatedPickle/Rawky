@@ -10,7 +10,7 @@ import com.deflatedpickle.rawky.api.annotations.Toggle
 import com.deflatedpickle.rawky.api.annotations.Tooltip
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.component.Toolbox
-import com.deflatedpickle.rawky.tool.fill.Fill
+import com.deflatedpickle.rawky.tool.fill.IFill
 import com.deflatedpickle.rawky.tool.fill.Solid
 import com.deflatedpickle.rawky.tool.fill.Stipple
 import com.deflatedpickle.rawky.util.ActionStack
@@ -97,7 +97,7 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
         var alpha = 0..255
     }
 
-    enum class FillType(val instance: Fill) {
+    enum class FillType(val instance: IFill) {
         SOLID(Solid),
         STIPPLE(Stipple)
     }

@@ -8,13 +8,11 @@ import com.pump.swing.CollapsibleContainer
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Desktop
-import java.awt.Dimension
 import java.awt.Font
 import java.net.URI
 import javax.swing.BorderFactory
 import javax.swing.BoxLayout
 import javax.swing.JButton
-import javax.swing.JDialog
 import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JScrollPane
@@ -23,13 +21,13 @@ import javax.swing.JTextArea
 import javax.swing.SwingConstants
 import khttp.get
 import org.jdesktop.swingx.JXPanel
+import org.oxbow.swingbits.dialog.task.TaskDialog
 
-class About : JDialog(Components.frame, "About", true) {
+// TODO: Just rewrite the whole damn about dialog
+class About : TaskDialog(Components.frame, "About") {
     init {
-        layout = BorderLayout()
-        size = Dimension(400, 600)
-
-        add(JXPanel().apply {
+        fixedComponent = JXPanel().apply {
+            isOpaque = false
             layout = BoxLayout(this, BoxLayout.Y_AXIS)
 
             add(JLabel("Rawky v0.9.1-alpha").apply {
@@ -65,6 +63,7 @@ class About : JDialog(Components.frame, "About", true) {
 
                                     val collapsibleContainer = CollapsibleContainer()
 
+                                    // TODO: Just include the licenses in the JAR, stop scraping them
                                     for ((k, v) in linkedMapOf(
                                             "DockingFrames" to "Benoker/DockingFrames",
                                             "ColorPicker" to "https://mvnrepository.com/artifact/org.drjekyll/colorpicker",
@@ -75,7 +74,13 @@ class About : JDialog(Components.frame, "About", true) {
                                             "Radiance" to "kirill-grouchnikov/radiance",
                                             "WebLaF" to "mgarin/weblaf",
                                             "GSON" to "google/gson",
-                                            "ICAFE" to "dragon66/icafe"
+                                            "ICAFE" to "dragon66/icafe",
+                                            "JIDE Common" to "jidesoft/jide-oss",
+                                            "JSplitButton" to "rhwood/jsplitbutton",
+                                            "Oxbow" to "eugener/oxbow",
+                                            "KHTTP" to "jkcclemens/khttp",
+                                            "Reflections" to "ronmamo/reflections",
+                                            "Apache Common Lang" to "apache/commons-lang"
                                     )) {
                                         collapsibleContainer.addSection(k.toLowerCase(), k).apply {
                                             val section = this
@@ -152,14 +157,6 @@ class About : JDialog(Components.frame, "About", true) {
                 alignmentX = Component.CENTER_ALIGNMENT
                 resizeWeight = 1.0
             })
-        })
-
-        add(JPanel().apply {
-            add(JButton("OK").apply {
-                addActionListener {
-                    this@About.dispose()
-                }
-            })
-        }, BorderLayout.PAGE_END)
+        }
     }
 }

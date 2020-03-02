@@ -15,10 +15,13 @@ import javax.swing.Icon
 import javax.swing.ImageIcon
 import javax.swing.SwingUtilities
 import org.reflections.Reflections
-import java.awt.Color
 
-abstract class Tool(val name: String, var iconList: List<Icon>, val cursor: Image,
-                    val group: Toolbox.Group? = null) {
+abstract class Tool(
+    val name: String,
+    var iconList: List<Icon>,
+    val cursor: Image,
+    val group: Toolbox.Group? = null
+) {
     companion object {
         val list = mutableListOf<Tool>()
 
@@ -73,7 +76,6 @@ abstract class Tool(val name: String, var iconList: List<Icon>, val cursor: Imag
         mouseDragged(button)
     }
 
-
     open fun mouseRelease(button: Int, polygon: Polygon?, row: Int, column: Int) {
         if (ActionStack.undoQueue.isNotEmpty() && ActionStack.undoQueue.last() is ActionStack.MultiAction) {
             (ActionStack.undoQueue.last() as ActionStack.MultiAction).active = false
@@ -85,8 +87,12 @@ abstract class Tool(val name: String, var iconList: List<Icon>, val cursor: Imag
     open fun render(g2D: Graphics2D) {}
 
     var isCached = false
-    open fun <T> process(x0: Int, y0: Int, x1: Int?, y1: Int?,
-                     cellMatrix: MutableList<MutableList<PixelGrid.Cell>>)
-            : MutableMap<PixelGrid.Cell, T> = mutableMapOf()
-
+    open fun <T> process(
+        x0: Int,
+        y0: Int,
+        x1: Int?,
+        y1: Int?,
+        cellMatrix: MutableList<MutableList<PixelGrid.Cell>>
+    ):
+            MutableMap<PixelGrid.Cell, T> = mutableMapOf()
 }

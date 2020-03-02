@@ -4,21 +4,28 @@ package com.deflatedpickle.rawky.util
 
 import com.deflatedpickle.rawky.component.ColourPalette
 import com.deflatedpickle.rawky.component.PixelGrid
+import com.deflatedpickle.rawky.dialogue.New
+import com.deflatedpickle.rawky.dialogue.ScaleImage
 import com.deflatedpickle.rawky.jasc_pal.JASC_PALLexer
 import com.deflatedpickle.rawky.jasc_pal.JASC_PALParser
 import com.deflatedpickle.rawky.rexpaint_palette.RexPaint_PaletteLexer
 import com.deflatedpickle.rawky.rexpaint_palette.RexPaint_PaletteParser
+import com.deflatedpickle.rawky.util.extension.toConstantCase
 import com.google.gson.GsonBuilder
 import com.google.gson.internal.LinkedTreeMap
 import com.icafe4j.image.gif.GIFTweaker
 import com.icafe4j.image.reader.GIFReader
 import java.awt.Color
+import java.awt.Image
+import java.awt.geom.AffineTransform
+import java.awt.image.AffineTransformOp
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import javax.swing.JFileChooser
 import javax.swing.filechooser.FileNameExtensionFilter
 import org.antlr.v4.runtime.CharStreams
 import org.antlr.v4.runtime.CommonTokenStream
+import org.oxbow.swingbits.dialog.task.TaskDialog
 
 object Commands {
     val fileChooser = JFileChooser().apply {
@@ -30,11 +37,26 @@ object Commands {
         addChoosableFileFilter(FileNameExtensionFilter("GIF (*.gif)", "gif"))
     }
 
+    val pngChooser = JFileChooser().apply {
+        addChoosableFileFilter(FileNameExtensionFilter("PNG (*.png)", "png").also { this.fileFilter = it })
+    }
+
     val gridChooser = JFileChooser().apply {
         addChoosableFileFilter(FileNameExtensionFilter("XML (*.xml)", "xml").also { this.fileFilter = it })
     }
 
     val gson = GsonBuilder().setPrettyPrinting().create()
+
+    fun newDialog() {
+        val dialog = New()
+
+        when (dialog.show().tag) {
+            TaskDialog.CommandTag.OK -> new(
+                    dialog.widthSpinner.slider.value,
+                    dialog.heightSpinner.slider.value
+            )
+        }
+    }
 
     fun new(width: Int = 16, height: Int = 16, withFrame: Boolean = true) {
         PixelGrid.columnAmount = width
@@ -215,19 +237,25 @@ object Commands {
         }
     }
 
-    fun exportImage() {
+    fun png(imageType: Int = BufferedImage.TYPE_INT_ARGB): BufferedImage =
+            BufferedImage(PixelGrid.columnAmount, PixelGrid.rowAmount, imageType).apply {
+                for (row in 0 until this.height) {
+                    for (column in 0 until this.width) {
+                        for (layer in PixelGrid.frameList[0].layerList.reversed()) {
+                            layer.pixelMatrix[column][row].colour.rgb.let { setRGB(column, row, it) }
+                        }
+                    }
+                }
+            }
+
+    fun exportImage(width: Int = PixelGrid.columnAmount, height: Int = PixelGrid.rowAmount, imageType: Int = BufferedImage.TYPE_INT_ARGB, scaleHints: Int = Image.SCALE_FAST) {
         if (imageChooser.showSaveDialog(Components.frame) == JFileChooser.APPROVE_OPTION) {
             when (imageChooser.selectedFile.extension) {
                 "png" -> {
-                    ImageIO.write(BufferedImage(PixelGrid.columnAmount, PixelGrid.rowAmount, BufferedImage.TYPE_INT_ARGB).apply {
-                        for (row in 0 until PixelGrid.rowAmount) {
-                            for (column in 0 until PixelGrid.columnAmount) {
-                                for (layer in PixelGrid.frameList[0].layerList.reversed()) {
-                                    layer.pixelMatrix[column][row].colour?.rgb?.let { setRGB(column, row, it) }
-                                }
-                            }
-                        }
-                    }, "png", imageChooser.selectedFile)
+                    ImageIO.write(
+                            png(imageType).apply { getScaledInstance(width, height, scaleHints) },
+                            "png", imageChooser.selectedFile
+                    )
                 }
                 "gif" -> {
                     val frameList = mutableListOf<BufferedImage>()
@@ -236,7 +264,7 @@ object Commands {
                             for (layer in frame.layerList.reversed()) {
                                 for (row in 0 until PixelGrid.rowAmount) {
                                     for (column in 0 until PixelGrid.columnAmount) {
-                                        layer.pixelMatrix[row][column].colour?.rgb?.let {
+                                        layer.pixelMatrix[row][column].colour.rgb.let {
                                             setRGB(column, row, it)
                                         }
                                     }
@@ -247,6 +275,40 @@ object Commands {
                     }
                     // TODO: Add an option for delay
                     GIFTweaker.writeAnimatedGIF(frameList.toTypedArray(), IntArray(PixelGrid.frameList.size) { 1000 / 60 }, imageChooser.selectedFile.outputStream())
+                }
+            }
+        }
+    }
+
+    fun scaledImage() {
+        val dialog = ScaleImage()
+
+        if (dialog.show().tag == TaskDialog.CommandTag.OK) {
+            if (pngChooser.showSaveDialog(Components.frame) == JFileChooser.APPROVE_OPTION) {
+                when (pngChooser.selectedFile.extension) {
+                    "png" -> {
+                        val oldImage = png()
+                        val newImage = BufferedImage(
+                                oldImage.width * dialog.widthSlider.slider.value,
+                                oldImage.height * dialog.heightSlider.slider.value,
+                                BufferedImage.TYPE_INT_ARGB
+                        )
+
+                        val affineTransform = AffineTransform.getScaleInstance(
+                                dialog.widthSlider.slider.value.toDouble(),
+                                dialog.heightSlider.slider.value.toDouble()
+                        )
+
+                        val affineTransformOp = AffineTransformOp(affineTransform,
+                                ScaleImage.ScaleType
+                                        .valueOf((dialog.scaleCombobox.model.selectedItem as String)
+                                                .toConstantCase()).type)
+
+                        ImageIO.write(
+                                affineTransformOp.filter(oldImage, newImage),
+                                "png", pngChooser.selectedFile
+                        )
+                    }
                 }
             }
         }
