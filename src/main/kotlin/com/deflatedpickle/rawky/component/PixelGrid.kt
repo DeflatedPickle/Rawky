@@ -469,8 +469,8 @@ object PixelGrid : ActionComponent() {
                         (ShapeUtils.generatePolygon(Shape.points,
                                 Settings.pixelSize / 2, 0) as Polygon).apply {
                             translate(
-                                    Settings.pixelSize / 2 + row * Settings.pixelSize + x,
-                                    Settings.pixelSize / 2 + column * Settings.pixelSize + y
+                                    Settings.pixelSize / 2 + column * Settings.pixelSize + x,
+                                    Settings.pixelSize / 2 + row * Settings.pixelSize + y
                             )
                         }
                 )
