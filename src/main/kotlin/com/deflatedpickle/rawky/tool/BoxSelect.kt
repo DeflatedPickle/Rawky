@@ -13,7 +13,7 @@ import javax.swing.UIManager
 import kotlin.math.max
 import kotlin.math.min
 
-class BoxSelect : HoverOutlineTool(null, "Box Select", listOf(Icons.boxSelect), Icons.boxSelect.image) {
+class BoxSelect : HoverOutlineTool(null, "Box Select", listOf(Icons.boxSelect)) {
     var clickedCell: Pair<Int, Int>? = null
 
     var button = 1

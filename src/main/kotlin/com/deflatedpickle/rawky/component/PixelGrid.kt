@@ -421,7 +421,7 @@ object PixelGrid : ActionComponent() {
                 if (index == length) {
                     tool?.let {
                         mousePosition?.let {
-                            biG2D.drawImage(tool.cursor,
+                            biG2D.drawImage(tool.iconList[0].image,
                                     mousePosition.x + 6,
                                     mousePosition.y,
                                     size, size, this)
@@ -435,7 +435,7 @@ object PixelGrid : ActionComponent() {
 
                     tool?.let {
                         mousePosition?.let {
-                            biG2D.drawImage(tool.cursor,
+                            biG2D.drawImage(tool.iconList[0].image,
                                     mousePosition.x + 44 + x,
                                     mousePosition.y + y,
                                     size, size, this)
@@ -590,7 +590,6 @@ object PixelGrid : ActionComponent() {
         return null
     }
 
-    fun getPolygonAt(point: Point) {
-        getPolygonAt(point.x, point.y)
-    }
+    fun getPolygonAt(point: Point): Polygon? = getPolygonAt(point.x, point.y)
+
 }

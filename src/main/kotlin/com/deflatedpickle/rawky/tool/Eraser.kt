@@ -14,7 +14,7 @@ import java.awt.Graphics2D
 import java.awt.Point
 import javax.swing.UIManager
 
-class Eraser : HoverOutlineTool(Settings::class.java, "Eraser", listOf(Icons.eraser), Icons.eraser.image,
+class Eraser : HoverOutlineTool(Settings::class.java, "Eraser", listOf(Icons.eraser),
         Toolbox.Group.MIDDLE) {
     @Options
     object Settings {

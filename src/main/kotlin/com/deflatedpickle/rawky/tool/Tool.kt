@@ -18,8 +18,7 @@ import org.reflections.Reflections
 
 abstract class Tool(
     val name: String,
-    var iconList: List<Icon>,
-    val cursor: Image,
+    var iconList: List<ImageIcon>,
     val group: Toolbox.Group? = null
 ) {
     companion object {

@@ -12,7 +12,7 @@ import java.awt.MouseInfo
 import java.awt.Point
 import javax.swing.SwingUtilities
 
-class Dropper : HoverOutlineTool(Settings::class.java, "Dropper", listOf(Icons.colourPicker), Icons.colourPicker.image) {
+class Dropper : HoverOutlineTool(Settings::class.java, "Dropper", listOf(Icons.colourPicker)) {
     object Settings {
         @JvmField
         var size = 1

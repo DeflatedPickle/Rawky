@@ -13,7 +13,7 @@ import java.awt.Polygon
 import javax.swing.UIManager
 import kotlin.math.abs
 
-class Line : HoverOutlineTool(null, "Line", listOf(Icons.pencil), Icons.pencil.image) {
+class Line : HoverOutlineTool(null, "Line", listOf(Icons.line)) {
     // @Options
     // object Settings {
     //     @Enum("com.deflatedpickle.rawky.tool.Line\$Mode")
