@@ -10,12 +10,35 @@ import javax.swing.JScrollPane
 import javax.swing.JToolBar
 
 class ComponentFrame(val component: Component) : JPanel() {
+    companion object {
+        fun makeToolbars(parent: JComponent, component: Component) {
+            for ((k, v) in component.toolbarWidgets) {
+                val toolbar = JToolBar().apply {
+                    layout = GridBagLayout()
+                }
+
+                for ((comp, const) in v) {
+                    when (comp) {
+                        is JComponent -> {
+                            toolbar.add(comp, const)
+                        }
+                        "---" -> toolbar.addSeparator()
+                    }
+                }
+
+                parent.add(toolbar, k)
+            }
+        }
+    }
+
+    val scrollPanel = JScrollPane(component)
+
     init {
         isOpaque = false
         layout = BorderLayout()
 
         component.componentFrame = this
-        add(JScrollPane(component))
+        add(this.scrollPanel)
 
         component.afterInit()
     }

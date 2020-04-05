@@ -4,6 +4,7 @@ package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.transfer.ColourTransfer
+import com.deflatedpickle.rawky.util.ColourAPI
 import com.deflatedpickle.rawky.util.Components
 import java.awt.BorderLayout
 import java.awt.Color
@@ -20,6 +21,8 @@ import org.jdesktop.swingx.JXButton
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter
 import uk.co.timwise.wraplayout.WrapLayout
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 
 class ColourShades : Component() {
     val shadesSlider = JSlider(3, 3 * 31).apply {
@@ -64,10 +67,8 @@ class ColourShades : Component() {
         for (i in 0 until amount) {
             this.add(JXButton().apply {
                 preferredSize = buttonSize
-                foreground = Color.BLACK
+                foreground = shades[i]
                 backgroundPainter = CompoundPainter<JXButton>(MattePainter(shades[i]))
-
-                ColourTransfer.pressedExport(this, shades[i])
 
                 if (i == amount / 2 + 1) {
                     selectedShade = shades[i]
@@ -85,6 +86,16 @@ class ColourShades : Component() {
 
                     border = LineBorder(UIManager.getColor("List.selectionBackground"), 2)
                 }
+
+                addMouseListener(object : MouseAdapter() {
+                    override fun mouseEntered(e: MouseEvent) {
+                        val color = ((backgroundPainter as CompoundPainter<JXButton>).painters[0] as MattePainter).fillPaint as Color
+
+                        ColourTransfer.pressedExport(this@apply, colour)
+
+                        toolTipText = ColourAPI.id(color).getJSONObject("name").getString("value")
+                    }
+                })
 
                 buttonList.add(this)
             })

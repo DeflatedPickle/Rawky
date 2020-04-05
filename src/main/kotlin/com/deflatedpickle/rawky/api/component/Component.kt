@@ -9,6 +9,7 @@ import java.awt.GridBagConstraints
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import org.jdesktop.swingx.JXPanel
+import javax.swing.SwingUtilities
 
 open class Component : JXPanel() {
     companion object {
@@ -18,7 +19,7 @@ open class Component : JXPanel() {
         }
     }
 
-    val sensitiveChildren = mutableListOf<Component>()
+    private val sensitiveChildren = mutableListOf<Component>()
 
     var toolbarWidgets = mutableMapOf<String, List<Pair<*, GridBagConstraints?>>>()
 

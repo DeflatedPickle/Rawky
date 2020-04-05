@@ -80,6 +80,7 @@ class LayerList : ActionComponent() {
     val table = JTable(tableModel).apply {
         autoResizeMode = JTable.AUTO_RESIZE_OFF
         showVerticalLines = false
+        // TODO: This should support multiple selection
         setSelectionMode(ListSelectionModel.SINGLE_SELECTION)
 
         rowHeight = 40
