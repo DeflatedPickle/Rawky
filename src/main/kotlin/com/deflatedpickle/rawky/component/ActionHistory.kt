@@ -140,16 +140,16 @@ object ActionHistory : Component() {
 
     init {
         toolbarWidgets[BorderLayout.PAGE_START] = listOf(
-                Pair(buttonPrevious, null),
-                Pair(comboboxCurrentWidget, fillX),
-                Pair(buttonNext, null)
-        )
-
-        toolbarWidgets[BorderLayout.PAGE_END] = listOf(
                 Pair(buttonUndo, null),
                 Pair(buttonRedo, null),
                 Pair("---", null),
                 Pair(buttonTrash, null)
+        )
+        
+        toolbarWidgets[BorderLayout.PAGE_END] = listOf(
+                Pair(buttonPrevious, null),
+                Pair(comboboxCurrentWidget, fillX),
+                Pair(buttonNext, null)
         )
 
         add(list)

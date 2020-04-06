@@ -4,8 +4,10 @@ package com.deflatedpickle.rawky
 
 import bibliothek.gui.dock.common.CGrid
 import bibliothek.gui.dock.common.DefaultSingleCDockable
+import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.api.component.ComponentFrame
 import com.deflatedpickle.rawky.component.ActionHistory
+import com.deflatedpickle.rawky.component.ColourHistory
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.menu.Edit
 import com.deflatedpickle.rawky.menu.File
@@ -61,41 +63,14 @@ fun main() {
         }, BorderLayout.PAGE_START)
 
         Components.frame.add(cControl.contentArea)
-        val grid = CGrid(cControl)
 
-        val toolbox = DefaultSingleCDockable("toolbox", "Toolbox", JScrollPane(Components.toolbox))
-        cControl.addDockable(toolbox)
-        toolbox.isVisible = true
-        grid.add(0.0, 0.2, 0.2, 1.8, toolbox)
-
-        val tiledView = DefaultSingleCDockable("tiledView", "Tiled View", Components.tiledView)
-        cControl.addDockable(tiledView)
-        tiledView.isVisible = true
-
-        val animationPreview = DefaultSingleCDockable("animationPreview", "Animation Preview", ComponentFrame(Components.animationPreview))
-        cControl.addDockable(animationPreview)
-        animationPreview.isVisible = true
-        grid.add(0.0, 0.3, 0.6, 1.0, tiledView, animationPreview)
-
-        val layerList = DefaultSingleCDockable("layerList", "Layer List", ComponentFrame(Components.layerList))
-        cControl.addDockable(layerList)
-        layerList.isVisible = true
-        grid.add(0.0, 1.0, 0.6, 1.0, layerList)
-
-        val pixelGrid = DefaultSingleCDockable("pixelGrid", "Pixel Grid", ComponentFrame(PixelGrid))
-        cControl.addDockable(pixelGrid)
-        pixelGrid.isVisible = true
-        grid.add(0.6, 0.3, 0.6, 1.4, pixelGrid)
-
-        val animationTimeline = DefaultSingleCDockable("animationTimeline", "Animation Timeline", ComponentFrame(Components.animationTimeline))
-        cControl.addDockable(animationTimeline)
-        animationTimeline.isVisible = true
-        grid.add(0.6, 1.4, 0.6, 0.6, animationTimeline)
-
-        val miniMap = DefaultSingleCDockable("miniMap", "Mini-Map", ComponentFrame(Components.miniMap))
-        cControl.addDockable(miniMap)
-        miniMap.isVisible = true
-        grid.add(1.0, 0.1, 0.4, 0.3, miniMap)
+        addDock("Toolbox", Components.toolbox, 0.0, 0.2, 0.2, 1.8)
+        addDock("Tiled View", Components.tiledView, 0.0, 0.3, 0.6, 1.0)
+        addDock("Animation Preview", Components.animationPreview, 0.0, 0.3, 0.6, 1.0)
+        addDock("Layer List", Components.layerList, 0.0, 1.0, 0.6, 1.0)
+        addDock("Pixel Grid", PixelGrid, 0.6, 0.3, 0.6, 1.4)
+        addDock("Animation Timeline", Components.animationTimeline, 0.6, 1.4, 0.6, 0.6)
+        addDock("Mini-Map", Components.miniMap, 1.0, 0.1, 0.4, 0.3)
 
         val colourPicker = DefaultSingleCDockable("colourPicker", "Colour Picker", JPanel().apply {
             isOpaque = false
@@ -113,36 +88,25 @@ fun main() {
         })
         cControl.addDockable(colourPicker)
         colourPicker.isVisible = true
-        grid.add(1.0, 0.3, 0.4, 0.6, colourPicker)
+        Components.grid.add(1.0, 0.3, 0.4, 0.6, colourPicker)
 
-        val toolOptions = DefaultSingleCDockable("toolOptions", "Tool Options", JScrollPane(Components.toolOptions))
-        cControl.addDockable(toolOptions)
-        toolOptions.isVisible = true
-        grid.add(1.0, 0.7, 0.4, 0.4, toolOptions)
+        addDock("Tool Options", Components.toolOptions, 1.0, 0.7, 0.4, 0.4)
+        addDock("Colour Shades", Components.colourShades, 1.2, 0.3, 0.4, 0.2)
+        addDock("Colour Palette", Components.colourPalette, 1.2, 0.5, 0.4, 0.2)
+        addDock("Colour Library", Components.colourLibrary, 1.2, 0.6, 0.4, 0.2)
+        addDock("Colour History", ColourHistory, 1.6, 0.0, 0.4, 0.1)
+        addDock("Action History", ActionHistory, 1.6, 0.1, 0.4, 0.4)
 
-        val colourShades = DefaultSingleCDockable("colourShades", "Colour Shades", ComponentFrame(Components.colourShades))
-        cControl.addDockable(colourShades)
-        colourShades.isVisible = true
-        grid.add(1.2, 0.3, 0.4, 0.2, colourShades)
-
-        val colourPalette = DefaultSingleCDockable("colourPalette", "Colour Palette", ComponentFrame(Components.colourPalette))
-        cControl.addDockable(colourPalette)
-        colourPalette.isVisible = true
-        grid.add(1.2, 0.5, 0.4, 0.2, colourPalette)
-
-        val colourLibrary = DefaultSingleCDockable("colourLibrary", "Colour Library", ComponentFrame(Components.colourLibrary))
-        cControl.addDockable(colourLibrary)
-        colourLibrary.isVisible = true
-        grid.add(1.2, 0.6, 0.4, 0.2, colourLibrary)
-
-        val actionHistory = DefaultSingleCDockable("actionHistory", "Action History", ComponentFrame(ActionHistory))
-        cControl.addDockable(actionHistory)
-        actionHistory.isVisible = true
-        grid.add(1.6, 0.0, 0.4, 0.4, actionHistory)
-
-        cControl.contentArea.deploy(grid)
+        cControl.contentArea.deploy(Components.grid)
     }
 
     Components.frame.isVisible = true
     Components.frame.setLocationRelativeTo(null)
+}
+
+fun addDock(title: String, component: Component, x: Double, y: Double, width: Double, height: Double) {
+    val dockable = DefaultSingleCDockable(title.toLowerCase().replace(' ', '_'), title, ComponentFrame(component))
+    cControl.addDockable(dockable)
+    dockable.isVisible = true
+    Components.grid.add(x, y, width, height, dockable)
 }

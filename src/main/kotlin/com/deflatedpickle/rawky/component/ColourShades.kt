@@ -6,6 +6,7 @@ import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.transfer.ColourTransfer
 import com.deflatedpickle.rawky.util.ColourAPI
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.util.UsefulValues
 import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Dimension
@@ -43,11 +44,8 @@ class ColourShades : Component() {
     val buttonSize = Dimension(40, 20)
     val buttonList = mutableListOf<JXButton>()
 
-    var colour = Color.BLACK
-
     val cachedBorder: Border
 
-    lateinit var selectedShade: Color
     lateinit var selectedButton: JXButton
 
     init {
@@ -73,13 +71,13 @@ class ColourShades : Component() {
                 backgroundPainter = CompoundPainter<JXButton>(MattePainter(shades[i]))
 
                 if (i == amount / 2 + 1) {
-                    selectedShade = shades[i]
+                    UsefulValues.currentColour = shades[i]
                     selectedButton = this
                 }
 
                 addActionListener {
                     val colour = ((backgroundPainter as CompoundPainter<JXButton>).painters[0] as MattePainter).fillPaint as Color
-                    selectedShade = colour
+                    UsefulValues.currentColour = colour
                     selectedButton = this
 
                     for (b in buttonList) {
@@ -116,11 +114,11 @@ class ColourShades : Component() {
     fun getShades(): List<Color> {
         val list = mutableListOf<Color>()
         for (i in (0 until amount / 2).reversed()) {
-            list.add(darken(colour, i / (amount.toDouble() / 2) + 0.1))
+            list.add(darken(UsefulValues.currentColour, i / (amount.toDouble() / 2) + 0.1))
         }
-        list.add(colour)
+        list.add(UsefulValues.currentColour)
         for (i in 0 until amount / 2) {
-            list.add(lighten(colour, i / (amount.toDouble() / 2) + 0.1))
+            list.add(lighten(UsefulValues.currentColour, i / (amount.toDouble() / 2) + 0.1))
         }
         return list
     }

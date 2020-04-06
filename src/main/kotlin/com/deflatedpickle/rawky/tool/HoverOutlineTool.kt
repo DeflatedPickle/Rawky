@@ -5,6 +5,7 @@ package com.deflatedpickle.rawky.tool
 import com.deflatedpickle.rawky.component.PixelGrid
 import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.util.Components
+import com.deflatedpickle.rawky.util.UsefulValues
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics2D
@@ -23,9 +24,9 @@ abstract class HoverOutlineTool(
 
     override fun render(g2D: Graphics2D) {
         g2D.color = Color(
-                Components.colourShades.selectedShade.red,
-                Components.colourShades.selectedShade.green,
-                Components.colourShades.selectedShade.blue,
+                UsefulValues.currentColour.red,
+                UsefulValues.currentColour.green,
+                UsefulValues.currentColour.blue,
                 PixelGrid.Settings.hoverOpacity
         )
 

@@ -10,6 +10,7 @@ import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
+import com.deflatedpickle.rawky.util.UsefulValues
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Point
@@ -32,10 +33,10 @@ class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", listOf(Icons.pen
                         .layerList[Components.layerList.table.selectedRow]
                         .pixelMatrix[PixelGrid.hoverRow][PixelGrid.hoverColumn]
                         .colour
-                != Components.colourShades.selectedShade) {
+                != UsefulValues.currentColour) {
             val pixel = object : Toolbox.LockCheck(this.name) {
                 // There'll only be one new value
-                val newValue = Components.colourShades.selectedShade
+                val newValue = UsefulValues.currentColour
                 // But there can be multiple old values
                 val oldValues = mutableListOf<MutableList<Color>>()
 
@@ -82,7 +83,7 @@ class Pencil : HoverOutlineTool(Settings::class.java, "Pencil", listOf(Icons.pen
 
     override fun mouseMoved(polygon: Polygon, row: Int, column: Int) {
         with(PixelGrid.previewRectangleMatrix[row][column]) {
-            colour = Components.colourShades.selectedShade
+            colour = UsefulValues.currentColour
         }
     }
 }

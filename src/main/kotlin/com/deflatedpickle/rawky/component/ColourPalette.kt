@@ -7,6 +7,7 @@ import com.deflatedpickle.rawky.api.component.Component
 import com.deflatedpickle.rawky.transfer.ColourTransfer
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
+import com.deflatedpickle.rawky.util.UsefulValues
 import java.awt.BasicStroke
 import java.awt.BorderLayout
 import java.awt.Color
@@ -97,21 +98,6 @@ class ColourPalette : Component() {
             override fun mousePressed(e: MouseEvent) {
                 mouseToggled = true
 
-                transferHandler = hoverColour?.colour?.let { ColourTransfer.ExportImport(it) }
-                transferHandler?.let { (e.source as ColourPalette).transferHandler.exportAsDrag(e.source as ColourPalette, e, TransferHandler.MOVE) }
-
-                if (e.button == MouseEvent.BUTTON1) {
-                    if (e.clickCount == 2) {
-                        if (selectedColour != null) {
-                            Components.colourPicker.color = selectedColour!!.colour
-                        }
-                    }
-                }
-            }
-
-            override fun mouseReleased(e: MouseEvent) {
-                mouseToggled = false
-
                 for (i in colourList) {
                     if (e.x > i.x && e.x < i.x + cellSize &&
                             e.y > i.y && e.y < i.y + cellSize) {
@@ -124,7 +110,22 @@ class ColourPalette : Component() {
                 }
             }
 
+            override fun mouseReleased(e: MouseEvent) {
+                mouseToggled = false
+
+                if (e.button == MouseEvent.BUTTON1) {
+                    if (e.clickCount == 2) {
+                        if (selectedColour != null) {
+                            UsefulValues.currentColour = selectedColour!!.colour
+                        }
+                    }
+                }
+            }
+
             override fun mouseDragged(e: MouseEvent) {
+                transferHandler = hoverColour?.colour?.let { ColourTransfer.ExportImport(it) }
+                transferHandler?.let { (e.source as ColourPalette).transferHandler.exportAsDrag(e.source as ColourPalette, e, TransferHandler.MOVE) }
+
                 if (mouseToggled) {
                     mouseReleased(e)
                 }

@@ -7,6 +7,7 @@ import com.deflatedpickle.rawky.component.Toolbox
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
+import com.deflatedpickle.rawky.util.UsefulValues
 import java.awt.Graphics2D
 import java.awt.Polygon
 import javax.swing.UIManager
@@ -71,7 +72,7 @@ class BoxSelect : HoverOutlineTool(null, "Box Select", listOf(Icons.boxSelect)) 
 
         clickedCell?.let {
             with(PixelGrid.previewRectangleMatrix[it.first][it.second]) {
-                colour = Components.colourShades.selectedShade
+                colour = UsefulValues.currentColour
             }
 
             process<Boolean>(column, row, it.second, it.first, PixelGrid.previewRectangleMatrix)
@@ -80,7 +81,7 @@ class BoxSelect : HoverOutlineTool(null, "Box Select", listOf(Icons.boxSelect)) 
 
     override fun mouseMoved(polygon: Polygon, row: Int, column: Int) {
         with(PixelGrid.previewRectangleMatrix[row][column]) {
-            colour = Components.colourShades.selectedShade
+            colour = UsefulValues.currentColour
         }
     }
 

@@ -7,6 +7,7 @@ import com.deflatedpickle.rawky.transfer.ColourTransfer
 import com.deflatedpickle.rawky.util.ColourAPI
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
+import com.deflatedpickle.rawky.util.UsefulValues
 import java.awt.Color
 import java.awt.Dimension
 import javax.swing.JButton
@@ -43,7 +44,7 @@ class ColourLibrary : Component() {
         add(newButton)
     }
 
-    fun addButton(colour: Color = Components.colourShades.selectedShade) {
+    fun addButton(colour: Color = UsefulValues.currentColour) {
         add(JXButton().apply {
             val cell = Cell(colour, this)
             cellList.add(cell)
@@ -51,7 +52,7 @@ class ColourLibrary : Component() {
             backgroundPainter = CompoundPainter<JXButton>(MattePainter(colour))
 
             addActionListener {
-                Components.colourPicker.color = ((backgroundPainter as CompoundPainter<JXButton>).painters[0] as MattePainter).fillPaint as Color
+                UsefulValues.currentColour = ((backgroundPainter as CompoundPainter<JXButton>).painters[0] as MattePainter).fillPaint as Color
             }
 
             addMouseListener(object : MouseAdapter() {

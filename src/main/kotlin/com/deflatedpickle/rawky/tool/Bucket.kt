@@ -16,6 +16,7 @@ import com.deflatedpickle.rawky.tool.fill.Stipple
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.Components
 import com.deflatedpickle.rawky.util.Icons
+import com.deflatedpickle.rawky.util.UsefulValues
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Point
@@ -113,7 +114,7 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
 
     override fun perform(button: Int, dragged: Boolean, point: Point, lastPoint: Point?, clickCount: Int) {
         val pixel = object : Toolbox.LockCheck(this.name) {
-            val shade = Components.colourShades.selectedShade
+            val shade = UsefulValues.currentColour
             val clickedColour = PixelGrid.frameList[frame].layerList[layer].pixelMatrix[row][column].colour
 
             // The cell and the colour it used to be
@@ -200,7 +201,7 @@ class Bucket : HoverOutlineTool(Settings::class.java, "Bucket", listOf(Icons.buc
         }
 
         for ((pair, cell) in colourList) {
-            Settings.fill.instance.perform(cell, pair.first, pair.second, Components.colourShades.selectedShade)
+            Settings.fill.instance.perform(cell, pair.first, pair.second, UsefulValues.currentColour)
         }
     }
 }

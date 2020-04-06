@@ -3,8 +3,10 @@
 package com.deflatedpickle.rawky.util
 
 import bibliothek.gui.dock.common.CControl
+import bibliothek.gui.dock.common.CGrid
 import com.bric.colorpicker.ColorPicker
 import com.bric.colorpicker.ColorPickerDialog
+import com.bric.colorpicker.ColorPickerPanel
 import com.deflatedpickle.rawky.api.annotations.Category
 import com.deflatedpickle.rawky.api.annotations.Colour
 import com.deflatedpickle.rawky.api.annotations.DoubleOpt
@@ -54,11 +56,17 @@ import org.jdesktop.swingx.VerticalLayout
 import org.jdesktop.swingx.painter.CheckerboardPainter
 import org.jdesktop.swingx.painter.CompoundPainter
 import org.jdesktop.swingx.painter.MattePainter
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
+import kotlin.reflect.KVisibility
+import kotlin.reflect.full.declaredMembers
+import kotlin.reflect.jvm.isAccessible
 
 object Components {
     val frame = Window()
 
     val cControl = CControl(frame)
+    val grid = CGrid(cControl)
 
     val toolbox = Toolbox()
     val tiledView = TiledView()
@@ -98,9 +106,18 @@ object Components {
         // toolbox.pencilButton.isSelected = true
 
         colourPicker.color = Color.WHITE
-        colourPicker.addColorListener {
-            colourShades.colour = colourPicker.color
-            colourShades.updateShades()
+
+        // They define the colour picker part as private...
+        // So we have to reflect it
+        with(colourPicker::class.declaredMembers.single { it.name == "colorPanel" }) {
+            isAccessible = true
+            (this.call(colourPicker) as ColorPickerPanel).addMouseListener(object : MouseAdapter() {
+                override fun mouseReleased(e: MouseEvent) {
+                    colourShades.updateShades()
+                    // This fires twice... I'm not sure why, really
+                    UsefulValues.currentColour = colourPicker.color
+                }
+            })
         }
 
         colourPicker.transferHandler = ColourTransfer.Import
