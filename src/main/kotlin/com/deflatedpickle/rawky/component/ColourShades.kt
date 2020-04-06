@@ -23,6 +23,8 @@ import org.jdesktop.swingx.painter.MattePainter
 import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
+import javax.swing.JButton
+import javax.swing.TransferHandler
 
 class ColourShades : Component() {
     val shadesSlider = JSlider(3, 3 * 31).apply {
@@ -89,11 +91,11 @@ class ColourShades : Component() {
 
                 addMouseListener(object : MouseAdapter() {
                     override fun mouseEntered(e: MouseEvent) {
-                        val color = ((backgroundPainter as CompoundPainter<JXButton>).painters[0] as MattePainter).fillPaint as Color
+                        val colour = ((backgroundPainter as CompoundPainter<JXButton>).painters[0] as MattePainter).fillPaint as Color
 
-                        ColourTransfer.pressedExport(this@apply, colour)
+                        ColourTransfer(colour).pressedExport(this@apply)
 
-                        toolTipText = ColourAPI.id(color).getJSONObject("name").getString("value")
+                        toolTipText = ColourAPI.id(colour).getJSONObject("name").getString("value")
                     }
                 })
 

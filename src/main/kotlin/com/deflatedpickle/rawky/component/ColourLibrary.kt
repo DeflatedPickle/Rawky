@@ -61,7 +61,7 @@ class ColourLibrary : Component() {
                 }
             })
 
-            ColourTransfer.pressedExport(this, colour)
+            ColourTransfer(colour).pressedExport(this)
 
             // TODO: Add a colour picker to change the cell colour
             componentPopupMenu = JPopupMenu().apply {

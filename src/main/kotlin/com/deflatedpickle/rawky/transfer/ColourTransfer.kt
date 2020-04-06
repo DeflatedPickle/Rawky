@@ -21,21 +21,21 @@ import javax.swing.TransferHandler
 class ColourTransfer(val colour: Color) : Transferable {
     companion object {
         val dataFlavor = DataFlavor(Color::class.java, this::class.java.canonicalName)
-
-        fun pressedExport(component: JComponent, colour: Color) {
-            component.transferHandler = Export(colour)
-
-            component.addMouseListener(object : MouseAdapter() {
-                override fun mousePressed(e: MouseEvent) {
-                    (e.source as JButton).transferHandler.exportAsDrag(e.source as JButton, e, TransferHandler.COPY)
-                }
-            })
-        }
     }
 
     override fun getTransferData(flavor: DataFlavor?): Any = colour
     override fun isDataFlavorSupported(flavor: DataFlavor?): Boolean = flavor == dataFlavor
     override fun getTransferDataFlavors(): Array<DataFlavor> = arrayOf(dataFlavor)
+
+    fun pressedExport(component: JComponent) {
+        component.transferHandler = Export(colour)
+
+        component.addMouseListener(object : MouseAdapter() {
+            override fun mousePressed(e: MouseEvent) {
+                (e.source as JButton).transferHandler.exportAsDrag(e.source as JButton, e, TransferHandler.COPY)
+            }
+        })
+    }
 
     class Export(val colour: Color) : TransferHandler() {
         override fun getSourceActions(c: JComponent?): Int = DnDConstants.ACTION_COPY_OR_MOVE
@@ -70,6 +70,7 @@ class ColourTransfer(val colour: Color) : Transferable {
                             is ColourPalette -> {
                                 if (support.userDropAction == MOVE) {
                                     component.hoverColour?.let {
+                                        // It just has to be removed twice, don't ask why
                                         component.colourList.remove(it)
                                         component.colourList.remove(it)
                                         component.repaint()
