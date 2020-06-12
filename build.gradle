@@ -27,7 +27,9 @@ allprojects {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
+    implementation 'com.github.Fylipp:easy-events:v1.1.0'
+
     compile project(':core')
     compile project(":pixelgrid")
-    implementation 'org.dockingframes:docking-frames-common:1.1.1'
+    compile project(":pluginmanager")
 }

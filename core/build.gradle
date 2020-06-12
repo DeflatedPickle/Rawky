@@ -24,4 +24,14 @@ dependencies {
 
     // Allows for plugin loading
     implementation 'io.github.classgraph:classgraph:4.8.85'
+
+    // Fuzzy searching
+    implementation 'me.xdrop:fuzzywuzzy:1.2.0'
+
+    // Events
+    implementation 'com.github.Fylipp:easy-events:v1.1.0'
+
+    // Logging
+    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
+    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
 }

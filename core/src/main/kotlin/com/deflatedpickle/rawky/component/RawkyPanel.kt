@@ -1,12 +1,8 @@
-package com.deflatedpickle.rawky.api.component
+package com.deflatedpickle.rawky.component
 
 import com.deflatedpickle.rawky.api.plugin.Plugin
 import org.jdesktop.swingx.JXPanel
-import java.awt.Dimension
-import java.awt.GridLayout
-import java.awt.Rectangle
 import javax.swing.JScrollPane
-import javax.swing.Scrollable
 
 /**
  * A superclass of [JPanel] providing utilities for Rawky

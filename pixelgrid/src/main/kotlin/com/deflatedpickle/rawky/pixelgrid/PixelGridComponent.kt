@@ -1,5 +1,5 @@
 package com.deflatedpickle.rawky.pixelgrid
 
-import com.deflatedpickle.rawky.api.component.RawkyPanel
+import com.deflatedpickle.rawky.component.RawkyPanel
 
 object PixelGridComponent : RawkyPanel()

@@ -1,4 +1,4 @@
-package com.deflatedpickle.rawky.api.util
+package com.deflatedpickle.rawky.util
 
 import io.github.classgraph.ClassGraph
 import io.github.classgraph.ScanResult

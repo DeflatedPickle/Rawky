@@ -4,3 +4,5 @@ include 'master'
 include 'core'
 
 include 'pixelgrid'
+
+include 'pluginmanager'
