@@ -1,0 +1,6 @@
+rootProject.name = 'Rawky'
+
+include 'master'
+include 'core'
+
+include 'pixelgrid'

@@ -1,0 +1,13 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+dependencies {
+    compile project(":core")
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    // Extended Swing widgets
+    implementation 'org.swinglabs:swingx:1.6.1'
+}
