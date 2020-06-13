@@ -1,4 +1,4 @@
-package com.deflatedpickle.rawky.api.extension
+package com.deflatedpickle.rawky.extension
 
 import java.awt.event.ActionEvent
 import javax.swing.JMenu

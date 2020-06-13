@@ -6,6 +6,7 @@ import com.deflatedpickle.rawky.component.Window
 import com.deflatedpickle.rawky.event.EventMenuBarBuild
 import java.awt.Dimension
 import javax.swing.SwingUtilities
+import javax.swing.UIManager
 
 fun main() {
     System.setProperty("log4j.skipJansi", "false")
@@ -25,8 +26,13 @@ fun main() {
 
     SwingUtilities.invokeLater {
         Window.deploy()
-    }
 
-    Window.size = Dimension(400, 400)
-    Window.isVisible = true
+        Window.size = Dimension(400, 400)
+        Window.setLocationRelativeTo(null)
+
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
+        SwingUtilities.updateComponentTreeUI(Window)
+
+        Window.isVisible = true
+    }
 }

@@ -1,4 +1,4 @@
-package com.deflatedpickle.rawky.api.extension
+package com.deflatedpickle.rawky.extension
 
 import javax.swing.table.DefaultTableModel
 

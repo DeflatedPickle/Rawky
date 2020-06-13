@@ -3,13 +3,11 @@ package com.deflatedpickle.rawky.pluginmanager
 import com.deflatedpickle.rawky.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.rawky.constraints.StickCenterFinishLine
 import com.deflatedpickle.rawky.constraints.StickWestFinishLine
-import org.jdesktop.swingx.JXLabel
-import org.jdesktop.swingx.JXPanel
-import org.jdesktop.swingx.JXTextArea
+import com.deflatedpickle.rawky.util.PluginUtil
+import org.jdesktop.swingx.*
+import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode
 import java.awt.*
-import javax.swing.BorderFactory
 import javax.swing.BoxLayout
-import javax.swing.JTextArea
 
 class PluginManagerPanel : JXPanel() {
     class Header : JXPanel() {
@@ -46,15 +44,13 @@ class PluginManagerPanel : JXPanel() {
             this.font = this.font.deriveFont(18f)
         }
 
-        val dependenciesText = JTextArea().apply {
-            this.isEditable = false
-        }
+        val dependenciesTableTree = JXTreeTable()
 
         init {
             this.layout = GridBagLayout()
 
             this.add(this.titleLabel, StickWestFinishLine)
-            this.add(this.dependenciesText, FillHorizontalFinishLine)
+            this.add(this.dependenciesTableTree, FillHorizontalFinishLine)
         }
     }
     val dependencies = Dependencies()

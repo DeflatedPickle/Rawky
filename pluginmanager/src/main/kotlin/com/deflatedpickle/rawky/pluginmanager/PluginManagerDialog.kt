@@ -1,63 +1,93 @@
 package com.deflatedpickle.rawky.pluginmanager
 
-import com.deflatedpickle.rawky.api.extension.removeAll
+import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.component.Window
 import com.deflatedpickle.rawky.util.PluginUtil
-import org.jdesktop.swingx.JXTable
+import org.jdesktop.swingx.JXTree
+import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode
+import org.jdesktop.swingx.treetable.MutableTreeTableNode
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.Dimension
 import javax.swing.*
+import javax.swing.tree.DefaultMutableTreeNode
 
 object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
-    private val tableModel = PluginManagerTableModel()
+    private val panel = PluginManagerPanel()
 
-    private val table = JXTable(this.tableModel).apply {
+    private val treeRootNode = DefaultMutableTreeNode("plugin")
+    private val tree = JXTree(treeRootNode).apply {
         val table = this
-        autoResizeMode = JTable.AUTO_RESIZE_OFF
-        selectionMode = ListSelectionModel.SINGLE_SELECTION
         isEditable = false
 
-        selectionModel.addListSelectionListener {
-            if (table.selectedRow == -1) return@addListSelectionListener
+        addTreeSelectionListener {
+            if (table.minSelectionRow == -1) return@addTreeSelectionListener
 
-            if (!it.valueIsAdjusting) {
-                this@PluginManagerDialog.panel.header.apply {
-                    this.nameLabel.text =
-                        PluginUtil.pluginLoadOrder[table.selectedRow]
-                            .value
-                            .split("_")
-                            .joinToString(" ") { it.capitalize() }
-                    this.versionLabel.text = "v${PluginUtil.pluginLoadOrder[table.selectedRow].version}"
+            val selected = PluginUtil.pluginLoadOrder[table.minSelectionRow]
+            val dependencies = selected.dependencies
 
-                    this.authorLabel.text = "By ${PluginUtil.pluginLoadOrder[table.selectedRow].author}"
-                    this.descriptionLabel.text =
-                        "<html>${
+            panel.dependencies.dependenciesTableTree.treeTableModel =
+                PluginManagerTreeTableModel(
+                    if (dependencies.any { it == "all" }) {
                         PluginUtil
-                            .pluginLoadOrder[table.selectedRow]
-                            .description.split("<br>").drop(1)[0]
-                            .replace("<br>", "<br><br>")
-                            .trimIndent()
-                        }</html>"
-                }
+                            .pluginLoadOrder
+                            .toTypedArray()
+                    } else {
+                        PluginUtil.pluginLoadOrder[table.minSelectionRow].dependencies.map {
+                            PluginUtil.idToPlugin[it]!!
+                        }.toTypedArray()
+                    }
+                )
 
-                this@PluginManagerDialog.panel.dependencies.dependenciesText.apply {
-                    this.text = null
-                    for (i in PluginUtil.pluginLoadOrder[table.selectedRow].dependencies) {
-                        this.append(i)
+            this@PluginManagerDialog.panel.header.apply {
+                this.nameLabel.text =
+                    PluginUtil.pluginLoadOrder[table.minSelectionRow]
+                        .value
+                        .split("_")
+                        .joinToString(" ") { it.capitalize() }
+                this.versionLabel.text = "v${PluginUtil.pluginLoadOrder[table.minSelectionRow].version}"
+
+                this.authorLabel.text = "By ${PluginUtil.pluginLoadOrder[table.minSelectionRow].author}"
+                this.descriptionLabel.text =
+                    "<html>${
+                    PluginUtil
+                        .pluginLoadOrder[table.minSelectionRow]
+                        // Split it, get rid of the short description
+                        .description.split("<br>").drop(1)[0]
+                        // One BR is too small for me, need b i g
+                        .replace("<br>", "<br><br>")
+                        .trimIndent()
+                    }</html>"
+            }
+
+            this@PluginManagerDialog.panel.dependencies.apply {
+                this.dependenciesTableTree.removeAll()
+                val dependencies = PluginUtil.pluginLoadOrder[table.minSelectionRow].dependencies
+
+                if (dependencies.isEmpty()) {
+                    (panel.dependencies.dependenciesTableTree.treeTableModel.root as MutableTreeTableNode).insert(
+                        DefaultMutableTreeTableNode("none"),
+                        0
+                    )
+                } else {
+                    for (i in dependencies) {
+                        (panel.dependencies.dependenciesTableTree.treeTableModel.root as MutableTreeTableNode).insert(
+                            DefaultMutableTreeTableNode(i),
+                            0
+                        )
                     }
                 }
             }
         }
     }
 
-    private val panel = PluginManagerPanel()
-
-    private val splitPane = JSplitPane(JSplitPane.HORIZONTAL_SPLIT, table, panel).apply {
+    private val splitPane = JSplitPane(JSplitPane.HORIZONTAL_SPLIT, tree, panel).apply {
         isOneTouchExpandable = true
     }
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
+
+        this.tree.isRootVisible = false
 
         this.fixedComponent = JPanel().apply {
             isOpaque = false
@@ -70,12 +100,12 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
     }
 
     override fun setVisible(visible: Boolean) {
-        this.tableModel.removeAll()
         for (plug in PluginUtil.pluginLoadOrder) {
-            this.tableModel.addRow(arrayOf(plug.value))
+            this.treeRootNode.add(DefaultMutableTreeNode(plug.value))
         }
 
-        this.table.setRowSelectionInterval(0, 0)
+        this.tree.setSelectionRow(0)
+        this.tree.expandAll()
 
         super.setVisible(visible)
     }

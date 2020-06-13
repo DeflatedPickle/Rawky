@@ -1,8 +1,7 @@
 package com.deflatedpickle.rawky.pluginmanager
 
-import com.deflatedpickle.rawky.api.extension.addItem
+import com.deflatedpickle.rawky.extension.addItem
 import com.deflatedpickle.rawky.api.plugin.Plugin
-import com.deflatedpickle.rawky.event.EventLoadPlugin
 import com.deflatedpickle.rawky.event.EventMenuBuild
 import com.deflatedpickle.rawky.menu.MenuTools
 

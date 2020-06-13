@@ -20,6 +20,8 @@ object PluginUtil {
      */
     val pluginLoadOrder = mutableListOf<Plugin>()
 
+    val idToPlugin = mutableMapOf<String, Plugin>()
+
     /**
      * A map of plugins that were found when refreshed, paired with the object they were applied to
      */
@@ -39,6 +41,8 @@ object PluginUtil {
 
             this.pluginMap[annotation] = plugin
             this.pluginLoadOrder.add(annotation)
+
+            this.idToPlugin[plugin.simpleName] = annotation
 
             counter++
         }
