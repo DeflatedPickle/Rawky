@@ -10,6 +10,7 @@ import com.deflatedpickle.rawky.menu.MenuTools
     value = "plugin_manager",
     author = "DeflatedPickle",
     description = """
+        <br>
         A GUI for managing plugins
     """,
     dependencies = ["all"]

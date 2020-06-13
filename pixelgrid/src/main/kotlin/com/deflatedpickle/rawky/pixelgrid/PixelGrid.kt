@@ -7,7 +7,7 @@ import com.deflatedpickle.rawky.api.plugin.Plugin
     author = "DeflatedPickle",
     description = """
         Provides a grid to draw upon
-        
+        <br>
         This plugin provides most of the basic user functionality of Rawky.
     """,
     components = [PixelGridComponent::class]

@@ -3,10 +3,12 @@ package com.deflatedpickle.rawky.api.plugin
 import org.apache.commons.lang3.StringUtils
 import kotlin.reflect.KClass
 
+import com.deflatedpickle.rawky.util.PluginUtil
+
 /**
  * A plugin to add extra features
  *
- * Discovered by [PluginManager.discoverPlugins]
+ * Discovered by [PluginUtil.discoverPlugins]
  */
 annotation class Plugin(
     /**
@@ -45,7 +47,7 @@ annotation class Plugin(
     val dependencies: Array<String> = []
 ) {
     companion object {
-        val comparator = Comparator<Plugin> { a, b ->
+        val comparator: Comparator<Plugin> = Comparator<Plugin> { a, b ->
             if (a.dependencies.contains(b.value) || a.dependencies.contains("all")) {
                 if (b.dependencies.contains(a.value)) {
                     throw IllegalStateException ("Circular dependency")
