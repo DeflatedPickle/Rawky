@@ -9,27 +9,28 @@ import java.awt.Dimension
 import javax.swing.*
 
 object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
-    val tableModel = PluginManagerTableModel()
-    val table = JXTable(this.tableModel).apply {
+    private val tableModel = PluginManagerTableModel()
+
+    private val table = JXTable(this.tableModel).apply {
         val table = this
         autoResizeMode = JTable.AUTO_RESIZE_OFF
         selectionMode = ListSelectionModel.SINGLE_SELECTION
         isEditable = false
 
         selectionModel.addListSelectionListener {
+            if (table.selectedRow == -1) return@addListSelectionListener
+
             if (!it.valueIsAdjusting) {
                 this@PluginManagerDialog.panel.header.apply {
-                    this.nameVersion.apply {
-                        this.nameLabel.text =
-                            PluginUtil.pluginLoadOrder[table.selectedRow]
-                                .value
-                                .split("_")
-                                .joinToString(" ") { it.capitalize() }
-                        this.versionLabel.text = PluginUtil.pluginLoadOrder[table.selectedRow].version
-                    }
+                    this.nameLabel.text =
+                        PluginUtil.pluginLoadOrder[table.selectedRow]
+                            .value
+                            .split("_")
+                            .joinToString(" ") { it.capitalize() }
+                    this.versionLabel.text = "v${PluginUtil.pluginLoadOrder[table.selectedRow].version}"
 
-                    this.authorLabel.text = PluginUtil.pluginLoadOrder[table.selectedRow].author
-                    this.descriptionPanel.descriptionLabel.text =
+                    this.authorLabel.text = "By ${PluginUtil.pluginLoadOrder[table.selectedRow].author}"
+                    this.descriptionLabel.text =
                         "<html>${
                         PluginUtil
                             .pluginLoadOrder[table.selectedRow]
@@ -38,11 +39,22 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
                             .trimIndent()
                         }</html>"
                 }
+
+                this@PluginManagerDialog.panel.dependencies.dependenciesText.apply {
+                    this.text = null
+                    for (i in PluginUtil.pluginLoadOrder[table.selectedRow].dependencies) {
+                        this.append(i)
+                    }
+                }
             }
         }
     }
 
     private val panel = PluginManagerPanel()
+
+    private val splitPane = JSplitPane(JSplitPane.HORIZONTAL_SPLIT, table, panel).apply {
+        isOneTouchExpandable = true
+    }
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
@@ -53,20 +65,14 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
 
             preferredSize = Dimension(400, 200)
 
-            add(
-                JSplitPane(
-                    JSplitPane.HORIZONTAL_SPLIT,
-                    this@PluginManagerDialog.table,
-                    this@PluginManagerDialog.panel
-                )
-            )
+            add(this@PluginManagerDialog.splitPane)
         }
     }
 
     override fun setVisible(visible: Boolean) {
         this.tableModel.removeAll()
         for (plug in PluginUtil.pluginLoadOrder) {
-            this.tableModel.addRow(arrayOf(plug.value, plug.author, plug.version))
+            this.tableModel.addRow(arrayOf(plug.value))
         }
 
         this.table.setRowSelectionInterval(0, 0)
