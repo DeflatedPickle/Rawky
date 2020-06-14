@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
 
     GeneralUtil.isInDev = args.contains("indev")
 
-    logger.info("Running ${if (GeneralUtil.isInDev) "as source" else "as build"}")
+    logger.info("Running ${if (GeneralUtil.isInDev) "as source" else "as built"}")
 
     // Plugins are distributed and loaded as JARs
     // When the program is built

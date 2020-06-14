@@ -1,6 +1,5 @@
 package com.deflatedpickle.rawky.pluginmanager
 
-import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.component.Window
 import com.deflatedpickle.rawky.util.PluginUtil
 import org.jdesktop.swingx.JXTree
@@ -8,7 +7,9 @@ import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode
 import org.jdesktop.swingx.treetable.MutableTreeTableNode
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.Dimension
-import javax.swing.*
+import javax.swing.BoxLayout
+import javax.swing.JPanel
+import javax.swing.JSplitPane
 import javax.swing.tree.DefaultMutableTreeNode
 
 object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
@@ -47,6 +48,9 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
                 this.versionLabel.text = "v${PluginUtil.pluginLoadOrder[table.minSelectionRow].version}"
 
                 this.authorLabel.text = "By ${PluginUtil.pluginLoadOrder[table.minSelectionRow].author}"
+
+                this.typeLabel.text = "Type: ${PluginUtil.pluginLoadOrder[table.minSelectionRow].type}"
+
                 this.descriptionLabel.text =
                     "<html>${
                     PluginUtil

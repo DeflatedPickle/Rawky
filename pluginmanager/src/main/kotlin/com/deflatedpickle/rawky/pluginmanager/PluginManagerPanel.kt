@@ -2,6 +2,7 @@ package com.deflatedpickle.rawky.pluginmanager
 
 import com.deflatedpickle.rawky.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.rawky.constraints.StickCenterFinishLine
+import com.deflatedpickle.rawky.constraints.StickEastFinishLine
 import com.deflatedpickle.rawky.constraints.StickWestFinishLine
 import com.deflatedpickle.rawky.util.PluginUtil
 import org.jdesktop.swingx.*
@@ -22,6 +23,10 @@ class PluginManagerPanel : JXPanel() {
             this.font = this.font.deriveFont(14f)
         }
 
+        val typeLabel = JXLabel("type").apply {
+            this.font = this.font.deriveFont(10f)
+        }
+
         val descriptionLabel = JXLabel("description")
 
         init {
@@ -34,6 +39,7 @@ class PluginManagerPanel : JXPanel() {
                 this.add(versionLabel)
             }, StickCenterFinishLine)
             this.add(this.authorLabel, StickCenterFinishLine)
+            this.add(this.typeLabel, StickWestFinishLine)
             this.add(this.descriptionLabel, FillHorizontalFinishLine)
         }
     }
