@@ -1,15 +1,27 @@
-package com.deflatedpickle.rawky
+package com.deflatedpickle.rawky.launcher
 
 import com.deflatedpickle.rawky.util.ClassGraphUtil
 import com.deflatedpickle.rawky.util.PluginUtil
 import com.deflatedpickle.rawky.component.Window
-import com.deflatedpickle.rawky.event.EventMenuBarBuild
+import com.deflatedpickle.rawky.util.GeneralUtil
+import org.apache.logging.log4j.LogManager
 import java.awt.Dimension
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
 
-fun main() {
+fun main(args: Array<String>) {
     System.setProperty("log4j.skipJansi", "false")
+    val logger = LogManager.getLogger("main")
+
+    GeneralUtil.isInDev = args.contains("indev")
+
+    logger.info("Running ${if (GeneralUtil.isInDev) "as source" else "as build"}")
+
+    // Plugins are distributed and loaded as JARs
+    // When the program is built
+    if (!GeneralUtil.isInDev) {
+        PluginUtil.createPluginsFolder()
+    }
     // Start a scan of the class graph
     // This will discover all plugins
     ClassGraphUtil.refresh()

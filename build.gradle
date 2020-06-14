@@ -1,5 +1,4 @@
 plugins {
-    id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.3.72'
 
     id 'application'
@@ -11,8 +10,6 @@ group 'org.deflatedpickle.rawky'
 version '1.0.0'
 
 sourceCompatibility = 1.8
-
-mainClassName = 'com.deflatedpickle.rawky.MainKt'
 
 allprojects {
     repositories {
@@ -30,6 +27,17 @@ dependencies {
     implementation 'com.github.Fylipp:easy-events:v1.1.0'
 
     compile project(':core')
-    compile project(":pixelgrid")
-    compile project(":pluginmanager")
+}
+
+run {
+    args = ['indev']
+    dependencies {
+        compile project(':launcher')
+        compile project(":pixelgrid")
+        compile project(":pluginmanager")
+    }
+
+    application {
+        mainClassName = 'com.deflatedpickle.rawky.launcher.MainKt'
+    }
 }

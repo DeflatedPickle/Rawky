@@ -1,0 +1,25 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+
+    id 'application'
+
+    id "com.github.johnrengelman.shadow" version "4.0.4"
+    id 'edu.sc.seis.launch4j' version '2.4.4'
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    implementation 'com.github.Fylipp:easy-events:v1.1.0'
+
+    compile project(':core')
+}
+
+application {
+    mainClassName = 'com.deflatedpickle.rawky.launcher.MainKt'
+}
+
+shadowJar {
+    // minimize()
+    archiveName = "Rawky.jar"
+}

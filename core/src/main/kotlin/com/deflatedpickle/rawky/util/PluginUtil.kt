@@ -6,11 +6,17 @@ import com.deflatedpickle.rawky.component.RawkyPanel
 import com.deflatedpickle.rawky.component.RawkyPanelHolder
 import com.deflatedpickle.rawky.component.Window
 import com.deflatedpickle.rawky.event.EventLoadPlugin
+import io.github.classgraph.ClassGraph
 import io.github.classgraph.ClassInfo
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import org.apache.logging.log4j.LogManager
+import java.io.File
+import java.net.URLClassLoader
+import java.util.*
 import javax.swing.JScrollPane
+import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.full.memberFunctions
 
 object PluginUtil {
     private val logger = LogManager.getLogger(this::class.simpleName)
@@ -28,9 +34,14 @@ object PluginUtil {
     @Suppress("MemberVisibilityCanBePrivate")
     val pluginMap = mutableMapOf<Plugin, ClassInfo>()
 
+    fun createPluginsFolder() {
+        File("plugins").mkdir()
+    }
+
     fun discoverPlugins() {
         // Caches the classes found as plugins
         var counter = 0
+
         for (plugin in ClassGraphUtil.scanResults.getClassesWithAnnotation(Plugin::class.qualifiedName)) {
             logger.debug("Found the plugin ${plugin.simpleName} from ${plugin.packageName}")
 
