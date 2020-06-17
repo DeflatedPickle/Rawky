@@ -1,6 +1,6 @@
 package com.deflatedpickle.rawky.pluginmanager
 
-import com.deflatedpickle.rawky.component.Window
+import com.deflatedpickle.rawky.ui.component.Window
 import com.deflatedpickle.rawky.util.PluginUtil
 import org.jdesktop.swingx.JXTree
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode

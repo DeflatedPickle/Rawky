@@ -1,11 +1,13 @@
 package com.deflatedpickle.rawky.launcher
 
+import com.deflatedpickle.rawky.function.umbrella
 import com.deflatedpickle.rawky.util.ClassGraphUtil
 import com.deflatedpickle.rawky.util.PluginUtil
-import com.deflatedpickle.rawky.component.Window
+import com.deflatedpickle.rawky.ui.component.Window
 import com.deflatedpickle.rawky.util.GeneralUtil
 import org.apache.logging.log4j.LogManager
 import java.awt.Dimension
+import java.lang.IllegalArgumentException
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
 

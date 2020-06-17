@@ -1,4 +1,4 @@
-package com.deflatedpickle.rawky.component
+package com.deflatedpickle.rawky.ui.component
 
 import com.deflatedpickle.rawky.api.plugin.Plugin
 import org.jdesktop.swingx.JXPanel

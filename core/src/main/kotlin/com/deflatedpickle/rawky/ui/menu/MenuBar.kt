@@ -1,4 +1,4 @@
-package com.deflatedpickle.rawky.menu
+package com.deflatedpickle.rawky.ui.menu
 
 import com.deflatedpickle.rawky.event.EventMenuBarBuild
 import com.deflatedpickle.rawky.event.EventMenuBuild

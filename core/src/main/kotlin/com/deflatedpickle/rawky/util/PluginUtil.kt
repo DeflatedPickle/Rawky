@@ -2,21 +2,17 @@ package com.deflatedpickle.rawky.util
 
 import bibliothek.gui.dock.common.DefaultSingleCDockable
 import com.deflatedpickle.rawky.api.plugin.Plugin
-import com.deflatedpickle.rawky.component.RawkyPanel
-import com.deflatedpickle.rawky.component.RawkyPanelHolder
-import com.deflatedpickle.rawky.component.Window
+import com.deflatedpickle.rawky.ui.component.RawkyPanel
+import com.deflatedpickle.rawky.ui.component.RawkyPanelHolder
+import com.deflatedpickle.rawky.ui.component.Window
 import com.deflatedpickle.rawky.event.EventLoadPlugin
-import io.github.classgraph.ClassGraph
+import com.deflatedpickle.rawky.function.umbrella
 import io.github.classgraph.ClassInfo
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import org.apache.logging.log4j.LogManager
 import java.io.File
-import java.net.URLClassLoader
-import java.util.*
 import javax.swing.JScrollPane
-import kotlin.reflect.full.declaredFunctions
 import kotlin.reflect.full.findAnnotation
-import kotlin.reflect.full.memberFunctions
 
 object PluginUtil {
     private val logger = LogManager.getLogger(this::class.simpleName)
@@ -35,7 +31,9 @@ object PluginUtil {
     val pluginMap = mutableMapOf<Plugin, ClassInfo>()
 
     fun createPluginsFolder() {
-        File("plugins").mkdir()
+        umbrella(this.logger) {
+            File("plugins").mkdir()
+        }
     }
 
     fun discoverPlugins() {
@@ -93,33 +91,37 @@ object PluginUtil {
 
     fun loadPlugins() {
         for (i in this.pluginLoadOrder) {
-            this.pluginMap[i]!!.loadClass().kotlin.objectInstance
+            umbrella(this.logger) {
+                this.pluginMap[i]!!.loadClass().kotlin.objectInstance
+            }
             EventLoadPlugin.trigger(i)
         }
     }
 
     fun createComponents() {
         for (i in this.pluginLoadOrder) {
-            val plugin = this.pluginMap[i]!!.loadClass().kotlin.objectInstance!!
-            val annotition = plugin::class.findAnnotation<Plugin>()!!
+            umbrella(this.logger) {
+                val plugin = this.pluginMap[i]!!.loadClass().kotlin.objectInstance!!
+                val annotition = plugin::class.findAnnotation<Plugin>()!!
 
-            for (comp in annotition.components) {
-                val panel = comp.objectInstance!! as RawkyPanel
-                panel.plugin = annotition
-                panel.scrollPane = JScrollPane(panel)
+                for (comp in annotition.components) {
+                    val panel = comp.objectInstance!! as RawkyPanel
+                    panel.plugin = annotition
+                    panel.scrollPane = JScrollPane(panel)
 
-                panel.componentHolder = RawkyPanelHolder()
-                panel.componentHolder.dock = DefaultSingleCDockable(
-                    annotition.value,
-                    annotition.value.replace("_", " ").capitalize(),
-                    panel.scrollPane
-                )
+                    panel.componentHolder = RawkyPanelHolder()
+                    panel.componentHolder.dock = DefaultSingleCDockable(
+                        annotition.value,
+                        annotition.value.replace("_", " ").capitalize(),
+                        panel.scrollPane
+                    )
 
-                Window.grid.add(
-                    0.0, 0.0,
-                    0.0, 0.0,
-                    panel.componentHolder.dock
-                )
+                    Window.grid.add(
+                        0.0, 0.0,
+                        0.0, 0.0,
+                        panel.componentHolder.dock
+                    )
+                }
             }
         }
     }

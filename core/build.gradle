@@ -9,11 +9,14 @@ dependencies {
 
     // Docking framework
     implementation 'org.dockingframes:docking-frames-common:1.1.1'
+
     // Extended Swing widgets
     implementation 'org.swinglabs:swingx:1.6.1'
+
     // Extra widgets
     implementation 'org.bidib.com.jidesoft:jide-parent:3.7.6'
     implementation 'org.bidib.com.jidesoft:jide-common:3.7.6'
+
     implementation 'com.github.mickleness.pumpernickel:pump-swing:66e5a9641c'
 
     // Dialogs

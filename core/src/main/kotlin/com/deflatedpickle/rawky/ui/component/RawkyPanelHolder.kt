@@ -1,4 +1,4 @@
-package com.deflatedpickle.rawky.component
+package com.deflatedpickle.rawky.ui.component
 
 import bibliothek.gui.dock.common.intern.CDockable
 import org.jdesktop.swingx.JXPanel

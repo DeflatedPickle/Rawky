@@ -1,12 +1,9 @@
 package com.deflatedpickle.rawky.pluginmanager
 
-import com.deflatedpickle.rawky.constraints.FillHorizontalFinishLine
-import com.deflatedpickle.rawky.constraints.StickCenterFinishLine
-import com.deflatedpickle.rawky.constraints.StickEastFinishLine
-import com.deflatedpickle.rawky.constraints.StickWestFinishLine
-import com.deflatedpickle.rawky.util.PluginUtil
+import com.deflatedpickle.rawky.ui.constraints.FillHorizontalFinishLine
+import com.deflatedpickle.rawky.ui.constraints.StickCenterFinishLine
+import com.deflatedpickle.rawky.ui.constraints.StickWestFinishLine
 import org.jdesktop.swingx.*
-import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode
 import java.awt.*
 import javax.swing.BoxLayout
 
