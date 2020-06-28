@@ -32,6 +32,11 @@ object DiscordRP {
         }
     }
 
+    private const val DELAY = 1
+    val timer = Timer(this.DELAY * 1000) {
+        DiscordRPC.discordRunCallbacks()
+    }
+
     /**
      * Initializes the RCP connection
      */

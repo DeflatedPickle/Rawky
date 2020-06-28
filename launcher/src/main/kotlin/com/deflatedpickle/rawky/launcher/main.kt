@@ -42,6 +42,7 @@ fun main(args: Array<String>) {
 
     // Connect to Discord RCP
     DiscordRP.initializeRCP()
+    DiscordRP.timer.start()
 
     // NOTE: This is triggered here as the launcher isn't a plugin
     DiscordRP.stack.push(
@@ -56,6 +57,7 @@ fun main(args: Array<String>) {
     Runtime.getRuntime().addShutdownHook(object : Thread() {
         override fun run() {
             DiscordRP.shutdownRCP()
+            DiscordRP.timer.stop()
         }
     })
 
