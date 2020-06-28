@@ -37,7 +37,7 @@ annotation class Plugin(
      * This will be chopped at 60 characters for the short description.
      */
     val description: String = StringUtils.EMPTY,
-    val types: Array<PluginType> = [PluginType.OTHER],
+    val type: PluginType = PluginType.API,
     /**
      * The components this plugin provides
      */
@@ -49,13 +49,13 @@ annotation class Plugin(
 ) {
     companion object {
         val comparator: Comparator<Plugin> = Comparator<Plugin> { a, b ->
-            if (a.dependencies.contains(b.value) || a.dependencies.contains("all")) {
+            if ((a.dependencies.contains(b.value) || a.dependencies.contains("all")) && a.type != PluginType.CORE_API) {
                 if (b.dependencies.contains(a.value)) {
-                    throw IllegalStateException ("Circular dependency")
+                    throw IllegalStateException("Circular dependency")
                 }
                 return@Comparator 1
             }
             return@Comparator 0
-        }.thenComparing(Plugin::value)
+        }.thenComparing(Plugin::type).thenComparing(Plugin::value)
     }
 }

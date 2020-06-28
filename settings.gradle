@@ -3,8 +3,11 @@ rootProject.name = 'Rawky'
 include 'master'
 include 'launcher'
 include 'core'
-include 'discordrcp'
 
 include 'pixelgrid'
 
 include 'pluginmanager'
+
+include 'discordrcp'
+
+include 'tipoftheday'

@@ -1,10 +1,10 @@
 package com.deflatedpickle.rawky.pluginmanager
 
-import com.deflatedpickle.rawky.extension.addItem
 import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.api.plugin.PluginType
 import com.deflatedpickle.rawky.event.EventMenuBuild
 import com.deflatedpickle.rawky.event.EventToastWindowShown
+import com.deflatedpickle.rawky.extension.addItem
 import com.deflatedpickle.rawky.ui.menu.MenuTools
 import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.util.PluginUtil
@@ -18,9 +18,10 @@ import com.deflatedpickle.tosuto.action.ToastSingleAction
         <br>
         A GUI for managing plugins
     """,
-    types = [PluginType.DIALOG, PluginType.MENU_COMMAND],
+    type = PluginType.DIALOG,
     dependencies = ["all"]
 )
+@Suppress("unused")
 object PluginManager {
     init {
         EventMenuBuild.addListener {

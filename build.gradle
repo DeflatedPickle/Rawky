@@ -36,6 +36,8 @@ run {
         compile project(':launcher')
         compile project(":pixelgrid")
         compile project(":pluginmanager")
+        compile project(":discordrcp")
+        compile project(":tipoftheday")
     }
 
     application {

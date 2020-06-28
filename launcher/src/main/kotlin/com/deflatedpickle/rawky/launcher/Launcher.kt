@@ -11,4 +11,5 @@ import com.deflatedpickle.rawky.api.plugin.Plugin
     """,
     dependencies = ["core"]
 )
+@Suppress("unused")
 object Launcher

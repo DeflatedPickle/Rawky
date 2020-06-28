@@ -4,6 +4,7 @@ import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.api.plugin.PluginType
 import com.deflatedpickle.rawky.discordrcp.util.DiscordRP
 import com.deflatedpickle.rawky.event.EventWindowShown
+import com.deflatedpickle.rawky.ui.window.Window
 import net.arikia.dev.drpc.DiscordRichPresence
 
 @Plugin(
@@ -13,9 +14,10 @@ import net.arikia.dev.drpc.DiscordRichPresence
         <br>
         Adds Discord RCP integration
     """,
-    types = [PluginType.API],
+    type = PluginType.API,
     dependencies = ["core"]
 )
+@Suppress("unused")
 object DiscordRCP {
     init {
         // Connect to Discord RCP
@@ -32,13 +34,15 @@ object DiscordRCP {
         })
 
         EventWindowShown.addListener {
-            DiscordRP.stack.push(
-                DiscordRichPresence
-                    .Builder("")
-                    .setDetails("Hanging around, doing nothing")
-                    .setStartTimestamps(System.currentTimeMillis())
-                    .build()
-            )
+            if (it is Window) {
+                DiscordRP.stack.push(
+                    DiscordRichPresence
+                        .Builder("")
+                        .setDetails("Hanging around, doing nothing")
+                        .setStartTimestamps(System.currentTimeMillis())
+                        .build()
+                )
+            }
         }
     }
 }

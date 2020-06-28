@@ -38,15 +38,15 @@ fun main(args: Array<String>) {
                 .showException(e)
         }
     }
-    logger.info("Registered default exception handler")
+    logger.info("Registered a default exception handler")
 
     // Plugins are distributed and loaded as JARs
-    // When the program is built
+    // when the program is built
     if (!GeneralUtil.isInDev) {
         PluginUtil.createPluginsFolder()
     }
     // Start a scan of the class graph
-    // This will discover all plugins
+    // this will discover all plugins
     ClassGraphUtil.refresh()
     // Finds all singletons extending Plugin
     PluginUtil.discoverPlugins()

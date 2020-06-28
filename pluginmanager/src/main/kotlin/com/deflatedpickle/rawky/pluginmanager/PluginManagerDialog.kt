@@ -60,9 +60,7 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
                 }"
 
                 this.typeLabel.text = "Type: ${
-                PluginUtil.pluginLoadOrder[table.minSelectionRow].types
-                    .sortedBy { it.ordinal }
-                    .joinToString { it.name }
+                PluginUtil.pluginLoadOrder[table.minSelectionRow].type.name
                 }"
 
                 this.descriptionLabel.text =

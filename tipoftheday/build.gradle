@@ -1,0 +1,14 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+dependencies {
+    compile project(":core")
+    compile project(":discordrcp")
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    implementation 'com.github.Fylipp:easy-events:v1.1.0'
+    implementation 'org.swinglabs:swingx:1.6.1'
+    implementation 'com.github.DeflatedPickle.tosuto:tosuto:1.7.2'
+}

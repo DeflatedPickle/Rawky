@@ -11,6 +11,6 @@ import com.deflatedpickle.rawky.api.plugin.PluginType
         <br>
         This provides the whole API for Rawky.
     """,
-    types = [PluginType.API]
+    type = PluginType.CORE_API
 )
 object Core
