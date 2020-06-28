@@ -19,6 +19,19 @@ object DiscordRP {
         }
         .build()
 
+    val stack = object : java.util.ArrayDeque<DiscordRichPresence>() {
+        override fun push(e: DiscordRichPresence) {
+            DiscordRPC.discordUpdatePresence(e)
+            super.push(e)
+        }
+
+        override fun pop(): DiscordRichPresence {
+            super.pop()
+            DiscordRPC.discordUpdatePresence(this.first)
+            return this.first
+        }
+    }
+
     /**
      * Initializes the RCP connection
      */

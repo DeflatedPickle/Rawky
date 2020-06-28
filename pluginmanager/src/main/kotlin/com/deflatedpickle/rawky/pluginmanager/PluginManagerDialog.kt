@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.pluginmanager
 
+import com.deflatedpickle.rawky.discord.DiscordRP
 import com.deflatedpickle.rawky.ui.component.Window
 import com.deflatedpickle.rawky.util.PluginUtil
 import net.arikia.dev.drpc.DiscordRPC
@@ -9,9 +10,13 @@ import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode
 import org.jdesktop.swingx.treetable.MutableTreeTableNode
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.Dimension
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
 import javax.swing.BoxLayout
+import javax.swing.JDialog
 import javax.swing.JPanel
 import javax.swing.JSplitPane
+import javax.swing.SwingUtilities
 import javax.swing.tree.DefaultMutableTreeNode
 
 object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
@@ -103,6 +108,12 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
 
             add(this@PluginManagerDialog.splitPane)
         }
+
+        (SwingUtilities.getWindowAncestor(this.fixedComponent) as JDialog).addWindowListener(object : WindowAdapter() {
+            override fun windowClosing(e: WindowEvent) {
+                DiscordRP.stack.pop()
+            }
+        })
     }
 
     override fun setVisible(visible: Boolean) {
@@ -113,7 +124,7 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
         this.tree.setSelectionRow(0)
         this.tree.expandAll()
 
-        DiscordRPC.discordUpdatePresence(
+        DiscordRP.stack.push(
             DiscordRichPresence
                 .Builder("Plugin Manager")
                 .setDetails("Managing plugins")

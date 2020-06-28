@@ -23,7 +23,7 @@ object PixelGrid {
     init {
         EventPanelFocusGained.addListener {
             if (it is PixelGridComponent) {
-                DiscordRPC.discordUpdatePresence(
+                DiscordRP.stack.push(
                     DiscordRichPresence
                         .Builder("Pixel Grid")
                         .setDetails("Editing: null")

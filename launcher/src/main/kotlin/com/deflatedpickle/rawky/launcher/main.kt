@@ -44,7 +44,7 @@ fun main(args: Array<String>) {
     DiscordRP.initializeRCP()
 
     // NOTE: This is triggered here as the launcher isn't a plugin
-    DiscordRPC.discordUpdatePresence(
+    DiscordRP.stack.push(
         DiscordRichPresence
             .Builder("Launcher")
             .setDetails("Hanging around, doing nothing")
