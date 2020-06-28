@@ -14,7 +14,7 @@ abstract class AbstractEvent<T : Any> : SimpleEvent<T>() {
         super.trigger(t)
     }
 
-    override fun addListener(listener: Consumer<T>?) {
+    override fun addListener(listener: Consumer<T>) {
         this.logger.debug("A listener was attached to this event")
         super.addListener(listener)
     }

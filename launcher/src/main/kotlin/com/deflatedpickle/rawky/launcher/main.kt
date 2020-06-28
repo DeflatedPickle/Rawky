@@ -9,6 +9,8 @@ import com.deflatedpickle.rawky.util.GeneralUtil
 import com.deflatedpickle.rawky.util.PluginUtil
 import net.arikia.dev.drpc.DiscordRichPresence
 import org.apache.logging.log4j.LogManager
+import org.oxbow.swingbits.dialog.task.TaskDialog
+import org.oxbow.swingbits.dialog.task.TaskDialogs
 import java.awt.Dimension
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
@@ -20,6 +22,26 @@ fun main(args: Array<String>) {
     GeneralUtil.isInDev = args.contains("indev")
 
     logger.info("Running ${if (GeneralUtil.isInDev) "as source" else "as built"}")
+    logger.warn(
+        "Rawky is running with ${
+        // This is in bytes, so we'll divide it by enough
+        Runtime.getRuntime().maxMemory() / 1_000_000
+        }MBs of memory"
+    )
+
+    Thread.setDefaultUncaughtExceptionHandler { t, e ->
+        logger.warn("${t.name} threw $e")
+        // We'll invoke it on the Swing thread
+        // This will wait at least for the window to open first
+        SwingUtilities.invokeLater {
+            // Open a dialog to report the error to the user
+            TaskDialogs
+                .build()
+                .parent(Window)
+                .showException(e)
+        }
+    }
+    logger.info("Registered default exception handler")
 
     // Plugins are distributed and loaded as JARs
     // When the program is built
@@ -56,6 +78,7 @@ fun main(args: Array<String>) {
     // Add a JVM hook to stop Discord RCP
     Runtime.getRuntime().addShutdownHook(object : Thread() {
         override fun run() {
+            logger.warn("The JVM instance running Rawky was shutdown")
             DiscordRP.shutdownRCP()
             DiscordRP.timer.stop()
         }
