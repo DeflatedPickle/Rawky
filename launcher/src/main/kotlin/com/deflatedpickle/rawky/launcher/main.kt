@@ -1,13 +1,15 @@
 package com.deflatedpickle.rawky.launcher
 
-import com.deflatedpickle.rawky.function.umbrella
-import com.deflatedpickle.rawky.util.ClassGraphUtil
-import com.deflatedpickle.rawky.util.PluginUtil
+import com.deflatedpickle.rawky.discord.DiscordRP
+import com.deflatedpickle.rawky.event.EventWindowDeployed
 import com.deflatedpickle.rawky.ui.component.Window
+import com.deflatedpickle.rawky.util.ClassGraphUtil
 import com.deflatedpickle.rawky.util.GeneralUtil
+import com.deflatedpickle.rawky.util.PluginUtil
+import net.arikia.dev.drpc.DiscordRPC
+import net.arikia.dev.drpc.DiscordRichPresence
 import org.apache.logging.log4j.LogManager
 import java.awt.Dimension
-import java.lang.IllegalArgumentException
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
 
@@ -38,8 +40,28 @@ fun main(args: Array<String>) {
     // Create the docked widgets
     PluginUtil.createComponents()
 
+    // Connect to Discord RCP
+    DiscordRP.initializeRCP()
+
+    // NOTE: This is triggered here as the launcher isn't a plugin
+    DiscordRPC.discordUpdatePresence(
+        DiscordRichPresence
+            .Builder("Launcher")
+            .setDetails("Hanging around, doing nothing")
+            .setStartTimestamps(System.currentTimeMillis())
+            .build()
+    )
+
+    // Add a JVM hook to stop Discord RCP
+    Runtime.getRuntime().addShutdownHook(object : Thread() {
+        override fun run() {
+            DiscordRP.shutdownRCP()
+        }
+    })
+
     SwingUtilities.invokeLater {
         Window.deploy()
+        EventWindowDeployed.trigger(Window)
 
         Window.size = Dimension(400, 400)
         Window.setLocationRelativeTo(null)

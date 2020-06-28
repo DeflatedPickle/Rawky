@@ -2,6 +2,11 @@ package com.deflatedpickle.rawky.pixelgrid
 
 import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.api.plugin.PluginType
+import com.deflatedpickle.rawky.discord.DiscordRP
+import com.deflatedpickle.rawky.event.EventPanelFocusGained
+import com.deflatedpickle.rawky.event.EventWindowDeployed
+import net.arikia.dev.drpc.DiscordRPC
+import net.arikia.dev.drpc.DiscordRichPresence
 
 @Plugin(
     value = "pixel_grid",
@@ -14,4 +19,18 @@ import com.deflatedpickle.rawky.api.plugin.PluginType
     type = PluginType.COMPONENT,
     components = [PixelGridComponent::class]
 )
-object PixelGrid
+object PixelGrid {
+    init {
+        EventPanelFocusGained.addListener {
+            if (it is PixelGridComponent) {
+                DiscordRPC.discordUpdatePresence(
+                    DiscordRichPresence
+                        .Builder("Pixel Grid")
+                        .setDetails("Editing: null")
+                        .setStartTimestamps(System.currentTimeMillis())
+                        .build()
+                )
+            }
+        }
+    }
+}

@@ -2,6 +2,8 @@ package com.deflatedpickle.rawky.pluginmanager
 
 import com.deflatedpickle.rawky.ui.component.Window
 import com.deflatedpickle.rawky.util.PluginUtil
+import net.arikia.dev.drpc.DiscordRPC
+import net.arikia.dev.drpc.DiscordRichPresence
 import org.jdesktop.swingx.JXTree
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode
 import org.jdesktop.swingx.treetable.MutableTreeTableNode
@@ -110,6 +112,14 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
 
         this.tree.setSelectionRow(0)
         this.tree.expandAll()
+
+        DiscordRPC.discordUpdatePresence(
+            DiscordRichPresence
+                .Builder("Plugin Manager")
+                .setDetails("Managing plugins")
+                .setStartTimestamps(System.currentTimeMillis())
+                .build()
+        )
 
         super.setVisible(visible)
     }

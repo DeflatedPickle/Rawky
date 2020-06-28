@@ -1,11 +1,15 @@
 package com.deflatedpickle.rawky.util
 
 import bibliothek.gui.dock.common.DefaultSingleCDockable
+import bibliothek.gui.dock.common.event.CFocusListener
+import bibliothek.gui.dock.common.intern.CDockable
 import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.ui.component.RawkyPanel
 import com.deflatedpickle.rawky.ui.component.RawkyPanelHolder
 import com.deflatedpickle.rawky.ui.component.Window
 import com.deflatedpickle.rawky.event.EventLoadPlugin
+import com.deflatedpickle.rawky.event.EventPanelFocusGained
+import com.deflatedpickle.rawky.event.EventPanelFocusLost
 import com.deflatedpickle.rawky.function.umbrella
 import io.github.classgraph.ClassInfo
 import me.xdrop.fuzzywuzzy.FuzzySearch
@@ -102,6 +106,7 @@ object PluginUtil {
         for (i in this.pluginLoadOrder) {
             umbrella(this.logger) {
                 val plugin = this.pluginMap[i]!!.loadClass().kotlin.objectInstance!!
+                // haha tit
                 val annotition = plugin::class.findAnnotation<Plugin>()!!
 
                 for (comp in annotition.components) {
@@ -115,6 +120,27 @@ object PluginUtil {
                         annotition.value.replace("_", " ").capitalize(),
                         panel.scrollPane
                     )
+                    panel.componentHolder.dock.addFocusListener(object : CFocusListener {
+                        override fun focusLost(dockable: CDockable) {
+                            EventPanelFocusLost.trigger(
+                                ((dockable as DefaultSingleCDockable)
+                                    .contentPane
+                                    .getComponent(0) as JScrollPane)
+                                    .viewport
+                                    .view as RawkyPanel
+                            )
+                        }
+
+                        override fun focusGained(dockable: CDockable) {
+                            EventPanelFocusGained.trigger(
+                                ((dockable as DefaultSingleCDockable)
+                                    .contentPane
+                                    .getComponent(0) as JScrollPane)
+                                    .viewport
+                                    .view as RawkyPanel
+                            )
+                        }
+                    })
 
                     Window.grid.add(
                         0.0, 0.0,

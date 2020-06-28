@@ -34,6 +34,9 @@ dependencies {
     // Events
     implementation 'com.github.Fylipp:easy-events:v1.1.0'
 
+    // Discord RCP
+    implementation 'com.github.Vatuu:discord-rpc:1.6.2'
+
     // Logging
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
