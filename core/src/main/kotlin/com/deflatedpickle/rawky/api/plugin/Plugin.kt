@@ -37,7 +37,7 @@ annotation class Plugin(
      * This will be chopped at 60 characters for the short description.
      */
     val description: String = StringUtils.EMPTY,
-    val type: PluginType = PluginType.OTHER,
+    val types: Array<PluginType> = [PluginType.OTHER],
     /**
      * The components this plugin provides
      */

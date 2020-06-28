@@ -36,9 +36,9 @@ object PluginUtil {
     val pluginMap = mutableMapOf<Plugin, ClassInfo>()
 
     fun createPluginsFolder() {
-        umbrella(this.logger) {
-            File("plugins").mkdir()
-        }
+        // This can throw an error, but we won't umbrella it
+        // in case the user needs to see it
+        File("plugins").mkdir()
     }
 
     fun discoverPlugins() {
@@ -56,7 +56,7 @@ object PluginUtil {
             this.pluginMap[annotation] = plugin
             this.pluginLoadOrder.add(annotation)
 
-            this.idToPlugin[plugin.simpleName] = annotation
+            this.idToPlugin[annotation.value] = annotation
 
             counter++
         }

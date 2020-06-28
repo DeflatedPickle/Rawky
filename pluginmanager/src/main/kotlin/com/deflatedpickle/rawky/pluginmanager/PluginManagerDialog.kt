@@ -1,6 +1,6 @@
 package com.deflatedpickle.rawky.pluginmanager
 
-import com.deflatedpickle.rawky.discord.DiscordRP
+import com.deflatedpickle.rawky.discordrcp.util.DiscordRP
 import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.util.PluginUtil
 import net.arikia.dev.drpc.DiscordRichPresence
@@ -51,11 +51,19 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
                         .value
                         .split("_")
                         .joinToString(" ") { it.capitalize() }
-                this.versionLabel.text = "v${PluginUtil.pluginLoadOrder[table.minSelectionRow].version}"
+                this.versionLabel.text = "v${
+                PluginUtil.pluginLoadOrder[table.minSelectionRow].version
+                }"
 
-                this.authorLabel.text = "By ${PluginUtil.pluginLoadOrder[table.minSelectionRow].author}"
+                this.authorLabel.text = "By ${
+                PluginUtil.pluginLoadOrder[table.minSelectionRow].author
+                }"
 
-                this.typeLabel.text = "Type: ${PluginUtil.pluginLoadOrder[table.minSelectionRow].type}"
+                this.typeLabel.text = "Type: ${
+                PluginUtil.pluginLoadOrder[table.minSelectionRow].types
+                    .sortedBy { it.ordinal }
+                    .joinToString { it.name }
+                }"
 
                 this.descriptionLabel.text =
                     "<html>${

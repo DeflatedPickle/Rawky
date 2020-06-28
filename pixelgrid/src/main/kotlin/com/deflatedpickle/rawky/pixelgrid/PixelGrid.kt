@@ -2,7 +2,7 @@ package com.deflatedpickle.rawky.pixelgrid
 
 import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.api.plugin.PluginType
-import com.deflatedpickle.rawky.discord.DiscordRP
+import com.deflatedpickle.rawky.discordrcp.util.DiscordRP
 import com.deflatedpickle.rawky.event.EventPanelFocusGained
 import net.arikia.dev.drpc.DiscordRichPresence
 
@@ -14,8 +14,9 @@ import net.arikia.dev.drpc.DiscordRichPresence
         <br>
         This plugin provides most of the basic user functionality of Rawky.
     """,
-    type = PluginType.COMPONENT,
-    components = [PixelGridComponent::class]
+    types = [PluginType.COMPONENT],
+    components = [PixelGridComponent::class],
+    dependencies = ["core", "discord_rcp"]
 )
 object PixelGrid {
     init {

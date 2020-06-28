@@ -1,18 +1,14 @@
 package com.deflatedpickle.rawky.launcher
 
-import com.deflatedpickle.rawky.discord.DiscordRP
 import com.deflatedpickle.rawky.event.EventDockDeployed
 import com.deflatedpickle.rawky.event.EventWindowShown
 import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.util.ClassGraphUtil
 import com.deflatedpickle.rawky.util.GeneralUtil
 import com.deflatedpickle.rawky.util.PluginUtil
-import net.arikia.dev.drpc.DiscordRichPresence
 import org.apache.logging.log4j.LogManager
-import org.oxbow.swingbits.dialog.task.TaskDialog
 import org.oxbow.swingbits.dialog.task.TaskDialogs
 import java.awt.Dimension
-import javax.swing.JDialog
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
 
@@ -63,25 +59,10 @@ fun main(args: Array<String>) {
     // Create the docked widgets
     PluginUtil.createComponents()
 
-    // Connect to Discord RCP
-    DiscordRP.initializeRCP()
-    DiscordRP.timer.start()
-
-    // NOTE: This is triggered here as the launcher isn't a plugin
-    DiscordRP.stack.push(
-        DiscordRichPresence
-            .Builder("Launcher")
-            .setDetails("Hanging around, doing nothing")
-            .setStartTimestamps(System.currentTimeMillis())
-            .build()
-    )
-
     // Add a JVM hook to stop Discord RCP
     Runtime.getRuntime().addShutdownHook(object : Thread() {
         override fun run() {
             logger.warn("The JVM instance running Rawky was shutdown")
-            DiscordRP.shutdownRCP()
-            DiscordRP.timer.stop()
         }
     })
 

@@ -14,7 +14,17 @@ enum class PluginType {
     /**
      * Adds a menu command
      */
-    COMMAND_GENERAL,
+    MENU_COMMAND,
+
+    /**
+     * Adds a setting
+     */
+    SETTING,
+
+    /**
+     * Adds an API for other plugins to use
+     */
+    API,
 
     /**
      * Does something else

@@ -11,10 +11,9 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
     implementation 'com.github.Fylipp:easy-events:v1.1.0'
-    implementation 'com.github.Vatuu:discord-rpc:1.6.2'
     implementation 'org.dockingframes:docking-frames-common:1.1.1'
     implementation 'org.oxbow:swing-bits:1.0.0-SNAPSHOT'
-    implementation 'com.github.DeflatedPickle.tosuto:tosuto:1.7.1'
+    implementation 'com.github.DeflatedPickle.tosuto:tosuto:1.7.2'
 
     compile project(':core')
 }

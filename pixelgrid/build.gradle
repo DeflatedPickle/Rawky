@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     compile project(":core")
+    compile project(":discordrcp")
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 

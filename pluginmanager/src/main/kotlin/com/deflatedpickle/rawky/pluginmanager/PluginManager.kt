@@ -3,16 +3,13 @@ package com.deflatedpickle.rawky.pluginmanager
 import com.deflatedpickle.rawky.extension.addItem
 import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.api.plugin.PluginType
-import com.deflatedpickle.rawky.event.EventLoadedPlugins
 import com.deflatedpickle.rawky.event.EventMenuBuild
 import com.deflatedpickle.rawky.event.EventToastWindowShown
-import com.deflatedpickle.rawky.event.EventWindowShown
 import com.deflatedpickle.rawky.ui.menu.MenuTools
 import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.util.PluginUtil
 import com.deflatedpickle.tosuto.ToastItem
 import com.deflatedpickle.tosuto.action.ToastSingleAction
-import javax.swing.SwingUtilities
 
 @Plugin(
     value = "plugin_manager",
@@ -21,7 +18,7 @@ import javax.swing.SwingUtilities
         <br>
         A GUI for managing plugins
     """,
-    type = PluginType.DIALOG,
+    types = [PluginType.DIALOG, PluginType.MENU_COMMAND],
     dependencies = ["all"]
 )
 object PluginManager {
@@ -45,7 +42,7 @@ object PluginManager {
                         actions = listOf(
                             ToastSingleAction(
                                 "Manage",
-                                command = {
+                                command = { _, _ ->
                                     PluginManagerDialog.isVisible = true
                                 }
                             )

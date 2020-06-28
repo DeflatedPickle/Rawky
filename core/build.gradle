@@ -38,7 +38,7 @@ dependencies {
     implementation 'com.github.Vatuu:discord-rpc:1.6.2'
 
     // Toasts
-    implementation 'com.github.DeflatedPickle.tosuto:tosuto:1.7.1'
+    implementation 'com.github.DeflatedPickle.tosuto:tosuto:1.7.2'
 
     // Logging
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
