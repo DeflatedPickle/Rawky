@@ -2,6 +2,7 @@ package com.deflatedpickle.rawky.ui.window
 
 import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
+import com.deflatedpickle.rawky.event.EventToastWindowShown
 import com.deflatedpickle.rawky.ui.menu.MenuBar
 import com.deflatedpickle.tosuto.TimedToastItem
 import com.deflatedpickle.tosuto.ToastWindow
@@ -16,7 +17,7 @@ object Window : JFrame() {
     @Suppress("MemberVisibilityCanBePrivate")
     val grid = CGrid(control)
 
-    val toastWindow: JDialog = ToastWindow(this)
+    val toastWindow = ToastWindow(this, 160)
 
     init {
         this.jMenuBar = MenuBar
@@ -35,5 +36,6 @@ object Window : JFrame() {
     override fun setVisible(b: Boolean) {
         super.setVisible(b)
         this.toastWindow.isVisible = true
+        EventToastWindowShown.trigger(this.toastWindow)
     }
 }

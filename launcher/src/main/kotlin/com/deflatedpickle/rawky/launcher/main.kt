@@ -12,6 +12,7 @@ import org.apache.logging.log4j.LogManager
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import org.oxbow.swingbits.dialog.task.TaskDialogs
 import java.awt.Dimension
+import javax.swing.JDialog
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
 

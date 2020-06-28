@@ -8,6 +8,7 @@ import com.deflatedpickle.rawky.ui.component.RawkyPanel
 import com.deflatedpickle.rawky.ui.component.RawkyPanelHolder
 import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.event.EventLoadPlugin
+import com.deflatedpickle.rawky.event.EventLoadedPlugins
 import com.deflatedpickle.rawky.event.EventPanelFocusGained
 import com.deflatedpickle.rawky.event.EventPanelFocusLost
 import com.deflatedpickle.rawky.function.umbrella
@@ -100,6 +101,7 @@ object PluginUtil {
             }
             EventLoadPlugin.trigger(i)
         }
+        EventLoadedPlugins.trigger(this.pluginLoadOrder)
     }
 
     fun createComponents() {
