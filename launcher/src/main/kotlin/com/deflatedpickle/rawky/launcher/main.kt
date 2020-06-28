@@ -1,12 +1,12 @@
 package com.deflatedpickle.rawky.launcher
 
 import com.deflatedpickle.rawky.discord.DiscordRP
-import com.deflatedpickle.rawky.event.EventWindowDeployed
-import com.deflatedpickle.rawky.ui.component.Window
+import com.deflatedpickle.rawky.event.EventDockDeployed
+import com.deflatedpickle.rawky.event.EventWindowShown
+import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.util.ClassGraphUtil
 import com.deflatedpickle.rawky.util.GeneralUtil
 import com.deflatedpickle.rawky.util.PluginUtil
-import net.arikia.dev.drpc.DiscordRPC
 import net.arikia.dev.drpc.DiscordRichPresence
 import org.apache.logging.log4j.LogManager
 import java.awt.Dimension
@@ -63,14 +63,16 @@ fun main(args: Array<String>) {
 
     SwingUtilities.invokeLater {
         Window.deploy()
-        EventWindowDeployed.trigger(Window)
+        EventDockDeployed.trigger(Window.grid)
 
         Window.size = Dimension(400, 400)
         Window.setLocationRelativeTo(null)
 
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
         SwingUtilities.updateComponentTreeUI(Window)
+        SwingUtilities.updateComponentTreeUI(Window.toastWindow)
 
         Window.isVisible = true
+        EventWindowShown.trigger(Window)
     }
 }

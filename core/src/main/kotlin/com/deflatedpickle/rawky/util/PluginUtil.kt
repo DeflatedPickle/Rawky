@@ -6,7 +6,7 @@ import bibliothek.gui.dock.common.intern.CDockable
 import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.ui.component.RawkyPanel
 import com.deflatedpickle.rawky.ui.component.RawkyPanelHolder
-import com.deflatedpickle.rawky.ui.component.Window
+import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.event.EventLoadPlugin
 import com.deflatedpickle.rawky.event.EventPanelFocusGained
 import com.deflatedpickle.rawky.event.EventPanelFocusLost

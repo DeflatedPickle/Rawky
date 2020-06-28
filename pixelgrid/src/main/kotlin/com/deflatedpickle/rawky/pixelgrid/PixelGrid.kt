@@ -4,8 +4,6 @@ import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.api.plugin.PluginType
 import com.deflatedpickle.rawky.discord.DiscordRP
 import com.deflatedpickle.rawky.event.EventPanelFocusGained
-import com.deflatedpickle.rawky.event.EventWindowDeployed
-import net.arikia.dev.drpc.DiscordRPC
 import net.arikia.dev.drpc.DiscordRichPresence
 
 @Plugin(
