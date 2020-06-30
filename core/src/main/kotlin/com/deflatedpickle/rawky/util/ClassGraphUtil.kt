@@ -12,11 +12,11 @@ object ClassGraphUtil {
     lateinit var scanResults: ScanResult
         private set
 
-    val jars = File("plugins").listFiles { file, name ->
+    private val jars = File("plugins").listFiles { _, name ->
         name.endsWith(".jar")
     }?.map { it.toURI().toURL() } ?: listOf()
 
-    val classLoader = URLClassLoader(jars.toTypedArray())
+    private val classLoader = URLClassLoader(jars.toTypedArray())
 
     init {
         if (!GeneralUtil.isInDev) {

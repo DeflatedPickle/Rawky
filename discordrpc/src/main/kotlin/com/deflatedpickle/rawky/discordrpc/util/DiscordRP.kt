@@ -1,14 +1,12 @@
-package com.deflatedpickle.rawky.discordrcp.util
+package com.deflatedpickle.rawky.discordrpc.util
 
 import com.deflatedpickle.rawky.ui.window.Window
-import com.deflatedpickle.rawky.util.PluginUtil
 import com.deflatedpickle.tosuto.ToastItem
 import com.deflatedpickle.tosuto.action.ToastSingleAction
 import com.deflatedpickle.tosuto.api.ToastLevel
 import net.arikia.dev.drpc.DiscordEventHandlers
 import net.arikia.dev.drpc.DiscordRPC
 import net.arikia.dev.drpc.DiscordRichPresence
-import net.arikia.dev.drpc.DiscordUser
 import org.apache.logging.log4j.LogManager
 import javax.swing.Timer
 

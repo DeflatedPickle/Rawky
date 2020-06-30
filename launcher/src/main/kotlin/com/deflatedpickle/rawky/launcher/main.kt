@@ -1,9 +1,11 @@
 package com.deflatedpickle.rawky.launcher
 
 import com.deflatedpickle.rawky.event.EventDockDeployed
+import com.deflatedpickle.rawky.event.EventRawkyInit
 import com.deflatedpickle.rawky.event.EventWindowShown
 import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.util.ClassGraphUtil
+import com.deflatedpickle.rawky.util.ConfigUtil
 import com.deflatedpickle.rawky.util.GeneralUtil
 import com.deflatedpickle.rawky.util.PluginUtil
 import org.apache.logging.log4j.LogManager
@@ -22,7 +24,7 @@ fun main(args: Array<String>) {
     logger.warn(
         "Rawky is running with ${
         // This is in bytes, so we'll divide it by enough
-        Runtime.getRuntime().maxMemory() / 1_000_000
+        Runtime.getRuntime().maxMemory() / 1024 * 1024
         }MBs of memory"
     )
 
@@ -58,6 +60,19 @@ fun main(args: Array<String>) {
     PluginUtil.loadPlugins()
     // Create the docked widgets
     PluginUtil.createComponents()
+
+    // We'll interject plugin content now
+    // These configs need to be loaded here
+    if (!GeneralUtil.isInDev) {
+        // Create the config file
+        ConfigUtil.createConfigFolder()
+        // Deserialize old configs
+        ConfigUtil.deserializeOldConfigFiles()
+        // Create and serialize configs that don't exist
+        ConfigUtil.createAndSerializeNewConfigFiles()
+    }
+
+    EventRawkyInit.trigger(true)
 
     // Add a JVM hook to stop Discord RCP
     Runtime.getRuntime().addShutdownHook(object : Thread() {

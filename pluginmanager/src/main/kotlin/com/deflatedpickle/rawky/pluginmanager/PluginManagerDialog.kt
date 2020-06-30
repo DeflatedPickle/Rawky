@@ -1,6 +1,6 @@
 package com.deflatedpickle.rawky.pluginmanager
 
-import com.deflatedpickle.rawky.discordrcp.util.DiscordRP
+import com.deflatedpickle.rawky.discordrpc.util.DiscordRP
 import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.util.PluginUtil
 import net.arikia.dev.drpc.DiscordRichPresence

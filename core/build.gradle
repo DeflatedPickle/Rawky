@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm'
+    id 'org.jetbrains.kotlin.plugin.serialization'
 }
 
 dependencies {
@@ -24,6 +25,7 @@ dependencies {
 
     // Utility
     implementation 'org.apache.commons:commons-lang3:3.9'
+    implementation 'com.github.javadev:underscore:1.55'
 
     // Allows for plugin loading
     implementation 'io.github.classgraph:classgraph:4.8.85'
@@ -40,7 +42,19 @@ dependencies {
     // Toasts
     implementation 'com.github.DeflatedPickle.tosuto:tosuto:1.7.2'
 
+    // Config
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0"
+
     // Logging
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
 }

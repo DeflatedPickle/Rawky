@@ -10,6 +10,7 @@ import com.deflatedpickle.rawky.util.PluginUtil
  *
  * Discovered by [PluginUtil.discoverPlugins]
  */
+@Target(AnnotationTarget.CLASS)
 annotation class Plugin(
     /**
      * The name/id of the plugin
@@ -45,7 +46,11 @@ annotation class Plugin(
     /**
      * The plugin IDs this plugin should load after
      */
-    val dependencies: Array<String> = []
+    val dependencies: Array<String> = [],
+    /**
+     * The config for this plugin
+     */
+    val settings: KClass<*> = Nothing::class
 ) {
     companion object {
         val comparator: Comparator<Plugin> = Comparator<Plugin> { a, b ->
