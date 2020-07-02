@@ -9,6 +9,7 @@ import net.arikia.dev.drpc.DiscordRichPresence
 @Plugin(
     value = "pixel_grid",
     author = "DeflatedPickle",
+    version = "1.0.0",
     description = """
         Provides a grid to draw upon
         <br>
@@ -16,7 +17,7 @@ import net.arikia.dev.drpc.DiscordRichPresence
     """,
     type = PluginType.COMPONENT,
     components = [PixelGridComponent::class],
-    dependencies = ["core", "discord_rcp"]
+    dependencies = ["core", "discord_rpc"]
 )
 @Suppress("unused")
 object PixelGrid {

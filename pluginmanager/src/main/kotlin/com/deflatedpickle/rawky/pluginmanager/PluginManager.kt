@@ -14,12 +14,12 @@ import com.deflatedpickle.tosuto.action.ToastSingleAction
 @Plugin(
     value = "plugin_manager",
     author = "DeflatedPickle",
+    version = "1.0.0",
     description = """
         <br>
         A GUI for managing plugins
     """,
-    type = PluginType.DIALOG,
-    dependencies = ["all"]
+    type = PluginType.DIALOG
 )
 @Suppress("unused")
 object PluginManager {

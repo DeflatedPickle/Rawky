@@ -34,15 +34,9 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
 
             panel.dependencies.dependenciesTableTree.treeTableModel =
                 PluginManagerTreeTableModel(
-                    if (dependencies.any { it == "all" }) {
-                        PluginUtil
-                            .pluginLoadOrder
-                            .toTypedArray()
-                    } else {
-                        PluginUtil.pluginLoadOrder[table.minSelectionRow].dependencies.map {
-                            PluginUtil.idToPlugin[it]!!
-                        }.toTypedArray()
-                    }
+                    dependencies.map {
+                        PluginUtil.idToPlugin[it]!!
+                    }.toTypedArray()
                 )
 
             this@PluginManagerDialog.panel.header.apply {

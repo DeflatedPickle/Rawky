@@ -31,13 +31,13 @@ annotation class Plugin(
     /**
      * The version the plugin is currently at
      */
-    val version: String = "1.0.0",
+    val version: String,
     /**
      * The description of the plugin
      *
      * This will be chopped at 60 characters for the short description.
      */
-    val description: String = StringUtils.EMPTY,
+    val description: String = "<br>",
     val type: PluginType = PluginType.API,
     /**
      * The components this plugin provides
@@ -54,7 +54,7 @@ annotation class Plugin(
 ) {
     companion object {
         val comparator: Comparator<Plugin> = Comparator<Plugin> { a, b ->
-            if ((a.dependencies.contains(b.value) || a.dependencies.contains("all")) && a.type != PluginType.CORE_API) {
+            if (a.dependencies.contains(b.value) || a.type != PluginType.CORE_API) {
                 if (b.dependencies.contains(a.value)) {
                     throw IllegalStateException("Circular dependency")
                 }

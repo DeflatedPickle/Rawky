@@ -12,6 +12,7 @@ import net.arikia.dev.drpc.DiscordRichPresence
 @Plugin(
     value = "discord_rpc",
     author = "DeflatedPickle",
+    version = "1.0.0",
     description = """
         <br>
         Adds Discord RCP integration

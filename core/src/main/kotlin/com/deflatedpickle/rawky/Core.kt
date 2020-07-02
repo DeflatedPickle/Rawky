@@ -6,6 +6,7 @@ import com.deflatedpickle.rawky.api.plugin.PluginType
 @Plugin(
     value = "core",
     author = "DeflatedPickle",
+    version = "1.0.0",
     description = """
         The core program
         <br>

@@ -11,6 +11,7 @@ import java.io.File
 import java.io.FileOutputStream
 import kotlin.reflect.full.createInstance
 
+@Suppress("MemberVisibilityCanBePrivate", "unused")
 @OptIn(ImplicitReflectionSerializer::class)
 object ConfigUtil {
     private val logger = LogManager.getLogger(this::class.simpleName)
@@ -23,29 +24,25 @@ object ConfigUtil {
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> getSettings(id: String): T = idToSettings[id] as T
 
-    @Suppress("MemberVisibilityCanBePrivate")
     val configFolder = File("config")
 
     fun createConfigFolder(): File =
         this.configFolder.apply {
             if (mkdir()) {
-                this@ConfigUtil.logger.info("Created the config folder")
+                this@ConfigUtil.logger.info("Created the config folder at ${this.absolutePath}")
             }
         }
 
-    @Suppress("MemberVisibilityCanBePrivate")
     fun createConfigFile(id: String): File =
         File("config/$id.json").apply {
             if (createNewFile()) {
-                this@ConfigUtil.logger.info("Created a config file for $id")
+                this@ConfigUtil.logger.info("Created a config file for $id at ${this.absolutePath}")
             }
         }
 
-    @Suppress("MemberVisibilityCanBePrivate")
     fun hasConfigFile(id: String): Boolean =
         File("config/$id.json").exists()
 
-    @Suppress("unused")
     fun createAllConfigFiles(): List<File> {
         val list = mutableListOf<File>()
 
@@ -57,7 +54,6 @@ object ConfigUtil {
     }
 
     @ImplicitReflectionSerializer
-    @Suppress("MemberVisibilityCanBePrivate")
     fun serializeConfig(id: String): File? {
         if (PluginUtil.idToPlugin[id]!!.settings == Nothing::class) return null
 
@@ -65,8 +61,8 @@ object ConfigUtil {
 
         val settings = PluginUtil.idToPlugin[id]!!.settings
 
-        val instance = settings.createInstance()
-        this.idToSettings[file.nameWithoutExtension] = instance
+        this.idToSettings.getOrPut(file.nameWithoutExtension, { settings.createInstance() })
+        val instance = this.idToSettings[file.nameWithoutExtension]!!
 
         @Suppress("UNCHECKED_CAST")
         val serializer = instance::class.serializer() as KSerializer<Any>
@@ -80,12 +76,11 @@ object ConfigUtil {
         out.flush()
         out.close()
 
-        this.logger.info("Serialized the config for $id")
+        this.logger.info("Serialized the config for $id to ${file.absolutePath}")
 
         return file
     }
 
-    @Suppress("MemberVisibilityCanBePrivate")
     fun deserializeConfig(file: File) {
         val settings = PluginUtil.idToPlugin[file.nameWithoutExtension]!!.settings
 
@@ -98,10 +93,9 @@ object ConfigUtil {
 
         this.idToSettings[file.nameWithoutExtension] = jsonObj
 
-        this.logger.info("Deserialized the config for $file")
+        this.logger.info("Deserialized the config for $file from ${file.absolutePath}")
     }
 
-    @Suppress("unused")
     fun serializeAllConfigs(): List<File> {
         val list = mutableListOf<File>()
 

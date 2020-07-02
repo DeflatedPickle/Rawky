@@ -31,3 +31,6 @@ build
 *.iml
 out
 gen
+
+# Rawky specific
+config/

@@ -12,6 +12,7 @@ import org.jdesktop.swingx.tips.TipOfTheDayModel
 @Plugin(
     value = "tip_of_the_day",
     author = "DeflatedPickle",
+    version = "1.0.0",
     description = """
         <br>
         Provides a dialog to show tips other plugins have registered

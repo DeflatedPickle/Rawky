@@ -15,6 +15,8 @@ import javax.swing.SwingUtilities
 import javax.swing.UIManager
 
 fun main(args: Array<String>) {
+    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
+
     System.setProperty("log4j.skipJansi", "false")
     val logger = LogManager.getLogger("main")
 
@@ -61,16 +63,12 @@ fun main(args: Array<String>) {
     // Create the docked widgets
     PluginUtil.createComponents()
 
-    // We'll interject plugin content now
-    // These configs need to be loaded here
-    if (!GeneralUtil.isInDev) {
-        // Create the config file
-        ConfigUtil.createConfigFolder()
-        // Deserialize old configs
-        ConfigUtil.deserializeOldConfigFiles()
-        // Create and serialize configs that don't exist
-        ConfigUtil.createAndSerializeNewConfigFiles()
-    }
+    // Create the config file
+    ConfigUtil.createConfigFolder()
+    // Deserialize old configs
+    ConfigUtil.deserializeOldConfigFiles()
+    // Create and serialize configs that don't exist
+    ConfigUtil.createAndSerializeNewConfigFiles()
 
     EventRawkyInit.trigger(true)
 
@@ -78,6 +76,9 @@ fun main(args: Array<String>) {
     Runtime.getRuntime().addShutdownHook(object : Thread() {
         override fun run() {
             logger.warn("The JVM instance running Rawky was shutdown")
+            // Changes were probably made, let's serialize the configs again
+            ConfigUtil.serializeAllConfigs()
+            logger.info("Serialized all the configs")
         }
     })
 
