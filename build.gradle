@@ -37,7 +37,7 @@ run {
         compile project(":pluginmanager")
         compile project(":discordrpc")
         compile project(":tipoftheday")
-        compile project(":settings")
+        compile project(":settingsgui")
     }
 
     application {

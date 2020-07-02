@@ -2,12 +2,10 @@ package com.deflatedpickle.rawky.ui.constraints
 
 import java.awt.GridBagConstraints
 
-object FillHorizontal : GridBagConstraints() {
+object StickEastFillHorizontal : GridBagConstraints() {
     init {
-        anchor = CENTER
+        anchor = EAST
         fill = HORIZONTAL
         weightx = 1.0
-        gridwidth = 1
-        gridheight = 1
     }
 }

@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.api.plugin
 
+import com.deflatedpickle.rawky.ui.component.RawkyPanel
 import org.apache.commons.lang3.StringUtils
 import kotlin.reflect.KClass
 
@@ -42,7 +43,7 @@ annotation class Plugin(
     /**
      * The components this plugin provides
      */
-    val components: Array<KClass<*>> = [],
+    val components: Array<KClass<out RawkyPanel>> = [],
     /**
      * The plugin IDs this plugin should load after
      */

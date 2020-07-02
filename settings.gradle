@@ -13,4 +13,4 @@ include 'discordrpc'
 
 include 'tipoftheday'
 
-include 'settings'
+include 'settingsgui'

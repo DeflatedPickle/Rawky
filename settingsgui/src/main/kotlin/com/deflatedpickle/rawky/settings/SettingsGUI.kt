@@ -10,12 +10,12 @@ import java.util.regex.PatternSyntaxException
 import javax.swing.tree.DefaultMutableTreeNode
 
 @Plugin(
-    value = "settings",
+    value = "settings_gui",
     author = "DeflatedPickle",
     version = "1.0.0",
     dependencies = ["core", "discord_rpc"]
 )
-object Settings {
+object SettingsGUI {
     init {
         EventMenuBuild.addListener {
             if (it is MenuFile) {

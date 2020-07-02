@@ -3,7 +3,9 @@ package com.deflatedpickle.rawky.settings
 import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.extension.get
 import com.deflatedpickle.rawky.extension.set
+import com.deflatedpickle.rawky.ui.constraints.FillHorizontal
 import com.deflatedpickle.rawky.ui.constraints.StickEast
+import com.deflatedpickle.rawky.ui.constraints.StickWest
 import com.deflatedpickle.rawky.ui.widget.ErrorLabel
 import com.deflatedpickle.rawky.ui.widget.SearchList
 import com.deflatedpickle.rawky.ui.window.Window
@@ -11,12 +13,18 @@ import com.deflatedpickle.rawky.util.ConfigUtil
 import com.deflatedpickle.rawky.util.PluginUtil
 import kotlinx.serialization.ImplicitReflectionSerializer
 import org.oxbow.swingbits.dialog.task.TaskDialog
+import java.awt.AlphaComposite
 import java.awt.Component
 import java.awt.Dimension
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.awt.GridBagConstraints
+import java.awt.Insets
 import javax.swing.BoxLayout
 import javax.swing.JCheckBox
 import javax.swing.JLabel
 import javax.swing.JPanel
+import javax.swing.JSeparator
 import javax.swing.JSplitPane
 import javax.swing.tree.DefaultMutableTreeNode
 import javax.swing.tree.MutableTreeNode
@@ -49,12 +57,14 @@ object SettingsDialog : TaskDialog(Window, "Settings") {
                         if (plugin.settings != Nothing::class) {
                             for (i in plugin.settings.declaredMemberProperties) {
                                 SettingsPanel.add(JLabel("${i.name}:"), StickEast)
+                                SettingsPanel.add(JSeparator(JSeparator.HORIZONTAL), FillHorizontal)
 
                                 SettingsPanel.add(
                                     when (i.returnType) {
                                         Boolean::class.createType() -> checkBox(plugin, i.name)
                                         else -> ErrorLabel("${i::class.simpleName} isn't supported yet!")
-                                    } as Component
+                                    } as Component,
+                                    StickWest
                                 )
                             }
                         }
