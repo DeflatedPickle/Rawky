@@ -10,6 +10,7 @@ import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.util.PluginUtil
 import com.deflatedpickle.tosuto.ToastItem
 import com.deflatedpickle.tosuto.action.ToastSingleAction
+import com.deflatedpickle.tosuto.api.ToastLevel
 
 @Plugin(
     value = "plugin_manager",
@@ -48,6 +49,18 @@ object PluginManager {
                                 }
                             )
                         )
+                    )
+                )
+            }
+
+            if (PluginUtil.unloadedPlugins.isNotEmpty()) {
+                Window.toastWindow.addToast(
+                    ToastItem(
+                        level = ToastLevel.ERROR,
+                        title = "Invalid Plugins",
+                        content = PluginUtil.unloadedPlugins.joinToString {
+                            it.value
+                        }
                     )
                 )
             }

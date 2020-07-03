@@ -30,8 +30,8 @@ object SettingsGUI {
                 if (plugin.settings != Nothing::class) {
                     SettingsDialog.searchPanel.model.insertNodeInto(
                         DefaultMutableTreeNode(plugin.value),
-                        SettingsDialog.nodePlugin,
-                        SettingsDialog.searchPanel.model.getChildCount(SettingsDialog.nodePlugin)
+                        Categories.nodePlugin,
+                        SettingsDialog.searchPanel.model.getChildCount(Categories.nodePlugin)
                     )
                 }
             }

@@ -27,6 +27,11 @@ object PluginUtil {
      */
     val pluginLoadOrder = mutableListOf<Plugin>()
 
+    /**
+     * A list of plugins that threw errors during loading
+     */
+    val unloadedPlugins = mutableListOf<Plugin>()
+
     val idToPlugin = mutableMapOf<String, Plugin>()
 
     /**
@@ -41,7 +46,7 @@ object PluginUtil {
         File("plugins").mkdir()
     }
 
-    fun discoverPlugins() {
+    fun discoverPlugins(run: (Plugin) -> Boolean) {
         // Caches the classes found as plugins
         var counter = 0
 
@@ -53,39 +58,79 @@ object PluginUtil {
                 .getAnnotationInfo(Plugin::class.qualifiedName)
                 .loadClassAndInstantiate() as Plugin
 
-            this.pluginMap[annotation] = plugin
-            this.pluginLoadOrder.add(annotation)
+            if (run(annotation)) {
+                this.pluginLoadOrder.add(annotation)
 
-            this.idToPlugin[annotation.value] = annotation
+                // Should
+                this.pluginMap[annotation] = plugin
+                this.idToPlugin[annotation.value] = annotation
 
-            counter++
+                counter++
+            } else {
+                this.unloadedPlugins.add(annotation)
+            }
         }
 
         this.logger.info("Found $counter plugin/s")
     }
 
-    fun validateDependencies() {
-        for (plug in this.pluginLoadOrder) {
-            val suggestions = mutableMapOf<String, MutableList<String>>()
+    private val versionRegex = Regex("[0-9].[0-9].[0-9]")
 
-            for (dep in plug.dependencies) {
-                if (dep == "all") continue
+    fun validateVersion(plugin: Plugin): Boolean {
+        if (this.versionRegex.containsMatchIn(plugin.version)) {
+            return true
+        }
 
-                if (dep !in this.pluginLoadOrder.map { it.value }) {
-                    suggestions.putIfAbsent(dep, mutableListOf())
+        this.logger.warn("The plugin ${plugin.value} doesn't have a valid version. Please use a semantic version")
+        return false
+    }
 
-                    for (checkDep in this.pluginMap.keys) {
-                        if (FuzzySearch.partialRatio(dep, checkDep.value) > 60) {
-                            suggestions[dep]!!.add(checkDep.value)
-                        }
+    fun validateDescription(plugin: Plugin): Boolean {
+        if (plugin.description.contains("<br>")) {
+            return true
+        }
+
+        this.logger.warn("The plugin ${plugin.value} doesn't contain a break tag")
+        return false
+    }
+
+    fun validateType(plugin: Plugin): Boolean =
+        when (plugin.type) {
+            PluginType.CORE_API,
+            PluginType.API,
+            PluginType.MENU_COMMAND,
+            PluginType.DIALOG,
+            PluginType.OTHER -> true
+
+            PluginType.SETTING -> plugin.settings != Nothing::class
+            PluginType.COMPONENT -> plugin.components != Nothing::class
+        }
+
+
+    fun validateDependencies(plugin: Plugin): Boolean {
+        val suggestions = mutableMapOf<String, MutableList<String>>()
+
+        for (dep in plugin.dependencies) {
+            if (dep !in this.pluginLoadOrder.map { it.value }) {
+                suggestions.putIfAbsent(dep, mutableListOf())
+
+                for (checkDep in this.pluginMap.keys) {
+                    if (FuzzySearch.partialRatio(dep, checkDep.value) > 60) {
+                        suggestions[dep]!!.add(checkDep.value)
                     }
                 }
             }
-
-            for ((k, v) in suggestions) {
-                this.logger.warn("The plugin ID \"$k\" wasn't found. Did you mean one of these? $v")
-            }
         }
+
+        if (suggestions.isEmpty()) {
+            return true
+        }
+
+        for ((k, v) in suggestions) {
+            this.logger.warn("The plugin ID \"$k\" wasn't found. Did you mean one of these? $v")
+        }
+
+        return false
     }
 
     fun figureOutLoadOrder() {
@@ -109,7 +154,7 @@ object PluginUtil {
             val annotition = plugin::class.findAnnotation<Plugin>()!!
 
             for (comp in annotition.components) {
-                val panel = comp.objectInstance!! as RawkyPanel
+                val panel = comp.objectInstance!!
                 panel.plugin = annotition
                 panel.scrollPane = JScrollPane(panel)
 

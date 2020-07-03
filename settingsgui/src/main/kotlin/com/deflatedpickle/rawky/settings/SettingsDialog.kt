@@ -3,9 +3,11 @@ package com.deflatedpickle.rawky.settings
 import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.extension.get
 import com.deflatedpickle.rawky.extension.set
+import com.deflatedpickle.rawky.ui.constraints.FillBothFinishLine
 import com.deflatedpickle.rawky.ui.constraints.FillHorizontal
 import com.deflatedpickle.rawky.ui.constraints.StickEast
 import com.deflatedpickle.rawky.ui.constraints.StickWest
+import com.deflatedpickle.rawky.ui.constraints.StickWestFinishLine
 import com.deflatedpickle.rawky.ui.widget.ErrorLabel
 import com.deflatedpickle.rawky.ui.widget.SearchList
 import com.deflatedpickle.rawky.ui.window.Window
@@ -13,13 +15,8 @@ import com.deflatedpickle.rawky.util.ConfigUtil
 import com.deflatedpickle.rawky.util.PluginUtil
 import kotlinx.serialization.ImplicitReflectionSerializer
 import org.oxbow.swingbits.dialog.task.TaskDialog
-import java.awt.AlphaComposite
 import java.awt.Component
 import java.awt.Dimension
-import java.awt.Graphics
-import java.awt.Graphics2D
-import java.awt.GridBagConstraints
-import java.awt.Insets
 import javax.swing.BoxLayout
 import javax.swing.JCheckBox
 import javax.swing.JLabel
@@ -33,11 +30,16 @@ import kotlin.reflect.full.declaredMemberProperties
 
 @OptIn(ImplicitReflectionSerializer::class)
 object SettingsDialog : TaskDialog(Window, "Settings") {
-    val nodePlugin = DefaultMutableTreeNode("Plugins")
+    private val paddingPanel = JPanel().apply {
+        val dimension = Dimension(1, 1)
+
+        preferredSize = dimension
+        minimumSize = dimension
+    }
 
     val searchPanel = SearchList().apply {
         model.apply {
-            insertNodeInto(nodePlugin, this.root as MutableTreeNode?, this.getChildCount(this.root))
+            insertNodeInto(Categories.nodePlugin, this.root as MutableTreeNode?, this.getChildCount(this.root))
         }
 
         tree.addTreeSelectionListener {
@@ -47,7 +49,7 @@ object SettingsDialog : TaskDialog(Window, "Settings") {
             if (path != null) {
                 SettingsPanel.removeAll()
 
-                if (path.path.contains(nodePlugin)) {
+                if (path.path.contains(Categories.nodePlugin)) {
                     val component = path.path.last()
 
                     val obj = (component as DefaultMutableTreeNode).userObject as String
@@ -64,12 +66,14 @@ object SettingsDialog : TaskDialog(Window, "Settings") {
                                         Boolean::class.createType() -> checkBox(plugin, i.name)
                                         else -> ErrorLabel("${i::class.simpleName} isn't supported yet!")
                                     } as Component,
-                                    StickWest
+                                    StickWestFinishLine
                                 )
                             }
                         }
                     }
                 }
+
+                SettingsPanel.add(this@SettingsDialog.paddingPanel, FillBothFinishLine)
 
                 SettingsPanel.doLayout()
                 SettingsPanel.repaint()

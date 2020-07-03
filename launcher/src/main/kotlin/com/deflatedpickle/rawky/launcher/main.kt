@@ -53,9 +53,13 @@ fun main(args: Array<String>) {
     // this will discover all plugins
     ClassGraphUtil.refresh()
     // Finds all singletons extending Plugin
-    PluginUtil.discoverPlugins()
-    // Warns if dependencies can't be found
-    PluginUtil.validateDependencies()
+    PluginUtil.discoverPlugins {
+        // Validate all the small things
+        PluginUtil.validateVersion(it) &&
+                PluginUtil.validateDescription(it) &&
+                PluginUtil.validateType(it) &&
+                PluginUtil.validateDependencies(it)
+    }
     // Organise plugins by their dependencies
     PluginUtil.figureOutLoadOrder()
     // Loads all classes with a Plugin annotation

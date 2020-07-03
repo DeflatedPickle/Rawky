@@ -39,10 +39,19 @@ annotation class Plugin(
      * This will be chopped at 60 characters for the short description.
      */
     val description: String = "<br>",
+    /**
+     * The website for this plugin
+     */
+    val website: String = "",
+    /**
+     * The type of plugin this is
+     */
     val type: PluginType = PluginType.API,
     /**
      * The components this plugin provides
      */
+    // It's an arraywilliam johnson because it can't be nullable
+    // and I can't find a way around it. You're welcome
     val components: Array<KClass<out RawkyPanel>> = [],
     /**
      * The plugin IDs this plugin should load after
