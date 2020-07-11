@@ -38,7 +38,11 @@ object SettingsDialog : TaskDialog(Window, "Settings") {
 
     val searchPanel = SearchList().apply {
         model.apply {
-            insertNodeInto(Categories.nodePlugin, this.root as MutableTreeNode?, this.getChildCount(this.root))
+            insertNodeInto(
+                Categories.nodePlugin,
+                this.root as MutableTreeNode?,
+                this.getChildCount(this.root)
+            )
         }
 
         tree.addTreeSelectionListener {
@@ -102,7 +106,7 @@ object SettingsDialog : TaskDialog(Window, "Settings") {
     }
 
     private fun checkBox(plugin: Plugin, name: String): JCheckBox = JCheckBox().apply {
-        val instance = ConfigUtil.getSettings<Any>(plugin.value)
+        val instance = ConfigUtil.getSettings<Any>(PluginUtil.pluginToSlug(plugin))
 
         isSelected = instance.get(name)
 
@@ -110,7 +114,7 @@ object SettingsDialog : TaskDialog(Window, "Settings") {
             isSelected = !instance.get<Boolean>(name)
             instance.set(name, isSelected)
 
-            ConfigUtil.serializeConfig(plugin.value)
+            ConfigUtil.serializeConfig(PluginUtil.pluginToSlug(plugin))
         }
     }
 }

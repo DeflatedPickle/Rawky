@@ -18,8 +18,8 @@ import net.arikia.dev.drpc.DiscordRichPresence
     type = PluginType.COMPONENT,
     components = [PixelGridComponent::class],
     dependencies = [
-        "deflatedpickle;core;1.0.0",
-        "deflatedpickle;discord_rpc;1.0.0"
+        "deflatedpickle@core#1.0.0",
+        "deflatedpickle@discord_rpc#1.0.0"
     ]
 )
 @Suppress("unused")

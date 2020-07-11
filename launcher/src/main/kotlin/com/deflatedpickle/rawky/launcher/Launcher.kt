@@ -11,7 +11,7 @@ import com.deflatedpickle.rawky.api.plugin.Plugin
         A basic launcher
     """,
     dependencies = [
-        "deflatedpickle;core;1.0.0"
+        "deflatedpickle@core#1.0.0"
     ]
 )
 @Suppress("unused")

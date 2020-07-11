@@ -14,8 +14,8 @@ import javax.swing.tree.DefaultMutableTreeNode
     author = "DeflatedPickle",
     version = "1.0.0",
     dependencies = [
-        "deflatedpickle;core;1.0.0",
-        "deflatedpickle;discord_rpc;1.0.0"
+        "deflatedpickle@core#1.0.0",
+        "deflatedpickle@discord_rpc#1.0.0"
     ]
 )
 object SettingsGUI {
@@ -32,7 +32,7 @@ object SettingsGUI {
             for (plugin in PluginUtil.pluginLoadOrder) {
                 if (plugin.settings != Nothing::class) {
                     SettingsDialog.searchPanel.model.insertNodeInto(
-                        DefaultMutableTreeNode(plugin.value),
+                        DefaultMutableTreeNode(PluginUtil.pluginToSlug(plugin)),
                         Categories.nodePlugin,
                         SettingsDialog.searchPanel.model.getChildCount(Categories.nodePlugin)
                     )

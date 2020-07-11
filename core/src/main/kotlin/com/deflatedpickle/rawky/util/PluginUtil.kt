@@ -36,7 +36,7 @@ object PluginUtil {
 
     // These are used to validate different strings
     private val versionRegex = Regex("[0-9].[0-9].[0-9]")
-    private val slugRegex = Regex("[a-z0-9;._]+")
+    private val slugRegex = Regex("[a-z]+@[a-z_]+#[0-9].[0-9].[0-9]")
 
     /**
      * A map of plugins that were found when refreshed, paired with the object they were applied to
@@ -45,7 +45,7 @@ object PluginUtil {
     val pluginMap = mutableMapOf<Plugin, ClassInfo>()
 
     fun pluginToSlug(plugin: Plugin): String =
-        "${plugin.author.toLowerCase()};${plugin.value.toLowerCase()};${plugin.version}"
+        "${plugin.author.toLowerCase()}@${plugin.value.toLowerCase()}#${plugin.version}"
 
     fun createPluginsFolder() {
         // This can throw an error, but we won't umbrella it
