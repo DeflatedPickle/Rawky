@@ -39,7 +39,7 @@ object PluginManager {
                     ToastItem(
                         title = "Loaded Plugins",
                         content = PluginUtil.pluginLoadOrder.joinToString {
-                            it.value
+                            PluginUtil.pluginToSlug(it)
                         },
                         actions = listOf(
                             ToastSingleAction(

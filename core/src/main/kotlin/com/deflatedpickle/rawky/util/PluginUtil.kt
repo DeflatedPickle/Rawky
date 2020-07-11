@@ -32,13 +32,20 @@ object PluginUtil {
      */
     val unloadedPlugins = mutableListOf<Plugin>()
 
-    val idToPlugin = mutableMapOf<String, Plugin>()
+    val slugToPlugin = mutableMapOf<String, Plugin>()
+
+    // These are used to validate different strings
+    private val versionRegex = Regex("[0-9].[0-9].[0-9]")
+    private val slugRegex = Regex("[a-z0-9;._]+")
 
     /**
      * A map of plugins that were found when refreshed, paired with the object they were applied to
      */
     @Suppress("MemberVisibilityCanBePrivate")
     val pluginMap = mutableMapOf<Plugin, ClassInfo>()
+
+    fun pluginToSlug(plugin: Plugin): String =
+        "${plugin.author.toLowerCase()};${plugin.value.toLowerCase()};${plugin.version}"
 
     fun createPluginsFolder() {
         // This can throw an error, but we won't umbrella it
@@ -61,9 +68,10 @@ object PluginUtil {
             if (run(annotation)) {
                 this.pluginLoadOrder.add(annotation)
 
-                // Should
                 this.pluginMap[annotation] = plugin
-                this.idToPlugin[annotation.value] = annotation
+                this.slugToPlugin[
+                    this.pluginToSlug(annotation)
+                ] = annotation
 
                 counter++
             } else {
@@ -73,8 +81,6 @@ object PluginUtil {
 
         this.logger.info("Found $counter plugin/s")
     }
-
-    private val versionRegex = Regex("[0-9].[0-9].[0-9]")
 
     fun validateVersion(plugin: Plugin): Boolean {
         if (this.versionRegex.containsMatchIn(plugin.version)) {
@@ -106,12 +112,21 @@ object PluginUtil {
             PluginType.COMPONENT -> plugin.components != Nothing::class
         }
 
+    fun validateDependencySlug(plugin: Plugin): Boolean {
+        for (dep in plugin.dependencies) {
+            if (!this.slugRegex.matches(dep)) {
+                return false
+            }
+        }
 
-    fun validateDependencies(plugin: Plugin): Boolean {
+        return true
+    }
+
+    fun validateDependencyExistence(plugin: Plugin): Boolean {
         val suggestions = mutableMapOf<String, MutableList<String>>()
 
         for (dep in plugin.dependencies) {
-            if (dep !in this.pluginLoadOrder.map { it.value }) {
+            if (dep !in this.pluginLoadOrder.map { this.pluginToSlug(it) }) {
                 suggestions.putIfAbsent(dep, mutableListOf())
 
                 for (checkDep in this.pluginMap.keys) {
@@ -136,7 +151,7 @@ object PluginUtil {
     fun figureOutLoadOrder() {
         this.pluginLoadOrder.sortWith(Plugin.comparator)
 
-        this.logger.info("Sorted out the load order: ${this.pluginLoadOrder.map { it.value }}")
+        this.logger.info("Sorted out the load order: ${this.pluginLoadOrder.map { this.pluginToSlug(it) }}")
     }
 
     fun loadPlugins() {

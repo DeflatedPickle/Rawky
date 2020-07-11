@@ -58,8 +58,10 @@ fun main(args: Array<String>) {
         PluginUtil.validateVersion(it) &&
                 PluginUtil.validateDescription(it) &&
                 PluginUtil.validateType(it) &&
-                PluginUtil.validateDependencies(it)
+                PluginUtil.validateDependencySlug(it) &&
+                PluginUtil.validateDependencyExistence(it)
     }
+    logger.debug("Validated all plugins with ${PluginUtil.unloadedPlugins.size} error/s")
     // Organise plugins by their dependencies
     PluginUtil.figureOutLoadOrder()
     // Loads all classes with a Plugin annotation

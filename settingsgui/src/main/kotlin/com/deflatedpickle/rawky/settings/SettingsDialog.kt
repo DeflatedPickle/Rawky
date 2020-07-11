@@ -6,7 +6,6 @@ import com.deflatedpickle.rawky.extension.set
 import com.deflatedpickle.rawky.ui.constraints.FillBothFinishLine
 import com.deflatedpickle.rawky.ui.constraints.FillHorizontal
 import com.deflatedpickle.rawky.ui.constraints.StickEast
-import com.deflatedpickle.rawky.ui.constraints.StickWest
 import com.deflatedpickle.rawky.ui.constraints.StickWestFinishLine
 import com.deflatedpickle.rawky.ui.widget.ErrorLabel
 import com.deflatedpickle.rawky.ui.widget.SearchList
@@ -54,8 +53,8 @@ object SettingsDialog : TaskDialog(Window, "Settings") {
 
                     val obj = (component as DefaultMutableTreeNode).userObject as String
 
-                    if (PluginUtil.idToPlugin.containsKey(obj)) {
-                        val plugin = PluginUtil.idToPlugin[obj]!!
+                    if (PluginUtil.slugToPlugin.containsKey(obj)) {
+                        val plugin = PluginUtil.slugToPlugin[obj]!!
                         if (plugin.settings != Nothing::class) {
                             for (i in plugin.settings.declaredMemberProperties) {
                                 SettingsPanel.add(JLabel("${i.name}:"), StickEast)

@@ -10,7 +10,9 @@ import com.deflatedpickle.rawky.api.plugin.Plugin
         <br>
         A basic launcher
     """,
-    dependencies = ["core"]
+    dependencies = [
+        "deflatedpickle;core;1.0.0"
+    ]
 )
 @Suppress("unused")
 object Launcher

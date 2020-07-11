@@ -13,7 +13,10 @@ import javax.swing.tree.DefaultMutableTreeNode
     value = "settings_gui",
     author = "DeflatedPickle",
     version = "1.0.0",
-    dependencies = ["core", "discord_rpc"]
+    dependencies = [
+        "deflatedpickle;core;1.0.0",
+        "deflatedpickle;discord_rpc;1.0.0"
+    ]
 )
 object SettingsGUI {
     init {

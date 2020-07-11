@@ -55,11 +55,11 @@ object ConfigUtil {
 
     @ImplicitReflectionSerializer
     fun serializeConfig(id: String): File? {
-        if (PluginUtil.idToPlugin[id]!!.settings == Nothing::class) return null
+        if (PluginUtil.slugToPlugin[id]!!.settings == Nothing::class) return null
 
         val file = File("config/$id.json")
 
-        val settings = PluginUtil.idToPlugin[id]!!.settings
+        val settings = PluginUtil.slugToPlugin[id]!!.settings
 
         this.idToSettings.getOrPut(file.nameWithoutExtension, { settings.createInstance() })
         val instance = this.idToSettings[file.nameWithoutExtension]!!
@@ -82,7 +82,7 @@ object ConfigUtil {
     }
 
     fun deserializeConfig(file: File) {
-        val settings = PluginUtil.idToPlugin[file.nameWithoutExtension]!!.settings
+        val settings = PluginUtil.slugToPlugin[file.nameWithoutExtension]!!.settings
 
         val instance = settings.createInstance()
         @Suppress("UNCHECKED_CAST")
@@ -99,17 +99,23 @@ object ConfigUtil {
     fun serializeAllConfigs(): List<File> {
         val list = mutableListOf<File>()
 
-        for (id in PluginUtil.pluginLoadOrder) {
-            this.serializeConfig(id.value)
+        for (plugin in PluginUtil.pluginLoadOrder) {
+            this.serializeConfig(
+                PluginUtil.pluginToSlug(plugin)
+            )
         }
 
         return list
     }
 
     fun createAndSerializeNewConfigFiles() {
-        for (id in PluginUtil.pluginLoadOrder) {
-            if (!this.hasConfigFile(id.value)) {
-                this.serializeConfig(id.value)
+        for (plugin in PluginUtil.pluginLoadOrder) {
+            if (!this.hasConfigFile(
+                    PluginUtil.pluginToSlug(plugin))
+            ) {
+                this.serializeConfig(
+                    PluginUtil.pluginToSlug(plugin)
+                )
             }
         }
     }

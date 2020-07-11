@@ -35,7 +35,7 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
             panel.dependencies.dependenciesTableTree.treeTableModel =
                 PluginManagerTreeTableModel(
                     dependencies.map {
-                        PluginUtil.idToPlugin[it]!!
+                        PluginUtil.slugToPlugin[it]!!
                     }.toTypedArray()
                 )
 

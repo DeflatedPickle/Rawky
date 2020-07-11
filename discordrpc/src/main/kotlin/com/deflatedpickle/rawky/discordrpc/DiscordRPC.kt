@@ -18,14 +18,18 @@ import net.arikia.dev.drpc.DiscordRichPresence
         Adds Discord RCP integration
     """,
     type = PluginType.API,
-    dependencies = ["core"],
+    dependencies = [
+        "deflatedpickle;core;1.0.0"
+    ],
     settings = DiscordRPCSettings::class
 )
 @Suppress("unused")
 object DiscordRPC {
     init {
         EventRawkyInit.addListener {
-            val settings = ConfigUtil.getSettings<DiscordRPCSettings>("discord_rpc")
+            val settings = ConfigUtil.getSettings<DiscordRPCSettings>(
+                "deflatedpickle;discord_rpc;1.0.0"
+            )
             val enabled = settings.enabled
 
             if (enabled) {
