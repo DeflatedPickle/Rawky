@@ -24,14 +24,7 @@ object ConfigUtil {
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> getSettings(id: String): T = idToSettings[id] as T
 
-    val configFolder = File("config")
-
-    fun createConfigFolder(): File =
-        this.configFolder.apply {
-            if (mkdir()) {
-                this@ConfigUtil.logger.info("Created the config folder at ${this.absolutePath}")
-            }
-        }
+    fun createConfigFolder(): File = File("config")
 
     fun createConfigFile(id: String): File =
         File("config/$id.json").apply {
@@ -54,10 +47,8 @@ object ConfigUtil {
     }
 
     @ImplicitReflectionSerializer
-    fun serializeConfig(id: String): File? {
+    fun serializeConfig(id: String, file: File): File? {
         if (PluginUtil.slugToPlugin[id]!!.settings == Nothing::class) return null
-
-        val file = File("config/$id.json")
 
         val settings = PluginUtil.slugToPlugin[id]!!.settings
 
@@ -76,8 +67,6 @@ object ConfigUtil {
         out.flush()
         out.close()
 
-        this.logger.info("Serialized the config for $id to ${file.absolutePath}")
-
         return file
     }
 
@@ -92,41 +81,18 @@ object ConfigUtil {
         val jsonObj = json.parse(serializer, file.readText())
 
         this.idToSettings[file.nameWithoutExtension] = jsonObj
-
-        this.logger.info("Deserialized the config for $file from ${file.absolutePath}")
     }
 
     fun serializeAllConfigs(): List<File> {
         val list = mutableListOf<File>()
 
         for (plugin in PluginUtil.pluginLoadOrder) {
-            this.serializeConfig(
-                PluginUtil.pluginToSlug(plugin)
-            )
+            val id = PluginUtil.pluginToSlug(plugin)
+            val file = File("config/$id.json")
+
+            this.serializeConfig(id, file)
         }
 
         return list
-    }
-
-    fun createAndSerializeNewConfigFiles() {
-        for (plugin in PluginUtil.pluginLoadOrder) {
-            if (!this.hasConfigFile(
-                    PluginUtil.pluginToSlug(plugin))
-            ) {
-                this.serializeConfig(
-                    PluginUtil.pluginToSlug(plugin)
-                )
-            }
-        }
-    }
-
-    fun deserializeOldConfigFiles() {
-        val files = this.configFolder.listFiles()
-
-        if (files != null) {
-            for (file in files) {
-                this.deserializeConfig(file)
-            }
-        }
     }
 }

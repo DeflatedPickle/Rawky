@@ -1,8 +1,8 @@
 package com.deflatedpickle.rawky.ui.menu
 
-import com.deflatedpickle.rawky.event.EventMenuBarAdd
-import com.deflatedpickle.rawky.event.EventMenuBarBuild
-import com.deflatedpickle.rawky.event.EventMenuBuild
+import com.deflatedpickle.rawky.event.reusable.EventMenuBarAdd
+import com.deflatedpickle.rawky.event.reusable.EventMenuBarBuild
+import com.deflatedpickle.rawky.event.reusable.EventMenuBuild
 import javax.swing.JMenu
 import javax.swing.JMenuBar
 

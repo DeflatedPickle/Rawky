@@ -1,5 +1,6 @@
-package com.deflatedpickle.rawky.event
+package com.deflatedpickle.rawky.event.specific
 
+import com.deflatedpickle.rawky.event.AbstractEvent
 import com.deflatedpickle.tosuto.ToastWindow
 
 /**

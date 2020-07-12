@@ -8,16 +8,14 @@ import com.deflatedpickle.rawky.api.plugin.PluginType
 import com.deflatedpickle.rawky.ui.component.RawkyPanel
 import com.deflatedpickle.rawky.ui.component.RawkyPanelHolder
 import com.deflatedpickle.rawky.ui.window.Window
-import com.deflatedpickle.rawky.event.EventLoadPlugin
-import com.deflatedpickle.rawky.event.EventLoadedPlugins
-import com.deflatedpickle.rawky.event.EventPanelFocusGained
-import com.deflatedpickle.rawky.event.EventPanelFocusLost
+import com.deflatedpickle.rawky.event.reusable.EventPanelFocusGained
+import com.deflatedpickle.rawky.event.reusable.EventPanelFocusLost
 import io.github.classgraph.ClassInfo
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import org.apache.logging.log4j.LogManager
 import java.io.File
 import javax.swing.JScrollPane
-import kotlin.reflect.full.findAnnotation
+import kotlin.reflect.KClass
 
 object PluginUtil {
     private val logger = LogManager.getLogger(this::class.simpleName)
@@ -44,15 +42,23 @@ object PluginUtil {
     @Suppress("MemberVisibilityCanBePrivate")
     val pluginMap = mutableMapOf<Plugin, ClassInfo>()
 
+    /**
+     * Constructs a slug from a [Plugin]
+     */
     fun pluginToSlug(plugin: Plugin): String =
         "${plugin.author.toLowerCase()}@${plugin.value.toLowerCase()}#${plugin.version}"
 
-    fun createPluginsFolder() {
-        // This can throw an error, but we won't umbrella it
-        // in case the user needs to see it
-        File("plugins").mkdir()
-    }
+    /**
+     * Creates the plugins folder
+     */
+    // This can throw an error, but we won't umbrella it
+    // in case the user needs to see it
+    fun createPluginsFolder(): File =
+        File("plugins").apply { mkdir() }
 
+    /**
+     * Calls [run] for all classes annotated with [Plugin], to find and validate each plugin
+     */
     fun discoverPlugins(run: (Plugin) -> Boolean) {
         // Caches the classes found as plugins
         var counter = 0
@@ -70,7 +76,7 @@ object PluginUtil {
 
                 this.pluginMap[annotation] = plugin
                 this.slugToPlugin[
-                    this.pluginToSlug(annotation)
+                        this.pluginToSlug(annotation)
                 ] = annotation
 
                 counter++
@@ -82,6 +88,9 @@ object PluginUtil {
         this.logger.info("Found $counter plugin/s")
     }
 
+    /**
+     * Checks [plugin]'s version matches [versionRegex]
+     */
     fun validateVersion(plugin: Plugin): Boolean {
         if (this.versionRegex.containsMatchIn(plugin.version)) {
             return true
@@ -91,6 +100,9 @@ object PluginUtil {
         return false
     }
 
+    /**
+     * Checks [plugin]'s description includes a line break
+     */
     fun validateDescription(plugin: Plugin): Boolean {
         if (plugin.description.contains("<br>")) {
             return true
@@ -100,6 +112,9 @@ object PluginUtil {
         return false
     }
 
+    /**
+     * Checks [plugin]'s type has the proper field
+     */
     fun validateType(plugin: Plugin): Boolean =
         when (plugin.type) {
             PluginType.CORE_API,
@@ -112,6 +127,9 @@ object PluginUtil {
             PluginType.COMPONENT -> plugin.components != Nothing::class
         }
 
+    /**
+     * Checks [plugin]'s dependency slug's matches [slugRegex]
+     */
     fun validateDependencySlug(plugin: Plugin): Boolean {
         for (dep in plugin.dependencies) {
             if (!this.slugRegex.matches(dep)) {
@@ -122,6 +140,9 @@ object PluginUtil {
         return true
     }
 
+    /**
+     * Checks [plugin]'s dependencies exist
+     */
     fun validateDependencyExistence(plugin: Plugin): Boolean {
         val suggestions = mutableMapOf<String, MutableList<String>>()
 
@@ -148,65 +169,48 @@ object PluginUtil {
         return false
     }
 
-    fun figureOutLoadOrder() {
-        this.pluginLoadOrder.sortWith(Plugin.comparator)
+    /**
+     * Creates all plugin components
+     */
+    fun createComponent(plugin: Plugin, component: KClass<out RawkyPanel>): RawkyPanel {
+        val panel = component.objectInstance!!
+        panel.plugin = plugin
+        panel.scrollPane = JScrollPane(panel)
 
-        this.logger.info("Sorted out the load order: ${this.pluginLoadOrder.map { this.pluginToSlug(it) }}")
-    }
-
-    fun loadPlugins() {
-        for (i in this.pluginLoadOrder) {
-            this.pluginMap[i]!!.loadClass().kotlin.objectInstance
-            EventLoadPlugin.trigger(i)
-        }
-        EventLoadedPlugins.trigger(this.pluginLoadOrder)
-    }
-
-    fun createComponents() {
-        for (i in this.pluginLoadOrder) {
-            val plugin = this.pluginMap[i]!!.loadClass().kotlin.objectInstance!!
-            // haha tit
-            val annotition = plugin::class.findAnnotation<Plugin>()!!
-
-            for (comp in annotition.components) {
-                val panel = comp.objectInstance!!
-                panel.plugin = annotition
-                panel.scrollPane = JScrollPane(panel)
-
-                panel.componentHolder = RawkyPanelHolder()
-                panel.componentHolder.dock = DefaultSingleCDockable(
-                    annotition.value,
-                    annotition.value.replace("_", " ").capitalize(),
-                    panel.scrollPane
-                )
-                panel.componentHolder.dock.addFocusListener(object : CFocusListener {
-                    override fun focusLost(dockable: CDockable) {
-                        EventPanelFocusLost.trigger(
-                            ((dockable as DefaultSingleCDockable)
-                                .contentPane
-                                .getComponent(0) as JScrollPane)
-                                .viewport
-                                .view as RawkyPanel
-                        )
-                    }
-
-                    override fun focusGained(dockable: CDockable) {
-                        EventPanelFocusGained.trigger(
-                            ((dockable as DefaultSingleCDockable)
-                                .contentPane
-                                .getComponent(0) as JScrollPane)
-                                .viewport
-                                .view as RawkyPanel
-                        )
-                    }
-                })
-
-                Window.grid.add(
-                    0.0, 0.0,
-                    0.0, 0.0,
-                    panel.componentHolder.dock
+        panel.componentHolder = RawkyPanelHolder()
+        panel.componentHolder.dock = DefaultSingleCDockable(
+            plugin.value,
+            plugin.value.replace("_", " ").capitalize(),
+            panel.scrollPane
+        )
+        panel.componentHolder.dock.addFocusListener(object : CFocusListener {
+            override fun focusLost(dockable: CDockable) {
+                EventPanelFocusLost.trigger(
+                    ((dockable as DefaultSingleCDockable)
+                        .contentPane
+                        .getComponent(0) as JScrollPane)
+                        .viewport
+                        .view as RawkyPanel
                 )
             }
-        }
+
+            override fun focusGained(dockable: CDockable) {
+                EventPanelFocusGained.trigger(
+                    ((dockable as DefaultSingleCDockable)
+                        .contentPane
+                        .getComponent(0) as JScrollPane)
+                        .viewport
+                        .view as RawkyPanel
+                )
+            }
+        })
+
+        Window.grid.add(
+            0.0, 0.0,
+            0.0, 0.0,
+            panel.componentHolder.dock
+        )
+
+        return panel
     }
 }

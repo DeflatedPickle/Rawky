@@ -2,8 +2,8 @@ package com.deflatedpickle.rawky.pluginmanager
 
 import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.api.plugin.PluginType
-import com.deflatedpickle.rawky.event.EventMenuBuild
-import com.deflatedpickle.rawky.event.EventToastWindowShown
+import com.deflatedpickle.rawky.event.reusable.EventMenuBuild
+import com.deflatedpickle.rawky.event.specific.EventToastWindowShown
 import com.deflatedpickle.rawky.ui.extension.addItem
 import com.deflatedpickle.rawky.ui.menu.MenuTools
 import com.deflatedpickle.rawky.ui.window.Window

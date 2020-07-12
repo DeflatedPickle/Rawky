@@ -2,12 +2,9 @@ package com.deflatedpickle.rawky.ui.window
 
 import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
-import com.deflatedpickle.rawky.event.EventToastWindowShown
+import com.deflatedpickle.rawky.event.specific.EventToastWindowShown
 import com.deflatedpickle.rawky.ui.menu.MenuBar
-import com.deflatedpickle.tosuto.TimedToastItem
 import com.deflatedpickle.tosuto.ToastWindow
-import com.deflatedpickle.tosuto.api.ToastLevel
-import javax.swing.JDialog
 import javax.swing.JFrame
 
 object Window : JFrame() {

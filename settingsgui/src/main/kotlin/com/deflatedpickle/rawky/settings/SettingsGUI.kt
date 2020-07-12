@@ -1,8 +1,8 @@
 package com.deflatedpickle.rawky.settings
 
 import com.deflatedpickle.rawky.api.plugin.Plugin
-import com.deflatedpickle.rawky.event.EventMenuBuild
-import com.deflatedpickle.rawky.event.EventRawkyInit
+import com.deflatedpickle.rawky.event.reusable.EventMenuBuild
+import com.deflatedpickle.rawky.event.specific.EventRawkyInit
 import com.deflatedpickle.rawky.ui.extension.addItem
 import com.deflatedpickle.rawky.ui.menu.MenuFile
 import com.deflatedpickle.rawky.util.PluginUtil

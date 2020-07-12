@@ -16,6 +16,7 @@ import kotlinx.serialization.ImplicitReflectionSerializer
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.Component
 import java.awt.Dimension
+import java.io.File
 import javax.swing.BoxLayout
 import javax.swing.JCheckBox
 import javax.swing.JLabel
@@ -114,7 +115,10 @@ object SettingsDialog : TaskDialog(Window, "Settings") {
             isSelected = !instance.get<Boolean>(name)
             instance.set(name, isSelected)
 
-            ConfigUtil.serializeConfig(PluginUtil.pluginToSlug(plugin))
+            val id = PluginUtil.pluginToSlug(plugin)
+            ConfigUtil.serializeConfig(
+                id, File("config/$id.json")
+            )
         }
     }
 }

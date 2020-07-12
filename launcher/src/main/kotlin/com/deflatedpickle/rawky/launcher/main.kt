@@ -1,8 +1,16 @@
 package com.deflatedpickle.rawky.launcher
 
-import com.deflatedpickle.rawky.event.EventDockDeployed
-import com.deflatedpickle.rawky.event.EventRawkyInit
-import com.deflatedpickle.rawky.event.EventWindowShown
+import com.deflatedpickle.rawky.api.plugin.Plugin
+import com.deflatedpickle.rawky.event.reusable.EventCreateFile
+import com.deflatedpickle.rawky.event.reusable.EventCreatePluginComponent
+import com.deflatedpickle.rawky.event.reusable.EventDeserializedConfig
+import com.deflatedpickle.rawky.event.reusable.EventDiscoverPlugin
+import com.deflatedpickle.rawky.event.specific.EventDockDeployed
+import com.deflatedpickle.rawky.event.reusable.EventLoadPlugin
+import com.deflatedpickle.rawky.event.specific.EventLoadedPlugins
+import com.deflatedpickle.rawky.event.specific.EventRawkyInit
+import com.deflatedpickle.rawky.event.specific.EventSortedPluginLoadOrder
+import com.deflatedpickle.rawky.event.specific.EventWindowShown
 import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.util.ClassGraphUtil
 import com.deflatedpickle.rawky.util.ConfigUtil
@@ -11,9 +19,12 @@ import com.deflatedpickle.rawky.util.PluginUtil
 import org.apache.logging.log4j.LogManager
 import org.oxbow.swingbits.dialog.task.TaskDialogs
 import java.awt.Dimension
+import java.io.File
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
+import kotlinx.serialization.ImplicitReflectionSerializer
 
+@OptIn(ImplicitReflectionSerializer::class)
 fun main(args: Array<String>) {
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
 
@@ -47,13 +58,20 @@ fun main(args: Array<String>) {
     // Plugins are distributed and loaded as JARs
     // when the program is built
     if (!GeneralUtil.isInDev) {
-        PluginUtil.createPluginsFolder()
+        EventCreateFile.trigger(
+            PluginUtil.createPluginsFolder().apply {
+                logger.info("Created the plugins folder at ${this.absolutePath}")
+            }
+        )
     }
+
     // Start a scan of the class graph
     // this will discover all plugins
     ClassGraphUtil.refresh()
+
     // Finds all singletons extending Plugin
     PluginUtil.discoverPlugins {
+        EventDiscoverPlugin.trigger(it)
         // Validate all the small things
         PluginUtil.validateVersion(it) &&
                 PluginUtil.validateDescription(it) &&
@@ -62,19 +80,58 @@ fun main(args: Array<String>) {
                 PluginUtil.validateDependencyExistence(it)
     }
     logger.debug("Validated all plugins with ${PluginUtil.unloadedPlugins.size} error/s")
+
     // Organise plugins by their dependencies
-    PluginUtil.figureOutLoadOrder()
+    PluginUtil.pluginLoadOrder.sortWith(Plugin.comparator)
+    logger.info("Sorted out the load order: ${PluginUtil.pluginLoadOrder.map { PluginUtil.pluginToSlug(it) }}")
+    EventSortedPluginLoadOrder.trigger(PluginUtil.pluginLoadOrder)
+
     // Loads all classes with a Plugin annotation
-    PluginUtil.loadPlugins()
+    for (i in PluginUtil.pluginLoadOrder) {
+        PluginUtil.pluginMap[i]!!.loadClass().kotlin.objectInstance
+        EventLoadPlugin.trigger(i)
+    }
+    logger.info("Loaded plugins; ${PluginUtil.pluginLoadOrder.dropWhile { it !in PluginUtil.unloadedPlugins }}")
+    EventLoadedPlugins.trigger(PluginUtil.pluginLoadOrder)
+
     // Create the docked widgets
-    PluginUtil.createComponents()
+    for (plugin in PluginUtil.pluginLoadOrder) {
+        for (component in plugin.components) {
+            PluginUtil.createComponent(plugin, component)
+            EventCreatePluginComponent.trigger(component.objectInstance!!)
+        }
+    }
 
     // Create the config file
-    ConfigUtil.createConfigFolder()
+    EventCreateFile.trigger(
+        ConfigUtil.createConfigFolder().apply {
+            logger.info("Created the config folder at ${this.absolutePath}")
+        }
+    )
+
     // Deserialize old configs
-    ConfigUtil.deserializeOldConfigFiles()
+    val files = ConfigUtil.createConfigFolder().listFiles()
+
+    if (files != null) {
+        for (file in files) {
+            ConfigUtil.deserializeConfig(file)
+
+            EventDeserializedConfig.trigger(file)
+            logger.info("Deserialized the config for $file from ${file.absolutePath}")
+        }
+    }
+
     // Create and serialize configs that don't exist
-    ConfigUtil.createAndSerializeNewConfigFiles()
+    for (plugin in PluginUtil.pluginLoadOrder) {
+        val id = PluginUtil.pluginToSlug(plugin)
+
+        if (!ConfigUtil.hasConfigFile(id)) {
+            val file = File("config/$id.json")
+
+            ConfigUtil.serializeConfig(id, file)
+            logger.info("Serialized the config for ${PluginUtil.pluginToSlug(plugin)} to ${file.absolutePath}")
+        }
+    }
 
     EventRawkyInit.trigger(true)
 
