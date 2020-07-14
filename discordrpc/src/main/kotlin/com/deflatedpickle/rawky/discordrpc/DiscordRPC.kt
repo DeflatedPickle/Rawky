@@ -4,11 +4,13 @@ import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.api.plugin.PluginType
 import com.deflatedpickle.rawky.discordrpc.util.DiscordRP
 import com.deflatedpickle.rawky.event.specific.EventRawkyInit
+import com.deflatedpickle.rawky.event.specific.EventRawkyShutdown
 import com.deflatedpickle.rawky.event.specific.EventWindowShown
 import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.util.ConfigUtil
 import net.arikia.dev.drpc.DiscordRichPresence
 
+// This plugin only exists to be a dependency
 @Plugin(
     value = "discord_rpc",
     author = "DeflatedPickle",
@@ -37,16 +39,6 @@ object DiscordRPC {
                 this.start()
             }
 
-            // Add a shutdown hook
-            Runtime.getRuntime().addShutdownHook(object : Thread() {
-                override fun run() {
-                    if (enabled) {
-                        // Shutdown Discord RCP
-                        this@DiscordRPC.stop()
-                    }
-                }
-            })
-
             if (enabled) {
                 EventWindowShown.addListener {
                     if (it is Window) {
@@ -60,6 +52,11 @@ object DiscordRPC {
                     }
                 }
             }
+        }
+
+        EventRawkyShutdown.addListener {
+            // Shutdown Discord RCP
+            this@DiscordRPC.stop()
         }
     }
 

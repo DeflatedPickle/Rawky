@@ -17,8 +17,6 @@ object Window : JFrame() {
     val toastWindow = ToastWindow(this, 160)
 
     init {
-        this.jMenuBar = MenuBar
-
         this.defaultCloseOperation = EXIT_ON_CLOSE
 
         this.add(this.control.contentArea)

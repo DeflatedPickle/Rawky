@@ -34,11 +34,11 @@ object PluginManager {
         }
 
         EventToastWindowShown.addListener {
-            if (PluginUtil.pluginLoadOrder.isNotEmpty()) {
+            if (PluginUtil.loadedPlugins.isNotEmpty()) {
                 Window.toastWindow.addToast(
                     ToastItem(
                         title = "Loaded Plugins",
-                        content = PluginUtil.pluginLoadOrder.joinToString {
+                        content = PluginUtil.loadedPlugins.joinToString {
                             PluginUtil.pluginToSlug(it)
                         },
                         actions = listOf(
@@ -56,8 +56,8 @@ object PluginManager {
             if (PluginUtil.unloadedPlugins.isNotEmpty()) {
                 Window.toastWindow.addToast(
                     ToastItem(
-                        level = ToastLevel.ERROR,
-                        title = "Invalid Plugins",
+                        level = ToastLevel.WARNING,
+                        title = "Unloaded Plugins",
                         content = PluginUtil.unloadedPlugins.joinToString {
                             it.value
                         }

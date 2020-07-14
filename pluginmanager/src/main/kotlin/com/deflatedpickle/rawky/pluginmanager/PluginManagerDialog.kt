@@ -29,7 +29,7 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
         addTreeSelectionListener {
             if (table.minSelectionRow == -1) return@addTreeSelectionListener
 
-            val selected = PluginUtil.pluginLoadOrder[table.minSelectionRow]
+            val selected = PluginUtil.discoveredPlugins[table.minSelectionRow]
             val dependencies = selected.dependencies
 
             panel.dependencies.dependenciesTableTree.treeTableModel =
@@ -41,26 +41,26 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
 
             this@PluginManagerDialog.panel.header.apply {
                 this.nameLabel.text =
-                    PluginUtil.pluginLoadOrder[table.minSelectionRow]
+                    PluginUtil.discoveredPlugins[table.minSelectionRow]
                         .value
                         .split("_")
                         .joinToString(" ") { it.capitalize() }
                 this.versionLabel.text = "v${
-                PluginUtil.pluginLoadOrder[table.minSelectionRow].version
+                PluginUtil.discoveredPlugins[table.minSelectionRow].version
                 }"
 
                 this.authorLabel.text = "By ${
-                PluginUtil.pluginLoadOrder[table.minSelectionRow].author
+                PluginUtil.discoveredPlugins[table.minSelectionRow].author
                 }"
 
                 this.typeLabel.text = "Type: ${
-                PluginUtil.pluginLoadOrder[table.minSelectionRow].type.name
+                PluginUtil.discoveredPlugins[table.minSelectionRow].type.name
                 }"
 
                 this.descriptionLabel.text =
                     "<html>${
                     PluginUtil
-                        .pluginLoadOrder[table.minSelectionRow]
+                        .discoveredPlugins[table.minSelectionRow]
                         // Split it, get rid of the short description
                         .description.split("<br>").drop(1)[0]
                         // One BR is too small for me, need b i g
@@ -71,7 +71,7 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
 
             this@PluginManagerDialog.panel.dependencies.apply {
                 this.dependenciesTableTree.removeAll()
-                val dependencies = PluginUtil.pluginLoadOrder[table.minSelectionRow].dependencies
+                val dependencies = PluginUtil.discoveredPlugins[table.minSelectionRow].dependencies
 
                 if (dependencies.isEmpty()) {
                     (panel.dependencies.dependenciesTableTree.treeTableModel.root as MutableTreeTableNode).insert(
@@ -116,7 +116,7 @@ object PluginManagerDialog : TaskDialog(Window, "Plugin Manager") {
     }
 
     override fun setVisible(visible: Boolean) {
-        for (plug in PluginUtil.pluginLoadOrder) {
+        for (plug in PluginUtil.discoveredPlugins) {
             this.treeRootNode.add(DefaultMutableTreeNode(plug.value))
         }
 

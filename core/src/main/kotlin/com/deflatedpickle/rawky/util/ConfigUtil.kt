@@ -39,7 +39,7 @@ object ConfigUtil {
     fun createAllConfigFiles(): List<File> {
         val list = mutableListOf<File>()
 
-        for (id in PluginUtil.pluginLoadOrder) {
+        for (id in PluginUtil.discoveredPlugins) {
             list.add(this.createConfigFile(id.value))
         }
 
@@ -47,14 +47,7 @@ object ConfigUtil {
     }
 
     @ImplicitReflectionSerializer
-    fun serializeConfig(id: String, file: File): File? {
-        if (PluginUtil.slugToPlugin[id]!!.settings == Nothing::class) return null
-
-        val settings = PluginUtil.slugToPlugin[id]!!.settings
-
-        this.idToSettings.getOrPut(file.nameWithoutExtension, { settings.createInstance() })
-        val instance = this.idToSettings[file.nameWithoutExtension]!!
-
+    fun serializeConfigToInstance(file: File, instance: Any): File? {
         @Suppress("UNCHECKED_CAST")
         val serializer = instance::class.serializer() as KSerializer<Any>
 
@@ -70,10 +63,31 @@ object ConfigUtil {
         return file
     }
 
-    fun deserializeConfig(file: File) {
-        val settings = PluginUtil.slugToPlugin[file.nameWithoutExtension]!!.settings
+    fun serializeConfig(id: String, file: File): File? {
+        if (PluginUtil.slugToPlugin[id]!!.settings == Nothing::class) return null
+
+        val settings = PluginUtil.slugToPlugin[id]!!.settings
+
+        this.idToSettings.getOrPut(file.nameWithoutExtension, { settings.createInstance() })
+        val instance = this.idToSettings[file.nameWithoutExtension]!!
+
+        this.serializeConfigToInstance(file, instance)
+
+        return file
+    }
+
+    fun deserializeConfig(file: File): Boolean {
+        val obj = PluginUtil.slugToPlugin[file.nameWithoutExtension] ?: return false
+        val settings = obj.settings
 
         val instance = settings.createInstance()
+
+        this.deserializeConfigToInstance(file, instance)
+
+        return true
+    }
+
+    fun deserializeConfigToInstance(file: File, instance: Any): Any {
         @Suppress("UNCHECKED_CAST")
         val serializer = instance::class.serializer() as KSerializer<Any>
 
@@ -81,12 +95,14 @@ object ConfigUtil {
         val jsonObj = json.parse(serializer, file.readText())
 
         this.idToSettings[file.nameWithoutExtension] = jsonObj
+
+        return jsonObj
     }
 
     fun serializeAllConfigs(): List<File> {
         val list = mutableListOf<File>()
 
-        for (plugin in PluginUtil.pluginLoadOrder) {
+        for (plugin in PluginUtil.discoveredPlugins) {
             val id = PluginUtil.pluginToSlug(plugin)
             val file = File("config/$id.json")
 

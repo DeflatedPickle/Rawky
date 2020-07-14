@@ -1,6 +1,8 @@
 package com.deflatedpickle.rawky.launcher
 
 import com.deflatedpickle.rawky.api.plugin.Plugin
+import com.deflatedpickle.rawky.api.plugin.PluginType
+import com.deflatedpickle.rawky.launcher.config.LauncherSettings
 
 @Plugin(
     value = "launcher",
@@ -10,9 +12,11 @@ import com.deflatedpickle.rawky.api.plugin.Plugin
         <br>
         A basic launcher
     """,
+    type = PluginType.LAUNCHER,
     dependencies = [
         "deflatedpickle@core#1.0.0"
-    ]
+    ],
+    settings = LauncherSettings::class
 )
 @Suppress("unused")
 object Launcher

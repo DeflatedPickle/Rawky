@@ -6,10 +6,11 @@ plugins {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0"
+
     implementation 'com.github.Fylipp:easy-events:v1.1.0'
     implementation 'com.github.Vatuu:discord-rpc:1.6.2'
     implementation 'com.github.DeflatedPickle.tosuto:tosuto:1.7.2'
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0"
 
     compile project(':core')
 }

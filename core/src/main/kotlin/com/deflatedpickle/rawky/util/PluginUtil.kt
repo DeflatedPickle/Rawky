@@ -5,6 +5,8 @@ import bibliothek.gui.dock.common.event.CFocusListener
 import bibliothek.gui.dock.common.intern.CDockable
 import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.api.plugin.PluginType
+import com.deflatedpickle.rawky.event.reusable.EventDiscoverPlugin
+import com.deflatedpickle.rawky.event.reusable.EventLoadPlugin
 import com.deflatedpickle.rawky.ui.component.RawkyPanel
 import com.deflatedpickle.rawky.ui.component.RawkyPanelHolder
 import com.deflatedpickle.rawky.ui.window.Window
@@ -21,9 +23,14 @@ object PluginUtil {
     private val logger = LogManager.getLogger(this::class.simpleName)
 
     /**
-     * A list of loaded plugins, ordered for dependencies
+     * A list of found plugins, ordered for dependencies
      */
-    val pluginLoadOrder = mutableListOf<Plugin>()
+    val discoveredPlugins = mutableListOf<Plugin>()
+
+    /**
+     * A list of loaded plugins, unordered
+     */
+    val loadedPlugins = mutableListOf<Plugin>()
 
     /**
      * A list of plugins that threw errors during loading
@@ -59,7 +66,7 @@ object PluginUtil {
     /**
      * Calls [run] for all classes annotated with [Plugin], to find and validate each plugin
      */
-    fun discoverPlugins(run: (Plugin) -> Boolean) {
+    fun discoverPlugins() {
         // Caches the classes found as plugins
         var counter = 0
 
@@ -71,21 +78,37 @@ object PluginUtil {
                 .getAnnotationInfo(Plugin::class.qualifiedName)
                 .loadClassAndInstantiate() as Plugin
 
-            if (run(annotation)) {
-                this.pluginLoadOrder.add(annotation)
+            this.discoveredPlugins.add(annotation)
 
-                this.pluginMap[annotation] = plugin
-                this.slugToPlugin[
-                        this.pluginToSlug(annotation)
-                ] = annotation
+            this.pluginMap[annotation] = plugin
 
-                counter++
-            } else {
-                this.unloadedPlugins.add(annotation)
-            }
+            this.slugToPlugin[
+                    this.pluginToSlug(annotation)
+            ] = annotation
+
+            EventDiscoverPlugin.trigger(annotation)
+            counter++
         }
 
         this.logger.info("Found $counter plugin/s")
+    }
+
+    fun loadPlugins(validator: (Plugin) -> Boolean) {
+        var counter = 0
+
+        for (ann in discoveredPlugins) {
+            if (validator(ann)) {
+                this.pluginMap[ann]!!.loadClass().kotlin.objectInstance
+                this.loadedPlugins.add(ann)
+                EventLoadPlugin.trigger(ann)
+
+                counter++
+            } else {
+                this.unloadedPlugins.add(ann)
+            }
+        }
+
+        this.logger.info("Loaded $counter plugin/s")
     }
 
     /**
@@ -118,6 +141,7 @@ object PluginUtil {
     fun validateType(plugin: Plugin): Boolean =
         when (plugin.type) {
             PluginType.CORE_API,
+            PluginType.LAUNCHER,
             PluginType.API,
             PluginType.MENU_COMMAND,
             PluginType.DIALOG,
@@ -147,7 +171,7 @@ object PluginUtil {
         val suggestions = mutableMapOf<String, MutableList<String>>()
 
         for (dep in plugin.dependencies) {
-            if (dep !in this.pluginLoadOrder.map { this.pluginToSlug(it) }) {
+            if (dep !in this.discoveredPlugins.map { this.pluginToSlug(it) }) {
                 suggestions.putIfAbsent(dep, mutableListOf())
 
                 for (checkDep in this.pluginMap.keys) {

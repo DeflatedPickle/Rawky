@@ -3,6 +3,7 @@ package com.deflatedpickle.rawky
 import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.api.plugin.PluginType
 
+// This plugin only exists to be a dependency
 @Plugin(
     value = "core",
     author = "DeflatedPickle",
@@ -14,4 +15,5 @@ import com.deflatedpickle.rawky.api.plugin.PluginType
     """,
     type = PluginType.CORE_API
 )
+@Suppress("unused")
 object Core

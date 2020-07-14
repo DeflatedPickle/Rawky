@@ -29,7 +29,7 @@ object SettingsGUI {
         }
 
         EventRawkyInit.addListener {
-            for (plugin in PluginUtil.pluginLoadOrder) {
+            for (plugin in PluginUtil.discoveredPlugins) {
                 if (plugin.settings != Nothing::class) {
                     SettingsDialog.searchPanel.model.insertNodeInto(
                         DefaultMutableTreeNode(PluginUtil.pluginToSlug(plugin)),

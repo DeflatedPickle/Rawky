@@ -7,6 +7,11 @@ enum class PluginType {
     CORE_API,
 
     /**
+     * A launcher for the program
+     */
+    LAUNCHER,
+
+    /**
      * Adds an API for other plugins to use
      */
     API,
