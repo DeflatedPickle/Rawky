@@ -5,6 +5,7 @@ import com.deflatedpickle.rawky.api.plugin.PluginType
 import com.deflatedpickle.rawky.event.reusable.EventCreateFile
 import com.deflatedpickle.rawky.event.reusable.EventCreatePluginComponent
 import com.deflatedpickle.rawky.event.reusable.EventDeserializedConfig
+import com.deflatedpickle.rawky.event.specific.EventCreatedPluginComponents
 import com.deflatedpickle.rawky.event.specific.EventDockDeployed
 import com.deflatedpickle.rawky.event.specific.EventLoadedPlugins
 import com.deflatedpickle.rawky.event.specific.EventRawkyInit
@@ -12,6 +13,7 @@ import com.deflatedpickle.rawky.event.specific.EventSortedPluginLoadOrder
 import com.deflatedpickle.rawky.event.specific.EventWindowShown
 import com.deflatedpickle.rawky.launcher.config.LauncherSettings
 import com.deflatedpickle.rawky.event.specific.EventRawkyShutdown
+import com.deflatedpickle.rawky.ui.component.RawkyPanel
 import com.deflatedpickle.rawky.ui.menu.MenuBar
 import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.util.ClassGraphUtil
@@ -155,12 +157,17 @@ fun main(args: Array<String>) {
     EventLoadedPlugins.trigger(PluginUtil.loadedPlugins)
 
     // Create the docked widgets
+    val componentList = mutableListOf<RawkyPanel>()
     for (plugin in PluginUtil.discoveredPlugins) {
-        for (component in plugin.components) {
-            PluginUtil.createComponent(plugin, component)
-            EventCreatePluginComponent.trigger(component.objectInstance!!)
+        if (plugin.component != Nothing::class) {
+            with(plugin.component.objectInstance!!) {
+                PluginUtil.createComponent(plugin, this)
+                componentList.add(this)
+                EventCreatePluginComponent.trigger(this)
+            }
         }
     }
+    EventCreatedPluginComponents.trigger(componentList)
 
     // Add newly enabled plugins to the core settings
     for (plug in PluginUtil.discoveredPlugins) {
@@ -216,12 +223,12 @@ fun main(args: Array<String>) {
     EventRawkyInit.trigger(true)
 
     SwingUtilities.invokeLater {
-        Window.deploy()
-        EventDockDeployed.trigger(Window.grid)
-
         Window.jMenuBar = MenuBar
         Window.size = Dimension(400, 400)
         Window.setLocationRelativeTo(null)
+
+        Window.deploy()
+        EventDockDeployed.trigger(Window.grid)
 
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
         SwingUtilities.updateComponentTreeUI(Window)

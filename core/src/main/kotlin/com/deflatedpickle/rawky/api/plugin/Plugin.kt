@@ -1,7 +1,7 @@
 package com.deflatedpickle.rawky.api.plugin
 
+import com.deflatedpickle.rawky.api.ComponentPosition
 import com.deflatedpickle.rawky.ui.component.RawkyPanel
-import org.apache.commons.lang3.StringUtils
 import kotlin.reflect.KClass
 
 import com.deflatedpickle.rawky.util.PluginUtil
@@ -50,9 +50,8 @@ annotation class Plugin(
     /**
      * The components this plugin provides
      */
-    // It's an arraywilliam johnson because it can't be nullable
-    // and I can't find a way around it. You're welcome
-    val components: Array<KClass<out RawkyPanel>> = [],
+    val component: KClass<out RawkyPanel> = Nothing::class,
+    val componentPosition: ComponentPosition = ComponentPosition.NORTH,
     /**
      * The plugin IDs this plugin should load after
      */

@@ -1,8 +1,10 @@
 package com.deflatedpickle.rawky.util
 
+import bibliothek.gui.dock.common.CLocation
 import bibliothek.gui.dock.common.DefaultSingleCDockable
 import bibliothek.gui.dock.common.event.CFocusListener
 import bibliothek.gui.dock.common.intern.CDockable
+import com.deflatedpickle.rawky.api.ComponentPosition
 import com.deflatedpickle.rawky.api.plugin.Plugin
 import com.deflatedpickle.rawky.api.plugin.PluginType
 import com.deflatedpickle.rawky.event.reusable.EventDiscoverPlugin
@@ -148,7 +150,7 @@ object PluginUtil {
             PluginType.OTHER -> true
 
             PluginType.SETTING -> plugin.settings != Nothing::class
-            PluginType.COMPONENT -> plugin.components != Nothing::class
+            PluginType.COMPONENT -> plugin.component != Nothing::class
         }
 
     /**
@@ -196,8 +198,7 @@ object PluginUtil {
     /**
      * Creates all plugin components
      */
-    fun createComponent(plugin: Plugin, component: KClass<out RawkyPanel>): RawkyPanel {
-        val panel = component.objectInstance!!
+    fun createComponent(plugin: Plugin, panel: RawkyPanel): RawkyPanel {
         panel.plugin = plugin
         panel.scrollPane = JScrollPane(panel)
 
@@ -229,11 +230,18 @@ object PluginUtil {
             }
         })
 
-        Window.grid.add(
-            0.0, 0.0,
-            0.0, 0.0,
-            panel.componentHolder.dock
+        Window.control.addDockable(panel.componentHolder.dock as DefaultSingleCDockable)
+
+        panel.componentHolder.dock.setLocation(
+            when (plugin.componentPosition) {
+                ComponentPosition.NORTH -> CLocation.base().minimalNorth()
+                ComponentPosition.EAST -> CLocation.base().minimalEast()
+                ComponentPosition.SOUTH -> CLocation.base().minimalSouth()
+                ComponentPosition.WEST -> CLocation.base().minimalWest()
+            }
         )
+
+        panel.componentHolder.dock.isVisible = true
 
         return panel
     }

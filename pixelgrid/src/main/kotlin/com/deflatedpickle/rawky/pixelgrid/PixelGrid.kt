@@ -16,7 +16,7 @@ import net.arikia.dev.drpc.DiscordRichPresence
         This plugin provides most of the basic user functionality of Rawky.
     """,
     type = PluginType.COMPONENT,
-    components = [PixelGridComponent::class],
+    component = PixelGridComponent::class,
     dependencies = [
         "deflatedpickle@core#1.0.0",
         "deflatedpickle@discord_rpc#1.0.0"

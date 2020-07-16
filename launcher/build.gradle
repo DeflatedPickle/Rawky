@@ -19,8 +19,10 @@ dependencies {
     implementation 'org.oxbow:swing-bits:1.0.0-SNAPSHOT'
     implementation 'com.github.DeflatedPickle.tosuto:tosuto:1.7.2'
     implementation 'io.github.classgraph:classgraph:4.8.85'
+    implementation 'org.swinglabs:swingx:1.6.1'
 
     compile project(':core')
+    compile project(':pixelgrid')
 }
 
 application {
