@@ -18,6 +18,7 @@ dependencies {
     implementation 'org.dockingframes:docking-frames-common:1.1.1'
     implementation 'org.oxbow:swing-bits:1.0.0-SNAPSHOT'
     implementation 'com.github.DeflatedPickle.tosuto:tosuto:1.7.2'
+    implementation 'com.github.DeflatedPickle:haruhi:637e6ea9c8'
     implementation 'io.github.classgraph:classgraph:4.8.85'
     implementation 'org.swinglabs:swingx:1.6.1'
 

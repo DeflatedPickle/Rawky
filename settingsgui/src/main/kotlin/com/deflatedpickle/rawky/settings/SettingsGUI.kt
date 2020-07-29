@@ -1,11 +1,11 @@
 package com.deflatedpickle.rawky.settings
 
-import com.deflatedpickle.rawky.api.plugin.Plugin
+import com.deflatedpickle.haruhi.api.plugin.Plugin
+import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.event.reusable.EventMenuBuild
 import com.deflatedpickle.rawky.event.specific.EventRawkyInit
 import com.deflatedpickle.rawky.ui.extension.addItem
 import com.deflatedpickle.rawky.ui.menu.MenuFile
-import com.deflatedpickle.rawky.util.PluginUtil
 import java.util.regex.PatternSyntaxException
 import javax.swing.tree.DefaultMutableTreeNode
 

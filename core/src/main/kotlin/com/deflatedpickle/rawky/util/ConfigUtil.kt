@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.util
 
+import com.deflatedpickle.haruhi.util.PluginUtil
 import com.github.underscore.lodash.U
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.KSerializer

@@ -1,7 +1,7 @@
 package com.deflatedpickle.rawky.tipoftheday
 
-import com.deflatedpickle.rawky.api.plugin.Plugin
-import com.deflatedpickle.rawky.api.plugin.PluginType
+import com.deflatedpickle.haruhi.api.plugin.Plugin
+import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.rawky.event.specific.EventWindowShown
 import com.deflatedpickle.rawky.tipoftheday.event.EventAddTip
 import com.deflatedpickle.rawky.ui.window.Window

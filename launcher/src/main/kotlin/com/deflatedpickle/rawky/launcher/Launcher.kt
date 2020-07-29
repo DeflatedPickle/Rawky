@@ -1,8 +1,7 @@
 package com.deflatedpickle.rawky.launcher
 
-import com.deflatedpickle.rawky.api.plugin.Plugin
-import com.deflatedpickle.rawky.api.plugin.PluginType
-import com.deflatedpickle.rawky.collection.Cell
+import com.deflatedpickle.haruhi.api.plugin.Plugin
+import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
@@ -15,7 +14,6 @@ import com.deflatedpickle.rawky.ui.extension.addItem
 import com.deflatedpickle.rawky.ui.menu.MenuFile
 import com.deflatedpickle.rawky.util.DocumentUtil
 import org.oxbow.swingbits.dialog.task.TaskDialog
-import java.awt.Rectangle
 
 @Plugin(
     value = "launcher",
@@ -43,20 +41,7 @@ object Launcher {
                         val maxRows = NewFileDialog.rowInput.text.toInt()
                         val maxColumns = NewFileDialog.columnInput.text.toInt()
 
-                        val document = RawkyDocument(
-                            children = Array(NewFileDialog.framesInput.text.toInt()) {
-                                Frame(
-                                    Array(NewFileDialog.layersInput.text.toInt()) {
-                                        Layer(
-                                            Grid(
-                                                rows = maxRows,
-                                                columns = maxColumns
-                                            )
-                                        )
-                                    }
-                                )
-                            }
-                        )
+                        val document = this.newDocument(maxRows, maxColumns)
 
                         DocumentUtil.document = document
 
@@ -66,4 +51,19 @@ object Launcher {
             }
         }
     }
+
+    fun newDocument(rows: Int, columns: Int): RawkyDocument = RawkyDocument(
+        children = Array(NewFileDialog.framesInput.text.toInt()) {
+            Frame(
+                Array(NewFileDialog.layersInput.text.toInt()) {
+                    Layer(
+                        Grid(
+                            rows = rows,
+                            columns = columns
+                        )
+                    )
+                }
+            )
+        }
+    )
 }

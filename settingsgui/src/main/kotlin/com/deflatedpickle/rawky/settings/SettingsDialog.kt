@@ -1,6 +1,7 @@
 package com.deflatedpickle.rawky.settings
 
-import com.deflatedpickle.rawky.api.plugin.Plugin
+import com.deflatedpickle.haruhi.api.plugin.Plugin
+import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.extension.get
 import com.deflatedpickle.rawky.extension.set
 import com.deflatedpickle.rawky.ui.constraints.FillBothFinishLine
@@ -11,7 +12,6 @@ import com.deflatedpickle.rawky.ui.widget.ErrorLabel
 import com.deflatedpickle.rawky.ui.widget.SearchList
 import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.util.ConfigUtil
-import com.deflatedpickle.rawky.util.PluginUtil
 import kotlinx.serialization.ImplicitReflectionSerializer
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.Component

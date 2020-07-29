@@ -1,7 +1,7 @@
 package com.deflatedpickle.rawky.discordrpc
 
-import com.deflatedpickle.rawky.api.plugin.Plugin
-import com.deflatedpickle.rawky.api.plugin.PluginType
+import com.deflatedpickle.haruhi.api.plugin.Plugin
+import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.rawky.discordrpc.util.DiscordRP
 import com.deflatedpickle.rawky.event.specific.EventRawkyInit
 import com.deflatedpickle.rawky.event.specific.EventRawkyShutdown

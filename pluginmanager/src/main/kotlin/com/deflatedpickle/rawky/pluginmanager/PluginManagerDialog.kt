@@ -1,8 +1,8 @@
 package com.deflatedpickle.rawky.pluginmanager
 
+import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.discordrpc.util.DiscordRP
 import com.deflatedpickle.rawky.ui.window.Window
-import com.deflatedpickle.rawky.util.PluginUtil
 import net.arikia.dev.drpc.DiscordRichPresence
 import org.jdesktop.swingx.JXTree
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode

@@ -1,32 +1,35 @@
 package com.deflatedpickle.rawky.launcher
 
-import com.deflatedpickle.rawky.api.plugin.Plugin
-import com.deflatedpickle.rawky.api.plugin.PluginType
+import com.deflatedpickle.haruhi.api.plugin.DependencyComparator
+import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.component.PluginPanel
+import com.deflatedpickle.haruhi.util.ClassGraphUtil
+import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.event.reusable.EventCreateFile
 import com.deflatedpickle.rawky.event.reusable.EventCreatePluginComponent
 import com.deflatedpickle.rawky.event.reusable.EventDeserializedConfig
+import com.deflatedpickle.rawky.event.specific.EventCreateRawkyDocument
 import com.deflatedpickle.rawky.event.specific.EventCreatedPluginComponents
 import com.deflatedpickle.rawky.event.specific.EventDockDeployed
 import com.deflatedpickle.rawky.event.specific.EventLoadedPlugins
 import com.deflatedpickle.rawky.event.specific.EventRawkyInit
+import com.deflatedpickle.rawky.event.specific.EventRawkyShutdown
 import com.deflatedpickle.rawky.event.specific.EventSortedPluginLoadOrder
 import com.deflatedpickle.rawky.event.specific.EventWindowShown
+import com.deflatedpickle.rawky.launcher.config.LaunchAction
 import com.deflatedpickle.rawky.launcher.config.LauncherSettings
-import com.deflatedpickle.rawky.event.specific.EventRawkyShutdown
-import com.deflatedpickle.rawky.ui.component.RawkyPanel
+import com.deflatedpickle.rawky.ui.RawkyToasts
 import com.deflatedpickle.rawky.ui.menu.MenuBar
 import com.deflatedpickle.rawky.ui.window.Window
-import com.deflatedpickle.rawky.util.ClassGraphUtil
 import com.deflatedpickle.rawky.util.ConfigUtil
-import com.deflatedpickle.rawky.util.GeneralUtil
-import com.deflatedpickle.rawky.util.PluginUtil
+import com.deflatedpickle.rawky.util.DocumentUtil
+import kotlinx.serialization.ImplicitReflectionSerializer
 import org.apache.logging.log4j.LogManager
 import org.oxbow.swingbits.dialog.task.TaskDialogs
 import java.awt.Dimension
 import java.io.File
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
-import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlin.reflect.full.createInstance
 
 @OptIn(ImplicitReflectionSerializer::class)
@@ -40,15 +43,17 @@ fun main(args: Array<String>) {
 
     // The gradle tasks pass in "indev" argument
     // if it doesn't exist it's not indev
-    GeneralUtil.isInDev = args.contains("indev")
+    PluginUtil.isInDev = args.contains("indev")
 
-    logger.info("Running ${if (GeneralUtil.isInDev) "as source" else "as built"}")
+    logger.info("Running ${if (PluginUtil.isInDev) "as source" else "as built"}")
     logger.warn(
         "Rawky is running with ${
         // This is in bytes, so we'll divide it by enough
         Runtime.getRuntime().maxMemory() / 1024 * 1024
         }MBs of memory"
     )
+
+    PluginUtil.control = Window.control
 
     // Adds a single shutdown thread with an event
     // to reduce the instance count
@@ -81,7 +86,7 @@ fun main(args: Array<String>) {
 
     // Plugins are distributed and loaded as JARs
     // when the program is built
-    if (!GeneralUtil.isInDev) {
+    if (!PluginUtil.isInDev) {
         EventCreateFile.trigger(
             PluginUtil.createPluginsFolder().apply {
                 logger.info("Created the plugins folder at ${this.absolutePath}")
@@ -113,7 +118,7 @@ fun main(args: Array<String>) {
     logger.debug("Validated all plugins with ${PluginUtil.unloadedPlugins.size} error/s")
 
     // Organise plugins by their dependencies
-    PluginUtil.discoveredPlugins.sortWith(Plugin.comparator)
+    PluginUtil.discoveredPlugins.sortWith(DependencyComparator)
     logger.info("Sorted out the load order: ${PluginUtil.discoveredPlugins.map { PluginUtil.pluginToSlug(it) }}")
     EventSortedPluginLoadOrder.trigger(PluginUtil.discoveredPlugins)
 
@@ -157,7 +162,7 @@ fun main(args: Array<String>) {
     EventLoadedPlugins.trigger(PluginUtil.loadedPlugins)
 
     // Create the docked widgets
-    val componentList = mutableListOf<RawkyPanel>()
+    val componentList = mutableListOf<PluginPanel>()
     for (plugin in PluginUtil.discoveredPlugins) {
         if (plugin.component != Nothing::class) {
             with(plugin.component.objectInstance!!) {
@@ -222,6 +227,18 @@ fun main(args: Array<String>) {
     // For example, if a plugin needs access to a config, they could listen to this
     EventRawkyInit.trigger(true)
 
+    val settings = ConfigUtil.getSettings<LauncherSettings>(
+        "deflatedpickle@launcher#1.0.0"
+    )
+
+    when(settings.onLaunch) {
+        LaunchAction.NOTHING -> { }
+        LaunchAction.NEW_FILE -> {
+            DocumentUtil.document = Launcher.newDocument(16, 16)
+            EventCreateRawkyDocument.trigger(DocumentUtil.document!!)
+        }
+    }
+
     SwingUtilities.invokeLater {
         Window.jMenuBar = MenuBar
         Window.size = Dimension(400, 400)
@@ -232,7 +249,7 @@ fun main(args: Array<String>) {
 
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
         SwingUtilities.updateComponentTreeUI(Window)
-        SwingUtilities.updateComponentTreeUI(Window.toastWindow)
+        SwingUtilities.updateComponentTreeUI(RawkyToasts)
 
         Window.isVisible = true
         EventWindowShown.trigger(Window)

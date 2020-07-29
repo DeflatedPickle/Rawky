@@ -1,13 +1,13 @@
 package com.deflatedpickle.rawky.pluginmanager
 
-import com.deflatedpickle.rawky.api.plugin.Plugin
-import com.deflatedpickle.rawky.api.plugin.PluginType
+import com.deflatedpickle.haruhi.api.plugin.Plugin
+import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.event.reusable.EventMenuBuild
 import com.deflatedpickle.rawky.event.specific.EventToastWindowShown
 import com.deflatedpickle.rawky.ui.extension.addItem
 import com.deflatedpickle.rawky.ui.menu.MenuTools
 import com.deflatedpickle.rawky.ui.window.Window
-import com.deflatedpickle.rawky.util.PluginUtil
 import com.deflatedpickle.tosuto.ToastItem
 import com.deflatedpickle.tosuto.action.ToastSingleAction
 import com.deflatedpickle.tosuto.api.ToastLevel

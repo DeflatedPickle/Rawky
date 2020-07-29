@@ -1,6 +1,6 @@
 package com.deflatedpickle.rawky.event.specific
 
-import com.deflatedpickle.rawky.api.plugin.Plugin
+import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.rawky.event.AbstractEvent
 
 /**

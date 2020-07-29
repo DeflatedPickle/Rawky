@@ -1,9 +1,9 @@
 package com.deflatedpickle.rawky.pixelgrid
 
-import com.deflatedpickle.rawky.api.plugin.Plugin
-import com.deflatedpickle.rawky.api.plugin.PluginType
+import com.deflatedpickle.haruhi.api.plugin.Plugin
+import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.event.EventPanelFocusGained
 import com.deflatedpickle.rawky.discordrpc.util.DiscordRP
-import com.deflatedpickle.rawky.event.reusable.EventPanelFocusGained
 import net.arikia.dev.drpc.DiscordRichPresence
 
 @Plugin(

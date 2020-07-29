@@ -1,7 +1,7 @@
 package com.deflatedpickle.rawky
 
-import com.deflatedpickle.rawky.api.plugin.Plugin
-import com.deflatedpickle.rawky.api.plugin.PluginType
+import com.deflatedpickle.haruhi.api.plugin.Plugin
+import com.deflatedpickle.haruhi.api.plugin.PluginType
 
 // This plugin only exists to be a dependency
 @Plugin(

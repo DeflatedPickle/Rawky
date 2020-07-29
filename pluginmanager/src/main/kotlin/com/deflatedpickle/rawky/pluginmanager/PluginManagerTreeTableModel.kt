@@ -1,6 +1,6 @@
 package com.deflatedpickle.rawky.pluginmanager
 
-import com.deflatedpickle.rawky.api.plugin.Plugin
+import com.deflatedpickle.haruhi.api.plugin.Plugin
 import org.jdesktop.swingx.treetable.DefaultMutableTreeTableNode
 import org.jdesktop.swingx.treetable.DefaultTreeTableModel
 
