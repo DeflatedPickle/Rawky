@@ -4,6 +4,7 @@ import com.deflatedpickle.haruhi.api.plugin.DependencyComparator
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.util.ClassGraphUtil
+import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.event.reusable.EventCreateFile
 import com.deflatedpickle.rawky.event.reusable.EventCreatePluginComponent
@@ -21,7 +22,6 @@ import com.deflatedpickle.rawky.launcher.config.LauncherSettings
 import com.deflatedpickle.rawky.ui.RawkyToasts
 import com.deflatedpickle.rawky.ui.menu.MenuBar
 import com.deflatedpickle.rawky.ui.window.Window
-import com.deflatedpickle.rawky.util.ConfigUtil
 import com.deflatedpickle.rawky.util.DocumentUtil
 import kotlinx.serialization.ImplicitReflectionSerializer
 import org.apache.logging.log4j.LogManager

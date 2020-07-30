@@ -2,12 +2,12 @@ package com.deflatedpickle.rawky.discordrpc
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.discordrpc.util.DiscordRP
 import com.deflatedpickle.rawky.event.specific.EventRawkyInit
 import com.deflatedpickle.rawky.event.specific.EventRawkyShutdown
 import com.deflatedpickle.rawky.event.specific.EventWindowShown
 import com.deflatedpickle.rawky.ui.window.Window
-import com.deflatedpickle.rawky.util.ConfigUtil
 import net.arikia.dev.drpc.DiscordRichPresence
 
 // This plugin only exists to be a dependency

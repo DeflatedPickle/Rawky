@@ -7,7 +7,7 @@ plugins {
     id 'com.diffplug.gradle.spotless' version '3.27.0'
 }
 
-group 'org.deflatedpickle.rawky'
+group 'org.deflatedpickle'
 version '1.0.0'
 
 allprojects {

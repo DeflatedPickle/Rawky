@@ -11,7 +11,7 @@ dependencies {
     implementation 'com.github.Fylipp:easy-events:v1.1.0'
     implementation 'com.github.Vatuu:discord-rpc:1.6.2'
     implementation 'com.github.DeflatedPickle.tosuto:tosuto:1.7.2'
-    implementation 'com.github.DeflatedPickle:haruhi:637e6ea9c8'
+    implementation 'com.github.DeflatedPickle:haruhi:1.1.0'
 
     compile project(':core')
 }
