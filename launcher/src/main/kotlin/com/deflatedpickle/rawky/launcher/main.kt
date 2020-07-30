@@ -94,6 +94,16 @@ fun main(args: Array<String>) {
         )
     }
 
+    // Create the config file
+    EventCreateFile.trigger(
+        ConfigUtil.createConfigFolder().apply {
+            if (!this.exists()) {
+                this.mkdir()
+                logger.info("Created the config folder at ${this.absolutePath}")
+            }
+        }
+    )
+
     // Serialize/deserialize a config for the core
     // This can't use the plugin config system as it
     // can dictate what plugins are/aren't loaded
@@ -142,7 +152,7 @@ fun main(args: Array<String>) {
                 // They might've got the plugin set from elsewhere
                 (
                         // Ignore facade types
-                        (it.type in arrayOf(
+                        (it.value == "haruhi" || it.type in arrayOf(
                             PluginType.CORE_API,
                             PluginType.LAUNCHER
                         )) ||
@@ -185,15 +195,6 @@ fun main(args: Array<String>) {
     // Serialize the enabled plugins
     ConfigUtil.serializeConfigToInstance(
         launcherSettingsFile, launcherSettingsInstance
-    )
-
-    // Create the config file
-    EventCreateFile.trigger(
-        ConfigUtil.createConfigFolder().apply {
-            if (!this.exists()) {
-                logger.info("Created the config folder at ${this.absolutePath}")
-            }
-        }
     )
 
     // Deserialize old configs
