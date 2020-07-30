@@ -2,8 +2,7 @@ package com.deflatedpickle.rawky.ui.window
 
 import bibliothek.gui.dock.common.CControl
 import bibliothek.gui.dock.common.CGrid
-import com.deflatedpickle.rawky.event.specific.EventToastWindowShown
-import com.deflatedpickle.rawky.ui.menu.MenuBar
+import com.deflatedpickle.haruhi.event.EventWindowShown
 import com.deflatedpickle.tosuto.ToastWindow
 import javax.swing.JFrame
 
@@ -31,6 +30,6 @@ object Window : JFrame() {
     override fun setVisible(b: Boolean) {
         super.setVisible(b)
         this.toastWindow.isVisible = true
-        EventToastWindowShown.trigger(this.toastWindow)
+        EventWindowShown.trigger(this.toastWindow)
     }
 }

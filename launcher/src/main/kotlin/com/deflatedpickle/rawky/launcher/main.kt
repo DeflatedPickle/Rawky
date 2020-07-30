@@ -3,20 +3,20 @@ package com.deflatedpickle.rawky.launcher
 import com.deflatedpickle.haruhi.api.plugin.DependencyComparator
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.component.PluginPanel
+import com.deflatedpickle.haruhi.event.EventCreateDocument
+import com.deflatedpickle.haruhi.event.EventCreateFile
+import com.deflatedpickle.haruhi.event.EventCreatePluginComponent
+import com.deflatedpickle.haruhi.event.EventCreatedPluginComponents
+import com.deflatedpickle.haruhi.event.EventDeserializedConfig
+import com.deflatedpickle.haruhi.event.EventDockDeployed
+import com.deflatedpickle.haruhi.event.EventLoadedPlugins
+import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
+import com.deflatedpickle.haruhi.event.EventProgramShutdown
+import com.deflatedpickle.haruhi.event.EventSortedPluginLoadOrder
+import com.deflatedpickle.haruhi.event.EventWindowShown
 import com.deflatedpickle.haruhi.util.ClassGraphUtil
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
-import com.deflatedpickle.rawky.event.reusable.EventCreateFile
-import com.deflatedpickle.rawky.event.reusable.EventCreatePluginComponent
-import com.deflatedpickle.rawky.event.reusable.EventDeserializedConfig
-import com.deflatedpickle.rawky.event.specific.EventCreateRawkyDocument
-import com.deflatedpickle.rawky.event.specific.EventCreatedPluginComponents
-import com.deflatedpickle.rawky.event.specific.EventDockDeployed
-import com.deflatedpickle.rawky.event.specific.EventLoadedPlugins
-import com.deflatedpickle.rawky.event.specific.EventRawkyInit
-import com.deflatedpickle.rawky.event.specific.EventRawkyShutdown
-import com.deflatedpickle.rawky.event.specific.EventSortedPluginLoadOrder
-import com.deflatedpickle.rawky.event.specific.EventWindowShown
 import com.deflatedpickle.rawky.launcher.config.LaunchAction
 import com.deflatedpickle.rawky.launcher.config.LauncherSettings
 import com.deflatedpickle.rawky.ui.RawkyToasts
@@ -60,7 +60,7 @@ fun main(args: Array<String>) {
     Runtime.getRuntime().addShutdownHook(object : Thread() {
         override fun run() {
             logger.warn("The JVM instance running Rawky was shutdown")
-            EventRawkyShutdown.trigger(true)
+            EventProgramShutdown.trigger(true)
             // Changes were probably made, let's serialize the configs again
             ConfigUtil.serializeAllConfigs()
             logger.info("Serialized all the configs")
@@ -226,7 +226,7 @@ fun main(args: Array<String>) {
     // This is a catch-all event, used by plugins to run code that depends on setup
     // though the specific events could be used instead
     // For example, if a plugin needs access to a config, they could listen to this
-    EventRawkyInit.trigger(true)
+    EventProgramFinishSetup.trigger(true)
 
     val settings = ConfigUtil.getSettings<LauncherSettings>(
         "deflatedpickle@launcher#1.0.0"
@@ -236,7 +236,7 @@ fun main(args: Array<String>) {
         LaunchAction.NOTHING -> { }
         LaunchAction.NEW_FILE -> {
             DocumentUtil.document = Launcher.newDocument(16, 16)
-            EventCreateRawkyDocument.trigger(DocumentUtil.document!!)
+            EventCreateDocument.trigger(DocumentUtil.document!!)
         }
     }
 

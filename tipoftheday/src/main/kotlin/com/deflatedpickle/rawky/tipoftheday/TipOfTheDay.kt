@@ -2,7 +2,7 @@ package com.deflatedpickle.rawky.tipoftheday
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.rawky.event.specific.EventWindowShown
+import com.deflatedpickle.haruhi.event.EventWindowShown
 import com.deflatedpickle.rawky.tipoftheday.event.EventAddTip
 import com.deflatedpickle.rawky.ui.window.Window
 import org.jdesktop.swingx.JXTipOfTheDay
@@ -28,14 +28,14 @@ object TipOfTheDay {
 
     init {
         EventWindowShown.addListener {
-            if (it is Window) {
-                EventAddTip.trigger(this.tips)
+            if (it != Window) return@addListener
 
-                if (this.tips.size > 0) {
-                    val model = DefaultTipOfTheDayModel(this.tips)
-                    val tipOfTheDay = JXTipOfTheDay(model)
-                    tipOfTheDay.showDialog(it)
-                }
+            EventAddTip.trigger(this.tips)
+
+            if (this.tips.size > 0) {
+                val model = DefaultTipOfTheDayModel(this.tips)
+                val tipOfTheDay = JXTipOfTheDay(model)
+                tipOfTheDay.showDialog(it)
             }
         }
 

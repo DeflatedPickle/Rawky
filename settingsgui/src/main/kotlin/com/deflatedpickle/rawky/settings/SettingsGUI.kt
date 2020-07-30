@@ -1,9 +1,9 @@
 package com.deflatedpickle.rawky.settings
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
+import com.deflatedpickle.haruhi.event.EventMenuBuild
+import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.PluginUtil
-import com.deflatedpickle.rawky.event.reusable.EventMenuBuild
-import com.deflatedpickle.rawky.event.specific.EventRawkyInit
 import com.deflatedpickle.rawky.ui.extension.addItem
 import com.deflatedpickle.rawky.ui.menu.MenuFile
 import java.util.regex.PatternSyntaxException
@@ -28,7 +28,7 @@ object SettingsGUI {
             }
         }
 
-        EventRawkyInit.addListener {
+        EventProgramFinishSetup.addListener {
             for (plugin in PluginUtil.discoveredPlugins) {
                 if (plugin.settings != Nothing::class) {
                     SettingsDialog.searchPanel.model.insertNodeInto(

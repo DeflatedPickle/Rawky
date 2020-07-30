@@ -2,11 +2,11 @@ package com.deflatedpickle.rawky.discordrpc
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
+import com.deflatedpickle.haruhi.event.EventProgramShutdown
+import com.deflatedpickle.haruhi.event.EventWindowShown
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.discordrpc.util.DiscordRP
-import com.deflatedpickle.rawky.event.specific.EventRawkyInit
-import com.deflatedpickle.rawky.event.specific.EventRawkyShutdown
-import com.deflatedpickle.rawky.event.specific.EventWindowShown
 import com.deflatedpickle.rawky.ui.window.Window
 import net.arikia.dev.drpc.DiscordRichPresence
 
@@ -28,7 +28,7 @@ import net.arikia.dev.drpc.DiscordRichPresence
 @Suppress("unused")
 object DiscordRPC {
     init {
-        EventRawkyInit.addListener {
+        EventProgramFinishSetup.addListener {
             val settings = ConfigUtil.getSettings<DiscordRPCSettings>(
                 "deflatedpickle@discord_rpc#1.0.0"
             )
@@ -54,7 +54,7 @@ object DiscordRPC {
             }
         }
 
-        EventRawkyShutdown.addListener {
+        EventProgramShutdown.addListener {
             // Shutdown Discord RCP
             this@DiscordRPC.stop()
         }

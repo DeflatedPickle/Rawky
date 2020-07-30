@@ -2,11 +2,11 @@ package com.deflatedpickle.rawky.launcher
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.event.EventCreateDocument
+import com.deflatedpickle.haruhi.event.EventMenuBuild
 import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
-import com.deflatedpickle.rawky.event.reusable.EventMenuBuild
-import com.deflatedpickle.rawky.event.specific.EventCreateRawkyDocument
 import com.deflatedpickle.rawky.launcher.config.LauncherSettings
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.ui.dialog.NewFileDialog
@@ -45,7 +45,7 @@ object Launcher {
 
                         DocumentUtil.document = document
 
-                        EventCreateRawkyDocument.trigger(document)
+                        EventCreateDocument.trigger(document)
                     }
                 }
             }

@@ -2,9 +2,9 @@ package com.deflatedpickle.rawky.pluginmanager
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.event.EventMenuBuild
+import com.deflatedpickle.haruhi.event.EventWindowShown
 import com.deflatedpickle.haruhi.util.PluginUtil
-import com.deflatedpickle.rawky.event.reusable.EventMenuBuild
-import com.deflatedpickle.rawky.event.specific.EventToastWindowShown
 import com.deflatedpickle.rawky.ui.extension.addItem
 import com.deflatedpickle.rawky.ui.menu.MenuTools
 import com.deflatedpickle.rawky.ui.window.Window
@@ -33,7 +33,9 @@ object PluginManager {
             }
         }
 
-        EventToastWindowShown.addListener {
+        EventWindowShown.addListener {
+            if (it != Window.toastWindow) return@addListener
+
             if (PluginUtil.loadedPlugins.isNotEmpty()) {
                 Window.toastWindow.addToast(
                     ToastItem(
