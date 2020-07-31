@@ -54,6 +54,7 @@ fun main(args: Array<String>) {
     )
 
     PluginUtil.control = Window.control
+    PluginUtil.grid = Window.grid
 
     // Adds a single shutdown thread with an event
     // to reduce the instance count
