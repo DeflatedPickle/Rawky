@@ -19,8 +19,7 @@ import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.launcher.config.LaunchAction
 import com.deflatedpickle.rawky.launcher.config.LauncherSettings
-import com.deflatedpickle.rawky.ui.RawkyToasts
-import com.deflatedpickle.rawky.ui.menu.MenuBar
+import com.deflatedpickle.rawky.ui.RawkyToastWindow
 import com.deflatedpickle.rawky.ui.window.Window
 import com.deflatedpickle.rawky.util.DocumentUtil
 import kotlinx.serialization.ImplicitReflectionSerializer
@@ -53,6 +52,8 @@ fun main(args: Array<String>) {
         }MBs of memory"
     )
 
+    PluginUtil.window = Window
+    PluginUtil.toastWindow = Window.toastWindow
     PluginUtil.control = Window.control
     PluginUtil.grid = Window.grid
 
@@ -242,16 +243,15 @@ fun main(args: Array<String>) {
     }
 
     SwingUtilities.invokeLater {
-        Window.jMenuBar = MenuBar
         Window.size = Dimension(400, 400)
         Window.setLocationRelativeTo(null)
 
-        Window.deploy()
+        Window.control.contentArea.deploy(Window.grid)
         EventDockDeployed.trigger(Window.grid)
 
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
         SwingUtilities.updateComponentTreeUI(Window)
-        SwingUtilities.updateComponentTreeUI(RawkyToasts)
+        SwingUtilities.updateComponentTreeUI(RawkyToastWindow)
 
         Window.isVisible = true
         EventWindowShown.trigger(Window)

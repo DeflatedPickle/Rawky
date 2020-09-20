@@ -6,11 +6,3 @@ include 'core'
 include 'launcher'
 
 include 'pixelgrid'
-
-include 'pluginmanager'
-
-include 'discordrpc'
-
-include 'tipoftheday'
-
-include 'settingsgui'

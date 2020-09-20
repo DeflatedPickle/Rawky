@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'java-library'
+
     id 'org.jetbrains.kotlin.jvm'
     id 'org.jetbrains.kotlin.plugin.serialization'
 }
@@ -11,41 +13,41 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0"
 
     // Docking framework
-    implementation 'org.dockingframes:docking-frames-common:1.1.1'
+    api 'org.dockingframes:docking-frames-common:1.1.1'
 
     // Extended Swing widgets
-    implementation 'org.swinglabs:swingx:1.6.1'
+    api 'org.swinglabs:swingx:1.6.1'
 
     // Extra widgets
-    implementation 'org.bidib.com.jidesoft:jide-parent:3.7.6'
-    implementation 'org.bidib.com.jidesoft:jide-common:3.7.6'
+    api 'org.bidib.com.jidesoft:jide-parent:3.7.6'
+    api 'org.bidib.com.jidesoft:jide-common:3.7.6'
 
-    implementation 'com.github.mickleness.pumpernickel:pump-swing:66e5a9641c'
+    api 'com.github.mickleness.pumpernickel:pump-swing:66e5a9641c'
 
     // Dialogs
-    implementation 'org.oxbow:swing-bits:1.0.0-SNAPSHOT'
+    api 'org.oxbow:swing-bits:1.0.0-SNAPSHOT'
 
     // Utility
-    implementation 'org.apache.commons:commons-lang3:3.9'
-    implementation 'com.github.javadev:underscore:1.55'
+    api 'org.apache.commons:commons-lang3:3.9'
+    api 'com.github.javadev:underscore:1.55'
 
     // Allows for plugin loading
-    implementation 'io.github.classgraph:classgraph:4.8.85'
+    api 'io.github.classgraph:classgraph:4.8.85'
 
     // Fuzzy searching
-    implementation 'me.xdrop:fuzzywuzzy:1.2.0'
+    api 'me.xdrop:fuzzywuzzy:1.2.0'
 
     // Events
-    implementation 'com.github.Fylipp:easy-events:v1.1.0'
+    api 'com.github.Fylipp:easy-events:v1.1.0'
 
     // Discord RCP
-    implementation 'com.github.Vatuu:discord-rpc:1.6.2'
+    api 'com.github.Vatuu:discord-rpc:1.6.2'
 
     // Toasts
-    implementation 'com.github.DeflatedPickle.tosuto:tosuto:1.7.3'
+    api 'com.github.DeflatedPickle.tosuto:tosuto:1.7.3'
 
     // Plugin framework
-    implementation 'com.github.DeflatedPickle.haruhi:haruhi:1.3.0'
+    api 'com.github.DeflatedPickle.haruhi:haruhi:871d3a8f3f'
 
     // Logging
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
