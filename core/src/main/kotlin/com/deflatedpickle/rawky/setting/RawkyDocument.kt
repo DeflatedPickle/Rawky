@@ -9,6 +9,7 @@ import kotlinx.serialization.Serializable
 /**
  * Settings for a file
  */
+@Suppress("SpellCheckingInspection")
 @Serializable
 class RawkyDocument(
     override val children: Array<Frame>,

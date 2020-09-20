@@ -4,6 +4,7 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventMenuBuild
+import com.deflatedpickle.rawky.Core
 import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
@@ -12,7 +13,6 @@ import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.ui.dialog.NewFileDialog
 import com.deflatedpickle.rawky.ui.extension.addItem
 import com.deflatedpickle.rawky.ui.menu.MenuFile
-import com.deflatedpickle.rawky.util.DocumentUtil
 import org.oxbow.swingbits.dialog.task.TaskDialog
 
 @Plugin(
@@ -43,7 +43,7 @@ object Launcher {
 
                         val document = this.newDocument(maxRows, maxColumns)
 
-                        DocumentUtil.document = document
+                        Core.document = document
 
                         EventCreateDocument.trigger(document)
                     }

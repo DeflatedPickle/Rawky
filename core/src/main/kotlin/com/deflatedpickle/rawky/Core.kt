@@ -2,6 +2,7 @@ package com.deflatedpickle.rawky
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.rawky.setting.RawkyDocument
 
 // This plugin only exists to be a dependency
 @Plugin(
@@ -16,4 +17,6 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
     type = PluginType.CORE_API
 )
 @Suppress("unused")
-object Core
+object Core {
+    var document: RawkyDocument? = null
+}

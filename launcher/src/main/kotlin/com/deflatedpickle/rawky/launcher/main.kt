@@ -17,11 +17,10 @@ import com.deflatedpickle.haruhi.event.EventWindowShown
 import com.deflatedpickle.haruhi.util.ClassGraphUtil
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
+import com.deflatedpickle.rawky.Core
 import com.deflatedpickle.rawky.launcher.config.LaunchAction
 import com.deflatedpickle.rawky.launcher.config.LauncherSettings
-import com.deflatedpickle.rawky.ui.RawkyToastWindow
 import com.deflatedpickle.rawky.ui.window.Window
-import com.deflatedpickle.rawky.util.DocumentUtil
 import kotlinx.serialization.ImplicitReflectionSerializer
 import org.apache.logging.log4j.LogManager
 import org.oxbow.swingbits.dialog.task.TaskDialogs
@@ -237,8 +236,8 @@ fun main(args: Array<String>) {
     when(settings.onLaunch) {
         LaunchAction.NOTHING -> { }
         LaunchAction.NEW_FILE -> {
-            DocumentUtil.document = Launcher.newDocument(16, 16)
-            EventCreateDocument.trigger(DocumentUtil.document!!)
+            Core.document = Launcher.newDocument(16, 16)
+            EventCreateDocument.trigger(Core.document!!)
         }
     }
 
@@ -251,7 +250,7 @@ fun main(args: Array<String>) {
 
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
         SwingUtilities.updateComponentTreeUI(Window)
-        SwingUtilities.updateComponentTreeUI(RawkyToastWindow)
+        SwingUtilities.updateComponentTreeUI(Window.toastWindow)
 
         Window.isVisible = true
         EventWindowShown.trigger(Window)

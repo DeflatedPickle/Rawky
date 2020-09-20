@@ -2,8 +2,8 @@ package com.deflatedpickle.rawky.pixelgrid
 
 import com.deflatedpickle.haruhi.api.redraw.RedrawActive
 import com.deflatedpickle.haruhi.component.PluginPanel
+import com.deflatedpickle.rawky.Core
 import com.deflatedpickle.rawky.collection.Grid
-import com.deflatedpickle.rawky.util.DocumentUtil
 import java.awt.Color
 import java.awt.Graphics
 
@@ -12,7 +12,7 @@ object PixelGridComponent : PluginPanel() {
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
 
-        val doc = DocumentUtil.document
+        val doc = Core.document
         if (doc != null) {
             val frame = doc.children[doc.selectedIndex]
             val layer = frame.children[frame.selectedIndex]

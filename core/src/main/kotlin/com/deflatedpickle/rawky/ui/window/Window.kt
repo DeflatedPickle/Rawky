@@ -20,6 +20,7 @@ object Window : JFrame() {
     init {
         this.defaultCloseOperation = EXIT_ON_CLOSE
 
+        Window.title = "Rawky"
         Window.jMenuBar = MenuBar
 
         this.add(this.control.contentArea, BorderLayout.CENTER)
