@@ -2,31 +2,31 @@ package com.deflatedpickle.rawky.server.frontend.dialog
 
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.server.ServerPlugin
-import com.deflatedpickle.rawky.ui.constraints.StickEast
-import com.deflatedpickle.rawky.ui.constraints.StickEastFinishLine
-import com.deflatedpickle.rawky.ui.constraints.StickWestFinishLine
+import com.deflatedpickle.rawky.server.frontend.widget.form
 import com.deflatedpickle.tosuto.constraints.FillHorizontalFinishLine
-import org.jdesktop.swingx.JXLabel
 import org.jdesktop.swingx.JXTextField
+import org.jdesktop.swingx.JXTitledSeparator
 import org.oxbow.swingbits.dialog.task.TaskDialog
-import java.awt.Dimension
-import java.awt.GridBagLayout
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import java.io.IOException
 import javax.swing.JCheckBox
-import javax.swing.JPanel
+import javax.swing.SwingUtilities
 
 class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
     companion object {
         fun open() {
             val dialog = DialogStartServer()
 
-            when (dialog.show().tag) {
+            when (dialog.show()?.tag) {
                 CommandTag.OK -> {
                     try {
                         ServerPlugin.startServer(
                             dialog.tcpPortField.text.toInt(),
                             dialog.udpPortField.text.toInt()
                         )
+                        ServerPlugin.hasPassword = dialog.passwordCheckbox.isSelected
+                        ServerPlugin.password = dialog.serverPasswordField.text
 
                         if (dialog.connectCheckbox.isSelected) {
                             try {
@@ -34,7 +34,9 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                                     dialog.timeoutField.text.toInt(),
                                     "localhost",
                                     dialog.tcpPortField.text.toInt(),
-                                    dialog.udpPortField.text.toInt()
+                                    dialog.udpPortField.text.toInt(),
+                                    dialog.serverPasswordField.text,
+                                    "Host"
                                 )
                             } catch (error: IOException) {
                                 ServerPlugin.logger.warn("Failed to connect to TCP: ${dialog.tcpPortField.text}")
@@ -50,31 +52,35 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
         }
     }
 
+    // Details
+    private val passwordCheckbox = JCheckBox("Password", false).apply { isOpaque = false }
+
+    // Connection
     private val timeoutField = JXTextField("Timeout").apply { text = "5000" }
     private val tcpPortField = JXTextField("TCP Port").apply { text = "50000" }
     private val udpPortField = JXTextField("UDP Port").apply { text = "50000" }
     private val connectCheckbox = JCheckBox("Connect", true).apply { isOpaque = false }
+    private val serverPasswordField = JXTextField("Password").apply { isEnabled = false }
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
 
-        this.fixedComponent = JPanel().apply {
-            isOpaque = false
-            layout = GridBagLayout()
+        this.passwordCheckbox.addMouseListener(object : MouseAdapter() {
+            override fun mouseClicked(e: MouseEvent) {
+                serverPasswordField.isEnabled = passwordCheckbox.isSelected
+            }
+        })
 
-            preferredSize = Dimension(200, 20)
+        this.fixedComponent = form {
+            add(JXTitledSeparator("Details"), FillHorizontalFinishLine)
+            addCheckbox(passwordCheckbox)
 
-            add(JXLabel("TCP Port:"), StickEast)
-            add(tcpPortField, FillHorizontalFinishLine)
-
-            add(JXLabel("UDP Port:"), StickEast)
-            add(udpPortField, FillHorizontalFinishLine)
-
-            add(JXLabel("Timeout:"), StickEast)
-            add(timeoutField, FillHorizontalFinishLine)
-
-            add(JXLabel())
-            add(connectCheckbox, StickEastFinishLine)
+            add(JXTitledSeparator("Connection"), FillHorizontalFinishLine)
+            addField("Password", serverPasswordField)
+            addField("TCP Port", tcpPortField)
+            addField("UDP Port", udpPortField)
+            addField("Timeout", timeoutField)
+            addCheckbox(connectCheckbox)
         }
     }
 }
