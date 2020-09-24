@@ -6,7 +6,9 @@ import com.deflatedpickle.haruhi.event.EventWindowShown
 import com.deflatedpickle.rawky.ui.menu.MenuBar
 import com.deflatedpickle.tosuto.ToastWindow
 import java.awt.BorderLayout
+import java.awt.Component
 import javax.swing.JFrame
+import javax.swing.JLayeredPane
 
 object Window : JFrame() {
     @Suppress("MemberVisibilityCanBePrivate")
@@ -20,6 +22,7 @@ object Window : JFrame() {
     init {
         this.defaultCloseOperation = EXIT_ON_CLOSE
 
+        @Suppress("SpellCheckingInspection")
         Window.title = "Rawky"
         Window.jMenuBar = MenuBar
 

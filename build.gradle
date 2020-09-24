@@ -17,6 +17,8 @@ allprojects {
 
         maven { url 'https://jitpack.io' }
         maven { url 'https://github.com/eugener/oxbow/raw/master/maven/repository' }
+        maven { url 'http://clojars.org/repo/' }
+        maven { url 'https://raw.github.com/kristian/better-glass-pane/mvn-repo/' }
     }
 }
 
@@ -34,6 +36,7 @@ run {
     dependencies {
         compile project(':launcher')
         compile project(":pixelgrid")
+        compile project(":server")
 
         implementation 'com.github.DeflatedPickle:sniffle:8f457b7d53'
     }

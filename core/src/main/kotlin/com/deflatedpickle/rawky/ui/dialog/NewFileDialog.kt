@@ -1,8 +1,8 @@
 package com.deflatedpickle.rawky.ui.dialog
 
-import com.deflatedpickle.rawky.ui.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.rawky.ui.constraints.StickEast
 import com.deflatedpickle.rawky.ui.window.Window
+import com.deflatedpickle.tosuto.constraints.FillHorizontalFinishLine
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.GridBagLayout
 import javax.swing.JLabel

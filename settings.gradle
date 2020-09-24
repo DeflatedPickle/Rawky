@@ -4,5 +4,6 @@ include 'master'
 
 include 'core'
 include 'launcher'
+include 'server'
 
 include 'pixelgrid'
