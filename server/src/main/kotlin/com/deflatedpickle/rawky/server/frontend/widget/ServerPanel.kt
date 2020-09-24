@@ -27,6 +27,14 @@ object ServerPanel : BetterGlassPane() {
                     )
                 )
             }
+
+            override fun mouseDragged(e: MouseEvent) {
+                ServerPlugin.client.sendTCP(
+                    RequestMoveMouse(
+                        ServerPanel.mousePosition
+                    )
+                )
+            }
         })
     }
 
@@ -45,7 +53,11 @@ object ServerPanel : BetterGlassPane() {
 
         g2D.color = Color.BLACK
 
+        // Draws every other clients cursor
         for ((index, position) in this.cursorPositions) {
+            // Dodge the current user
+            if (index == ServerPlugin.id) return
+
             val x = position.x
             val y = position.y
 

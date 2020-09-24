@@ -8,7 +8,11 @@ import com.deflatedpickle.haruhi.event.EventWindowShown
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.rawky.server.backend.request.Request
 import com.deflatedpickle.rawky.server.backend.request.RequestMoveMouse
+import com.deflatedpickle.rawky.server.backend.request.RequestUserJoin
+import com.deflatedpickle.rawky.server.backend.response.ResponseJoinFail
 import com.deflatedpickle.rawky.server.backend.response.ResponseMoveMouse
+import com.deflatedpickle.rawky.server.backend.response.ResponseUserJoin
+import com.deflatedpickle.rawky.server.backend.util.JoinFail
 import com.deflatedpickle.rawky.server.frontend.menu.MenuServer
 import com.deflatedpickle.rawky.server.frontend.widget.ServerPanel
 import com.deflatedpickle.rawky.ui.window.Window
@@ -20,8 +24,6 @@ import com.esotericsoftware.kryonet.Server
 import org.apache.logging.log4j.LogManager
 import java.awt.Point
 import java.io.IOException
-import java.net.InetSocketAddress
-import java.util.*
 import javax.swing.JMenu
 
 @Plugin(
@@ -40,9 +42,13 @@ import javax.swing.JMenu
 @Suppress("unused")
 object ServerPlugin {
     var client = Client()
-    var server: Server = Server()
+    var server = Server()
 
-    val uuid: UUID = UUID.randomUUID()
+    var id = -1
+    private set
+
+    var hasPassword = false
+    var password: String? = null
 
     @Suppress("HasPlatformType")
     val logger = LogManager.getLogger()
@@ -66,6 +72,7 @@ object ServerPlugin {
         client.addListener(object : Listener() {
             override fun connected(connection: Connection) {
                 logger.info("Connected to ${connection.remoteAddressTCP}")
+                id = connection.id
             }
 
             override fun received(connection: Connection, any: Any) {
@@ -77,6 +84,12 @@ object ServerPlugin {
                             ServerPanel.cursorPositions[any.id] = any.point
                             ServerPanel.repaint()
                         }
+                    }
+                    is ResponseUserJoin -> {
+                        logger.info("${any.userName} joined")
+                    }
+                    is ResponseJoinFail -> {
+                        logger.warn("Failed to join due to ${any.reason}")
                     }
                 }
             }
@@ -99,6 +112,15 @@ object ServerPlugin {
                                     any.point
                                 )
                             )
+                        }
+                        is RequestUserJoin -> {
+                            if (hasPassword && any.serverPassword != password) {
+                                logger.warn("${any.userName} tried to join, wrong password")
+                                connection.sendUDP(ResponseJoinFail(JoinFail.WRONG_PASSWORD))
+                                connection.close()
+                            } else {
+                                logger.info("${any.userName} joined")
+                            }
                         }
                     }
                 }
@@ -125,17 +147,22 @@ object ServerPlugin {
     private fun registerRequests(kryo: Kryo) {
         with(kryo) {
             register(RequestMoveMouse::class.java)
+            register(RequestUserJoin::class.java)
         }
     }
 
     private fun registerResponses(kryo: Kryo) {
         with(kryo) {
             register(ResponseMoveMouse::class.java)
+            register(ResponseUserJoin::class.java)
+            register(ResponseJoinFail::class.java)
         }
     }
 
     private fun registerSerializers(kryo: Kryo) {
         with(kryo) {
+            register(JoinFail::class.java)
+
             register(Point::class.java)
         }
     }
@@ -153,13 +180,23 @@ object ServerPlugin {
      * Connects to a server
      */
     @Throws(IOException::class)
-    fun connectServer(timeoutMilliseconds: Int, ipAddress: String, tcpPort: Int, udpPort: Int) {
-        this.client.start()
+    fun connectServer(timeoutMilliseconds: Int, ipAddress: String, tcpPort: Int, udpPort: Int, password: String, userName: String) {
+        if (this.client.updateThread == null) {
+            this.client.start()
+        }
+
         this.client.connect(
             timeoutMilliseconds,
             ipAddress,
             tcpPort,
             udpPort
+        )
+
+        this.client.sendUDP(
+            RequestUserJoin(
+                password,
+                userName
+            )
         )
     }
 }
