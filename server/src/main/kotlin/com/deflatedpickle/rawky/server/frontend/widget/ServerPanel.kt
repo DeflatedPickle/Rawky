@@ -14,8 +14,6 @@ import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
 
 object ServerPanel : BetterGlassPane() {
-    val cursorPositions = hashMapOf<Int, Point>()
-
     init {
         this.isOpaque = false
 
@@ -54,19 +52,20 @@ object ServerPanel : BetterGlassPane() {
         g2D.color = Color.BLACK
 
         // Draws every other clients cursor
-        for ((index, position) in this.cursorPositions) {
+        for ((index, user) in ServerPlugin.userMap) {
             // Dodge the current user
-            if (index == ServerPlugin.id) return
+            if (index == ServerPlugin.id) continue
 
-            val x = position.x
-            val y = position.y
+            val x = user.mousePosition.x
+            val y = user.mousePosition.y
 
             g2D.drawString(
-                "$index",
-                x + 8 - g.fontMetrics.stringWidth("$index") / 2,
+                user.userName,
+                x + 8 - g.fontMetrics.stringWidth(user.userName) / 2,
                 y - g.fontMetrics.height / 2
             )
-            g2D.fillRect(x, y, 16, 16)
+            // This will later draw the tool selected by each user
+            g2D.drawRect(x, y, 16, 16)
         }
     }
 }

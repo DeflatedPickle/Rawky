@@ -11,7 +11,6 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 import java.io.IOException
 import javax.swing.JCheckBox
-import javax.swing.SwingUtilities
 
 class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
     companion object {
@@ -72,15 +71,15 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
         })
 
         this.fixedComponent = form {
-            add(JXTitledSeparator("Details"), FillHorizontalFinishLine)
-            addCheckbox(passwordCheckbox)
+            category("Details")
+            check(passwordCheckbox)
 
-            add(JXTitledSeparator("Connection"), FillHorizontalFinishLine)
-            addField("Password", serverPasswordField)
-            addField("TCP Port", tcpPortField)
-            addField("UDP Port", udpPortField)
-            addField("Timeout", timeoutField)
-            addCheckbox(connectCheckbox)
+            category("Connection")
+            field("Password", serverPasswordField)
+            field("TCP Port", tcpPortField)
+            field("UDP Port", udpPortField)
+            field("Timeout", timeoutField)
+            check(connectCheckbox)
         }
     }
 }

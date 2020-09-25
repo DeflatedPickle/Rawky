@@ -6,6 +6,7 @@ import com.deflatedpickle.tosuto.constraints.FillHorizontalFinishLine
 import org.jdesktop.swingx.JXLabel
 import org.jdesktop.swingx.JXPanel
 import org.jdesktop.swingx.JXTextField
+import org.jdesktop.swingx.JXTitledSeparator
 import java.awt.Dimension
 import java.awt.GridBagLayout
 import javax.swing.JCheckBox
@@ -22,14 +23,18 @@ class FormPanel : JXPanel() {
         this.preferredSize = Dimension(200, 20)
     }
 
-    fun addField(label: String, component: JTextField): Pair<JLabel, JTextField> {
+    fun category(label: String) {
+        add(JXTitledSeparator(label), FillHorizontalFinishLine)
+    }
+
+    fun field(label: String, component: JTextField): Pair<JLabel, JTextField> {
         val labelComp = JXLabel("$label:")
         add(labelComp, StickEast)
         add(component, FillHorizontalFinishLine)
         return Pair(labelComp, component)
     }
 
-    fun addCheckbox(component: JCheckBox): JCheckBox {
+    fun check(component: JCheckBox): JCheckBox {
         add(component, StickEastFinishLine)
         return component
     }
