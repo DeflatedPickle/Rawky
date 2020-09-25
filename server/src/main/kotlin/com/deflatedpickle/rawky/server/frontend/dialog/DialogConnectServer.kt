@@ -2,7 +2,6 @@ package com.deflatedpickle.rawky.server.frontend.dialog
 
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.server.ServerPlugin
-import com.deflatedpickle.rawky.server.backend.request.RequestUserJoin
 import com.deflatedpickle.rawky.server.frontend.widget.form
 import com.deflatedpickle.tosuto.constraints.FillHorizontalFinishLine
 import org.jdesktop.swingx.JXTextField
@@ -48,14 +47,14 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
 
         this.fixedComponent = form {
             add(JXTitledSeparator("User"), FillHorizontalFinishLine)
-            addField("Username", userNameField)
+            field("Username", userNameField)
 
             add(JXTitledSeparator("Connection"), FillHorizontalFinishLine)
-            addField("IP Address", ipAddressField)
-            addField("Password", serverPasswordField)
-            addField("TCP Port", tcpPortField)
-            addField("UDP Port", udpPortField)
-            addField("Timeout", timeoutField)
+            field("IP Address", ipAddressField)
+            field("Password", serverPasswordField)
+            field("TCP Port", tcpPortField)
+            field("UDP Port", udpPortField)
+            field("Timeout", timeoutField)
         }
     }
 }

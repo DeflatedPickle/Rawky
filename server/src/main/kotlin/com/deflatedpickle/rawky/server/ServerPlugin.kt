@@ -9,10 +9,12 @@ import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.rawky.server.backend.request.Request
 import com.deflatedpickle.rawky.server.backend.request.RequestMoveMouse
 import com.deflatedpickle.rawky.server.backend.request.RequestUserJoin
+import com.deflatedpickle.rawky.server.backend.response.ResponseActiveUsers
 import com.deflatedpickle.rawky.server.backend.response.ResponseJoinFail
 import com.deflatedpickle.rawky.server.backend.response.ResponseMoveMouse
 import com.deflatedpickle.rawky.server.backend.response.ResponseUserJoin
 import com.deflatedpickle.rawky.server.backend.util.JoinFail
+import com.deflatedpickle.rawky.server.backend.util.User
 import com.deflatedpickle.rawky.server.frontend.menu.MenuServer
 import com.deflatedpickle.rawky.server.frontend.widget.ServerPanel
 import com.deflatedpickle.rawky.ui.window.Window
@@ -44,11 +46,14 @@ object ServerPlugin {
     var client = Client()
     var server = Server()
 
+    // Maybe replace this with the User instance?
     var id = -1
     private set
 
     var hasPassword = false
     var password: String? = null
+
+    var userMap = mutableMapOf<Int, User>()
 
     @Suppress("HasPlatformType")
     val logger = LogManager.getLogger()
@@ -81,7 +86,8 @@ object ServerPlugin {
                 when (any) {
                     is ResponseMoveMouse -> {
                         if (any.point != null) {
-                            ServerPanel.cursorPositions[any.id] = any.point
+                            userMap[any.id]?.mousePosition?.location = any.point
+                            // ServerPanel.cursorPositions[any.id] = any.point
                             ServerPanel.repaint()
                         }
                     }
@@ -90,6 +96,9 @@ object ServerPlugin {
                     }
                     is ResponseJoinFail -> {
                         logger.warn("Failed to join due to ${any.reason}")
+                    }
+                    is ResponseActiveUsers -> {
+                        userMap.putAll(any.activeUsers)
                     }
                 }
             }
@@ -120,6 +129,17 @@ object ServerPlugin {
                                 connection.close()
                             } else {
                                 logger.info("${any.userName} joined")
+
+                                userMap[connection.id] = User(
+                                    id = connection.id,
+                                    userName = any.userName
+                                )
+
+                                server.sendToAllTCP(
+                                    ResponseActiveUsers(
+                                        userMap
+                                    )
+                                )
                             }
                         }
                     }
@@ -156,14 +176,17 @@ object ServerPlugin {
             register(ResponseMoveMouse::class.java)
             register(ResponseUserJoin::class.java)
             register(ResponseJoinFail::class.java)
+            register(ResponseActiveUsers::class.java)
         }
     }
 
     private fun registerSerializers(kryo: Kryo) {
         with(kryo) {
             register(JoinFail::class.java)
+            register(User::class.java)
 
             register(Point::class.java)
+            register(LinkedHashMap::class.java)
         }
     }
 
