@@ -2,12 +2,16 @@ package com.deflatedpickle.rawky.server.frontend.dialog
 
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.server.ServerPlugin
+import com.deflatedpickle.rawky.server.backend.util.Encoding
+import com.deflatedpickle.rawky.server.backend.util.functions.extension.get
+import com.deflatedpickle.rawky.server.backend.util.functions.ipFromByteArray
+import com.deflatedpickle.rawky.server.backend.util.functions.portFromByteArray
 import com.deflatedpickle.rawky.server.frontend.widget.form
-import com.deflatedpickle.tosuto.constraints.FillHorizontalFinishLine
+import com.github.fzakaria.ascii85.Ascii85
 import org.jdesktop.swingx.JXTextField
-import org.jdesktop.swingx.JXTitledSeparator
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.io.IOException
+import javax.swing.JComboBox
 
 class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
     companion object {
@@ -17,16 +21,25 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
             when (dialog.show().tag) {
                 CommandTag.OK -> {
                     try {
+                        val decoded = when (dialog.encodingComboBox.selectedItem as Encoding) {
+                            Encoding.ASCII85 -> {
+                                Ascii85.decode(dialog.securityCodeField.text)
+                            }
+                        }
+
+                        val ipAddress = ipFromByteArray(decoded[0..4])
+                        val tcpPort = portFromByteArray(decoded[4..8])
+                        val udpPort = portFromByteArray(decoded[8..12])
+
                         ServerPlugin.connectServer(
                             dialog.timeoutField.text.toInt(),
-                            dialog.ipAddressField.text,
-                            dialog.tcpPortField.text.toInt(),
-                            dialog.udpPortField.text.toInt(),
-                            dialog.serverPasswordField.text,
+                            ipAddress,
+                            tcpPort,
+                            udpPort,
                             dialog.userNameField.text
                         )
                     } catch (error: IOException) {
-                        ServerPlugin.logger.warn("Failed to connect to IP: ${dialog.ipAddressField.text}, TCP: ${dialog.tcpPortField.text.toInt()}")
+                        ServerPlugin.logger.warn(error)
                     }
                 }
                 else -> {
@@ -35,26 +48,25 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
         }
     }
 
+    // Details
     private val userNameField = JXTextField("Username")
-    private val ipAddressField = JXTextField("IP Address").apply { text = "localhost" }
-    private val serverPasswordField = JXTextField("Password")
-    private val tcpPortField = JXTextField("TCP Port").apply { text = "50000" }
-    private val udpPortField = JXTextField("UDP Port").apply { text = "50000" }
+
+    // Connection
+    private val securityCodeField = JXTextField("Security Code")
+    private val encodingComboBox = JComboBox<Encoding>(Encoding.values())
     private val timeoutField = JXTextField("Timeout").apply { text = "5000" }
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
 
         this.fixedComponent = form {
-            add(JXTitledSeparator("User"), FillHorizontalFinishLine)
-            field("Username", userNameField)
+            category("Details")
+            widget("Username", userNameField)
 
-            add(JXTitledSeparator("Connection"), FillHorizontalFinishLine)
-            field("IP Address", ipAddressField)
-            field("Password", serverPasswordField)
-            field("TCP Port", tcpPortField)
-            field("UDP Port", udpPortField)
-            field("Timeout", timeoutField)
+            category("Connection")
+            widget("Security Code", securityCodeField)
+            widget("Encoding", encodingComboBox)
+            widget("Timeout", timeoutField)
         }
     }
 }
