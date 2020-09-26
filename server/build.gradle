@@ -5,9 +5,15 @@ plugins {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 
+    // Server
     implementation 'com.esotericsoftware:kryo:5.0.0-RC9'
     implementation 'kryonet:kryonet:2.21'
+
+    // Widgets
     implementation 'lc.kra.swing:better-glass-pane:0.1.4'
+
+    // Encoding
+    implementation 'com.github.fzakaria:ascii85:1.2'
 
     compile project(":core")
 }

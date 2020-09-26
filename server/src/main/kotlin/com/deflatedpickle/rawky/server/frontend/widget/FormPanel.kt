@@ -27,7 +27,7 @@ class FormPanel : JXPanel() {
         add(JXTitledSeparator(label), FillHorizontalFinishLine)
     }
 
-    fun field(label: String, component: JTextField): Pair<JLabel, JTextField> {
+    fun <T : JComponent> widget(label: String, component: T): Pair<JLabel, T> {
         val labelComp = JXLabel("$label:")
         add(labelComp, StickEast)
         add(component, FillHorizontalFinishLine)

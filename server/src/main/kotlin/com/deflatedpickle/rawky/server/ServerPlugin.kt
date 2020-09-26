@@ -13,6 +13,7 @@ import com.deflatedpickle.rawky.server.backend.response.ResponseActiveUsers
 import com.deflatedpickle.rawky.server.backend.response.ResponseJoinFail
 import com.deflatedpickle.rawky.server.backend.response.ResponseMoveMouse
 import com.deflatedpickle.rawky.server.backend.response.ResponseUserJoin
+import com.deflatedpickle.rawky.server.backend.util.Encoding
 import com.deflatedpickle.rawky.server.backend.util.JoinFail
 import com.deflatedpickle.rawky.server.backend.util.User
 import com.deflatedpickle.rawky.server.frontend.menu.MenuServer
@@ -26,7 +27,9 @@ import com.esotericsoftware.kryonet.Server
 import org.apache.logging.log4j.LogManager
 import java.awt.Point
 import java.io.IOException
+import java.util.*
 import javax.swing.JMenu
+import kotlin.collections.LinkedHashMap
 
 @Plugin(
     value = "server",
@@ -50,8 +53,7 @@ object ServerPlugin {
     var id = -1
     private set
 
-    var hasPassword = false
-    var password: String? = null
+    var password: ByteArray? = null
 
     var userMap = mutableMapOf<Int, User>()
 
@@ -123,24 +125,18 @@ object ServerPlugin {
                             )
                         }
                         is RequestUserJoin -> {
-                            if (hasPassword && any.serverPassword != password) {
-                                logger.warn("${any.userName} tried to join, wrong password")
-                                connection.sendUDP(ResponseJoinFail(JoinFail.WRONG_PASSWORD))
-                                connection.close()
-                            } else {
-                                logger.info("${any.userName} joined")
+                            logger.info("${any.userName} joined")
 
-                                userMap[connection.id] = User(
-                                    id = connection.id,
-                                    userName = any.userName
-                                )
+                            userMap[connection.id] = User(
+                                id = connection.id,
+                                userName = any.userName
+                            )
 
-                                server.sendToAllTCP(
-                                    ResponseActiveUsers(
-                                        userMap
-                                    )
+                            server.sendToAllTCP(
+                                ResponseActiveUsers(
+                                    userMap
                                 )
-                            }
+                            )
                         }
                     }
                 }
@@ -203,7 +199,7 @@ object ServerPlugin {
      * Connects to a server
      */
     @Throws(IOException::class)
-    fun connectServer(timeoutMilliseconds: Int, ipAddress: String, tcpPort: Int, udpPort: Int, password: String, userName: String) {
+    fun connectServer(timeoutMilliseconds: Int, ipAddress: String, tcpPort: Int, udpPort: Int, userName: String) {
         if (this.client.updateThread == null) {
             this.client.start()
         }
@@ -217,7 +213,6 @@ object ServerPlugin {
 
         this.client.sendUDP(
             RequestUserJoin(
-                password,
                 userName
             )
         )
