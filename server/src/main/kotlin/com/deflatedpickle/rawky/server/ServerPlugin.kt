@@ -97,6 +97,8 @@ object ServerPlugin {
             }
         })
 
+        this.addClientListener()
+
         this.registerRequests(this.client.kryo)
         this.registerResponses(this.client.kryo)
         this.registerSerializers(this.client.kryo)
@@ -135,6 +137,7 @@ object ServerPlugin {
     fun startServer(tcpPort: Int, udpPort: Int) {
         if (!this::server.isInitialized) {
             this.server = Server()
+            this.addServerListener()
 
             this.registerRequests(this.server.kryo)
             this.registerResponses(this.server.kryo)

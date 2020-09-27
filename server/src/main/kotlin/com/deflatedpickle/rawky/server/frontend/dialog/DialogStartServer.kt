@@ -3,8 +3,11 @@ package com.deflatedpickle.rawky.server.frontend.dialog
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.backend.util.Encoding
+import com.deflatedpickle.rawky.server.backend.util.functions.extension.get
 import com.deflatedpickle.rawky.server.backend.util.functions.ipToByteArray
 import com.deflatedpickle.rawky.server.backend.util.functions.getPublicIP
+import com.deflatedpickle.rawky.server.backend.util.functions.ipFromByteArray
+import com.deflatedpickle.rawky.server.backend.util.functions.portFromByteArray
 import com.deflatedpickle.rawky.server.backend.util.functions.portToByteArray
 import com.deflatedpickle.rawky.server.frontend.widget.form
 import com.deflatedpickle.tosuto.ToastItem
@@ -18,6 +21,7 @@ import java.awt.datatransfer.StringSelection
 import java.io.IOException
 import javax.swing.JCheckBox
 import javax.swing.JComboBox
+import kotlin.random.Random
 
 class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
     companion object {
@@ -46,6 +50,9 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                                     UPnP.isMappedTCP(tcp) -> {
                                         ServerPlugin.logger.warn("The TCP port: $tcp, is already mapped")
                                     }
+                                    UPnP.isMappedUDP(udp) -> {
+                                        ServerPlugin.logger.warn("The UDP port: $udp, is already mapped")
+                                    }
                                     UPnP.openPortTCP(tcp) -> {
                                         ServerPlugin.logger.info("The TCP port: $tcp, has been opened")
                                         UPnP.openPortUDP(udp)
@@ -64,10 +71,15 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                         val tcpPortByteArray = portToByteArray(dialog.tcpPortField.text.toInt())
                         val udpPortByteArray = portToByteArray(dialog.udpPortField.text.toInt())
 
+                        // 00111100111100111100
                         val securityCodeByteArray = byteArrayOf(
+                            *Random.nextBytes(2),
                             *ipByteArray,
+                            *Random.nextBytes(2),
                             *tcpPortByteArray,
-                            *udpPortByteArray
+                            *Random.nextBytes(2),
+                            *udpPortByteArray,
+                            *Random.nextBytes(2)
                         )
 
                         val securityCode = when (dialog.encodingComboBox.selectedItem as Encoding) {
@@ -101,7 +113,7 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                             try {
                                 ServerPlugin.connectServer(
                                     dialog.timeoutField.text.toInt(),
-                                    getPublicIP(),
+                                    "localhost",
                                     dialog.tcpPortField.text.toInt(),
                                     dialog.udpPortField.text.toInt(),
                                     "Host"
