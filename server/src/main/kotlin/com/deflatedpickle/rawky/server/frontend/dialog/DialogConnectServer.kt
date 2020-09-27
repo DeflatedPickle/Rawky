@@ -52,7 +52,7 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
     private val userNameField = JXTextField("Username")
 
     // Connection
-    private val securityCodeField = JXTextField("Security Code")
+    private val securityCodeField = JXTextField("Session Code")
     private val encodingComboBox = JComboBox<Encoding>(Encoding.values())
     private val timeoutField = JXTextField("Timeout").apply { text = "5000" }
 
@@ -64,7 +64,7 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
             widget("Username", userNameField)
 
             category("Connection")
-            widget("Security Code", securityCodeField)
+            widget("Session Code", securityCodeField)
             widget("Encoding", encodingComboBox)
             widget("Timeout", timeoutField)
         }

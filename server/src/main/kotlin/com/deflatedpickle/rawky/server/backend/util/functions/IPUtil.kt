@@ -5,7 +5,7 @@ import java.io.InputStreamReader
 import java.net.URL
 import java.nio.ByteBuffer
 
-fun getLocalIP(): String {
+fun getPublicIP(): String {
     val url = URL("http://checkip.amazonaws.com")
     val bufferedReader = BufferedReader(
         InputStreamReader(

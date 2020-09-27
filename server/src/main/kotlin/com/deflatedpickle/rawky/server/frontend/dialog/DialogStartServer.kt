@@ -3,24 +3,19 @@ package com.deflatedpickle.rawky.server.frontend.dialog
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.backend.util.Encoding
-import com.deflatedpickle.rawky.server.backend.util.functions.portFromByteArray
 import com.deflatedpickle.rawky.server.backend.util.functions.ipToByteArray
-import com.deflatedpickle.rawky.server.backend.util.functions.getLocalIP
+import com.deflatedpickle.rawky.server.backend.util.functions.getPublicIP
 import com.deflatedpickle.rawky.server.backend.util.functions.portToByteArray
 import com.deflatedpickle.rawky.server.frontend.widget.form
-import com.deflatedpickle.rawky.server.backend.util.functions.extension.get
-import com.deflatedpickle.rawky.server.backend.util.functions.ipFromByteArray
 import com.deflatedpickle.tosuto.ToastItem
 import com.deflatedpickle.tosuto.action.ToastSingleAction
 import com.dosse.upnp.UPnP
 import com.github.fzakaria.ascii85.Ascii85
-import com.github.underscore.lodash.Base32
 import org.jdesktop.swingx.JXTextField
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.io.IOException
-import java.util.*
 import javax.swing.JCheckBox
 import javax.swing.JComboBox
 
@@ -32,12 +27,40 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
             when (dialog.show()?.tag) {
                 CommandTag.OK -> {
                     try {
+                        val tcp = dialog.tcpPortField.text.toInt()
+                        val udp = dialog.udpPortField.text.toInt()
+
                         ServerPlugin.startServer(
-                            dialog.tcpPortField.text.toInt(),
-                            dialog.udpPortField.text.toInt()
+                            tcp,
+                            udp
                         )
 
-                        val ipByteArray = ipToByteArray(getLocalIP())
+                        if (dialog.uPnPCheckBox.isSelected) {
+                            ServerPlugin.logger.info("Attempting UPnP port forwarding")
+                            if (UPnP.isUPnPAvailable()) {
+                                // Close the ports if they're open
+                                UPnP.closePortTCP(tcp)
+                                UPnP.closePortUDP(udp)
+
+                                when {
+                                    UPnP.isMappedTCP(tcp) -> {
+                                        ServerPlugin.logger.warn("The TCP port: $tcp, is already mapped")
+                                    }
+                                    UPnP.openPortTCP(tcp) -> {
+                                        ServerPlugin.logger.info("The TCP port: $tcp, has been opened")
+                                        UPnP.openPortUDP(udp)
+                                        ServerPlugin.logger.info("The UDP port: $udp, has been opened")
+                                    }
+                                    else -> {
+                                        ServerPlugin.logger.error("UPnP port forwarding failed")
+                                    }
+                                }
+                            } else {
+                                ServerPlugin.logger.warn("UPnP is not available on your network")
+                            }
+                        }
+
+                        val ipByteArray = ipToByteArray(getPublicIP())
                         val tcpPortByteArray = portToByteArray(dialog.tcpPortField.text.toInt())
                         val udpPortByteArray = portToByteArray(dialog.udpPortField.text.toInt())
 
@@ -55,7 +78,7 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
 
                         PluginUtil.toastWindow.addToast(
                             ToastItem(
-                                title = "Security Code",
+                                title = "Session Code",
                                 content = securityCode,
                                 actions = listOf(
                                     ToastSingleAction(
@@ -78,7 +101,7 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                             try {
                                 ServerPlugin.connectServer(
                                     dialog.timeoutField.text.toInt(),
-                                    getLocalIP(),
+                                    getPublicIP(),
                                     dialog.tcpPortField.text.toInt(),
                                     dialog.udpPortField.text.toInt(),
                                     "Host"
@@ -102,6 +125,8 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
         selectedItem = Encoding.values().last()
     }
 
+    private val uPnPCheckBox = JCheckBox("UPnP", true).apply { isOpaque = false }
+
     // Connection
     private val timeoutField = JXTextField("Timeout").apply { text = "5000" }
     private val tcpPortField = JXTextField("TCP Port").apply { text = "50000" }
@@ -114,6 +139,7 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
         this.fixedComponent = form {
             category("Details")
             widget("Encoding", encodingComboBox)
+            check(uPnPCheckBox)
 
             category("Connection")
             widget("TCP Port", tcpPortField)
