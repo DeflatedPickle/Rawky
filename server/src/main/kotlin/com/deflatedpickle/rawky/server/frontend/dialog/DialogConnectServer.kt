@@ -27,9 +27,10 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
                             }
                         }
 
-                        val ipAddress = ipFromByteArray(decoded[0..4])
-                        val tcpPort = portFromByteArray(decoded[4..8])
-                        val udpPort = portFromByteArray(decoded[8..12])
+                        // 00111100111100111100
+                        val ipAddress = ipFromByteArray(decoded[2..6])
+                        val tcpPort = portFromByteArray(decoded[8..12])
+                        val udpPort = portFromByteArray(decoded[14..18])
 
                         ServerPlugin.connectServer(
                             dialog.timeoutField.text.toInt(),
