@@ -2,14 +2,11 @@ package com.deflatedpickle.rawky.server.frontend.widget
 
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.backend.request.RequestMoveMouse
-import com.deflatedpickle.rawky.ui.window.Window
 import lc.kra.swing.BetterGlassPane
 import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
-import java.awt.Point
 import java.awt.RenderingHints
-import java.awt.Toolkit
 import java.awt.event.MouseEvent
 import java.awt.event.MouseMotionAdapter
 

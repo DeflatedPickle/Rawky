@@ -2,9 +2,6 @@ package com.deflatedpickle.rawky.pixelgrid
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.event.EventPanelFocusGained
-import com.deflatedpickle.rawky.discordrpc.util.DiscordRP
-import net.arikia.dev.drpc.DiscordRichPresence
 
 @Plugin(
     value = "pixel_grid",
@@ -23,18 +20,4 @@ import net.arikia.dev.drpc.DiscordRichPresence
     ]
 )
 @Suppress("unused")
-object PixelGridPlugin {
-    init {
-        EventPanelFocusGained.addListener {
-            if (it is PixelGridPanel) {
-                DiscordRP.stack.push(
-                    DiscordRichPresence
-                        .Builder("Pixel Grid")
-                        .setDetails("Editing: null")
-                        .setStartTimestamps(System.currentTimeMillis())
-                        .build()
-                )
-            }
-        }
-    }
-}
+object PixelGridPlugin

@@ -14,8 +14,8 @@ object ActionUtil {
         NewFileDialog.isVisible = true
 
         if (NewFileDialog.result == TaskDialog.StandardCommand.OK) {
-            val maxRows = NewFileDialog.rowInput.text.toInt()
-            val maxColumns = NewFileDialog.columnInput.text.toInt()
+            val maxRows = NewFileDialog.rowInput.value as Int
+            val maxColumns = NewFileDialog.columnInput.value as Int
 
             val document = newDocument(maxRows, maxColumns)
 
@@ -26,9 +26,9 @@ object ActionUtil {
     }
 
     fun newDocument(rows: Int, columns: Int): RawkyDocument = RawkyDocument(
-        children = Array(NewFileDialog.framesInput.text.toInt()) {
+        children = Array(NewFileDialog.framesInput.value as Int) {
             Frame(
-                Array(NewFileDialog.layersInput.text.toInt()) {
+                Array(NewFileDialog.layersInput.value as Int) {
                     Layer(
                         Grid(
                             rows = rows,

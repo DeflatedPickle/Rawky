@@ -1,8 +1,8 @@
 package com.deflatedpickle.rawky.server.frontend.widget
 
-import com.deflatedpickle.rawky.ui.constraints.StickEast
-import com.deflatedpickle.rawky.ui.constraints.StickEastFinishLine
 import com.deflatedpickle.tosuto.constraints.FillHorizontalFinishLine
+import com.deflatedpickle.undulation.constraints.StickEast
+import com.deflatedpickle.undulation.constraints.StickEastFinishLine
 import org.jdesktop.swingx.JXLabel
 import org.jdesktop.swingx.JXPanel
 import org.jdesktop.swingx.JXTextField

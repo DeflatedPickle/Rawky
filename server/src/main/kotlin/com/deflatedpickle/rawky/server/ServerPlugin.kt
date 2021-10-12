@@ -5,6 +5,7 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.event.EventWindowShown
+import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.rawky.server.backend.request.Request
 import com.deflatedpickle.rawky.server.backend.request.RequestMoveMouse
@@ -18,7 +19,6 @@ import com.deflatedpickle.rawky.server.backend.util.ServerProperties
 import com.deflatedpickle.rawky.server.backend.util.User
 import com.deflatedpickle.rawky.server.frontend.menu.MenuServer
 import com.deflatedpickle.rawky.server.frontend.widget.ServerPanel
-import com.deflatedpickle.rawky.ui.window.Window
 import com.dosse.upnp.UPnP
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryonet.Client
@@ -68,12 +68,10 @@ object ServerPlugin {
             toolMenu.add(MenuServer)
         }
 
-        EventWindowShown.addListener {
-            if (it is Window) {
-                ServerPanel.rootPane = Window.rootPane
-                Window.glassPane = ServerPanel
-                Window.glassPane.isVisible = true
-            }
+        EventProgramFinishSetup.addListener {
+            ServerPanel.rootPane = PluginUtil.window.rootPane
+            PluginUtil.window.glassPane = ServerPanel
+            PluginUtil.window.glassPane.isVisible = true
         }
 
         Runtime.getRuntime().addShutdownHook(object : Thread() {

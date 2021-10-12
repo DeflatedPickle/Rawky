@@ -1,6 +1,7 @@
 package com.deflatedpickle.rawky.dialog
 
 import com.deflatedpickle.haruhi.util.PluginUtil
+import com.deflatedpickle.undulation.constraints.FillHorizontal
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.constraints.StickEast
 import org.oxbow.swingbits.dialog.task.TaskDialog
@@ -8,22 +9,16 @@ import java.awt.GridBagLayout
 import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JSeparator
+import javax.swing.JSpinner
 import javax.swing.JTextField
+import javax.swing.SpinnerNumberModel
 
 object NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
-    // Labels
-    private val rowLabel = JLabel("Rows:")
-    private val columnLabel = JLabel("Columns:")
+    val rowInput = JSpinner(SpinnerNumberModel(16, 1, 512, 8))
+    val columnInput = JSpinner(SpinnerNumberModel(16, 1, 512, 8))
 
-    private val framesLabel = JLabel("Initial Frames:")
-    private val layersLabel = JLabel("Initial Layers:")
-
-    // Inputs
-    val rowInput = JTextField("16")
-    val columnInput = JTextField("16")
-
-    val framesInput = JTextField("1")
-    val layersInput = JTextField("1")
+    val framesInput = JSpinner(SpinnerNumberModel(1, 1, 1000, 1))
+    val layersInput = JSpinner(SpinnerNumberModel(1, 1, 1000, 1))
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
@@ -32,17 +27,17 @@ object NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
             isOpaque = false
             layout = GridBagLayout()
 
-            this.add(rowLabel, StickEast)
-            this.add(rowInput, FillHorizontalFinishLine)
-            this.add(columnLabel, StickEast)
-            this.add(columnInput, FillHorizontalFinishLine)
+            add(JLabel("Size:"), StickEast)
+            add(rowInput, FillHorizontal)
+            add(JLabel("X"))
+            add(columnInput, FillHorizontalFinishLine)
 
-            this.add(JSeparator(JSeparator.HORIZONTAL), FillHorizontalFinishLine)
+            add(JSeparator(JSeparator.HORIZONTAL), FillHorizontalFinishLine)
 
-            this.add(framesLabel, StickEast)
-            this.add(framesInput, FillHorizontalFinishLine)
-            this.add(layersLabel, StickEast)
-            this.add(layersInput, FillHorizontalFinishLine)
+            add(JLabel("Initial Frames:"), StickEast)
+            add(framesInput, FillHorizontalFinishLine)
+            add(JLabel("Initial Layers:"), StickEast)
+            add(layersInput, FillHorizontalFinishLine)
         }
     }
 }

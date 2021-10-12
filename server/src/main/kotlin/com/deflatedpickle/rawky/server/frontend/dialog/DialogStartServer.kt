@@ -133,7 +133,7 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
     }
 
     // Details
-    private val encodingComboBox = JComboBox<Encoding>(Encoding.values()).apply {
+    private val encodingComboBox = JComboBox(Encoding.values()).apply {
         selectedItem = Encoding.values().last()
     }
 
