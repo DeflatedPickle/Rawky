@@ -208,8 +208,8 @@ run {
     workingDir 'run'
 
     dependencies {
-        compile project(':launcher')
-        compile project(":pixelgrid")
+        implementation project(':launcher')
+        implementation project(":pixelgrid")
 
         runtimeOnly project(":pixelgrid")
         runtimeOnly project(":server")
