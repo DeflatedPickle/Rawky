@@ -1,8 +1,8 @@
-package com.deflatedpickle.rawky.ui.dialog
+package com.deflatedpickle.rawky.dialog
 
-import com.deflatedpickle.rawky.ui.constraints.FillHorizontalFinishLine
-import com.deflatedpickle.rawky.ui.constraints.StickEast
-import com.deflatedpickle.rawky.ui.window.Window
+import com.deflatedpickle.haruhi.util.PluginUtil
+import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
+import com.deflatedpickle.undulation.constraints.StickEast
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.GridBagLayout
 import javax.swing.JLabel
@@ -10,7 +10,7 @@ import javax.swing.JPanel
 import javax.swing.JSeparator
 import javax.swing.JTextField
 
-object NewFileDialog : TaskDialog(Window, "New File") {
+object NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
     // Labels
     private val rowLabel = JLabel("Rows:")
     private val columnLabel = JLabel("Columns:")

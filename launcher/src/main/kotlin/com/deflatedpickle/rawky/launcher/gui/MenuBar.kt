@@ -1,4 +1,4 @@
-package com.deflatedpickle.rawky.ui.menu
+package com.deflatedpickle.rawky.launcher.gui
 
 import com.deflatedpickle.haruhi.api.Registry
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
@@ -12,17 +12,19 @@ import javax.swing.JMenuBar
 object MenuBar : JMenuBar() {
     private val menuRegistry = object : Registry<String, JMenu>() {
         init {
-            register(MenuCategory.FILE.name, addMenu(MenuFile))
-            register(MenuCategory.TOOLS.name, addMenu(MenuTools))
+            register(MenuCategory.FILE.name, addMenu(JMenu("File")))
+            register(MenuCategory.TOOLS.name, addMenu(JMenu("Tools")))
         }
     }
 
     init {
+        @Suppress("UNCHECKED_CAST")
         RegistryUtil.register(MenuCategory.MENU.name, menuRegistry as Registry<String, Any>)
         EventMenuBarBuild.trigger(this)
     }
 
-    private fun addMenu(menu: JMenu): JMenu {
+    @Suppress("MemberVisibilityCanBePrivate")
+    fun addMenu(menu: JMenu): JMenu {
         EventMenuBuild.trigger(menu)
         this.add(menu)
         EventMenuBarAdd.trigger(menu)

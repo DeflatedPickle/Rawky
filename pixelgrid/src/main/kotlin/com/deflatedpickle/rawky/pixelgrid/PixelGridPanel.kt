@@ -4,16 +4,17 @@ import com.deflatedpickle.haruhi.api.redraw.RedrawActive
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.rawky.Core
 import com.deflatedpickle.rawky.collection.Grid
+import java.awt.BorderLayout
 import java.awt.Color
 import java.awt.Graphics
+import javax.swing.JTextField
 
 @RedrawActive
-object PixelGridComponent : PluginPanel() {
+object PixelGridPanel : PluginPanel() {
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
 
-        val doc = Core.document
-        if (doc != null) {
+        Core.document?.let { doc ->
             val frame = doc.children[doc.selectedIndex]
             val layer = frame.children[frame.selectedIndex]
             val grid = layer.child

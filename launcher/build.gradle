@@ -1,12 +1,12 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm'
-    id 'org.jetbrains.kotlin.plugin.serialization'
-
     id "com.github.johnrengelman.shadow" version "4.0.4"
     id 'edu.sc.seis.launch4j' version '2.4.4'
 }
 
 dependencies {
+    // Terminal colours
+    implementation 'org.fusesource.jansi:jansi:2.3.4'
+
     implementation project(':core')
 }
 

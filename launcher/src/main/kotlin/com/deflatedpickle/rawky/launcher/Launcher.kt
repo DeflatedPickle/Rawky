@@ -1,19 +1,16 @@
 package com.deflatedpickle.rawky.launcher
 
+import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.event.EventCreateDocument
-import com.deflatedpickle.haruhi.event.EventMenuBuild
-import com.deflatedpickle.rawky.Core
-import com.deflatedpickle.rawky.collection.Frame
-import com.deflatedpickle.rawky.collection.Grid
-import com.deflatedpickle.rawky.collection.Layer
+import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
+import com.deflatedpickle.haruhi.util.RegistryUtil
+import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.launcher.config.LauncherSettings
-import com.deflatedpickle.rawky.setting.RawkyDocument
-import com.deflatedpickle.rawky.ui.dialog.NewFileDialog
-import com.deflatedpickle.rawky.ui.extension.addItem
-import com.deflatedpickle.rawky.ui.menu.MenuFile
-import org.oxbow.swingbits.dialog.task.TaskDialog
+import com.deflatedpickle.rawky.launcher.gui.Toolbar
+import com.deflatedpickle.rawky.util.ActionUtil
+import com.deflatedpickle.undulation.extensions.add
+import javax.swing.JMenu
 
 @Plugin(
     value = "launcher",
@@ -32,38 +29,18 @@ import org.oxbow.swingbits.dialog.task.TaskDialog
 @Suppress("unused")
 object Launcher {
     init {
-        EventMenuBuild.addListener {
-            if (it is MenuFile) {
-                it.addItem("New") {
-                    NewFileDialog.isVisible = true
+        EventProgramFinishSetup.addListener {
+            val menuBar = RegistryUtil.get(MenuCategory.MENU.name)
+            (menuBar?.get(MenuCategory.FILE.name) as JMenu).apply {
+                add("New", MonoIcon.FOLDER_NEW) { ActionUtil.newFile() }
+                // add("Open", MonoIcon.FOLDER_OPEN) { ActionUtil.openPack() }
+                addSeparator()
+            }
 
-                    if (NewFileDialog.result == TaskDialog.StandardCommand.OK) {
-                        val maxRows = NewFileDialog.rowInput.text.toInt()
-                        val maxColumns = NewFileDialog.columnInput.text.toInt()
-
-                        val document = this.newDocument(maxRows, maxColumns)
-
-                        Core.document = document
-
-                        EventCreateDocument.trigger(document)
-                    }
-                }
+            Toolbar.apply {
+                add(icon = MonoIcon.FOLDER_NEW, tooltip = "New") { ActionUtil.newFile() }
+                // add(icon = MonoIcon.FOLDER_OPEN, tooltip = "Open Pack") { ActionUtil.openPack() }
             }
         }
     }
-
-    fun newDocument(rows: Int, columns: Int): RawkyDocument = RawkyDocument(
-        children = Array(NewFileDialog.framesInput.text.toInt()) {
-            Frame(
-                Array(NewFileDialog.layersInput.text.toInt()) {
-                    Layer(
-                        Grid(
-                            rows = rows,
-                            columns = columns
-                        )
-                    )
-                }
-            )
-        }
-    )
 }

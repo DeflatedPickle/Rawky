@@ -16,17 +16,17 @@ import net.arikia.dev.drpc.DiscordRichPresence
         This plugin provides most of the basic user functionality of Rawky.
     """,
     type = PluginType.COMPONENT,
-    component = PixelGridComponent::class,
+    component = PixelGridPanel::class,
     dependencies = [
-        "deflatedpickle@core#1.0.0",
-        "deflatedpickle@discord_rpc#1.0.0"
+        "deflatedpickle@core#*",
+        "deflatedpickle@discord_rpc#*"
     ]
 )
 @Suppress("unused")
-object PixelGrid {
+object PixelGridPlugin {
     init {
         EventPanelFocusGained.addListener {
-            if (it is PixelGridComponent) {
+            if (it is PixelGridPanel) {
                 DiscordRP.stack.push(
                     DiscordRichPresence
                         .Builder("Pixel Grid")
