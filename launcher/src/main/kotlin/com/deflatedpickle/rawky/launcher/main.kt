@@ -21,7 +21,7 @@ import com.deflatedpickle.rawky.Core
 import com.deflatedpickle.rawky.launcher.config.LaunchAction
 import com.deflatedpickle.rawky.launcher.config.LauncherSettings
 import com.deflatedpickle.rawky.ui.window.Window
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.InternalSerializationApi
 import org.apache.logging.log4j.LogManager
 import org.oxbow.swingbits.dialog.task.TaskDialogs
 import java.awt.Dimension
@@ -30,7 +30,7 @@ import javax.swing.SwingUtilities
 import javax.swing.UIManager
 import kotlin.reflect.full.createInstance
 
-@OptIn(ImplicitReflectionSerializer::class)
+@OptIn(InternalSerializationApi::class)
 fun main(args: Array<String>) {
     // We set the LaF now so any error pop-ups use the use it
     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
@@ -229,15 +229,15 @@ fun main(args: Array<String>) {
     // For example, if a plugin needs access to a config, they could listen to this
     EventProgramFinishSetup.trigger(true)
 
-    val settings = ConfigUtil.getSettings<LauncherSettings>(
+    ConfigUtil.getSettings<LauncherSettings>(
         "deflatedpickle@launcher#1.0.0"
-    )
-
-    when(settings.onLaunch) {
-        LaunchAction.NOTHING -> { }
-        LaunchAction.NEW_FILE -> {
-            Core.document = Launcher.newDocument(16, 16)
-            EventCreateDocument.trigger(Core.document!!)
+    )?.let { settings ->
+        when(settings.onLaunch) {
+            LaunchAction.NOTHING -> { }
+            LaunchAction.NEW_FILE -> {
+                Core.document = Launcher.newDocument(16, 16)
+                EventCreateDocument.trigger(Core.document!!)
+            }
         }
     }
 

@@ -7,51 +7,68 @@ plugins {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.3.72"
-
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0"
-
-    // Docking framework
-    api 'org.dockingframes:docking-frames-common:1.1.1'
-
-    // Extended Swing widgets
-    api 'org.swinglabs:swingx:1.6.1'
-
-    // Extra widgets
-    api 'org.bidib.com.jidesoft:jide-parent:3.7.6'
-    api 'org.bidib.com.jidesoft:jide-common:3.7.6'
-
-    api 'com.github.mickleness.pumpernickel:pump-swing:66e5a9641c'
-
-    // Dialogs
-    api 'org.oxbow:swing-bits:1.0.0-SNAPSHOT'
+    // Logging
+    api 'org.apache.logging.log4j:log4j-api:2.14.1'
+    api 'org.apache.logging.log4j:log4j-core:2.14.1'
 
     // Utility
-    api 'org.apache.commons:commons-lang3:3.9'
-    api 'com.github.javadev:underscore:1.55'
+    api 'org.apache.commons:commons-lang3:3.12.0'
+    api 'commons-io:commons-io:2.9.0'
+    api 'com.github.javadev:underscore:1.65'
+    api 'com.github.erayerdin:kappdirs:v0.3.1-alpha'
+    api 'net.lingala.zip4j:zip4j:2.8.0'
+    api 'org.reflections:reflections:0.9.12'
+    api 'io.github.classgraph:classgraph:4.8.105'
+    api 'com.github.Vatuu:discord-rpc:1.6.2'
+    api 'me.xdrop:fuzzywuzzy:1.3.1'
+    api "blue.endless:jankson:1.2.1"
+    api 'org.jooq:joor-java-8:0.9.14'
+    api 'com.github.renatoathaydes:kunion:0bd9cbfe38'
 
-    // Allows for plugin loading
-    api 'io.github.classgraph:classgraph:4.8.85'
+    api 'com.deflatedpickle:marvin:'
+    api 'com.deflatedpickle:undulation:'
 
-    // Fuzzy searching
-    api 'me.xdrop:fuzzywuzzy:1.2.0'
+    // Plugin framework
+    api 'com.deflatedpickle:haruhi:'
 
     // Events
     api 'com.github.Fylipp:easy-events:v1.1.0'
 
-    // Discord RCP
-    api 'com.github.Vatuu:discord-rpc:1.6.2'
+    // Extra Swing widgets
+    api 'com.alexandriasoftware.swing:jsplitbutton:1.3.1'
+
+    // api 'org.swinglabs:swingx:1.6.1'
+    api 'com.github.smartbow-gmbh:swingx:ad1f38ebb2'
+    // api 'com.jidesoft:jide-oss:3.6.18'
+    api 'com.formdev:jide-oss:3.7.12'
+
+    // api 'com.github.mikera:swing-console:swing-console-0.1.2'
+    api 'net.java.balloontip:balloontip:1.2.4.1'
+
+    // api 'com.github.mickleness:pumpernickel:7721e5641f'
+    api 'com.github.DeflatedPickle:pumpernickel:9fb38d8acc'
+
+    api 'com.fifesoft:rsyntaxtextarea:3.1.2'
+    api 'com.fifesoft:languagesupport:3.1.1'
+    api 'com.fifesoft:spellchecker:3.1.1'
+    api 'com.fifesoft:autocomplete:3.1.1'
+    api 'com.fifesoft:rstaui:3.1.1'
+    api 'de.tisoft.rsyntaxtextarea:rsyntaxtextarea-antlr4-extension:0.0.2'
+
+    // Docking framework
+    api 'org.dockingframes:docking-frames-common:1.1.1'
+
+    // Dialogs
+    api 'org.oxbow:swing-bits:1.0.0-SNAPSHOT'
+
+    // Layouts
+    api 'com.github.DeflatedPickle:WrapLayout:9ae792ee13'
 
     // Toasts
-    api 'com.github.DeflatedPickle.tosuto:tosuto:1.7.3'
+    api 'com.deflatedpickle:tosuto:'
 
-    // Plugin framework
-    api 'com.github.DeflatedPickle.haruhi:haruhi:871d3a8f3f'
-
-    // Logging
-    compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.11.1'
-    compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.11.1'
+    // Icons
+    api 'com.deflatedpickle:monocons:'
 }
 
 compileKotlin {
