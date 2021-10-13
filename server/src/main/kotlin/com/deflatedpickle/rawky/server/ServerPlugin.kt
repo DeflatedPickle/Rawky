@@ -7,6 +7,7 @@ import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.event.EventWindowShown
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
+import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.server.backend.request.Request
 import com.deflatedpickle.rawky.server.backend.request.RequestMoveMouse
 import com.deflatedpickle.rawky.server.backend.request.RequestUserJoin
@@ -19,6 +20,8 @@ import com.deflatedpickle.rawky.server.backend.util.ServerProperties
 import com.deflatedpickle.rawky.server.backend.util.User
 import com.deflatedpickle.rawky.server.frontend.menu.MenuServer
 import com.deflatedpickle.rawky.server.frontend.widget.ServerPanel
+import com.deflatedpickle.rawky.util.ActionUtil
+import com.deflatedpickle.undulation.extensions.add
 import com.dosse.upnp.UPnP
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryonet.Client
@@ -30,6 +33,7 @@ import java.awt.Point
 import java.io.IOException
 import javax.swing.JMenu
 import kotlin.collections.LinkedHashMap
+import kotlin.math.log
 
 @Plugin(
     value = "server",
@@ -248,5 +252,37 @@ object ServerPlugin {
                 }
             }
         })
+    }
+    
+    fun upnpStart(tcpPort: Int, udpPort: Int) {
+        if (UPnP.isUPnPAvailable()) {
+            logger.info("Attempting UPnP port forwarding")
+
+            if (UPnP.isMappedTCP(tcpPort)) {
+                logger.warn("TCP port '$tcpPort' already mapped")
+                if (UPnP.closePortTCP(tcpPort)) {
+                    logger.warn("Closed TCP port '$tcpPort'")
+                }
+            }
+            if (UPnP.openPortTCP(tcpPort)) {
+                logger.warn("Opened TCP port '$tcpPort'")
+            } else {
+                logger.warn("Failed to open TCP port '$tcpPort'")
+            }
+
+            if (UPnP.isMappedUDP(udpPort)) {
+                logger.warn("UDP port '$udpPort' already mapped")
+                if (UPnP.closePortUDP(udpPort)) {
+                    logger.warn("Closed UDP port '$udpPort'")
+                }
+            }
+            if (UPnP.openPortUDP(udpPort)) {
+                logger.warn("Opened UDP port '$udpPort'")
+            } else {
+                logger.warn("Failed to open UDP port '$udpPort'")
+            }
+        } else {
+            logger.warn("UPnP port-forwarding is not available on your network")
+        }
     }
 }

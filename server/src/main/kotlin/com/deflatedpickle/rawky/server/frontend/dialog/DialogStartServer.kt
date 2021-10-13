@@ -12,6 +12,9 @@ import com.deflatedpickle.rawky.server.backend.util.functions.portToByteArray
 import com.deflatedpickle.rawky.server.frontend.widget.form
 import com.deflatedpickle.tosuto.ToastItem
 import com.deflatedpickle.tosuto.action.ToastSingleAction
+import com.deflatedpickle.undulation.DocumentAdapter
+import com.deflatedpickle.undulation.constraints.StickEast
+import com.deflatedpickle.undulation.constraints.StickEastFinishLine
 import com.dosse.upnp.UPnP
 import com.github.fzakaria.ascii85.Ascii85
 import org.jdesktop.swingx.JXTextField
@@ -21,6 +24,9 @@ import java.awt.datatransfer.StringSelection
 import java.io.IOException
 import javax.swing.JCheckBox
 import javax.swing.JComboBox
+import javax.swing.JSpinner
+import javax.swing.SpinnerNumberModel
+import javax.swing.SwingUtilities
 import kotlin.random.Random
 
 class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
@@ -31,45 +37,21 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
             when (dialog.show()?.tag) {
                 CommandTag.OK -> {
                     try {
-                        val tcp = dialog.tcpPortField.text.toInt()
-                        val udp = dialog.udpPortField.text.toInt()
+                        val tcp = dialog.tcpPortField.value as Int
+                        val udp = dialog.udpPortField.value as Int
+
+                        if (dialog.uPnPCheckBox.isSelected) {
+                            ServerPlugin.upnpStart(tcp, udp)
+                        }
 
                         ServerPlugin.startServer(
                             tcp,
                             udp
                         )
 
-                        if (dialog.uPnPCheckBox.isSelected) {
-                            ServerPlugin.logger.info("Attempting UPnP port forwarding")
-                            if (UPnP.isUPnPAvailable()) {
-                                // Close the ports if they're open
-                                UPnP.closePortTCP(tcp)
-                                UPnP.closePortUDP(udp)
-
-                                when {
-                                    UPnP.isMappedTCP(tcp) -> {
-                                        ServerPlugin.logger.warn("The TCP port: $tcp, is already mapped")
-                                    }
-                                    UPnP.isMappedUDP(udp) -> {
-                                        ServerPlugin.logger.warn("The UDP port: $udp, is already mapped")
-                                    }
-                                    UPnP.openPortTCP(tcp) -> {
-                                        ServerPlugin.logger.info("The TCP port: $tcp, has been opened")
-                                        UPnP.openPortUDP(udp)
-                                        ServerPlugin.logger.info("The UDP port: $udp, has been opened")
-                                    }
-                                    else -> {
-                                        ServerPlugin.logger.error("UPnP port forwarding failed")
-                                    }
-                                }
-                            } else {
-                                ServerPlugin.logger.warn("UPnP is not available on your network")
-                            }
-                        }
-
                         val ipByteArray = ipToByteArray(getPublicIP())
-                        val tcpPortByteArray = portToByteArray(dialog.tcpPortField.text.toInt())
-                        val udpPortByteArray = portToByteArray(dialog.udpPortField.text.toInt())
+                        val tcpPortByteArray = portToByteArray(tcp)
+                        val udpPortByteArray = portToByteArray(udp)
 
                         // 00111100111100111100
                         val securityCodeByteArray = byteArrayOf(
@@ -112,11 +94,11 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                         if (dialog.connectCheckbox.isSelected) {
                             try {
                                 ServerPlugin.connectServer(
-                                    dialog.timeoutField.text.toInt(),
+                                    dialog.timeoutField.value as Int,
                                     "localhost",
-                                    dialog.tcpPortField.text.toInt(),
-                                    dialog.udpPortField.text.toInt(),
-                                    "Host"
+                                    dialog.tcpPortField.value as Int,
+                                    dialog.udpPortField.value as Int,
+                                    dialog.userNameField.text
                                 )
                             } catch (error: IOException) {
                                 ServerPlugin.logger.warn(error)
@@ -132,32 +114,49 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
         }
     }
 
+    private fun validationCheck(): Boolean =
+        userNameField.text.isNotBlank()
+
     // Details
+    private val userNameField = JXTextField("Username").apply {
+        text = "Host"
+
+        this.document.addDocumentListener(DocumentAdapter {
+            fireValidationFinished(validationCheck())
+        })
+    }
+
+    private val portMin = 49_152
+    private val portMax = 65_535
+
+    // Connection
+    private val timeoutField = JSpinner(SpinnerNumberModel(5000, 0, 5000 * 5, 5))
+    private val tcpPortField = JSpinner(SpinnerNumberModel(50000, portMin, portMax, 1))
+    private val udpPortField = JSpinner(SpinnerNumberModel(50000, portMin, portMax, 1))
     private val encodingComboBox = JComboBox(Encoding.values()).apply {
         selectedItem = Encoding.values().last()
     }
-
     private val uPnPCheckBox = JCheckBox("UPnP", true).apply { isOpaque = false }
-
-    // Connection
-    private val timeoutField = JXTextField("Timeout").apply { text = "5000" }
-    private val tcpPortField = JXTextField("TCP Port").apply { text = "50000" }
-    private val udpPortField = JXTextField("UDP Port").apply { text = "50000" }
     private val connectCheckbox = JCheckBox("Connect", true).apply { isOpaque = false }
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
 
+        SwingUtilities.invokeLater {
+            fireValidationFinished(validationCheck())
+        }
+
         this.fixedComponent = form {
             category("Details")
-            widget("Encoding", encodingComboBox)
-            check(uPnPCheckBox)
+            widget("Username", userNameField)
 
             category("Connection")
             widget("TCP Port", tcpPortField)
             widget("UDP Port", udpPortField)
+            widget("Encoding", encodingComboBox)
             widget("Timeout", timeoutField)
-            check(connectCheckbox)
+            add(uPnPCheckBox, StickEast)
+            add(connectCheckbox, StickEastFinishLine)
         }
     }
 }

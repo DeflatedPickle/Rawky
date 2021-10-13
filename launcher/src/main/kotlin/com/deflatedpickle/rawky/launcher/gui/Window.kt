@@ -25,4 +25,9 @@ object Window : JFrame("Quiver") {
 
         this.pack()
     }
+
+    override fun setVisible(b: Boolean) {
+        super.setVisible(b)
+        toastWindow.isVisible = b
+    }
 }

@@ -7,11 +7,15 @@ import com.deflatedpickle.rawky.server.backend.util.functions.extension.get
 import com.deflatedpickle.rawky.server.backend.util.functions.ipFromByteArray
 import com.deflatedpickle.rawky.server.backend.util.functions.portFromByteArray
 import com.deflatedpickle.rawky.server.frontend.widget.form
+import com.deflatedpickle.undulation.DocumentAdapter
 import com.github.fzakaria.ascii85.Ascii85
 import org.jdesktop.swingx.JXTextField
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.io.IOException
 import javax.swing.JComboBox
+import javax.swing.JSpinner
+import javax.swing.SpinnerNumberModel
+import javax.swing.SwingUtilities
 
 class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
     companion object {
@@ -33,7 +37,7 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
                         val udpPort = portFromByteArray(decoded[14..18])
 
                         ServerPlugin.connectServer(
-                            dialog.timeoutField.text.toInt(),
+                            dialog.timeoutField.value as Int,
                             ipAddress,
                             tcpPort,
                             udpPort,
@@ -49,16 +53,31 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
         }
     }
 
+    private fun validationCheck(): Boolean =
+        userNameField.text.isNotBlank() && securityCodeField.text.isNotBlank()
+
     // Details
-    private val userNameField = JXTextField("Username")
+    private val userNameField = JXTextField("Username").apply {
+        this.document.addDocumentListener(DocumentAdapter {
+            fireValidationFinished(validationCheck())
+        })
+    }
 
     // Connection
-    private val securityCodeField = JXTextField("Session Code")
-    private val encodingComboBox = JComboBox<Encoding>(Encoding.values())
-    private val timeoutField = JXTextField("Timeout").apply { text = "5000" }
+    private val securityCodeField = JXTextField("Session Code").apply {
+        this.document.addDocumentListener(DocumentAdapter {
+            fireValidationFinished(validationCheck())
+        })
+    }
+    private val encodingComboBox = JComboBox(Encoding.values())
+    private val timeoutField = JSpinner(SpinnerNumberModel(5000, 0, 5000 * 5, 5))
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
+
+        SwingUtilities.invokeLater {
+            fireValidationFinished(validationCheck())
+        }
 
         this.fixedComponent = form {
             category("Details")

@@ -33,9 +33,4 @@ class FormPanel : JXPanel() {
         add(component, FillHorizontalFinishLine)
         return Pair(labelComp, component)
     }
-
-    fun check(component: JCheckBox): JCheckBox {
-        add(component, StickEastFinishLine)
-        return component
-    }
 }
