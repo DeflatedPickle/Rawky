@@ -30,11 +30,16 @@ class Grid(
             }
 
             Cell(
-                Rectangle(
+                row = row,
+                column = column,
+                polygon = Rectangle(
                     row * 16, column * 16,
                     width, height
                 )
             )
         }
     }
+
+    operator fun get(row: Int, column: Int) = children[(column * columns) + row]
+    operator fun set(row: Int, column: Int, value: Cell) = children.set((column * columns) + row, value)
 }

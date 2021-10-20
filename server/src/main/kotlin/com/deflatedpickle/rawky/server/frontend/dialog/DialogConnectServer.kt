@@ -9,6 +9,7 @@ import com.deflatedpickle.rawky.server.backend.util.functions.portFromByteArray
 import com.deflatedpickle.rawky.server.frontend.widget.form
 import com.deflatedpickle.undulation.DocumentAdapter
 import com.github.fzakaria.ascii85.Ascii85
+import org.apache.logging.log4j.LogManager
 import org.jdesktop.swingx.JXTextField
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.io.IOException
@@ -19,6 +20,8 @@ import javax.swing.SwingUtilities
 
 class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
     companion object {
+        private val logger = LogManager.getLogger()
+
         fun open() {
             val dialog = DialogConnectServer()
 
@@ -44,7 +47,7 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
                             dialog.userNameField.text
                         )
                     } catch (error: IOException) {
-                        ServerPlugin.logger.warn(error)
+                        logger.warn(error)
                     }
                 }
                 else -> {
@@ -58,6 +61,8 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
 
     // Details
     private val userNameField = JXTextField("Username").apply {
+        text = "User"
+
         this.document.addDocumentListener(DocumentAdapter {
             fireValidationFinished(validationCheck())
         })

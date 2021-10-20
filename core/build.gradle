@@ -24,6 +24,7 @@ dependencies {
     api "blue.endless:jankson:1.2.1"
     api 'org.jooq:joor-java-8:0.9.14'
     api 'com.github.renatoathaydes:kunion:0bd9cbfe38'
+    // api 'org.javassist:javassist:3.28.0-GA'
 
     api 'com.deflatedpickle:marvin:'
     api 'com.deflatedpickle:undulation:'

@@ -17,6 +17,7 @@ import com.deflatedpickle.undulation.constraints.StickEast
 import com.deflatedpickle.undulation.constraints.StickEastFinishLine
 import com.dosse.upnp.UPnP
 import com.github.fzakaria.ascii85.Ascii85
+import org.apache.logging.log4j.LogManager
 import org.jdesktop.swingx.JXTextField
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.Toolkit
@@ -31,6 +32,8 @@ import kotlin.random.Random
 
 class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
     companion object {
+        private val logger = LogManager.getLogger()
+
         fun open() {
             val dialog = DialogStartServer()
 
@@ -101,11 +104,11 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                                     dialog.userNameField.text
                                 )
                             } catch (error: IOException) {
-                                ServerPlugin.logger.warn(error)
+                                logger.warn(error)
                             }
                         }
                     } catch (error: IOException) {
-                        ServerPlugin.logger.warn(error)
+                        logger.warn(error)
                     }
                 }
                 else -> {

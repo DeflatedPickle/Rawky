@@ -2,7 +2,16 @@ package com.deflatedpickle.rawky.pixelgrid
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.event.EventCreateDocument
+import com.deflatedpickle.haruhi.event.EventSerializeConfig
+import com.deflatedpickle.haruhi.util.PluginUtil
+import com.deflatedpickle.rawky.api.Tool
+import com.deflatedpickle.rawky.event.EventChangeTool
+import com.deflatedpickle.rawky.event.EventUpdateCell
+import com.deflatedpickle.rawky.event.EventUpdateGrid
+import kotlinx.serialization.ExperimentalSerializationApi
 
+@ExperimentalSerializationApi
 @Plugin(
     value = "pixel_grid",
     author = "DeflatedPickle",
@@ -20,4 +29,24 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
     ]
 )
 @Suppress("unused")
-object PixelGridPlugin
+object PixelGridPlugin {
+    init {
+        EventCreateDocument.addListener {
+            PixelGridPanel.repaint()
+        }
+
+        EventUpdateGrid.addListener {
+            PixelGridPanel.repaint()
+        }
+
+        EventChangeTool.addListener {
+            PluginUtil.window.cursor = it.asCursor()
+        }
+
+        EventSerializeConfig.addListener {
+            if ("core" in it.name) {
+                EventChangeTool.trigger(Tool.current)
+            }
+        }
+    }
+}

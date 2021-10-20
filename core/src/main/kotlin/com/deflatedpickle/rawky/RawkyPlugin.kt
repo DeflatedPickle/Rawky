@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.deflatedpickle.rawky
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
@@ -12,11 +14,12 @@ import com.deflatedpickle.rawky.setting.RawkyDocument
     description = """
         The core program
         <br>
-        This provides the whole API for Rawky.
+        This provides the main API for Rawky
     """,
-    type = PluginType.CORE_API
+    type = PluginType.CORE_API,
+    settings = RawkySettings::class,
 )
 @Suppress("unused")
-object Core {
+object RawkyPlugin {
     var document: RawkyDocument? = null
 }

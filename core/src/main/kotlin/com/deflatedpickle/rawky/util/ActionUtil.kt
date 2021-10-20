@@ -1,7 +1,7 @@
 package com.deflatedpickle.rawky.util
 
 import com.deflatedpickle.haruhi.event.EventCreateDocument
-import com.deflatedpickle.rawky.Core
+import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
@@ -16,19 +16,21 @@ object ActionUtil {
         if (NewFileDialog.result == TaskDialog.StandardCommand.OK) {
             val maxRows = NewFileDialog.rowInput.value as Int
             val maxColumns = NewFileDialog.columnInput.value as Int
+            val frames = NewFileDialog.framesInput.value as Int
+            val layers = NewFileDialog.layersInput.value as Int
 
-            val document = newDocument(maxRows, maxColumns)
+            val document = newDocument(maxRows, maxColumns, frames, layers)
 
-            Core.document = document
+            RawkyPlugin.document = document
 
             EventCreateDocument.trigger(document)
         }
     }
 
-    fun newDocument(rows: Int, columns: Int): RawkyDocument = RawkyDocument(
-        children = Array(NewFileDialog.framesInput.value as Int) {
+    fun newDocument(rows: Int, columns: Int, frames: Int, layers: Int): RawkyDocument = RawkyDocument(
+        children = Array(frames) {
             Frame(
-                Array(NewFileDialog.layersInput.value as Int) {
+                Array(layers) {
                     Layer(
                         Grid(
                             rows = rows,

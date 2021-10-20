@@ -19,6 +19,14 @@ include 'server'
 
 include 'pixelgrid'
 
+[
+        'pencil',
+].each {
+    include it
+    project(":$it").projectDir = new File(settingsDir, "tools/$it")
+}
+
+
 // Include the libraries I use and own
 // This is so I can fix any issues easier
 [

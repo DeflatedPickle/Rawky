@@ -3,25 +3,32 @@ package com.deflatedpickle.rawky.server
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
-import com.deflatedpickle.haruhi.event.EventWindowShown
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
-import com.deflatedpickle.monocons.MonoIcon
-import com.deflatedpickle.rawky.server.backend.request.Request
+import com.deflatedpickle.marvin.Colour
+import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.collection.Cell
+import com.deflatedpickle.rawky.collection.Grid
+import com.deflatedpickle.rawky.event.EventUpdateGrid
+import com.deflatedpickle.rawky.server.backend.event.EventJoinServer
+import com.deflatedpickle.rawky.server.backend.event.EventStartServer
 import com.deflatedpickle.rawky.server.backend.request.RequestMoveMouse
 import com.deflatedpickle.rawky.server.backend.request.RequestUserJoin
 import com.deflatedpickle.rawky.server.backend.response.ResponseActiveUsers
 import com.deflatedpickle.rawky.server.backend.response.ResponseJoinFail
 import com.deflatedpickle.rawky.server.backend.response.ResponseMoveMouse
+import com.deflatedpickle.rawky.server.backend.response.ResponseNewDocument
+import com.deflatedpickle.rawky.server.backend.query.QueryUpdateCell
 import com.deflatedpickle.rawky.server.backend.response.ResponseUserJoin
 import com.deflatedpickle.rawky.server.backend.util.JoinFail
 import com.deflatedpickle.rawky.server.backend.util.ServerProperties
-import com.deflatedpickle.rawky.server.backend.util.User
+import com.deflatedpickle.rawky.server.backend.util.user.IUser
+import com.deflatedpickle.rawky.server.backend.util.user.User
 import com.deflatedpickle.rawky.server.frontend.menu.MenuServer
 import com.deflatedpickle.rawky.server.frontend.widget.ServerPanel
 import com.deflatedpickle.rawky.util.ActionUtil
-import com.deflatedpickle.undulation.extensions.add
 import com.dosse.upnp.UPnP
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryonet.Client
@@ -30,10 +37,9 @@ import com.esotericsoftware.kryonet.Listener
 import com.esotericsoftware.kryonet.Server
 import org.apache.logging.log4j.LogManager
 import java.awt.Point
+import java.awt.Rectangle
 import java.io.IOException
 import javax.swing.JMenu
-import kotlin.collections.LinkedHashMap
-import kotlin.math.log
 
 @Plugin(
     value = "server",
@@ -45,13 +51,16 @@ import kotlin.math.log
     """,
     type = PluginType.OTHER,
     dependencies = [
-        "deflatedpickle@core#1.0.0"
-    ]
+        "deflatedpickle@core#*"
+    ],
+    settings = ServerSettings::class
 )
 @Suppress("unused")
 object ServerPlugin {
+    private val logger = LogManager.getLogger()
+
     val client = Client()
-    lateinit var server: Server
+    var server: Server? = null
 
     // Maybe replace this with the User instance?
     var id = -1
@@ -59,10 +68,8 @@ object ServerPlugin {
 
     lateinit var serverProperties: ServerProperties
 
-    var userMap = mutableMapOf<Int, User>()
-
-    @Suppress("HasPlatformType")
-    val logger = LogManager.getLogger()
+    var userMap = mutableMapOf<Int, IUser>()
+    var grid: Grid? = null
 
     init {
         EventProgramFinishSetup.addListener {
@@ -85,9 +92,11 @@ object ServerPlugin {
                     client.stop()
                 }
 
-                if (this@ServerPlugin::server.isInitialized && server.updateThread != null) {
-                    logger.info("Closing the server thread")
-                    server.close()
+                server?.let { server ->
+                    if (server.updateThread != null) {
+                        logger.info("Closing the server thread")
+                        server.close()
+                    }
                 }
 
                 if (this@ServerPlugin::serverProperties.isInitialized) {
@@ -98,12 +107,12 @@ object ServerPlugin {
                 }
             }
         })
+    }
 
-        this.addClientListener()
-
-        this.registerRequests(this.client.kryo)
-        this.registerResponses(this.client.kryo)
-        this.registerSerializers(this.client.kryo)
+    private fun registerQueries(kryo: Kryo) {
+        with(kryo) {
+            register(QueryUpdateCell::class.java)
+        }
     }
 
     private fun registerRequests(kryo: Kryo) {
@@ -117,18 +126,36 @@ object ServerPlugin {
         with(kryo) {
             register(ResponseMoveMouse::class.java)
             register(ResponseUserJoin::class.java)
+
             register(ResponseJoinFail::class.java)
             register(ResponseActiveUsers::class.java)
+
+            register(ResponseNewDocument::class.java)
         }
     }
 
     private fun registerSerializers(kryo: Kryo) {
         with(kryo) {
+            register(LinkedHashMap::class.java)
+            register(FloatArray::class.java)
+
+            register(Point::class.java)
+            // register(Color::class.java)
+            register(Rectangle::class.java)
+
+            register(Colour::class.java)
+
             register(JoinFail::class.java)
             register(User::class.java)
 
-            register(Point::class.java)
-            register(LinkedHashMap::class.java)
+            register(Cell::class.java)
+            // register(Array<Cell>::class.java)
+            // register(Grid::class.java)
+            // register(Layer::class.java)
+            // register(Array<Layer>::class.java)
+            // register(Frame::class.java)
+            // register(Array<Frame>::class.java)
+            // register(RawkyDocument::class.java)
         }
     }
 
@@ -137,40 +164,47 @@ object ServerPlugin {
      */
     @Throws(IOException::class)
     fun startServer(tcpPort: Int, udpPort: Int) {
-        if (!this::server.isInitialized) {
+        if (server == null) {
             this.server = Server()
             this.addServerListener()
 
-            this.registerRequests(this.server.kryo)
-            this.registerResponses(this.server.kryo)
-            this.registerSerializers(this.server.kryo)
+            server?.let { server ->
+                registerQueries(server.kryo)
+                this.registerRequests(server.kryo)
+                this.registerResponses(server.kryo)
+                this.registerSerializers(server.kryo)
+            }
         }
 
-        if (this.server.updateThread == null) {
-            this.server.start()
-        }
+        server?.let { server ->
+            if (server.updateThread == null) {
+                server.start()
+            }
 
-        this.server.bind(
-            tcpPort,
-            udpPort
-        )
+            server.bind(
+                tcpPort,
+                udpPort
+            )
+        }
 
         this.serverProperties = ServerProperties(
             tcpPort,
             udpPort
         )
+
+        EventStartServer.trigger(null)
     }
 
     private fun addServerListener() {
-        server.addListener(object : Listener() {
-            override fun connected(connection: Connection) {
-                logger.info("Connected to ${connection.remoteAddressTCP}")
-            }
+        server?.let { server ->
+            server.addListener(object : Listener() {
+                override fun connected(connection: Connection) {
+                    logger.info("Connected to ${connection.remoteAddressTCP}")
+                }
 
-            override fun received(connection: Connection, any: Any) {
-                logger.trace("Received $any from ${connection.remoteAddressTCP}")
+                override fun received(connection: Connection, any: Any) {
+                    logger.debug("Received $any from ${connection.remoteAddressTCP}")
 
-                if (any is Request) {
                     when (any) {
                         is RequestMoveMouse -> {
                             server.sendToAllTCP(
@@ -194,10 +228,11 @@ object ServerPlugin {
                                 )
                             )
                         }
+                        is QueryUpdateCell -> updateCell(any)
                     }
                 }
-            }
-        })
+            })
+        }
     }
 
     /**
@@ -205,6 +240,13 @@ object ServerPlugin {
      */
     @Throws(IOException::class)
     fun connectServer(timeoutMilliseconds: Int, ipAddress: String, tcpPort: Int, udpPort: Int, userName: String) {
+        this.addClientListener()
+
+        registerQueries(client.kryo)
+        this.registerRequests(this.client.kryo)
+        this.registerResponses(this.client.kryo)
+        this.registerSerializers(this.client.kryo)
+
         if (this.client.updateThread == null) {
             this.client.start()
         }
@@ -221,6 +263,8 @@ object ServerPlugin {
                 userName
             )
         )
+
+        EventJoinServer.trigger(null)
     }
 
     private fun addClientListener() {
@@ -240,20 +284,27 @@ object ServerPlugin {
                             ServerPanel.repaint()
                         }
                     }
-                    is ResponseUserJoin -> {
-                        logger.info("${any.userName} joined")
+                    is ResponseUserJoin -> logger.info("${any.userName} joined")
+                    is ResponseJoinFail -> logger.warn("Failed to join due to ${any.reason}")
+                    is ResponseActiveUsers -> userMap.putAll(any.activeUsers)
+                    is ResponseNewDocument -> {
+                        if (server == null) {
+                            logger.debug("Creating a new document from server info")
+                            RawkyPlugin.document = ActionUtil.newDocument(
+                                any.rows,
+                                any.columns,
+                                any.frames,
+                                any.layers,
+                            )
+                            EventCreateDocument.trigger(RawkyPlugin.document!!)
+                        }
                     }
-                    is ResponseJoinFail -> {
-                        logger.warn("Failed to join due to ${any.reason}")
-                    }
-                    is ResponseActiveUsers -> {
-                        userMap.putAll(any.activeUsers)
-                    }
+                    is QueryUpdateCell -> updateCell(any)
                 }
             }
         })
     }
-    
+
     fun upnpStart(tcpPort: Int, udpPort: Int) {
         if (UPnP.isUPnPAvailable()) {
             logger.info("Attempting UPnP port forwarding")
@@ -283,6 +334,22 @@ object ServerPlugin {
             }
         } else {
             logger.warn("UPnP port-forwarding is not available on your network")
+        }
+    }
+
+    fun updateCell(any: QueryUpdateCell) {
+        RawkyPlugin.document?.let { doc ->
+            val frame = doc.children[doc.selectedIndex]
+            val layer = frame.children[frame.selectedIndex]
+            val grid = layer.child
+
+            any.cell?.let { cell ->
+                grid[cell.row, cell.column] {
+                    colour = cell.colour
+                }
+            }
+
+            EventUpdateGrid.trigger(grid)
         }
     }
 }

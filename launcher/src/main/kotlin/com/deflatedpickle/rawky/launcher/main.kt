@@ -2,28 +2,18 @@ package com.deflatedpickle.rawky.launcher
 
 import com.deflatedpickle.haruhi.api.plugin.DependencyComparator
 import com.deflatedpickle.haruhi.api.plugin.Plugin
-import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.component.PluginPanel
-import com.deflatedpickle.haruhi.event.EventCreateDocument
-import com.deflatedpickle.haruhi.event.EventCreateFile
 import com.deflatedpickle.haruhi.event.EventCreatePluginComponent
 import com.deflatedpickle.haruhi.event.EventCreatedPluginComponents
 import com.deflatedpickle.haruhi.event.EventDeserializedConfig
-import com.deflatedpickle.haruhi.event.EventDockDeployed
 import com.deflatedpickle.haruhi.event.EventLoadedPlugins
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.event.EventProgramShutdown
-import com.deflatedpickle.haruhi.event.EventSortedPluginLoadOrder
-import com.deflatedpickle.haruhi.event.EventWindowShown
 import com.deflatedpickle.haruhi.util.ClassGraphUtil
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.marvin.util.OSUtil
-import com.deflatedpickle.rawky.Core
-import com.deflatedpickle.rawky.launcher.config.LaunchAction
-import com.deflatedpickle.rawky.launcher.config.LauncherSettings
 import com.deflatedpickle.rawky.launcher.gui.Window
-import com.deflatedpickle.rawky.util.ActionUtil
 import com.jidesoft.plaf.LookAndFeelFactory
 import kotlinx.serialization.InternalSerializationApi
 import org.apache.logging.log4j.LogManager
@@ -32,8 +22,6 @@ import org.oxbow.swingbits.dialog.task.TaskDialogs
 import java.awt.Dimension
 import java.io.File
 import javax.swing.SwingUtilities
-import javax.swing.UIManager
-import kotlin.reflect.full.createInstance
 import kotlin.system.exitProcess
 
 @InternalSerializationApi
