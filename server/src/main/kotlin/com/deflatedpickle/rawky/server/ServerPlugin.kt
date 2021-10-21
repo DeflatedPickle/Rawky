@@ -21,11 +21,12 @@ import com.deflatedpickle.rawky.server.backend.response.ResponseJoinFail
 import com.deflatedpickle.rawky.server.backend.response.ResponseMoveMouse
 import com.deflatedpickle.rawky.server.backend.response.ResponseNewDocument
 import com.deflatedpickle.rawky.server.backend.query.QueryUpdateCell
+import com.deflatedpickle.rawky.server.backend.request.RequestUserLeave
 import com.deflatedpickle.rawky.server.backend.response.ResponseUserJoin
+import com.deflatedpickle.rawky.server.backend.response.ResponseUserLeave
 import com.deflatedpickle.rawky.server.backend.util.JoinFail
 import com.deflatedpickle.rawky.server.backend.util.ServerProperties
-import com.deflatedpickle.rawky.server.backend.util.user.IUser
-import com.deflatedpickle.rawky.server.backend.util.user.User
+import com.deflatedpickle.rawky.server.backend.util.User
 import com.deflatedpickle.rawky.server.frontend.menu.MenuServer
 import com.deflatedpickle.rawky.server.frontend.widget.ServerPanel
 import com.deflatedpickle.rawky.util.ActionUtil
@@ -39,7 +40,9 @@ import org.apache.logging.log4j.LogManager
 import java.awt.Point
 import java.awt.Rectangle
 import java.io.IOException
+import java.util.*
 import javax.swing.JMenu
+import kotlin.collections.LinkedHashMap
 
 @Plugin(
     value = "server",
@@ -59,7 +62,7 @@ import javax.swing.JMenu
 object ServerPlugin {
     private val logger = LogManager.getLogger()
 
-    val client = Client()
+    var client = Client()
     var server: Server? = null
 
     // Maybe replace this with the User instance?
@@ -68,7 +71,7 @@ object ServerPlugin {
 
     lateinit var serverProperties: ServerProperties
 
-    var userMap = mutableMapOf<Int, IUser>()
+    var userMap = mutableMapOf<Int, User>()
     var grid: Grid? = null
 
     init {
@@ -118,14 +121,18 @@ object ServerPlugin {
     private fun registerRequests(kryo: Kryo) {
         with(kryo) {
             register(RequestMoveMouse::class.java)
+
             register(RequestUserJoin::class.java)
+            register(RequestUserLeave::class.java)
         }
     }
 
     private fun registerResponses(kryo: Kryo) {
         with(kryo) {
             register(ResponseMoveMouse::class.java)
+
             register(ResponseUserJoin::class.java)
+            register(ResponseJoinFail::class.java)
 
             register(ResponseJoinFail::class.java)
             register(ResponseActiveUsers::class.java)
@@ -195,6 +202,22 @@ object ServerPlugin {
         EventStartServer.trigger(null)
     }
 
+    fun closeServer() {
+        leaveServer()
+        userMap.clear()
+
+        server?.let { server ->
+            server.sendToAllTCP(
+                ResponseActiveUsers(
+                    userMap
+                )
+            )
+            server.close()
+        }
+
+        server = null
+    }
+
     private fun addServerListener() {
         server?.let { server ->
             server.addListener(object : Listener() {
@@ -203,7 +226,7 @@ object ServerPlugin {
                 }
 
                 override fun received(connection: Connection, any: Any) {
-                    logger.debug("Received $any from ${connection.remoteAddressTCP}")
+                    logger.trace("Received $any from ${connection.remoteAddressTCP}")
 
                     when (any) {
                         is RequestMoveMouse -> {
@@ -221,6 +244,18 @@ object ServerPlugin {
                                 id = connection.id,
                                 userName = any.userName
                             )
+
+                            server.sendToAllTCP(
+                                ResponseActiveUsers(
+                                    userMap
+                                )
+                            )
+                        }
+                        is RequestUserLeave -> {
+                            logger.info("${any.userName} left")
+
+                            userMap.remove(connection.id)
+                            ServerPanel.repaint()
 
                             server.sendToAllTCP(
                                 ResponseActiveUsers(
@@ -267,6 +302,13 @@ object ServerPlugin {
         EventJoinServer.trigger(null)
     }
 
+    fun leaveServer() {
+        client.sendTCP(RequestUserLeave())
+        userMap.clear()
+        client.stop()
+        client = Client()
+    }
+
     private fun addClientListener() {
         client.addListener(object : Listener() {
             override fun connected(connection: Connection) {
@@ -285,6 +327,7 @@ object ServerPlugin {
                         }
                     }
                     is ResponseUserJoin -> logger.info("${any.userName} joined")
+                    is ResponseUserLeave -> logger.info("${any.userName} left")
                     is ResponseJoinFail -> logger.warn("Failed to join due to ${any.reason}")
                     is ResponseActiveUsers -> userMap.putAll(any.activeUsers)
                     is ResponseNewDocument -> {

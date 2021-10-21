@@ -27,28 +27,24 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
 
             when (dialog.show().tag) {
                 CommandTag.OK -> {
-                    try {
-                        val decoded = when (dialog.encodingComboBox.selectedItem as Encoding) {
-                            Encoding.ASCII85 -> {
-                                Ascii85.decode(dialog.securityCodeField.text)
-                            }
+                    val decoded = when (dialog.encodingComboBox.selectedItem as Encoding) {
+                        Encoding.ASCII85 -> {
+                            Ascii85.decode(dialog.securityCodeField.text)
                         }
-
-                        // 00111100111100111100
-                        val ipAddress = ipFromByteArray(decoded[2..6])
-                        val tcpPort = portFromByteArray(decoded[8..12])
-                        val udpPort = portFromByteArray(decoded[14..18])
-
-                        ServerPlugin.connectServer(
-                            dialog.timeoutField.value as Int,
-                            ipAddress,
-                            tcpPort,
-                            udpPort,
-                            dialog.userNameField.text
-                        )
-                    } catch (error: IOException) {
-                        logger.warn(error)
                     }
+
+                    // 00111100111100111100
+                    val ipAddress = ipFromByteArray(decoded[2..6])
+                    val tcpPort = portFromByteArray(decoded[8..12])
+                    val udpPort = portFromByteArray(decoded[14..18])
+
+                    ServerPlugin.connectServer(
+                        dialog.timeoutField.value as Int,
+                        ipAddress,
+                        tcpPort,
+                        udpPort,
+                        dialog.userNameField.text
+                    )
                 }
                 else -> {
                 }
