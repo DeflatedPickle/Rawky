@@ -6,7 +6,7 @@ import com.deflatedpickle.tosuto.ToastWindow
 import java.awt.BorderLayout
 import javax.swing.JFrame
 
-object Window : JFrame("Quiver") {
+object Window : JFrame("Rawky") {
     val control = CControl(this)
     val grid = CGrid(control)
 

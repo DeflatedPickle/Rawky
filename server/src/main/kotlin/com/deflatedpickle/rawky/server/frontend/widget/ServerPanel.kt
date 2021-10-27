@@ -34,7 +34,7 @@ object ServerPanel : BetterGlassPane() {
             fun mouse(/*e: MouseEvent,*/ drag: Boolean) {
                 mousePosition?.let {
                     ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.let { s ->
-                        if (Clock.System.now().toEpochMilliseconds() - lastTime.toEpochMilliseconds() > s.mouseSyncDelay) {
+                        // if (Clock.System.now().toEpochMilliseconds() - lastTime.toEpochMilliseconds() > s.mouseSyncDelay) {
                             client.sendTCP(
                                 RequestMoveMouse(
                                     ServerPanel.mousePosition,
@@ -43,7 +43,7 @@ object ServerPanel : BetterGlassPane() {
                             )
 
                             lastTime = Clock.System.now()
-                        }
+                        // }
                     }
                 }
             }
@@ -102,7 +102,7 @@ object ServerPanel : BetterGlassPane() {
         // Draws every other clients cursor
         for ((index, user) in ServerPlugin.userMap) {
             // Dodge the current user
-            if (index == ServerPlugin.id) continue
+            // if (index == ServerPlugin.id) continue
 
             g2D.color = user.colour.toAwt()
 

@@ -27,9 +27,11 @@ import com.deflatedpickle.rawky.server.backend.response.ResponseUserLeave
 import com.deflatedpickle.rawky.server.backend.util.JoinFail
 import com.deflatedpickle.rawky.server.backend.util.ServerProperties
 import com.deflatedpickle.rawky.server.backend.util.User
+import com.deflatedpickle.rawky.server.frontend.dialog.DialogConnectServer
 import com.deflatedpickle.rawky.server.frontend.menu.MenuServer
 import com.deflatedpickle.rawky.server.frontend.widget.ServerPanel
 import com.deflatedpickle.rawky.util.ActionUtil
+import com.deflatedpickle.undulation.builder.ProgressMonitorBuilder
 import com.dosse.upnp.UPnP
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryonet.Client
@@ -42,6 +44,7 @@ import java.awt.Rectangle
 import java.io.IOException
 import java.util.*
 import javax.swing.JMenu
+import javax.swing.ProgressMonitor
 import kotlin.collections.LinkedHashMap
 
 @Plugin(
@@ -274,32 +277,73 @@ object ServerPlugin {
      * Connects to a server
      */
     @Throws(IOException::class)
-    fun connectServer(timeoutMilliseconds: Int, ipAddress: String, tcpPort: Int, udpPort: Int, userName: String) {
-        this.addClientListener()
+    fun connectServer(
+        timeoutMilliseconds: Int,
+        ipAddress: String,
+        tcpPort: Int, udpPort: Int,
+        userName: String,
+        progressMonitor: ProgressMonitorBuilder,
+        retries: Int?,
+    ) {
+        progressMonitor
+            .queue {
+                note = "Adding client listener..."
+                task = { addClientListener() }
+            }
+            .queue {
+                note = "Registering queries..."
+                task = { registerQueries(client.kryo) }
+            }
+            .queue {
+                note = "Registering requests..."
+                task = { registerRequests(client.kryo) }
+            }
+            .queue {
+                note = "Registering responses..."
+                task = { registerResponses(client.kryo) }
+            }
+            .queue {
+                note = "Registering serializers..."
+                task = { registerSerializers(client.kryo) }
+            }
+            .queue {
+                note = "Starting the client..."
+                task = {
+                    if (client.updateThread == null) {
+                        client.start()
+                    }
+                }
+            }
+            .queue {
+                note = "Connecting to the server..."
+                task = {
+                    // This sometimes fails so we may as well retry it
+                    for (i in 0 until (retries ?: 1)) {
+                        try {
+                            client.connect(
+                                timeoutMilliseconds,
+                                ipAddress,
+                                tcpPort,
+                                udpPort
+                            )
+                        } catch (e: Exception) {
+                            continue
+                        }
 
-        registerQueries(client.kryo)
-        this.registerRequests(this.client.kryo)
-        this.registerResponses(this.client.kryo)
-        this.registerSerializers(this.client.kryo)
-
-        if (this.client.updateThread == null) {
-            this.client.start()
-        }
-
-        this.client.connect(
-            timeoutMilliseconds,
-            ipAddress,
-            tcpPort,
-            udpPort
-        )
-
-        this.client.sendUDP(
-            RequestUserJoin(
-                userName
-            )
-        )
-
-        EventJoinServer.trigger(null)
+                        if (client.isConnected) {
+                            break
+                        }
+                    }
+                }
+            }
+            .queue {
+                note = "Sending a join request..."
+                task = { client.sendUDP(RequestUserJoin(userName)) }
+            }
+            .queue {
+                note = "Triggering the join server event..."
+                task = { EventJoinServer.trigger(null) }
+            }
     }
 
     fun leaveServer() {

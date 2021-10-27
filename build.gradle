@@ -111,7 +111,7 @@ allprojects { p ->
         kotlinOptions {
             freeCompilerArgs = [
                     "-Xopt-in=kotlin.RequiresOptIn",
-                    "-Xinline-classes"
+                    "-Xinline-classes",
             ]
         }
     }
