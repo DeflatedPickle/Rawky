@@ -12,10 +12,15 @@ import com.deflatedpickle.rawky.server.frontend.widget.form
 import com.deflatedpickle.undulation.DocumentAdapter
 import com.deflatedpickle.undulation.builder.ProgressMonitorBuilder
 import com.github.fzakaria.ascii85.Ascii85
+import com.github.underscore.lodash.Base32
+import de.bwaldvogel.base91.Base91
+import io.github.novacrypto.base58.Base58
+import io.seruco.encoding.base62.Base62
 import org.apache.logging.log4j.LogManager
 import org.jdesktop.swingx.JXTextField
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.io.IOException
+import java.util.*
 import javax.swing.JComboBox
 import javax.swing.JSpinner
 import javax.swing.ProgressMonitor
@@ -24,17 +29,6 @@ import javax.swing.SwingUtilities
 
 class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
     companion object {
-        var progress = 0
-            set(value) {
-                if (this::progressMonitor.isInitialized)
-                    progressMonitor.setProgress(value)
-                field = value
-            }
-
-        private lateinit var progressMonitor: ProgressMonitor
-
-        private val logger = LogManager.getLogger()
-
         fun open() {
             val dialog = DialogConnectServer()
 
@@ -45,10 +39,14 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
                         .queue {
                             note = "Decoding security code"
                             task = {
+                                val text = dialog.securityCodeField.text
+
                                 when (dialog.encodingComboBox.selectedItem as Encoding) {
-                                    Encoding.ASCII85 -> {
-                                        Ascii85.decode(dialog.securityCodeField.text)
-                                    }
+                                    Encoding.BASE91 -> Base91.decode(text.toByteArray())
+                                    Encoding.ASCII85 -> Ascii85.decode(text)
+                                    Encoding.BASE64 -> Base64.getDecoder().decode(text)
+                                    Encoding.BASE62 -> Base62.createInstance().decode(text.toByteArray())
+                                    Encoding.BASE58 -> Base58.base58Decode(text)
                                 }
                             }
                         }
@@ -56,10 +54,13 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
                             note = "Decoding IP and ports from the security code"
                             task = {
                                 val decoded = it as ByteArray
+
                                 // 00111100111100111100
                                 val ipAddress = ipFromByteArray(decoded[2..6])
                                 val tcpPort = portFromByteArray(decoded[8..12])
                                 val udpPort = portFromByteArray(decoded[14..18])
+
+                                // println("IP: $ipAddress\nTCP: $tcpPort\nUDP: $udpPort")
 
                                 Triple(ipAddress, tcpPort, udpPort)
                             }
@@ -108,9 +109,11 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
             fireValidationFinished(validationCheck())
         })
     }
-    private val encodingComboBox = JComboBox(Encoding.values())
+    private val encodingComboBox = JComboBox(Encoding.values()).apply {
+        selectedItem = Encoding.ASCII85
+    }
     private val timeoutField = JSpinner(SpinnerNumberModel(5000, 0, 5000 * 5, 5))
-    private val retriesFiled = JSpinner(SpinnerNumberModel(5, 0, 100, 1))
+    private val retriesFiled = JSpinner(SpinnerNumberModel(10, 0, 100, 1))
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)

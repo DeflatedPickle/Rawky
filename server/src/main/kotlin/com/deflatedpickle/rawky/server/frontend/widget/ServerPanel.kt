@@ -102,7 +102,7 @@ object ServerPanel : BetterGlassPane() {
         // Draws every other clients cursor
         for ((index, user) in ServerPlugin.userMap) {
             // Dodge the current user
-            // if (index == ServerPlugin.id) continue
+            if (index == ServerPlugin.id) continue
 
             g2D.color = user.colour.toAwt()
 

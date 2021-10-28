@@ -20,12 +20,17 @@ import com.deflatedpickle.undulation.constraints.StickEast
 import com.deflatedpickle.undulation.constraints.StickEastFinishLine
 import com.dosse.upnp.UPnP
 import com.github.fzakaria.ascii85.Ascii85
+import com.github.underscore.lodash.Base32
+import de.bwaldvogel.base91.Base91
+import io.github.novacrypto.base58.Base58
+import io.seruco.encoding.base62.Base62
 import org.apache.logging.log4j.LogManager
 import org.jdesktop.swingx.JXTextField
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.io.IOException
+import java.util.*
 import javax.swing.JCheckBox
 import javax.swing.JComboBox
 import javax.swing.JSpinner
@@ -36,15 +41,6 @@ import kotlin.random.Random
 
 class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
     companion object {
-        var progress = 0
-            set(value) {
-                if (this::progressMonitor.isInitialized)
-                    progressMonitor.setProgress(value)
-                field = value
-            }
-
-        private lateinit var progressMonitor: ProgressMonitor
-
         private val logger = LogManager.getLogger()
 
         fun open() {
@@ -108,10 +104,12 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                                 val securityCodeByteArray = it as ByteArray
 
                                 when (dialog.encodingComboBox.selectedItem as Encoding) {
-                                    Encoding.ASCII85 -> {
-                                        Ascii85.encode(securityCodeByteArray)
-                                    }
-                                }
+                                    Encoding.BASE91 -> Base91.encode(securityCodeByteArray).decodeToString()
+                                    Encoding.ASCII85 -> Ascii85.encode(securityCodeByteArray)
+                                    Encoding.BASE64 -> Base64.getEncoder().encodeToString(securityCodeByteArray)
+                                    Encoding.BASE62 -> Base62.createInstance().encode(securityCodeByteArray).decodeToString()
+                                    Encoding.BASE58 -> Base58.base58Encode(securityCodeByteArray)
+                                }// .also { println(it) }
                             }
                         }
                         .queue {
@@ -188,9 +186,12 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
     private val tcpPortField = JSpinner(SpinnerNumberModel(50000, portMin, portMax, 1))
     private val udpPortField = JSpinner(SpinnerNumberModel(50000, portMin, portMax, 1))
     private val encodingComboBox = JComboBox(Encoding.values()).apply {
-        selectedItem = Encoding.values().last()
+        selectedItem = Encoding.ASCII85
     }
-    private val uPnPCheckBox = JCheckBox("UPnP", true).apply { isOpaque = false }
+    private val uPnPCheckBox = JCheckBox("UPnP", UPnP.isUPnPAvailable()).apply {
+        isOpaque = false
+        isEnabled = UPnP.isUPnPAvailable()
+    }
     private val connectCheckbox = JCheckBox("Connect", true).apply { isOpaque = false }
 
     init {

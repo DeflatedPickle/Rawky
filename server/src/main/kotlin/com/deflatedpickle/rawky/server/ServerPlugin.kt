@@ -38,6 +38,9 @@ import com.esotericsoftware.kryonet.Client
 import com.esotericsoftware.kryonet.Connection
 import com.esotericsoftware.kryonet.Listener
 import com.esotericsoftware.kryonet.Server
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.apache.logging.log4j.LogManager
 import java.awt.Point
 import java.awt.Rectangle
@@ -47,6 +50,7 @@ import javax.swing.JMenu
 import javax.swing.ProgressMonitor
 import kotlin.collections.LinkedHashMap
 
+@OptIn(DelicateCoroutinesApi::class)
 @Plugin(
     value = "server",
     author = "DeflatedPickle",
@@ -83,12 +87,14 @@ object ServerPlugin {
             val toolMenu = menuBar?.get(MenuCategory.TOOLS.name) as JMenu
 
             toolMenu.add(MenuServer)
-        }
 
-        EventProgramFinishSetup.addListener {
             ServerPanel.rootPane = PluginUtil.window.rootPane
             PluginUtil.window.glassPane = ServerPanel
             PluginUtil.window.glassPane.isVisible = true
+
+            GlobalScope.launch {
+                UPnP.isUPnPAvailable()
+            }
         }
 
         Runtime.getRuntime().addShutdownHook(object : Thread() {
