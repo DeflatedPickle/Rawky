@@ -69,6 +69,9 @@ import kotlin.collections.LinkedHashMap
 object ServerPlugin {
     private val logger = LogManager.getLogger()
 
+    const val portMin = 49_152
+    const val portMax = 65_535
+
     var client = Client()
     var server: Server? = null
 

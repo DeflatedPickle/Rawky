@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation project(":core")
     implementation project(":launcher")
+    implementation project(":settingsgui")
 
     // Server
     implementation 'com.esotericsoftware:kryo:5.2.0'

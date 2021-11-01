@@ -2,8 +2,10 @@
 
 package com.deflatedpickle.rawky.server.frontend.dialog
 
+import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.server.ServerPlugin
+import com.deflatedpickle.rawky.server.ServerSettings
 import com.deflatedpickle.rawky.server.backend.util.Encoding
 import com.deflatedpickle.rawky.server.backend.util.functions.extension.get
 import com.deflatedpickle.rawky.server.backend.util.functions.ipFromByteArray
@@ -96,7 +98,9 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
 
     // Details
     private val userNameField = JXTextField("Username").apply {
-        text = "User"
+        ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.let {
+            text = it.defaultUserName
+        }
 
         this.document.addDocumentListener(DocumentAdapter {
             fireValidationFinished(validationCheck())
@@ -110,7 +114,9 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
         })
     }
     private val encodingComboBox = JComboBox(Encoding.values()).apply {
-        selectedItem = Encoding.ASCII85
+        ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.let {
+            selectedItem = it.defaultConnectionEncoding
+        }
     }
     private val timeoutField = JSpinner(SpinnerNumberModel(5000, 0, 5000 * 5, 5))
     private val retriesFiled = JSpinner(SpinnerNumberModel(10, 0, 100, 1))
