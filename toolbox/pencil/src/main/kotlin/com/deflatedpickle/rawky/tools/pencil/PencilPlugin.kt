@@ -5,14 +5,11 @@ package com.deflatedpickle.rawky.tools.pencil
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.monocons.MonoIcon
-import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
-import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
-import com.deflatedpickle.undulation.extensions.toColour
+import com.deflatedpickle.undulation.functions.extensions.toColour
 import java.awt.Color
 import java.awt.Point
-import javax.swing.Icon
 
 @Plugin(
     value = "pencil",
@@ -32,7 +29,7 @@ object PencilPlugin : Tool {
     override val icon = MonoIcon.PENCIL
 
     init {
-        Tool.registry[name] = this
+        Tool.registry["deflatedpickle@$name"] = this
     }
 
     override fun perform(

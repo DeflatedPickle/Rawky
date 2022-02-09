@@ -60,12 +60,13 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                                 }
                             }
                         }
-                        .queue {
+                        .queuwu {
                             note = "Starting server"
-                            task = {
+                            task = { pm, _ ->
                                 ServerPlugin.startServer(
                                     dialog.tcpPortField.value as Int,
-                                    dialog.udpPortField.value as Int
+                                    dialog.udpPortField.value as Int,
+                                    pm,
                                 )
                             }
                         }
@@ -168,6 +169,9 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
     private fun validationCheck(): Boolean =
         userNameField.text.isNotBlank()
 
+    private fun serverCheck(): Boolean =
+        ServerPlugin.client.discoverHost(udpPortField.value as Int, 5000) != null
+
     // Details
     private val userNameField = JXTextField("Username").apply {
         ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.let {
@@ -224,6 +228,16 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
             widget("Timeout", timeoutField)
             add(uPnPCheckBox, StickEast)
             add(connectCheckbox, StickEastFinishLine)
+        }
+
+        for (i in listOf(tcpPortField, udpPortField)) {
+            i.apply {
+                addChangeListener {
+                    SwingUtilities.invokeLater {
+                        fireValidationFinished(serverCheck())
+                    }
+                }
+            }
         }
     }
 }

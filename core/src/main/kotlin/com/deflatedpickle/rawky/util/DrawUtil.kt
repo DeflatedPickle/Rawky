@@ -1,7 +1,7 @@
 package com.deflatedpickle.rawky.util
 
 import com.deflatedpickle.rawky.collection.Grid
-import com.deflatedpickle.undulation.extensions.toAwt
+import com.deflatedpickle.undulation.functions.extensions.toAwt
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics

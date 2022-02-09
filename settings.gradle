@@ -16,14 +16,23 @@ include 'master'
 include 'core'
 include 'launcher'
 include 'server'
+include 'toolbox'
+
+[
+        'userlist',
+].each {
+    include it
+    project(":$it").projectDir = new File(settingsDir, "server/$it")
+}
 
 include 'pixelgrid'
 
 [
         'pencil',
+        'eraser',
 ].each {
     include it
-    project(":$it").projectDir = new File(settingsDir, "tools/$it")
+    project(":$it").projectDir = new File(settingsDir, "toolbox/$it")
 }
 
 
@@ -45,3 +54,4 @@ includeBuild 'libs/marvin'
 includeBuild 'libs/monocons'
 includeBuild 'libs/tosuto'
 includeBuild 'libs/undulation'
+includeBuild 'libs/eyellect'

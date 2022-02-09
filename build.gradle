@@ -36,17 +36,6 @@ project.ext {
     toolDir = new File(buildDir, 'tools')
 }
 
-allprojects {
-    repositories {
-        mavenCentral()
-
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://github.com/eugener/oxbow/raw/master/maven/repository' }
-        maven { url 'https://clojars.org/repo/' }
-        maven { url 'https://raw.github.com/kristian/better-glass-pane/mvn-repo/' }
-    }
-}
-
 allprojects { p ->
     apply plugin: 'java'
     apply plugin: 'java-library'
@@ -63,6 +52,8 @@ allprojects { p ->
 
         maven { url 'https://jitpack.io' }
         maven { url 'https://github.com/eugener/oxbow/raw/master/maven/repository' }
+        maven { url 'https://clojars.org/repo/' }
+        maven { url 'https://raw.github.com/kristian/better-glass-pane/mvn-repo/' }
     }
 
     dependencies {
@@ -213,9 +204,13 @@ run {
         implementation project(":pixelgrid")
 
         runtimeOnly project(":pixelgrid")
-        runtimeOnly project(":server")
 
+        runtimeOnly project(":server")
+        runtimeOnly project(":userlist")
+
+        runtimeOnly project(":toolbox")
         runtimeOnly project(":pencil")
+        runtimeOnly project(":eraser")
 
         // runtimeOnly project(':discordrpc')
         runtimeOnly project(':pluginmanager')

@@ -15,3 +15,6 @@
 	url = https://github.com/DeflatedPickle/tosuto
 [submodule "libs/undulation"]
 	url = https://github.com/DeflatedPickle/undulation
+[submodule "libs/eyellect"]
+	path = libs/eyellect
+	url = https://github.com/DeflatedPickle/eyellect

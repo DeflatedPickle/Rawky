@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 package com.deflatedpickle.rawky
 
 import com.deflatedpickle.undulation.serializer.PointSerializer

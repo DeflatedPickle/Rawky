@@ -22,6 +22,7 @@ interface Tool {
 
         val bestSize: Dimension = Toolkit.getDefaultToolkit().getBestCursorSize(0, 0)
 
+        const val defaultSize = 24
         lateinit var current: Tool
 
         init {
@@ -33,7 +34,7 @@ interface Tool {
     }
 
     val name: String
-    val icon: ImageIcon /*Icon*/
+    val icon: ImageIcon
 
     fun perform(
         cell: Cell,
@@ -45,17 +46,23 @@ interface Tool {
     @ExperimentalSerializationApi
     fun asCursor(): Cursor {
         val settings = ConfigUtil.getSettings<RawkySettings>("deflatedpickle@core#*")
+        val x = settings?.cursorSize?.x ?: defaultSize
+        val y = settings?.cursorSize?.y ?: defaultSize
 
         return Toolkit.getDefaultToolkit().createCustomCursor(
             icon.image.getScaledInstance(
-                settings?.cursorSize?.x ?: 32,
-                settings?.cursorSize?.y ?: 32,
+                x,
+                y,
                 Image.SCALE_AREA_AVERAGING
             ),
             when (icon) {
                 MonoIcon.PENCIL -> Point(
                     2,
-                    (settings?.cursorSize?.y ?: 32) - 1,
+                    y - 1,
+                )
+                MonoIcon.ERASER -> Point(
+                    4,
+                    y - 2
                 )
                 else -> Point(
                     bestSize.width / 2,

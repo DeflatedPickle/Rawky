@@ -9,25 +9,24 @@ import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.marvin.Colour
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.collection.Grid
+import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateGrid
-import com.deflatedpickle.rawky.server.backend.event.EventJoinServer
+import com.deflatedpickle.rawky.server.backend.event.EventDisconnect
+import com.deflatedpickle.rawky.server.backend.event.EventUserJoinServer
+import com.deflatedpickle.rawky.server.backend.event.EventUserLeaveServer
+import com.deflatedpickle.rawky.server.backend.event.EventUserRename
 import com.deflatedpickle.rawky.server.backend.event.EventStartServer
-import com.deflatedpickle.rawky.server.backend.request.RequestMoveMouse
-import com.deflatedpickle.rawky.server.backend.request.RequestUserJoin
-import com.deflatedpickle.rawky.server.backend.response.ResponseActiveUsers
-import com.deflatedpickle.rawky.server.backend.response.ResponseJoinFail
-import com.deflatedpickle.rawky.server.backend.response.ResponseMoveMouse
-import com.deflatedpickle.rawky.server.backend.response.ResponseNewDocument
 import com.deflatedpickle.rawky.server.backend.query.QueryUpdateCell
-import com.deflatedpickle.rawky.server.backend.request.RequestUserLeave
-import com.deflatedpickle.rawky.server.backend.response.ResponseUserJoin
-import com.deflatedpickle.rawky.server.backend.response.ResponseUserLeave
+import com.deflatedpickle.rawky.server.backend.request.*
+import com.deflatedpickle.rawky.server.backend.response.*
 import com.deflatedpickle.rawky.server.backend.util.JoinFail
+import com.deflatedpickle.rawky.server.backend.util.LeaveReason
 import com.deflatedpickle.rawky.server.backend.util.ServerProperties
 import com.deflatedpickle.rawky.server.backend.util.User
-import com.deflatedpickle.rawky.server.frontend.dialog.DialogConnectServer
+import com.deflatedpickle.rawky.server.backend.util.UserUpdate
 import com.deflatedpickle.rawky.server.frontend.menu.MenuServer
 import com.deflatedpickle.rawky.server.frontend.widget.ServerPanel
 import com.deflatedpickle.rawky.util.ActionUtil
@@ -42,12 +41,11 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.apache.logging.log4j.LogManager
+import java.awt.Component
 import java.awt.Point
 import java.awt.Rectangle
 import java.io.IOException
-import java.util.*
 import javax.swing.JMenu
-import javax.swing.ProgressMonitor
 import kotlin.collections.LinkedHashMap
 
 @OptIn(DelicateCoroutinesApi::class)
@@ -84,12 +82,16 @@ object ServerPlugin {
     var userMap = mutableMapOf<Int, User>()
     var grid: Grid? = null
 
+    lateinit var oldPane: Component
+
     init {
         EventProgramFinishSetup.addListener {
             val menuBar = RegistryUtil.get(MenuCategory.MENU.name)
             val toolMenu = menuBar?.get(MenuCategory.TOOLS.name) as JMenu
 
             toolMenu.add(MenuServer)
+
+            oldPane = PluginUtil.window.glassPane
 
             ServerPanel.rootPane = PluginUtil.window.rootPane
             PluginUtil.window.glassPane = ServerPanel
@@ -98,6 +100,14 @@ object ServerPlugin {
             GlobalScope.launch {
                 UPnP.isUPnPAvailable()
             }
+        }
+
+        EventDisconnect.addListener {
+            PluginUtil.window.glassPane = oldPane
+        }
+
+        EventChangeTool.addListener {
+            client.sendTCP(RequestChangeTool(id, Tool.current, it))
         }
 
         Runtime.getRuntime().addShutdownHook(object : Thread() {
@@ -136,6 +146,10 @@ object ServerPlugin {
 
             register(RequestUserJoin::class.java)
             register(RequestUserLeave::class.java)
+            register(RequestRemoveUser::class.java)
+
+            register(RequestChangeName::class.java)
+            register(RequestChangeTool::class.java)
         }
     }
 
@@ -144,10 +158,12 @@ object ServerPlugin {
             register(ResponseMoveMouse::class.java)
 
             register(ResponseUserJoin::class.java)
-            register(ResponseJoinFail::class.java)
+            register(ResponseUserLeave::class.java)
 
             register(ResponseJoinFail::class.java)
             register(ResponseActiveUsers::class.java)
+            register(ResponseChangeName::class.java)
+            register(ResponseChangeTool::class.java)
 
             register(ResponseNewDocument::class.java)
         }
@@ -159,22 +175,21 @@ object ServerPlugin {
             register(FloatArray::class.java)
 
             register(Point::class.java)
-            // register(Color::class.java)
             register(Rectangle::class.java)
 
             register(Colour::class.java)
 
             register(JoinFail::class.java)
+            register(LeaveReason::class.java)
+            register(UserUpdate::class.java)
+
             register(User::class.java)
 
             register(Cell::class.java)
-            // register(Array<Cell>::class.java)
-            // register(Grid::class.java)
-            // register(Layer::class.java)
-            // register(Array<Layer>::class.java)
-            // register(Frame::class.java)
-            // register(Array<Frame>::class.java)
-            // register(RawkyDocument::class.java)
+
+            for (v in Tool.registry.values) {
+                register(v::class.java)
+            }
         }
     }
 
@@ -182,36 +197,64 @@ object ServerPlugin {
      * Starts and connects to a server
      */
     @Throws(IOException::class)
-    fun startServer(tcpPort: Int, udpPort: Int) {
-        if (server == null) {
-            this.server = Server()
-            this.addServerListener()
-
-            server?.let { server ->
-                registerQueries(server.kryo)
-                this.registerRequests(server.kryo)
-                this.registerResponses(server.kryo)
-                this.registerSerializers(server.kryo)
+    fun startServer(tcpPort: Int, udpPort: Int, progressMonitor: ProgressMonitorBuilder) {
+        progressMonitor
+            .queue {
+                note = "Setting server instance"
+                task = { Server().let { server = it } }
             }
-        }
-
-        server?.let { server ->
-            if (server.updateThread == null) {
-                server.start()
+            .queue {
+                note = "Adding server listener"
+                task = { addServerListener() }
             }
-
-            server.bind(
-                tcpPort,
-                udpPort
-            )
-        }
-
-        this.serverProperties = ServerProperties(
-            tcpPort,
-            udpPort
-        )
-
-        EventStartServer.trigger(null)
+            .queue {
+                note = "Registering queries"
+                task = { registerQueries(server!!.kryo) }
+            }
+            .queue {
+                note = "Registering requests"
+                task = { registerRequests(server!!.kryo) }
+            }
+            .queue {
+                note = "Registering responses"
+                task = { registerResponses(server!!.kryo) }
+            }
+            .queue {
+                note = "Registering serializers"
+                task = { registerSerializers(server!!.kryo) }
+            }
+            .queue {
+                note = "Starting server"
+                task = {
+                    server!!.let { server ->
+                        if (server.updateThread == null) {
+                            server.start()
+                        }
+                    }
+                }
+            }
+            .queue {
+                note = "Binding server to ports"
+                task = {
+                    server!!.bind(
+                        tcpPort,
+                        udpPort
+                    )
+                }
+            }
+            .queue {
+                note = "Setting server properties"
+                task = {
+                    ServerProperties(
+                        tcpPort,
+                        udpPort
+                    ).let { serverProperties = it }
+                }
+            }
+            .queue {
+                note = "Triggering the start server event"
+                task = { EventStartServer.trigger(null) }
+            }
     }
 
     fun closeServer() {
@@ -259,22 +302,77 @@ object ServerPlugin {
 
                             server.sendToAllTCP(
                                 ResponseActiveUsers(
-                                    userMap
+                                    userMap,
+                                    UserUpdate.JOIN,
                                 )
                             )
+
+                            server.sendToAllTCP(
+                                ResponseUserJoin(
+                                    connection.id,
+                                    any.userName,
+                                )
+                            )
+
+
+                            RawkyPlugin.document?.let { doc ->
+                                ServerPanel.sendGrid(doc)
+
+                                val frame = doc.children[doc.selectedIndex]
+                                val layer = frame.children[frame.selectedIndex]
+                                val grid = layer.child
+
+                                for (i in grid.children) {
+                                    if (i.colour != Cell.defaultColour) {
+                                        server.sendToAllExceptTCP(id, QueryUpdateCell(i))
+                                    }
+                                }
+                            }
                         }
                         is RequestUserLeave -> {
-                            logger.info("${any.userName} left")
+                            logger.info("${userMap[connection.id]!!.userName} left")
 
-                            userMap.remove(connection.id)
+                            server.sendToAllTCP(
+                                ResponseUserLeave(
+                                    connection.id,
+                                )
+                            )
+
                             ServerPanel.repaint()
 
                             server.sendToAllTCP(
                                 ResponseActiveUsers(
-                                    userMap
+                                    userMap,
+                                    UserUpdate.LEAVE,
                                 )
                             )
                         }
+                        is RequestChangeName -> {
+                            logger.info("User ${any.id} requested to change their name to ${any.realName}")
+
+                            server.sendToAllTCP(
+                                ResponseActiveUsers(
+                                    userMap.also { it[any.id]!!.userName = any.realName },
+                                    UserUpdate.RENAME,
+                                )
+                            )
+
+                            server.sendToAllTCP(
+                                ResponseChangeName(
+                                    connection.id,
+                                    any.deadName,
+                                    any.realName,
+                                )
+                            )
+                        }
+                        is RequestChangeTool -> server.sendToAllTCP(
+                            ResponseChangeTool(
+                                connection.id,
+                                any.oldTool,
+                                any.newTool,
+                            )
+                        )
+                        is RequestRemoveUser -> userMap.remove(connection.id)
                         is QueryUpdateCell -> updateCell(any)
                     }
                 }
@@ -296,27 +394,27 @@ object ServerPlugin {
     ) {
         progressMonitor
             .queue {
-                note = "Adding client listener..."
+                note = "Adding client listener"
                 task = { addClientListener() }
             }
             .queue {
-                note = "Registering queries..."
+                note = "Registering queries"
                 task = { registerQueries(client.kryo) }
             }
             .queue {
-                note = "Registering requests..."
+                note = "Registering requests"
                 task = { registerRequests(client.kryo) }
             }
             .queue {
-                note = "Registering responses..."
+                note = "Registering responses"
                 task = { registerResponses(client.kryo) }
             }
             .queue {
-                note = "Registering serializers..."
+                note = "Registering serializers"
                 task = { registerSerializers(client.kryo) }
             }
             .queue {
-                note = "Starting the client..."
+                note = "Starting the client"
                 task = {
                     if (client.updateThread == null) {
                         client.start()
@@ -324,7 +422,7 @@ object ServerPlugin {
                 }
             }
             .queue {
-                note = "Connecting to the server..."
+                note = "Connecting to the server"
                 task = {
                     // This sometimes fails so we may as well retry it
                     for (i in 0 until (retries ?: 1)) {
@@ -346,20 +444,35 @@ object ServerPlugin {
                 }
             }
             .queue {
-                note = "Sending a join request..."
+                note = "Sending a join request"
                 task = { client.sendUDP(RequestUserJoin(userName)) }
             }
             .queue {
-                note = "Triggering the join server event..."
-                task = { EventJoinServer.trigger(null) }
+                note = "Disabling toolbar"
+                task = {
+                    if (server == null) {
+                        for (i in PluginUtil.toolbar.components) {
+                            i.isEnabled = false
+                        }
+                    }
+                }
             }
+        /*.queue {
+            note = "Triggering the join server event"
+            task = { userMap[id]?.let { EventJoinServer.trigger(it) }; 0 }
+        }*/
     }
 
     fun leaveServer() {
-        client.sendTCP(RequestUserLeave())
+        EventDisconnect.trigger(userMap[id]!!)
+        client.sendTCP(RequestUserLeave(id))
         userMap.clear()
         client.stop()
         client = Client()
+
+        for (i in PluginUtil.toolbar.components) {
+            i.isEnabled = true
+        }
     }
 
     private fun addClientListener() {
@@ -379,8 +492,19 @@ object ServerPlugin {
                             ServerPanel.repaint()
                         }
                     }
-                    is ResponseUserJoin -> logger.info("${any.userName} joined")
-                    is ResponseUserLeave -> logger.info("${any.userName} left")
+                    is ResponseUserJoin -> {
+                        userMap[any.id]?.let {
+                            // logger.info("${it.userName} joined")
+                            it.let { EventUserJoinServer.trigger(it) }
+                        }
+                    }
+                    is ResponseUserLeave -> {
+                        userMap[any.id]?.let {
+                            logger.info("${it.userName} left")
+                            it.let { EventUserLeaveServer.trigger(it) }
+                            client.sendTCP(RequestRemoveUser())
+                        }
+                    }
                     is ResponseJoinFail -> logger.warn("Failed to join due to ${any.reason}")
                     is ResponseActiveUsers -> userMap.putAll(any.activeUsers)
                     is ResponseNewDocument -> {
@@ -394,6 +518,11 @@ object ServerPlugin {
                             )
                             EventCreateDocument.trigger(RawkyPlugin.document!!)
                         }
+                    }
+                    is ResponseChangeName -> EventUserRename.trigger(User(any.id, any.realName))
+                    is ResponseChangeTool -> {
+                        any.newTool?.let { tool -> userMap[any.id]?.tool = tool }
+                        ServerPanel.repaint()
                     }
                     is QueryUpdateCell -> updateCell(any)
                 }
@@ -440,7 +569,7 @@ object ServerPlugin {
             val grid = layer.child
 
             any.cell?.let { cell ->
-                grid[cell.row, cell.column] {
+                grid[cell.row, cell.column + 1] {
                     colour = cell.colour
                 }
             }

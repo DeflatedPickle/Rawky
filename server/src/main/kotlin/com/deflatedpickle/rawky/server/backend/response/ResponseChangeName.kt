@@ -1,6 +1,7 @@
 package com.deflatedpickle.rawky.server.backend.response
 
-data class ResponseUserJoin(
+data class ResponseChangeName(
     override val id: Int = -1,
-    val userName: String = "",
+    val deadName: String = "",
+    val realName: String = "",
 ) : Response()

@@ -5,7 +5,7 @@ package com.deflatedpickle.rawky.server.frontend.menu
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.frontend.dialog.DialogConnectServer
 import com.deflatedpickle.rawky.server.frontend.dialog.DialogStartServer
-import com.deflatedpickle.undulation.extensions.add
+import com.deflatedpickle.undulation.functions.extensions.add
 import javax.swing.JMenu
 import javax.swing.JMenuItem
 

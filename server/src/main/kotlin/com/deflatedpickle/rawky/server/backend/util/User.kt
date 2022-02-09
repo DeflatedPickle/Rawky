@@ -1,7 +1,8 @@
 package com.deflatedpickle.rawky.server.backend.util
 
 import com.deflatedpickle.marvin.Colour
-import com.deflatedpickle.undulation.extensions.toColour
+import com.deflatedpickle.rawky.api.Tool
+import com.deflatedpickle.undulation.functions.extensions.toColour
 import java.awt.Color
 import java.awt.Point
 
@@ -10,6 +11,7 @@ data class User(
     var userName: String = "",
     val mousePosition: Point = originPoint,
     val colour: Colour = Color.BLACK.toColour(),
+    var tool: Tool = Tool.registry.values.first()
 ) {
     companion object {
         val originPoint = Point(0, 0)

@@ -9,7 +9,7 @@ import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.launcher.config.LauncherSettings
 import com.deflatedpickle.rawky.launcher.gui.Toolbar
 import com.deflatedpickle.rawky.util.ActionUtil
-import com.deflatedpickle.undulation.extensions.add
+import com.deflatedpickle.undulation.functions.extensions.add
 import javax.swing.JMenu
 
 @Plugin(

@@ -8,8 +8,8 @@ dependencies {
     implementation project(":settingsgui")
 
     // Server
-    implementation 'com.esotericsoftware:kryo:5.2.0'
-    implementation 'kryonet:kryonet:2.21'
+    api 'com.esotericsoftware:kryo:5.2.0'
+    api 'kryonet:kryonet:2.21'
 
     // UPnP
     implementation 'com.github.geo-gs:WaifUPnP:576d111ae6'
