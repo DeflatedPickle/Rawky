@@ -5,6 +5,7 @@ package com.deflatedpickle.rawky.tools.pencil
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.monocons.MonoIcon
+import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.undulation.functions.extensions.toColour
@@ -38,6 +39,6 @@ object PencilPlugin : Tool {
         dragged: Boolean,
         clickCount: Int
     ) {
-        cell.colour = Color.CYAN.toColour()
+        cell.colour = RawkyPlugin.colour
     }
 }

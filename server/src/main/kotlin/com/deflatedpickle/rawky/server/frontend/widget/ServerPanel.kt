@@ -17,6 +17,7 @@ import com.deflatedpickle.undulation.functions.extensions.toAwt
 import kotlinx.datetime.Clock
 import lc.kra.swing.BetterGlassPane
 import org.apache.logging.log4j.LogManager
+import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.RenderingHints
@@ -119,6 +120,7 @@ object ServerPanel : BetterGlassPane() {
                 x + 8 - g2D.fontMetrics.stringWidth(user.userName) / 2,
                 y - g2D.fontMetrics.height / 2
             )
+
             user.tool.icon.paintIcon(this, g2D, x, y)
         }
     }

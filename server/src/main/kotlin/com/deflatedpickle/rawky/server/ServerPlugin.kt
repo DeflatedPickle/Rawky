@@ -12,6 +12,7 @@ import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.collection.Grid
+import com.deflatedpickle.rawky.event.EventChangeColour
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.server.backend.event.EventDisconnect
@@ -20,6 +21,8 @@ import com.deflatedpickle.rawky.server.backend.event.EventUserLeaveServer
 import com.deflatedpickle.rawky.server.backend.event.EventUserRename
 import com.deflatedpickle.rawky.server.backend.event.EventStartServer
 import com.deflatedpickle.rawky.server.backend.query.QueryUpdateCell
+import com.deflatedpickle.rawky.server.backend.query.QueryChangeColour
+import com.deflatedpickle.rawky.server.backend.query.QueryChangeTool
 import com.deflatedpickle.rawky.server.backend.request.*
 import com.deflatedpickle.rawky.server.backend.response.*
 import com.deflatedpickle.rawky.server.backend.util.JoinFail
@@ -107,7 +110,11 @@ object ServerPlugin {
         }
 
         EventChangeTool.addListener {
-            client.sendTCP(RequestChangeTool(id, Tool.current, it))
+            client.sendTCP(QueryChangeTool(id, Tool.current, it))
+        }
+
+        EventChangeColour.addListener {
+            client.sendTCP(QueryChangeColour(id, RawkyPlugin.colour))
         }
 
         Runtime.getRuntime().addShutdownHook(object : Thread() {
@@ -137,6 +144,8 @@ object ServerPlugin {
     private fun registerQueries(kryo: Kryo) {
         with(kryo) {
             register(QueryUpdateCell::class.java)
+            register(QueryChangeTool::class.java)
+            register(QueryChangeColour::class.java)
         }
     }
 
@@ -149,7 +158,6 @@ object ServerPlugin {
             register(RequestRemoveUser::class.java)
 
             register(RequestChangeName::class.java)
-            register(RequestChangeTool::class.java)
         }
     }
 
@@ -163,7 +171,6 @@ object ServerPlugin {
             register(ResponseJoinFail::class.java)
             register(ResponseActiveUsers::class.java)
             register(ResponseChangeName::class.java)
-            register(ResponseChangeTool::class.java)
 
             register(ResponseNewDocument::class.java)
         }
@@ -365,15 +372,10 @@ object ServerPlugin {
                                 )
                             )
                         }
-                        is RequestChangeTool -> server.sendToAllTCP(
-                            ResponseChangeTool(
-                                connection.id,
-                                any.oldTool,
-                                any.newTool,
-                            )
-                        )
+                        is QueryChangeTool -> server.sendToAllTCP(any)
                         is RequestRemoveUser -> userMap.remove(connection.id)
                         is QueryUpdateCell -> updateCell(any)
+                        is QueryChangeColour -> server.sendToAllTCP(any)
                     }
                 }
             })
@@ -489,7 +491,6 @@ object ServerPlugin {
                     is ResponseMoveMouse -> {
                         if (any.point != null) {
                             userMap[any.id]?.mousePosition?.location = any.point
-                            ServerPanel.repaint()
                         }
                     }
                     is ResponseUserJoin -> {
@@ -520,12 +521,13 @@ object ServerPlugin {
                         }
                     }
                     is ResponseChangeName -> EventUserRename.trigger(User(any.id, any.realName))
-                    is ResponseChangeTool -> {
+                    is QueryChangeTool ->
                         any.newTool?.let { tool -> userMap[any.id]?.tool = tool }
-                        ServerPanel.repaint()
-                    }
                     is QueryUpdateCell -> updateCell(any)
+                    is QueryChangeColour -> userMap[any.id]?.colour = any.colour
                 }
+
+                ServerPanel.repaint()
             }
         })
     }

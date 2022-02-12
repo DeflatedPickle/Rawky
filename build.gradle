@@ -203,11 +203,11 @@ run {
         implementation project(':launcher')
         implementation project(":pixelgrid")
 
-        runtimeOnly project(":pixelgrid")
-
         runtimeOnly project(":server")
         runtimeOnly project(":userlist")
 
+        runtimeOnly project(":pixelgrid")
+        runtimeOnly project(":colourwheel")
         runtimeOnly project(":toolbox")
         runtimeOnly project(":pencil")
         runtimeOnly project(":eraser")

@@ -15,9 +15,8 @@ include 'master'
 
 include 'core'
 include 'launcher'
-include 'server'
-include 'toolbox'
 
+include 'server'
 [
         'userlist',
 ].each {
@@ -26,7 +25,7 @@ include 'toolbox'
 }
 
 include 'pixelgrid'
-
+include 'toolbox'
 [
         'pencil',
         'eraser',
@@ -34,6 +33,7 @@ include 'pixelgrid'
     include it
     project(":$it").projectDir = new File(settingsDir, "toolbox/$it")
 }
+include 'colourwheel'
 
 
 // Include the libraries I use and own
