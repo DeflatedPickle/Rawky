@@ -23,6 +23,16 @@ include 'server'
     include it
     project(":$it").projectDir = new File(settingsDir, "server/$it")
 }
+[
+        'ascii85',
+        'base58',
+        'base62',
+        'base64',
+        'base91',
+].each {
+    include it
+    project(":$it").projectDir = new File(settingsDir, "server/encoding/$it")
+}
 
 include 'pixelgrid'
 include 'toolbox'

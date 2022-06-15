@@ -26,7 +26,8 @@ import kotlinx.serialization.ExperimentalSerializationApi
     dependencies = [
         "deflatedpickle@core#*",
         "deflatedpickle@discord_rpc#*"
-    ]
+    ],
+    settings = PixelGridSettings::class
 )
 @Suppress("unused")
 object PixelGridPlugin {
@@ -44,7 +45,7 @@ object PixelGridPlugin {
         }
 
         EventSerializeConfig.addListener {
-            if ("core" in it.name) {
+            if ("core" in it.name && Tool.isToolValid()) {
                 EventChangeTool.trigger(Tool.current)
             }
         }

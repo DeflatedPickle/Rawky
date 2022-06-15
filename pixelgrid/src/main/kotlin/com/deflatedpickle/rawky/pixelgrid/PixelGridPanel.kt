@@ -2,10 +2,13 @@ package com.deflatedpickle.rawky.pixelgrid
 
 import com.deflatedpickle.haruhi.api.redraw.RedrawActive
 import com.deflatedpickle.haruhi.component.PluginPanel
+import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.RawkySettings
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.util.DrawUtil
+import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
@@ -64,7 +67,17 @@ object PixelGridPanel : PluginPanel() {
             val layer = frame.children[frame.selectedIndex]
             val grid = layer.child
 
-            DrawUtil.paintGrid(g, grid)
+            val settings = ConfigUtil.getSettings<PixelGridSettings>("deflatedpickle@pixel_grid#*")
+
+            settings?.let { settings ->
+                val g2d = g as Graphics2D
+                g2d.stroke = BasicStroke(
+                    settings.lineThickness
+                )
+
+                DrawUtil.paintGrid(g, grid, settings.lineColour)
+            }
+
             mousePosition?.let { DrawUtil.paintHoverCell(it, g as Graphics2D, grid) }
         }
     }

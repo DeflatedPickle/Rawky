@@ -16,10 +16,4 @@ dependencies {
 
     // Widgets
     implementation 'lc.kra.swing:better-glass-pane:0.1.4'
-
-    // Encoding
-    implementation 'com.github.bwaldvogel:base91:26d6fc6207'
-    implementation 'com.github.fzakaria:ascii85:1.2'
-    implementation 'com.github.seruco:base62:0.1.3'
-    implementation 'com.github.NovaCrypto:Base58:0.1.2'
 }

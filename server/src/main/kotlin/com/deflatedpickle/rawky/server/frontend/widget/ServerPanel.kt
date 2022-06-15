@@ -66,8 +66,11 @@ object ServerPanel : BetterGlassPane() {
                 logger.debug("Sending cell update to server")
                 client.sendTCP(QueryUpdateCell(it))
             }
-            logger.debug("Sending cell update to all clients")
-            server?.sendToAllExceptTCP(ServerPlugin.id, QueryUpdateCell(it))
+
+            server?.let { server ->
+                logger.debug("Sending cell update to all clients")
+                server.sendToAllExceptTCP(ServerPlugin.id, QueryUpdateCell(it))
+            }
         }
     }
 

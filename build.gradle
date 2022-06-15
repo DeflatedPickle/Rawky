@@ -203,15 +203,26 @@ run {
         implementation project(':launcher')
         implementation project(":pixelgrid")
 
+        // Widgets
+        runtimeOnly project(":colourwheel")
+
         runtimeOnly project(":server")
         runtimeOnly project(":userlist")
 
-        runtimeOnly project(":pixelgrid")
-        runtimeOnly project(":colourwheel")
+        // Encodings
+        runtimeOnly project(":ascii85")
+        runtimeOnly project(":base58")
+        runtimeOnly project(":base62")
+        runtimeOnly project(":base64")
+        runtimeOnly project(":base91")
+
         runtimeOnly project(":toolbox")
+
+        // Tools
         runtimeOnly project(":pencil")
         runtimeOnly project(":eraser")
 
+        // Sniffle
         // runtimeOnly project(':discordrpc')
         runtimeOnly project(':pluginmanager')
         runtimeOnly project(':settingsgui')

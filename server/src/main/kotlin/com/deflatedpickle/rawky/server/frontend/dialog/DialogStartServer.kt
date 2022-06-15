@@ -8,10 +8,11 @@ import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.ServerPlugin.portMax
 import com.deflatedpickle.rawky.server.ServerPlugin.portMin
 import com.deflatedpickle.rawky.server.ServerSettings
-import com.deflatedpickle.rawky.server.backend.util.Encoding
+import com.deflatedpickle.rawky.server.backend.api.Encoder
 import com.deflatedpickle.rawky.server.backend.util.functions.ipToByteArray
 import com.deflatedpickle.rawky.server.backend.util.functions.getPublicIP
 import com.deflatedpickle.rawky.server.backend.util.functions.portToByteArray
+import com.deflatedpickle.rawky.server.frontend.widget.EncoderComboBox
 import com.deflatedpickle.rawky.server.frontend.widget.form
 import com.deflatedpickle.tosuto.ToastItem
 import com.deflatedpickle.tosuto.action.ToastSingleAction
@@ -20,10 +21,6 @@ import com.deflatedpickle.undulation.builder.ProgressMonitorBuilder
 import com.deflatedpickle.undulation.constraints.StickEast
 import com.deflatedpickle.undulation.constraints.StickEastFinishLine
 import com.dosse.upnp.UPnP
-import com.github.fzakaria.ascii85.Ascii85
-import de.bwaldvogel.base91.Base91
-import io.github.novacrypto.base58.Base58
-import io.seruco.encoding.base62.Base62
 import org.apache.logging.log4j.LogManager
 import org.jdesktop.swingx.JXTextField
 import org.oxbow.swingbits.dialog.task.TaskDialog
@@ -101,15 +98,8 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                         .queue {
                             note = "Encoding security code"
                             task = {
-                                val securityCodeRaw = it as ByteArray
-
-                                when (dialog.encodingComboBox.selectedItem as Encoding) {
-                                    Encoding.BASE91 -> Base91.encode(securityCodeRaw).decodeToString()
-                                    Encoding.ASCII85 -> Ascii85.encode(securityCodeRaw)
-                                    Encoding.BASE64 -> Base64.getEncoder().encodeToString(securityCodeRaw)
-                                    Encoding.BASE62 -> Base62.createInstance().encode(securityCodeRaw).decodeToString()
-                                    Encoding.BASE58 -> Base58.base58Encode(securityCodeRaw)
-                                }// .also { println(it) }
+                                (dialog.encodingComboBox.selectedItem as Encoder)
+                                    .encode(it as ByteArray)
                             }
                         }
                         .queue {
@@ -199,11 +189,7 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
             1
         )
     )
-    private val encodingComboBox = JComboBox(Encoding.values()).apply {
-        ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.let {
-            selectedItem = it.defaultConnectionEncoding
-        }
-    }
+    private val encodingComboBox = EncoderComboBox()
     private val uPnPCheckBox = JCheckBox("UPnP", UPnP.isUPnPAvailable()).apply {
         isOpaque = false
         isEnabled = UPnP.isUPnPAvailable()

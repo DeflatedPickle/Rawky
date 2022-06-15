@@ -6,10 +6,14 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.marvin.Colour
 import com.deflatedpickle.monocons.MonoIcon
+import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
+import com.deflatedpickle.rawky.util.ActionStack
+import com.deflatedpickle.rawky.util.ActionStack.Action
 import com.deflatedpickle.undulation.functions.extensions.toColour
 import java.awt.Color
+import java.awt.Graphics2D
 import java.awt.Point
 
 @Plugin(
@@ -25,20 +29,41 @@ import java.awt.Point
         "deflatedpickle@core#1.0.0"
     ]
 )
-object EraserPlugin : Tool {
-    override val name = "eraser"
-    override val icon = MonoIcon.ERASER
-
+object EraserPlugin : Tool(
+    name = "eraser",
+    icon = MonoIcon.ERASER,
+    offset = { _, y ->
+        Point(
+            4,
+            y - 2
+        )
+    }
+) {
     init {
-        Tool.registry["deflatedpickle@$name"] = this
+        registry["deflatedpickle@$name"] = this
     }
 
     override fun perform(
         cell: Cell,
         button: Int,
         dragged: Boolean,
-        clickCount: Int
+        clickCount: Int,
     ) {
-        cell.colour = Cell.defaultColour
+        val action = object : Action(name) {
+            val old = cell.colour
+
+            override fun perform() {
+                cell.colour = Cell.defaultColour
+            }
+
+            override fun cleanup() {
+                cell.colour = old
+            }
+
+            override fun outline(g2D: Graphics2D) {
+            }
+        }
+
+        ActionStack.push(action)
     }
 }

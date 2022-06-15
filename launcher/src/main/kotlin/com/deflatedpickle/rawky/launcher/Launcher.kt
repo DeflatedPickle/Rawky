@@ -6,7 +6,6 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.monocons.MonoIcon
-import com.deflatedpickle.rawky.launcher.config.LauncherSettings
 import com.deflatedpickle.rawky.launcher.gui.Toolbar
 import com.deflatedpickle.rawky.util.ActionUtil
 import com.deflatedpickle.undulation.functions.extensions.add
@@ -24,7 +23,6 @@ import javax.swing.JMenu
     dependencies = [
         "deflatedpickle@core#1.0.0"
     ],
-    settings = LauncherSettings::class
 )
 @Suppress("unused")
 object Launcher {

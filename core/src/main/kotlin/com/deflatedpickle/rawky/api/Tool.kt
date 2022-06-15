@@ -16,7 +16,16 @@ import java.awt.Point
 import java.awt.Toolkit
 import javax.swing.ImageIcon
 
-interface Tool {
+abstract class Tool(
+    val name: String,
+    val icon: ImageIcon,
+    val offset: (x: Int, y: Int) -> Point = { _, _ ->
+        Point(
+            bestSize.width / 2,
+            bestSize.height / 2,
+        )
+    },
+) {
     companion object {
         val registry = Registry<String, Tool>()
 
@@ -31,17 +40,18 @@ interface Tool {
                 EventChangeTool.trigger(current)
             }
         }
+
+        fun isToolValid() = this::current.isInitialized
     }
 
-    val name: String
-    val icon: ImageIcon
-
-    fun perform(
+    abstract fun perform(
         cell: Cell,
         button: Int,
         dragged: Boolean,
         clickCount: Int,
     )
+
+    override fun toString() = name
 
     @ExperimentalSerializationApi
     fun asCursor(): Cursor {
@@ -55,20 +65,7 @@ interface Tool {
                 y,
                 Image.SCALE_AREA_AVERAGING
             ),
-            when (icon) {
-                MonoIcon.PENCIL -> Point(
-                    2,
-                    y - 1,
-                )
-                MonoIcon.ERASER -> Point(
-                    4,
-                    y - 2
-                )
-                else -> Point(
-                    bestSize.width / 2,
-                    bestSize.height / 2,
-                )
-            },
+            offset(x, y),
             name,
         )
     }

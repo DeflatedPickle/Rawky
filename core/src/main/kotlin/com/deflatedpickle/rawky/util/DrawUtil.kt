@@ -9,7 +9,7 @@ import java.awt.Graphics2D
 import java.awt.Point
 
 object DrawUtil {
-    fun paintGrid(g: Graphics, grid: Grid) {
+    fun paintGrid(g: Graphics, grid: Grid, outlineColour: Color = Color.BLACK) {
         for (cell in grid.children) {
             g.color = cell.colour.toAwt()
             g.fillRect(
@@ -17,7 +17,7 @@ object DrawUtil {
                 cell.polygon.width, cell.polygon.height
             )
 
-            g.color = Color.BLACK
+            g.color = outlineColour
             g.drawRect(
                 cell.polygon.x, cell.polygon.y,
                 cell.polygon.width, cell.polygon.height

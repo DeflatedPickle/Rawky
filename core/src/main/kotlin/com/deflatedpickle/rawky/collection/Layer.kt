@@ -5,5 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 class Layer(
-    override var child: Grid
+    override var child: Grid,
+    var name: String = "",
 ) : SingleParent<Grid>
