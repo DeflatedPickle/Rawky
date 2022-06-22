@@ -1,15 +1,29 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package com.deflatedpickle.rawky.pixelgrid
 
+import com.deflatedpickle.haruhi.api.Registry
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventCreateDocument
+import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.event.EventSerializeConfig
+import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
+import com.deflatedpickle.haruhi.util.RegistryUtil
+import com.deflatedpickle.marvin.extensions.get
+import com.deflatedpickle.marvin.extensions.set
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.event.EventChangeTool
-import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.event.EventUpdateGrid
+import com.deflatedpickle.rawky.pixelgrid.api.Mode
+import com.deflatedpickle.rawky.pixelgrid.setting.PixelGridSettings
+import com.deflatedpickle.rawky.settings.SettingsGUI
 import kotlinx.serialization.ExperimentalSerializationApi
+import java.awt.Component
+import java.awt.event.ItemEvent
+import javax.swing.JComboBox
+import javax.swing.SwingUtilities
 
 @ExperimentalSerializationApi
 @Plugin(
@@ -40,13 +54,32 @@ object PixelGridPlugin {
             PixelGridPanel.repaint()
         }
 
-        EventChangeTool.addListener {
-            PluginUtil.window.cursor = it.asCursor()
-        }
+        EventProgramFinishSetup.addListener {
+            (RegistryUtil.get("setting_type") as Registry<String, (Plugin, String, Any) -> Component>?)?.let { registry ->
+                registry.register(Mode::class.qualifiedName!!) { plugin, name, instance ->
+                    JComboBox<Mode>().apply {
+                        SwingUtilities.invokeLater {
+                            for ((_, v) in Mode.registry) {
+                                addItem(v)
+                            }
 
-        EventSerializeConfig.addListener {
-            if ("core" in it.name && Tool.isToolValid()) {
-                EventChangeTool.trigger(Tool.current)
+                            selectedItem = instance.get<Mode>(name)
+
+                            addItemListener {
+                                when (it.stateChange) {
+                                    ItemEvent.DESELECTED -> {
+                                        (it.item as Mode).remove()
+                                    }
+                                    ItemEvent.SELECTED -> {
+                                        instance.set(name, it.item)
+                                        (it.item as Mode).apply()
+                                        SettingsGUI.serializeConfig(plugin)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

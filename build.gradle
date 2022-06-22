@@ -203,6 +203,9 @@ run {
         implementation project(':launcher')
         implementation project(":pixelgrid")
 
+        implementation project(":mouse")
+        implementation project(":keyboard")
+
         // Widgets
         runtimeOnly project(":colourwheel")
 

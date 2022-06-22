@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.util
 
+import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.undulation.functions.extensions.toAwt
 import java.awt.BasicStroke
@@ -25,16 +26,14 @@ object DrawUtil {
         }
     }
 
-    fun paintHoverCell(mousePosition: Point, g: Graphics2D, grid: Grid) {
-        for (cell in grid.children) {
-            if (cell.polygon.contains(mousePosition)) {
-                g.stroke = BasicStroke(4f)
-                g.color = Color.BLACK
-                g.drawRect(
-                    cell.polygon.x, cell.polygon.y,
-                    cell.polygon.width, cell.polygon.height
-                )
-            }
+    fun paintHoverCell(cells: List<Cell>, g: Graphics2D) {
+        for (cell in cells) {
+            g.stroke = BasicStroke(4f)
+            g.color = Color.BLACK
+            g.drawRect(
+                cell.polygon.x, cell.polygon.y,
+                cell.polygon.width, cell.polygon.height
+            )
         }
     }
 }

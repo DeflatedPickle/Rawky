@@ -4,58 +4,41 @@ import com.deflatedpickle.haruhi.api.redraw.RedrawActive
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.RawkySettings
 import com.deflatedpickle.rawky.api.Tool
+import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.event.EventUpdateCell
+import com.deflatedpickle.rawky.pixelgrid.setting.PixelGridSettings
 import com.deflatedpickle.rawky.util.DrawUtil
 import java.awt.BasicStroke
-import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
 
 @RedrawActive
 object PixelGridPanel : PluginPanel() {
+    val selectedCells = mutableListOf<Cell>()
+
     init {
-        object : MouseAdapter() {
-            fun click(e: MouseEvent, dragged: Boolean) {
-                RawkyPlugin.document?.let { doc ->
-                    val frame = doc.children[doc.selectedIndex]
-                    val layer = frame.children[frame.selectedIndex]
-                    val grid = layer.child
-
-                    PixelGridPanel.mousePosition?.let { mp ->
-                        for (cell in grid.children) {
-                            if (cell.polygon.contains(mp)) {
-                                Tool.current.perform(
-                                    cell,
-                                    e.button,
-                                    dragged,
-                                    e.clickCount,
-                                )
-
-                                EventUpdateCell.trigger(cell)
-                            }
-                        }
-                    }
-                }
-            }
-
-            override fun mouseClicked(e: MouseEvent) {
-                click(e, false)
-            }
-
-            override fun mouseDragged(e: MouseEvent) {
-                click(e, true)
-            }
-        }.apply {
-            addMouseListener(this)
-            addMouseMotionListener(this)
-        }
-
         EventUpdateCell.addListener {
             repaint()
+        }
+    }
+
+    fun paint(
+        button: Int,
+        dragged: Boolean,
+        count: Int,
+        cells: List<Cell> = selectedCells,
+        tool: Tool = Tool.current,
+    ) {
+        for (cell in cells) {
+            tool.perform(
+                cell,
+                button,
+                dragged,
+                count,
+            )
+
+            EventUpdateCell.trigger(cell)
         }
     }
 
@@ -72,13 +55,13 @@ object PixelGridPanel : PluginPanel() {
             settings?.let { settings ->
                 val g2d = g as Graphics2D
                 g2d.stroke = BasicStroke(
-                    settings.lineThickness
+                    settings.divide.thickness
                 )
 
-                DrawUtil.paintGrid(g, grid, settings.lineColour)
+                DrawUtil.paintGrid(g, grid, settings.divide.colour)
             }
 
-            mousePosition?.let { DrawUtil.paintHoverCell(it, g as Graphics2D, grid) }
+            DrawUtil.paintHoverCell(selectedCells, g as Graphics2D)
         }
     }
 }

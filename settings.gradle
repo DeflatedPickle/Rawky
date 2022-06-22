@@ -35,6 +35,13 @@ include 'server'
 }
 
 include 'pixelgrid'
+[
+        'mouse',
+        'keyboard',
+].each {
+    include it
+    project(":$it").projectDir = new File(settingsDir, "pixelgrid/mode/$it")
+}
 include 'toolbox'
 [
         'pencil',
