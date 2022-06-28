@@ -12,7 +12,7 @@ import java.awt.Point
 object DrawUtil {
     fun paintGrid(g: Graphics, grid: Grid, outlineColour: Color = Color.BLACK) {
         for (cell in grid.children) {
-            g.color = cell.colour.toAwt()
+            g.color = cell.colour
             g.fillRect(
                 cell.polygon.x, cell.polygon.y,
                 cell.polygon.width, cell.polygon.height

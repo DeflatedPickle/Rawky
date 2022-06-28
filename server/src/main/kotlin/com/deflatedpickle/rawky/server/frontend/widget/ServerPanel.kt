@@ -113,7 +113,7 @@ object ServerPanel : BetterGlassPane() {
             // Dodge the current user
             if (index == ServerPlugin.id) continue
 
-            g2D.color = user.colour.toAwt()
+            g2D.color = user.colour
 
             val x = user.mousePosition.x
             val y = user.mousePosition.y

@@ -4,7 +4,7 @@ import com.deflatedpickle.rawky.api.relation.SingleParent
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Layer(
-    override var child: Grid,
+data class Layer(
+    override var child: Grid = Grid(),
     var name: String = "",
 ) : SingleParent<Grid>

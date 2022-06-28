@@ -11,7 +11,8 @@ import kotlinx.serialization.Serializable
  */
 @Suppress("SpellCheckingInspection")
 @Serializable
-class RawkyDocument(
-    override val children: Array<Frame>,
+data class RawkyDocument(
+    val version: Int = 1,
+    override val children: MutableList<Frame>,
     override var selectedIndex: Int = 0
 ) : MultiParent<Frame>, ChildSelector, Document

@@ -11,7 +11,7 @@ data class User(
     val id: Int = -1,
     var userName: String = "",
     val mousePosition: Point = originPoint,
-    var colour: Colour = Cell.defaultColour,
+    var colour: Color = Cell.defaultColour,
     var tool: Tool = Tool.registry.values.first()
 ) {
     companion object {

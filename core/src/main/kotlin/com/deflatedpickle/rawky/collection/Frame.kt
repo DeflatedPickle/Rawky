@@ -5,7 +5,7 @@ import com.deflatedpickle.rawky.api.relation.MultiParent
 import kotlinx.serialization.Serializable
 
 @Serializable
-class Frame(
-    override val children: Array<Layer>,
+data class Frame(
+    override val children: MutableList<Layer> = mutableListOf(),
     override var selectedIndex: Int = 0
 ) : MultiParent<Layer>, ChildSelector

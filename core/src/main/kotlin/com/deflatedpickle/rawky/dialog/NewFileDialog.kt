@@ -13,7 +13,7 @@ import javax.swing.JSpinner
 import javax.swing.JTextField
 import javax.swing.SpinnerNumberModel
 
-object NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
+class NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
     val rowInput = JSpinner(SpinnerNumberModel(16, 1, 512, 8))
     val columnInput = JSpinner(SpinnerNumberModel(16, 1, 512, 8))
 

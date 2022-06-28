@@ -11,13 +11,14 @@ import org.oxbow.swingbits.dialog.task.TaskDialog
 
 object ActionUtil {
     fun newFile() {
-        NewFileDialog.isVisible = true
+        val dialog = NewFileDialog()
+        dialog.isVisible = true
 
-        if (NewFileDialog.result == TaskDialog.StandardCommand.OK) {
-            val maxRows = NewFileDialog.rowInput.value as Int
-            val maxColumns = NewFileDialog.columnInput.value as Int
-            val frames = NewFileDialog.framesInput.value as Int
-            val layers = NewFileDialog.layersInput.value as Int
+        if (dialog.result == TaskDialog.StandardCommand.OK) {
+            val maxRows = dialog.rowInput.value as Int
+            val maxColumns = dialog.columnInput.value as Int
+            val frames = dialog.framesInput.value as Int
+            val layers = dialog.layersInput.value as Int
 
             val document = newDocument(maxRows, maxColumns, frames, layers)
 
@@ -37,8 +38,8 @@ object ActionUtil {
                             columns = columns
                         )
                     )
-                }
+                }.toMutableList()
             )
-        }
+        }.toMutableList()
     )
 }

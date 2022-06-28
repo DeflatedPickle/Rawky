@@ -203,8 +203,18 @@ run {
         implementation project(':launcher')
         implementation project(":pixelgrid")
 
+        // Pixel Grid -> Mode
         implementation project(":mouse")
         implementation project(":keyboard")
+
+        // Export -> Image
+        implementation project(":imageio")
+        // Export -> Text
+        implementation project(":ascii")
+        implementation project(":rawr")
+
+        // Export -> Text -> Ascii
+        implementation project(":block")
 
         // Widgets
         runtimeOnly project(":colourwheel")

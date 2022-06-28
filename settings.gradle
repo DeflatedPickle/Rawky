@@ -42,6 +42,26 @@ include 'pixelgrid'
     include it
     project(":$it").projectDir = new File(settingsDir, "pixelgrid/mode/$it")
 }
+[
+        'imageio',
+].each {
+    include it
+    project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/image/$it")
+}
+[
+        'ascii',
+        'rawr',
+].each {
+    include it
+    project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/text/$it")
+}
+[
+        'block',
+].each {
+    include it
+    project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/text/ascii/$it")
+}
+
 include 'toolbox'
 [
         'pencil',
@@ -52,9 +72,6 @@ include 'toolbox'
 }
 include 'colourwheel'
 
-
-// Include the libraries I use and own
-// This is so I can fix any issues easier
 [
         'discordrpc',
         'pluginmanager',
