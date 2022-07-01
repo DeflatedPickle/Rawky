@@ -1,41 +1,39 @@
 @file:Suppress("unused")
 
-package com.deflatedpickle.rawky.tools.eraser
+package com.deflatedpickle.rawky.tool.pencil
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.marvin.Colour
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.ActionStack.Action
-import com.deflatedpickle.undulation.functions.extensions.toColour
-import java.awt.Color
+import com.deflatedpickle.rawky.util.ActionStack.MultiAction
 import java.awt.Graphics2D
 import java.awt.Point
 
 @Plugin(
-    value = "eraser",
+    value = "pencil",
     author = "DeflatedPickle",
     version = "1.0.0",
     description = """
         <br>
-        An eraser
+        A pencil
     """,
     type = PluginType.OTHER,
     dependencies = [
         "deflatedpickle@core#1.0.0"
     ]
 )
-object EraserPlugin : Tool(
-    name = "eraser",
-    icon = MonoIcon.ERASER,
+object PencilPlugin : Tool(
+    name = "Pencil",
+    icon = MonoIcon.PENCIL,
     offset = { _, y ->
         Point(
-            4,
-            y - 2
+            2,
+            y - 1,
         )
     }
 ) {
@@ -53,7 +51,7 @@ object EraserPlugin : Tool(
             val old = cell.colour
 
             override fun perform() {
-                cell.colour = Cell.defaultColour
+                cell.colour = RawkyPlugin.colour
             }
 
             override fun cleanup() {

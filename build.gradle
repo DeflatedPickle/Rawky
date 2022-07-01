@@ -234,6 +234,7 @@ run {
         // Tools
         runtimeOnly project(":pencil")
         runtimeOnly project(":eraser")
+        runtimeOnly project(":dropper")
 
         // Sniffle
         // runtimeOnly project(':discordrpc')

@@ -9,7 +9,7 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 
 object ColourWheelPanel : PluginPanel() {
-    private val colourPicker = ColorPicker(false, true).apply {
+    val colourPicker = ColorPicker(false, true).apply {
         color = RawkyPlugin.colour
 
         object : MouseAdapter() {
