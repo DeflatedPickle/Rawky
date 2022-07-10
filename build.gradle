@@ -8,7 +8,7 @@ plugins {
 
     id 'com.diffplug.spotless'
     id 'de.undercouch.download'
-    id 'net.kyori.blossom'
+    // id 'net.kyori.blossom'
 }
 
 group "$group"
@@ -45,7 +45,7 @@ allprojects { p ->
     apply plugin: 'org.jetbrains.kotlin.plugin.serialization'
 
     apply plugin: 'com.diffplug.spotless'
-    apply plugin: 'net.kyori.blossom'
+    // apply plugin: 'net.kyori.blossom'
 
     repositories {
         mavenCentral()
@@ -107,11 +107,11 @@ allprojects { p ->
         }
     }
 
-    blossom {
+    /*blossom {
         replaceToken('$[name]', p.property('id'))
         replaceToken('$[author]', p.property('author'))
         replaceToken('$[version]', p.version)
-    }
+    }*/
 }
 
 startScripts {
@@ -221,6 +221,7 @@ run {
 
         runtimeOnly project(":server")
         runtimeOnly project(":userlist")
+        runtimeOnly project(":chat")
 
         // Encodings
         runtimeOnly project(":ascii85")
