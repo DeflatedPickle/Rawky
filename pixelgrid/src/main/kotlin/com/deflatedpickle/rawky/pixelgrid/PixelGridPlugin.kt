@@ -39,7 +39,6 @@ import javax.swing.SwingUtilities
     component = PixelGridPanel::class,
     dependencies = [
         "deflatedpickle@core#*",
-        "deflatedpickle@discord_rpc#*"
     ],
     settings = PixelGridSettings::class
 )

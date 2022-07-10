@@ -32,12 +32,6 @@ import java.awt.Point
 object EraserPlugin : Tool(
     name = "Eraser",
     icon = MonoIcon.ERASER,
-    offset = { _, y ->
-        Point(
-            4,
-            y - 2
-        )
-    }
 ) {
     init {
         registry["deflatedpickle@$name"] = this

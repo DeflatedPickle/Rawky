@@ -10,8 +10,10 @@ import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
 import com.deflatedpickle.rawky.pixelgrid.api.Mode
 import com.deflatedpickle.rawky.util.DrawUtil
+import java.awt.MouseInfo
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
+import javax.swing.SwingUtilities
 
 @Plugin(
     value = "mouse",
@@ -44,11 +46,14 @@ object MousePlugin : Mode("Mouse", 1) {
                 val layer = frame.children[frame.selectedIndex]
                 val grid = layer.child
 
-                PixelGridPanel.mousePosition?.let { mp ->
+                MouseInfo.getPointerInfo()?.let {
+                    val point = MouseInfo.getPointerInfo().location
+                    SwingUtilities.convertPointFromScreen(point, PixelGridPanel)
+
                     PixelGridPanel.selectedCells.clear()
 
                     for (cell in grid.children) {
-                        if (cell.polygon.contains(mp)) {
+                        if (cell.polygon.contains(point)) {
                             PixelGridPanel.selectedCells.add(cell)
                             break
                         }

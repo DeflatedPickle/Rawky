@@ -19,19 +19,11 @@ import javax.swing.ImageIcon
 abstract class Tool(
     val name: String,
     val icon: ImageIcon,
-    val offset: (x: Int, y: Int) -> Point = { _, _ ->
-        Point(
-            bestSize.width / 2,
-            bestSize.height / 2,
-        )
-    },
 ) {
     companion object {
         val registry = Registry<String, Tool>()
 
-        val bestSize: Dimension = Toolkit.getDefaultToolkit().getBestCursorSize(0, 0)
-
-        const val defaultSize = 24
+        const val defaultSize = 32
         lateinit var current: Tool
 
         init {
@@ -52,21 +44,4 @@ abstract class Tool(
     )
 
     override fun toString() = name
-
-    @ExperimentalSerializationApi
-    fun asCursor(): Cursor {
-        val settings = ConfigUtil.getSettings<RawkySettings>("deflatedpickle@core#*")
-        val x = settings?.cursorSize?.x ?: defaultSize
-        val y = settings?.cursorSize?.y ?: defaultSize
-
-        return Toolkit.getDefaultToolkit().createCustomCursor(
-            icon.image.getScaledInstance(
-                x,
-                y,
-                Image.SCALE_AREA_AVERAGING
-            ),
-            offset(x, y),
-            name,
-        )
-    }
 }

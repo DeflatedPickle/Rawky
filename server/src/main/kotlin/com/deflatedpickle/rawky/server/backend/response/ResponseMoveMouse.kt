@@ -1,9 +1,18 @@
 package com.deflatedpickle.rawky.server.backend.response
 
+import com.deflatedpickle.rawky.server.ServerPlugin
+import com.esotericsoftware.kryonet.Client
+import com.esotericsoftware.kryonet.Connection
 import java.awt.Point
 import java.util.*
 
 data class ResponseMoveMouse(
     override val id: Int = -1,
     val point: Point? = null
-) : Response()
+) : Response() {
+    override fun runClient(connection: Connection, client: Client) {
+        if (point != null) {
+            ServerPlugin.userMap[id]?.mousePosition?.location = point
+        }
+    }
+}

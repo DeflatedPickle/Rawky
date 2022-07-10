@@ -1,9 +1,12 @@
+@file:Suppress("USELESS_ELVIS")
+
 package com.deflatedpickle.rawky.pixelgrid
 
 import com.deflatedpickle.haruhi.api.redraw.RedrawActive
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.RawkySettings
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.event.EventUpdateCell
@@ -12,6 +15,9 @@ import com.deflatedpickle.rawky.util.DrawUtil
 import java.awt.BasicStroke
 import java.awt.Graphics
 import java.awt.Graphics2D
+import java.awt.Image
+import java.awt.MouseInfo
+import javax.swing.SwingUtilities
 
 @RedrawActive
 object PixelGridPanel : PluginPanel() {
@@ -42,6 +48,28 @@ object PixelGridPanel : PluginPanel() {
         }
     }
 
+    private fun drawCursor(g: Graphics) {
+        val settings = ConfigUtil.getSettings<RawkySettings>("deflatedpickle@core#*")
+        val width = settings?.cursorSize?.x ?: Tool.defaultSize
+        val height = settings?.cursorSize?.y ?: Tool.defaultSize
+
+        if (Tool.isToolValid() && MouseInfo.getPointerInfo() != null) {
+            val point = MouseInfo.getPointerInfo().location
+            SwingUtilities.convertPointFromScreen(point, this)
+
+            g.drawImage(
+                Tool.current.icon.image.getScaledInstance(
+                    width,
+                    height,
+                    Image.SCALE_AREA_AVERAGING
+                ),
+                point.x,
+                point.y,
+                null,
+            )
+        }
+    }
+
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
 
@@ -63,5 +91,7 @@ object PixelGridPanel : PluginPanel() {
 
             DrawUtil.paintHoverCell(selectedCells, g as Graphics2D)
         }
+
+        drawCursor(g)
     }
 }

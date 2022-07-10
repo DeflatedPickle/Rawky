@@ -48,10 +48,6 @@ object RawkyPlugin {
         }
 
     init {
-        EventChangeTool.addListener {
-            PluginUtil.window.cursor = it.asCursor()
-        }
-
         EventSerializeConfig.addListener {
             if ("core" in it.name) {
                 if (Tool.isToolValid()) {

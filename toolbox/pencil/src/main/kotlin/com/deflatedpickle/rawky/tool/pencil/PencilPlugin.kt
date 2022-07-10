@@ -30,12 +30,6 @@ import java.awt.Point
 object PencilPlugin : Tool(
     name = "Pencil",
     icon = MonoIcon.PENCIL,
-    offset = { _, y ->
-        Point(
-            2,
-            y - 1,
-        )
-    }
 ) {
     init {
         registry["deflatedpickle@$name"] = this

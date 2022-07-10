@@ -3,11 +3,9 @@ package com.deflatedpickle.rawky.server
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
-import com.deflatedpickle.marvin.Colour
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
@@ -15,24 +13,27 @@ import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.event.EventChangeColour
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateGrid
+import com.deflatedpickle.rawky.server.backend.api.Destination.CLIENT
+import com.deflatedpickle.rawky.server.backend.api.Destination.SERVER
+import com.deflatedpickle.rawky.server.backend.api.packet.ClientPacket
+import com.deflatedpickle.rawky.server.backend.api.packet.ServerPacket
 import com.deflatedpickle.rawky.server.backend.event.EventDisconnect
-import com.deflatedpickle.rawky.server.backend.event.EventUserJoinServer
-import com.deflatedpickle.rawky.server.backend.event.EventUserLeaveServer
-import com.deflatedpickle.rawky.server.backend.event.EventUserRename
+import com.deflatedpickle.rawky.server.backend.event.EventRegisterPackets
 import com.deflatedpickle.rawky.server.backend.event.EventStartServer
 import com.deflatedpickle.rawky.server.backend.query.QueryUpdateCell
 import com.deflatedpickle.rawky.server.backend.query.QueryChangeColour
 import com.deflatedpickle.rawky.server.backend.query.QueryChangeTool
 import com.deflatedpickle.rawky.server.backend.request.*
 import com.deflatedpickle.rawky.server.backend.response.*
+import com.deflatedpickle.rawky.server.backend.serializer.ColorSerializer
 import com.deflatedpickle.rawky.server.backend.util.JoinFail
 import com.deflatedpickle.rawky.server.backend.util.LeaveReason
+import com.deflatedpickle.rawky.server.backend.util.Role
 import com.deflatedpickle.rawky.server.backend.util.ServerProperties
 import com.deflatedpickle.rawky.server.backend.util.User
 import com.deflatedpickle.rawky.server.backend.util.UserUpdate
 import com.deflatedpickle.rawky.server.frontend.menu.MenuServer
 import com.deflatedpickle.rawky.server.frontend.widget.ServerPanel
-import com.deflatedpickle.rawky.util.ActionUtil
 import com.deflatedpickle.undulation.builder.ProgressMonitorBuilder
 import com.dosse.upnp.UPnP
 import com.esotericsoftware.kryo.Kryo
@@ -44,10 +45,13 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
+import java.awt.Color
 import java.awt.Component
 import java.awt.Point
 import java.awt.Rectangle
 import java.io.IOException
+import javax.swing.ImageIcon
 import javax.swing.JMenu
 import kotlin.collections.LinkedHashMap
 
@@ -68,7 +72,7 @@ import kotlin.collections.LinkedHashMap
 )
 @Suppress("unused")
 object ServerPlugin {
-    private val logger = LogManager.getLogger()
+    val logger: Logger = LogManager.getLogger()
 
     const val portMin = 49_152
     const val portMax = 65_535
@@ -115,6 +119,15 @@ object ServerPlugin {
 
         EventChangeColour.addListener {
             client.sendTCP(QueryChangeColour(id, RawkyPlugin.colour))
+        }
+
+        EventRegisterPackets.addListener {
+            with(it.first) {
+                registerQueries(this)
+                registerRequests(this)
+                registerResponses(this)
+                registerSerializers(this)
+            }
         }
 
         Runtime.getRuntime().addShutdownHook(object : Thread() {
@@ -178,19 +191,22 @@ object ServerPlugin {
 
     private fun registerSerializers(kryo: Kryo) {
         with(kryo) {
+            register(Function::class.java)
+
             register(LinkedHashMap::class.java)
             register(FloatArray::class.java)
 
             register(Point::class.java)
             register(Rectangle::class.java)
-
-            register(Colour::class.java)
+            register(Color::class.java, ColorSerializer(kryo))
+            register(ImageIcon::class.java)
 
             register(JoinFail::class.java)
             register(LeaveReason::class.java)
             register(UserUpdate::class.java)
 
             register(User::class.java)
+            register(Role::class.java)
 
             register(Cell::class.java)
 
@@ -215,20 +231,8 @@ object ServerPlugin {
                 task = { addServerListener() }
             }
             .queue {
-                note = "Registering queries"
-                task = { registerQueries(server!!.kryo) }
-            }
-            .queue {
-                note = "Registering requests"
-                task = { registerRequests(server!!.kryo) }
-            }
-            .queue {
-                note = "Registering responses"
-                task = { registerResponses(server!!.kryo) }
-            }
-            .queue {
-                note = "Registering serializers"
-                task = { registerSerializers(server!!.kryo) }
+                note = "Registering packets"
+                task = { EventRegisterPackets.trigger(Pair(server!!.kryo, SERVER)) }
             }
             .queue {
                 note = "Starting server"
@@ -290,92 +294,8 @@ object ServerPlugin {
                 override fun received(connection: Connection, any: Any) {
                     logger.trace("Received $any from ${connection.remoteAddressTCP}")
 
-                    when (any) {
-                        is RequestMoveMouse -> {
-                            server.sendToAllTCP(
-                                ResponseMoveMouse(
-                                    connection.id,
-                                    any.point
-                                )
-                            )
-                        }
-                        is RequestUserJoin -> {
-                            logger.info("${any.userName} joined")
-
-                            userMap[connection.id] = User(
-                                id = connection.id,
-                                userName = any.userName
-                            )
-
-                            server.sendToAllTCP(
-                                ResponseActiveUsers(
-                                    userMap,
-                                    UserUpdate.JOIN,
-                                )
-                            )
-
-                            server.sendToAllTCP(
-                                ResponseUserJoin(
-                                    connection.id,
-                                    any.userName,
-                                )
-                            )
-
-
-                            RawkyPlugin.document?.let { doc ->
-                                ServerPanel.sendGrid(doc)
-
-                                val frame = doc.children[doc.selectedIndex]
-                                val layer = frame.children[frame.selectedIndex]
-                                val grid = layer.child
-
-                                for (i in grid.children) {
-                                    if (i.colour != Cell.defaultColour) {
-                                        server.sendToAllExceptTCP(id, QueryUpdateCell(i))
-                                    }
-                                }
-                            }
-                        }
-                        is RequestUserLeave -> {
-                            logger.info("${userMap[connection.id]!!.userName} left")
-
-                            server.sendToAllTCP(
-                                ResponseUserLeave(
-                                    connection.id,
-                                )
-                            )
-
-                            ServerPanel.repaint()
-
-                            server.sendToAllTCP(
-                                ResponseActiveUsers(
-                                    userMap,
-                                    UserUpdate.LEAVE,
-                                )
-                            )
-                        }
-                        is RequestChangeName -> {
-                            logger.info("User ${any.id} requested to change their name to ${any.realName}")
-
-                            server.sendToAllTCP(
-                                ResponseActiveUsers(
-                                    userMap.also { it[any.id]!!.userName = any.realName },
-                                    UserUpdate.RENAME,
-                                )
-                            )
-
-                            server.sendToAllTCP(
-                                ResponseChangeName(
-                                    connection.id,
-                                    any.deadName,
-                                    any.realName,
-                                )
-                            )
-                        }
-                        is QueryChangeTool -> server.sendToAllTCP(any)
-                        is RequestRemoveUser -> userMap.remove(connection.id)
-                        is QueryUpdateCell -> updateCell(any)
-                        is QueryChangeColour -> server.sendToAllTCP(any)
+                    if (any is ServerPacket) {
+                        any.runServer(connection, server)
                     }
                 }
             })
@@ -400,20 +320,8 @@ object ServerPlugin {
                 task = { addClientListener() }
             }
             .queue {
-                note = "Registering queries"
-                task = { registerQueries(client.kryo) }
-            }
-            .queue {
-                note = "Registering requests"
-                task = { registerRequests(client.kryo) }
-            }
-            .queue {
-                note = "Registering responses"
-                task = { registerResponses(client.kryo) }
-            }
-            .queue {
-                note = "Registering serializers"
-                task = { registerSerializers(client.kryo) }
+                note = "Registering packets"
+                task = { EventRegisterPackets.trigger(Pair(client.kryo, CLIENT)) }
             }
             .queue {
                 note = "Starting the client"
@@ -487,44 +395,8 @@ object ServerPlugin {
             override fun received(connection: Connection, any: Any) {
                 logger.trace("Received $any from ${connection.remoteAddressTCP}")
 
-                when (any) {
-                    is ResponseMoveMouse -> {
-                        if (any.point != null) {
-                            userMap[any.id]?.mousePosition?.location = any.point
-                        }
-                    }
-                    is ResponseUserJoin -> {
-                        userMap[any.id]?.let {
-                            // logger.info("${it.userName} joined")
-                            it.let { EventUserJoinServer.trigger(it) }
-                        }
-                    }
-                    is ResponseUserLeave -> {
-                        userMap[any.id]?.let {
-                            logger.info("${it.userName} left")
-                            it.let { EventUserLeaveServer.trigger(it) }
-                            client.sendTCP(RequestRemoveUser())
-                        }
-                    }
-                    is ResponseJoinFail -> logger.warn("Failed to join due to ${any.reason}")
-                    is ResponseActiveUsers -> userMap.putAll(any.activeUsers)
-                    is ResponseNewDocument -> {
-                        if (server == null) {
-                            logger.debug("Creating a new document from server info")
-                            RawkyPlugin.document = ActionUtil.newDocument(
-                                any.rows,
-                                any.columns,
-                                any.frames,
-                                any.layers,
-                            )
-                            EventCreateDocument.trigger(RawkyPlugin.document!!)
-                        }
-                    }
-                    is ResponseChangeName -> EventUserRename.trigger(User(any.id, any.realName))
-                    is QueryChangeTool ->
-                        any.newTool?.let { tool -> userMap[any.id]?.tool = tool }
-                    is QueryUpdateCell -> updateCell(any)
-                    is QueryChangeColour -> userMap[any.id]?.colour = any.colour
+                if (any is ClientPacket) {
+                    any.runClient(connection, client)
                 }
 
                 ServerPanel.repaint()

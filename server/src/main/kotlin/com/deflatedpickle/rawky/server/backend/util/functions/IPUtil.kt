@@ -1,12 +1,14 @@
 package com.deflatedpickle.rawky.server.backend.util.functions
 
+import com.deflatedpickle.rawky.server.backend.api.Service
+import com.deflatedpickle.rawky.server.backend.api.Service.AWS
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
 import java.nio.ByteBuffer
 
-fun getPublicIP(): String {
-    val url = URL("http://checkip.amazonaws.com")
+fun getPublicIP(service: Service = AWS): String {
+    val url = URL(service.address)
     val bufferedReader = BufferedReader(
         InputStreamReader(
             url.openStream()

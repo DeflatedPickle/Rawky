@@ -10,6 +10,7 @@ import java.awt.Point
 data class User(
     val id: Int = -1,
     var userName: String = "",
+    var role: Role = Role.USER,
     val mousePosition: Point = originPoint,
     var colour: Color = Cell.defaultColour,
     var tool: Tool = Tool.registry.values.first()
