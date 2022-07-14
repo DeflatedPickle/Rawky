@@ -18,6 +18,7 @@ import com.deflatedpickle.rawky.server.backend.api.Destination.SERVER
 import com.deflatedpickle.rawky.server.backend.api.packet.ClientPacket
 import com.deflatedpickle.rawky.server.backend.api.packet.ServerPacket
 import com.deflatedpickle.rawky.server.backend.event.EventDisconnect
+import com.deflatedpickle.rawky.server.backend.event.EventJoinServer
 import com.deflatedpickle.rawky.server.backend.event.EventRegisterPackets
 import com.deflatedpickle.rawky.server.backend.event.EventStartServer
 import com.deflatedpickle.rawky.server.backend.query.QueryUpdateCell
@@ -367,10 +368,10 @@ object ServerPlugin {
                     }
                 }
             }
-        /*.queue {
-            note = "Triggering the join server event"
-            task = { userMap[id]?.let { EventJoinServer.trigger(it) }; 0 }
-        }*/
+            .queue {
+                note = "Triggering the join server event"
+                task = { EventJoinServer.trigger() }
+            }
     }
 
     fun leaveServer() {

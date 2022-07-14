@@ -22,6 +22,7 @@ import javax.swing.ListSelectionModel
 
 object UserListPanel : PluginPanel() {
     private val hostBar = JToolBar("Host Settings").apply {
+        // TODO: Add a way to kick users
         add(JButton("Kick"))
     }
     private val userBar = JToolBar("User Settings").apply {

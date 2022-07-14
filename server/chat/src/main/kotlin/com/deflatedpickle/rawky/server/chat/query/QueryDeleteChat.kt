@@ -8,20 +8,19 @@ import com.esotericsoftware.kryonet.Client
 import com.esotericsoftware.kryonet.Connection
 import com.esotericsoftware.kryonet.Server
 
-data class QuerySendChat(
+data class QueryDeleteChat(
     val id: Int = -1,
-    val message: String = "",
+    val messages: List<Message> = listOf(),
 ) : Query() {
     override fun runServer(connection: Connection, server: Server) {
-        server.sendToAllTCP(this)
+        if (ChatPanel.list.selectedValuesList.all { it.id == ServerPlugin.id } || ServerPlugin.server != null) {
+            server.sendToAllTCP(this)
+        }
     }
 
     override fun runClient(connection: Connection, client: Client) {
-        ChatPanel.model.addElement(
-            Message(
-                id,
-                message,
-            )
-        )
+        for (i in messages) {
+            ChatPanel.model.removeElement(i)
+        }
     }
 }

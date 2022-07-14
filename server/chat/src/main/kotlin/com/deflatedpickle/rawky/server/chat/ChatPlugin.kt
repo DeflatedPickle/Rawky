@@ -12,6 +12,7 @@ import com.deflatedpickle.rawky.server.backend.event.EventRegisterPackets
 import com.deflatedpickle.rawky.server.backend.event.EventUserJoinServer
 import com.deflatedpickle.rawky.server.backend.event.EventUserLeaveServer
 import com.deflatedpickle.rawky.server.backend.event.EventUserRename
+import com.deflatedpickle.rawky.server.chat.query.QueryDeleteChat
 import com.deflatedpickle.rawky.server.chat.query.QuerySendChat
 import javax.swing.DefaultListModel
 
@@ -37,8 +38,10 @@ object ChatPlugin {
         EventRegisterPackets.addListener {
             with(it.first) {
                 register(Message::class.java)
+                register(ArrayList::class.java)
 
                 register(QuerySendChat::class.java)
+                register(QueryDeleteChat::class.java)
             }
         }
     }
