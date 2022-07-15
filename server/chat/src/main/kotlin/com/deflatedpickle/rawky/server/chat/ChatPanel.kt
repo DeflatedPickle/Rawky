@@ -60,7 +60,7 @@ object ChatPanel : PluginPanel() {
                     UIManager.getColor("List.background")
                 }
 
-                add(JLabel(ServerPlugin.userMap[value.id]?.userName).apply {
+                add(JLabel("${ServerPlugin.userMap[value.id]?.userName} (${value.id})").apply {
                     foreground = ServerPlugin.userMap[value.id]?.colour
                 }, StickWest)
                 add(JSeparator(), FillHorizontal)
