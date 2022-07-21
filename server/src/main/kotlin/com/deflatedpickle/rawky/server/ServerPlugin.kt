@@ -99,15 +99,17 @@ object ServerPlugin {
 
             toolMenu.add(MenuServer)
 
+            GlobalScope.launch {
+                UPnP.isUPnPAvailable()
+            }
+        }
+
+        EventJoinServer.addListener {
             oldPane = PluginUtil.window.glassPane
 
             ServerPanel.rootPane = PluginUtil.window.rootPane
             PluginUtil.window.glassPane = ServerPanel
             PluginUtil.window.glassPane.isVisible = true
-
-            GlobalScope.launch {
-                UPnP.isUPnPAvailable()
-            }
         }
 
         EventDisconnect.addListener {

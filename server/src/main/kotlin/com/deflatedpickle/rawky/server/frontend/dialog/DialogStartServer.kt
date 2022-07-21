@@ -74,6 +74,8 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                                 val tcpPortByteArray = portToByteArray(dialog.tcpPortField.value as Int)
                                 val udpPortByteArray = portToByteArray(dialog.udpPortField.value as Int)
 
+                                // println("IP: ${getPublicIP()}\nTCP: ${dialog.tcpPortField.value}\nUDP: ${dialog.udpPortField.value}")
+
                                 Triple(ipByteArray, tcpPortByteArray, udpPortByteArray)
                             }
                         }

@@ -11,6 +11,8 @@ import com.deflatedpickle.rawky.server.backend.event.EventDisconnect
 import com.deflatedpickle.rawky.server.backend.event.EventUserJoinServer
 import com.deflatedpickle.rawky.server.backend.event.EventUserLeaveServer
 import com.deflatedpickle.rawky.server.backend.event.EventUserRename
+import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
+import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
 import javax.swing.DefaultListModel
 
 @Plugin(
@@ -23,7 +25,7 @@ import javax.swing.DefaultListModel
     """,
     type = PluginType.COMPONENT,
     component = UserListPanel::class,
-    componentMinimizedPosition = ComponentPosition.EAST,
+    componentMinimizedPosition = ComponentPosition.WEST,
     componentVisible = false,
     dependencies = [
         "deflatedpickle@core#*",
@@ -71,6 +73,10 @@ object UserListPlugin {
 
         EventCloseServer.addListener {
             (UserListPanel.list.model as DefaultListModel).removeAllElements()
+        }
+
+        EventChangeTheme.addListener {
+            UserListPanel.updateUIRecursively()
         }
     }
 }

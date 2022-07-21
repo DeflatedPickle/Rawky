@@ -55,7 +55,7 @@ object UserListPanel : PluginPanel() {
                 isSelected: Boolean,
                 cellHasFocus: Boolean
             ) = super.getListCellRendererComponent(
-                list, (value as User).let { "${it.userName} (${it.id})" },
+                list, (value as User).let { "${it.userName} (#${it.id})" },
                 index, isSelected, cellHasFocus,
             )
         }

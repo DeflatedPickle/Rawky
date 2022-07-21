@@ -17,6 +17,8 @@ import com.deflatedpickle.rawky.server.chat.query.QueryDeleteChat
 import com.deflatedpickle.rawky.server.chat.query.QuerySendChat
 import com.deflatedpickle.rawky.server.chat.request.RequestSyncOldChat
 import com.deflatedpickle.rawky.server.chat.response.ResponseSyncOldChat
+import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
+import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
 import javax.swing.DefaultListModel
 
 @Plugin(
@@ -29,8 +31,8 @@ import javax.swing.DefaultListModel
     """,
     type = PluginType.COMPONENT,
     component = ChatPanel::class,
-    // componentMinimizedPosition = ComponentPosition.EAST,
-    // componentVisible = false,
+    componentMinimizedPosition = ComponentPosition.SOUTH,
+    componentVisible = false,
     dependencies = [
         "deflatedpickle@core#*",
         "deflatedpickle@server#*",
@@ -57,6 +59,10 @@ object ChatPlugin {
                     ServerPlugin.id
                 )
             )
+        }
+
+        EventChangeTheme.addListener {
+            ChatPanel.updateUIRecursively()
         }
     }
 
