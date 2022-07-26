@@ -20,6 +20,7 @@ include 'server'
 [
         'userlist',
         'chat',
+        'leaderboard',
 ].each {
     include it
     project(":$it").projectDir = new File(settingsDir, "server/$it")

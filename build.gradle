@@ -222,6 +222,7 @@ run {
         runtimeOnly project(":server")
         runtimeOnly project(":userlist")
         runtimeOnly project(":chat")
+        runtimeOnly project(":leaderboard")
 
         // Encodings
         runtimeOnly project(":ascii85")
