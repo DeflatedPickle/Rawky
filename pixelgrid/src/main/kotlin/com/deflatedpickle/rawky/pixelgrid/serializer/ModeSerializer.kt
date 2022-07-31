@@ -14,7 +14,7 @@ import java.awt.Color
 @Serializer(forClass = Mode::class)
 object ModeSerializer : KSerializer<Mode?> {
     override val descriptor = PrimitiveSerialDescriptor(
-        serialName = "Color",
+        serialName = "Mode",
         kind = PrimitiveKind.STRING,
     )
 

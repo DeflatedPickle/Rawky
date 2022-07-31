@@ -75,6 +75,8 @@ include 'toolbox'
 }
 include 'colourwheel'
 
+include 'autosave'
+
 [
         'discordrpc',
         'pluginmanager',

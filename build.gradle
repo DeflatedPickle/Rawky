@@ -219,6 +219,8 @@ run {
         // Widgets
         runtimeOnly project(":colourwheel")
 
+        runtimeOnly project(":autosave")
+
         runtimeOnly project(":server")
         runtimeOnly project(":userlist")
         runtimeOnly project(":chat")
