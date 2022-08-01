@@ -1,30 +1,21 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused", "UNUSED_PARAMETER", "SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.export.text.rawr
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.api.impex.Exporter
-import com.deflatedpickle.rawky.api.impex.Importer
 import com.deflatedpickle.rawky.api.impex.Opener
-import com.deflatedpickle.rawky.event.EventUpdateCell
-import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
-import com.deflatedpickle.rawky.pixelgrid.api.Mode
 import com.deflatedpickle.rawky.setting.RawkyDocument
-import com.deflatedpickle.rawky.util.DrawUtil
-import com.github.underscore.lodash.U
+import com.github.underscore.U
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
-import java.awt.image.BufferedImage
 import java.io.File
 import java.io.FileOutputStream
-import javax.imageio.ImageIO
 
 @Plugin(
     value = "rawr",

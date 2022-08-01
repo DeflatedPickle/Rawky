@@ -1,28 +1,13 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused", "UNUSED_PARAMETER")
 
 package com.deflatedpickle.rawky.pixelgrid.export.text.ascii.block
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.marvin.registry.Registry
-import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.api.Tool
-import com.deflatedpickle.rawky.api.impex.Exporter
-import com.deflatedpickle.rawky.event.EventUpdateCell
-import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
-import com.deflatedpickle.rawky.pixelgrid.api.Mode
 import com.deflatedpickle.rawky.pixelgrid.export.text.ascii.api.Palette
-import com.deflatedpickle.rawky.pixelgrid.export.text.ascii.api.Palette.Companion.registry
-import com.deflatedpickle.rawky.setting.RawkyDocument
-import com.deflatedpickle.rawky.util.DrawUtil
-import com.github.underscore.lodash.U
 import java.awt.Color
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
-import java.awt.image.BufferedImage
-import java.io.File
-import java.io.FileOutputStream
-import javax.imageio.ImageIO
 
 @Plugin(
     value = "block",
