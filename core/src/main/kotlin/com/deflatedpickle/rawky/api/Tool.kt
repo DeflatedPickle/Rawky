@@ -1,6 +1,7 @@
 package com.deflatedpickle.rawky.api
 
 import com.deflatedpickle.haruhi.event.EventCreateDocument
+import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.marvin.registry.Registry
@@ -28,6 +29,11 @@ abstract class Tool(
 
         init {
             EventCreateDocument.addListener {
+                current = registry.values.first()
+                EventChangeTool.trigger(current)
+            }
+
+            EventOpenDocument.addListener {
                 current = registry.values.first()
                 EventChangeTool.trigger(current)
             }

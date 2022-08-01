@@ -5,10 +5,12 @@ package com.deflatedpickle.rawky.toolbox
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventCreateDocument
+import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.event.EventChangeTool
+import com.deflatedpickle.rawky.toolbox.event.EventToolboxFinish
 import com.deflatedpickle.undulation.api.ButtonType
 import com.deflatedpickle.undulation.functions.extensions.add
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -51,9 +53,17 @@ object ToolboxPlugin {
             }
 
             PluginUtil.window.add(toolbar, BorderLayout.LINE_START)
+
+            EventToolboxFinish.trigger(toolbar)
         }
 
         EventCreateDocument.addListener {
+            for (i in group.elements) {
+                i.isEnabled = true
+            }
+        }
+
+        EventOpenDocument.addListener {
             for (i in group.elements) {
                 i.isEnabled = true
             }

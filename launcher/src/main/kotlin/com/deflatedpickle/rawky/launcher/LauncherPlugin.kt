@@ -1,12 +1,19 @@
-@file:Suppress("SimpleRedundantLet")
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
+@file:Suppress("SimpleRedundantLet", "MemberVisibilityCanBePrivate")
 
 package com.deflatedpickle.rawky.launcher
 
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.api.util.DocumentCreationType.IMPORT
+import com.deflatedpickle.haruhi.api.util.DocumentCreationType.OPEN
 import com.deflatedpickle.haruhi.event.EventCreateDocument
+import com.deflatedpickle.haruhi.event.EventImportDocument
+import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
+import com.deflatedpickle.haruhi.event.EventSaveDocument
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
@@ -133,7 +140,7 @@ object LauncherPlugin {
             if (file.extension in v.extensions) {
                 none = false
                 RawkyPlugin.document = v.open(file)
-                EventCreateDocument.trigger(RawkyPlugin.document!!)
+                EventOpenDocument.trigger(Pair(RawkyPlugin.document!!, file))
 
                 break
             }
@@ -162,7 +169,7 @@ object LauncherPlugin {
                     ).apply { RawkyPlugin.document = this },
                     file
                 )
-                EventCreateDocument.trigger(RawkyPlugin.document!!)
+                EventImportDocument.trigger(Pair(RawkyPlugin.document!!, file))
 
                 break
             }
@@ -187,6 +194,7 @@ object LauncherPlugin {
 
                 if (doc != null) {
                     v.export(doc, file)
+                    EventSaveDocument.trigger(Pair(doc, file))
                 } else {
                     TaskDialogs.error(
                         PluginUtil.window,

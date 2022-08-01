@@ -17,5 +17,5 @@ data class AutoSaveSettings(
     @Required var path: @Serializable(FileSerializer::class) File = File("."),
     @Required var replace: Boolean = false,
     @Required @IntRange(0, 30) var delay: Int = 1,
-    @Required var file_type: @Serializable(FileTypeSerializer::class) FileType? = null,
+    @Required var fileType: @Serializable(FileTypeSerializer::class) FileType? = null,
 )

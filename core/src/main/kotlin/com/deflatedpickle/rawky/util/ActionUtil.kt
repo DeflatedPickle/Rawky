@@ -1,12 +1,15 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.util
 
+import com.deflatedpickle.haruhi.api.util.DocumentCreationType.NEW
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
-import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.dialog.NewFileDialog
+import com.deflatedpickle.rawky.setting.RawkyDocument
 import org.oxbow.swingbits.dialog.task.TaskDialog
 
 object ActionUtil {

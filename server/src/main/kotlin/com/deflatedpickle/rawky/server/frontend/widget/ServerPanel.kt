@@ -1,6 +1,7 @@
 package com.deflatedpickle.rawky.server.frontend.widget
 
 import com.deflatedpickle.haruhi.event.EventCreateDocument
+import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.event.EventUpdateCell
@@ -57,6 +58,10 @@ object ServerPanel : BetterGlassPane() {
 
         EventStartServer.addListener {
             EventCreateDocument.addListener {
+                sendGrid(it as RawkyDocument)
+            }
+
+            EventOpenDocument.addListener {
                 sendGrid(it as RawkyDocument)
             }
         }

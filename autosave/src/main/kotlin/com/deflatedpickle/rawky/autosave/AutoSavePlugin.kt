@@ -5,6 +5,7 @@ package com.deflatedpickle.rawky.autosave
 import com.deflatedpickle.haruhi.api.Registry
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.event.EventCreateDocument
+import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
@@ -13,6 +14,7 @@ import com.deflatedpickle.marvin.extensions.get
 import com.deflatedpickle.marvin.extensions.set
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.impex.Exporter
+import com.deflatedpickle.rawky.autosave.event.EventAutoSaveDocument
 import com.deflatedpickle.rawky.autosave.util.FileType
 import com.deflatedpickle.rawky.settings.SettingsGUI
 import com.deflatedpickle.undulation.constraints.FillHorizontal
@@ -34,8 +36,7 @@ import javax.swing.Timer
         Adds a timer to automatically save the current file
     """,
     dependencies = [
-        "deflatedpickle@rawky#*",
-        "deflatedpickle@imageio#*",
+        "deflatedpickle@core#*",
     ],
     settings = AutoSaveSettings::class
 )
@@ -49,9 +50,9 @@ object AutoSavePlugin {
     init {
         EventProgramFinishSetup.addListener {
             ConfigUtil.getSettings<AutoSaveSettings>("deflatedpickle@auto_save#*")?.let { config ->
-                if (config.file_type == null) {
+                if (config.fileType == null) {
                     val exporter = Exporter.registry.values.first()
-                    config.file_type = FileType(exporter, exporter.extensions.first())
+                    config.fileType = FileType(exporter, exporter.extensions.first())
 
                     PluginUtil.slugToPlugin("deflatedpickle@auto_save#*")
                         ?.let { plug -> ConfigUtil.serializeConfig(plug) }
@@ -104,24 +105,34 @@ object AutoSavePlugin {
         }
 
         EventCreateDocument.addListener {
-            ConfigUtil.getSettings<AutoSaveSettings>("deflatedpickle@auto_save#*")?.let { config ->
-                timer?.stop()
+            run()
+        }
 
-                timer = Timer(config.delay * MINUTE) {
-                    RawkyPlugin.document?.let { doc ->
-                        var name = config.name
+        EventOpenDocument.addListener {
+            run()
+        }
+    }
 
-                        if (!config.replace) {
-                            val count = config.path.list()?.count { it.startsWith(config.name) }
-                            name = "${config.name}-$count"
-                        }
+    private fun run() {
+        ConfigUtil.getSettings<AutoSaveSettings>("deflatedpickle@auto_save#*")?.let { config ->
+            timer?.stop()
 
-                        val file = File("${config.path.absolutePath}/$name.${config.file_type?.extension}").apply { createNewFile() }
-                        config.file_type?.handler?.export(doc, file)
+            timer = Timer(config.delay * MINUTE) {
+                RawkyPlugin.document?.let { doc ->
+                    var name = config.name
+
+                    if (!config.replace) {
+                        val count = config.path.list()?.count { it.startsWith(config.name) }
+                        name = "${config.name}-$count"
                     }
-                }.apply {
-                    start()
+
+                    val file = File("${config.path.absolutePath}/$name.${config.fileType?.extension}").apply { createNewFile() }
+                    config.fileType?.handler?.export(doc, file)
+
+                    EventAutoSaveDocument.trigger(Pair(doc, file))
                 }
+            }.apply {
+                start()
             }
         }
     }

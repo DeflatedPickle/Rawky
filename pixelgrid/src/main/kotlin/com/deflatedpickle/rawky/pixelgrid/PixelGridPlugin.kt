@@ -6,6 +6,7 @@ import com.deflatedpickle.haruhi.api.Registry
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventCreateDocument
+import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.event.EventSerializeConfig
 import com.deflatedpickle.haruhi.util.ConfigUtil
@@ -46,6 +47,10 @@ import javax.swing.SwingUtilities
 object PixelGridPlugin {
     init {
         EventCreateDocument.addListener {
+            PixelGridPanel.repaint()
+        }
+
+        EventOpenDocument.addListener {
             PixelGridPanel.repaint()
         }
 

@@ -1,14 +1,14 @@
 plugins {
-    id 'java'
-    id 'org.jetbrains.kotlin.jvm'
-    id 'org.jetbrains.kotlin.plugin.serialization'
+	id 'java'
+	id 'org.jetbrains.kotlin.jvm'
+	id 'org.jetbrains.kotlin.plugin.serialization'
 
-    id 'distribution'
-    id 'application'
+	id 'distribution'
+	id 'application'
 
-    id 'com.diffplug.spotless'
-    id 'de.undercouch.download'
-    // id 'net.kyori.blossom'
+	id 'com.diffplug.spotless'
+	id 'de.undercouch.download'
+	// id 'net.kyori.blossom'
 }
 
 group "$group"
@@ -17,238 +17,239 @@ version "$version"
 sourceCompatibility = targetCompatibility = "$jvmTarget"
 
 project.ext {
-    ver = project.properties["pre"] ?: version
-    vendor = System.getProperty("java.vendor").replace(" ", "").toLowerCase()
+	ver = project.properties["pre"] ?: version
+	vendor = System.getProperty("java.vendor").replace(" ", "").toLowerCase()
 
-    if (vendor == "internationalbusinessmachinescorporation") {
-        vendor = "ibm"
-    }
+	if (vendor == "internationalbusinessmachinescorporation") {
+		vendor = "ibm"
+	}
 
-    jv = JavaVersion.current()
+	jv = JavaVersion.current()
 
-    if (jv == JavaVersion.VERSION_1_8) {
-        jv = "8"
-    }
+	if (jv == JavaVersion.VERSION_1_8) {
+		jv = "8"
+	}
 
-    mostlyName = "$name-$ver-${System.getProperty("os.name").toLowerCase()}-${System.getProperty("os.arch")}-java${jv}-${vendor}"
+	mostlyName = "$name-$ver-${System.getProperty("os.name").toLowerCase()}-${System.getProperty("os.arch")}-java${jv}-${vendor}"
 
-    licenseDir = new File(buildDir, 'licenses')
-    toolDir = new File(buildDir, 'tools')
+	licenseDir = new File(buildDir, 'licenses')
+	toolDir = new File(buildDir, 'tools')
 }
 
 allprojects { p ->
-    apply plugin: 'java'
-    apply plugin: 'java-library'
-    apply plugin: 'distribution'
+	apply plugin: 'java'
+	apply plugin: 'java-library'
+	apply plugin: 'distribution'
 
-    apply plugin: 'org.jetbrains.kotlin.jvm'
-    apply plugin: 'org.jetbrains.kotlin.plugin.serialization'
+	apply plugin: 'org.jetbrains.kotlin.jvm'
+	apply plugin: 'org.jetbrains.kotlin.plugin.serialization'
 
-    apply plugin: 'com.diffplug.spotless'
-    // apply plugin: 'net.kyori.blossom'
+	apply plugin: 'com.diffplug.spotless'
+	// apply plugin: 'net.kyori.blossom'
 
-    repositories {
-        mavenCentral()
+	repositories {
+		mavenCentral()
 
-        maven { url 'https://jitpack.io' }
-        maven { url 'https://github.com/eugener/oxbow/raw/master/maven/repository' }
-        maven { url 'https://clojars.org/repo/' }
-        maven { url 'https://raw.github.com/kristian/better-glass-pane/mvn-repo/' }
-    }
+		maven { url 'https://jitpack.io' }
+		maven { url 'https://github.com/eugener/oxbow/raw/master/maven/repository' }
+		maven { url 'https://clojars.org/repo/' }
+		maven { url 'https://raw.github.com/kristian/better-glass-pane/mvn-repo/' }
+	}
 
-    dependencies {
-        api "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-        api "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
-        api "org.jetbrains.kotlinx:kotlinx-serialization-json:${kotlinSerialization}"
-        api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
-        api 'org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4'
-        api 'org.jetbrains.kotlinx:kotlinx-datetime:0.4.0'
-    }
+	dependencies {
+		api "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+		api "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
+		api "org.jetbrains.kotlinx:kotlinx-serialization-json:${kotlinSerialization}"
+		api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
+		api 'org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4'
+		api 'org.jetbrains.kotlinx:kotlinx-datetime:0.4.0'
+	}
 
-    spotless {
-        ratchetFrom 'origin/rewrite'
+	spotless {
+		ratchetFrom 'origin/rewrite'
 
-        java {
-            importOrder()
-            removeUnusedImports()
-            googleJavaFormat()
+		java {
+			importOrder()
+			removeUnusedImports()
+			googleJavaFormat()
 
-            licenseHeader "$licenseHeader\n\n"
-        }
+			licenseHeader "$licenseHeader\n\n"
+		}
 
-        groovyGradle {
-            target '*.gradle'
-            greclipse()
-        }
+		groovyGradle {
+			target '*.gradle'
+			greclipse()
+		}
 
-        kotlin {
-            ktlint("$ktlintVersion")
+		kotlin {
+			ktlint("$ktlintVersion")
 
-            licenseHeader "$licenseHeader\n\n"
-        }
+			licenseHeader "$licenseHeader\n\n"
+		}
 
-        format 'misc', {
-            target '*.md', '.gitignore'
+		format 'misc', {
+			target '*.md', '.gitignore'
 
-            trimTrailingWhitespace()
-            indentWithTabs()
-            endWithNewline()
-        }
-    }
+			trimTrailingWhitespace()
+			indentWithTabs()
+			endWithNewline()
+		}
+	}
 
-    compileKotlin {
-        kotlinOptions.jvmTarget = sourceCompatibility
+	compileKotlin {
+		kotlinOptions.jvmTarget = sourceCompatibility
 
-        kotlinOptions {
-            freeCompilerArgs = [
-                    "-Xopt-in=kotlin.RequiresOptIn",
-                    "-Xinline-classes",
-            ]
-        }
-    }
+		kotlinOptions {
+			freeCompilerArgs = [
+				"-Xopt-in=kotlin.RequiresOptIn",
+				"-Xinline-classes",
+			]
+		}
+	}
 
-    /*blossom {
-        replaceToken('$[name]', p.property('id'))
-        replaceToken('$[author]', p.property('author'))
-        replaceToken('$[version]', p.version)
-    }*/
+	/*blossom {
+	 replaceToken('$[name]', p.property('id'))
+	 replaceToken('$[author]', p.property('author'))
+	 replaceToken('$[version]', p.version)
+	 }*/
 }
 
 startScripts {
-    executableDir = ""
+	executableDir = ""
 
-    doLast {
-        windowsScript.text = windowsScript.text.replaceAll('set CLASSPATH=.*', 'set CLASSPATH=.;%APP_HOME%/lib/*')
-    }
+	doLast {
+		windowsScript.text = windowsScript.text.replaceAll('set CLASSPATH=.*', 'set CLASSPATH=.;%APP_HOME%/lib/*')
+	}
 }
 
 distributions {
-    //noinspection GroovyAssignabilityCheck
-    main {
-        contents {
-            from files('README.MD', 'LICENSE')
-            from startScripts
+	//noinspection GroovyAssignabilityCheck
+	main {
+		contents {
+			from files('README.MD', 'LICENSE')
+			from startScripts
 
-            into('data') {
-                from files('data')
-            }
+			into('data') {
+				from files('data')
+			}
 
-            into('licenses') {
-                from files("$buildDir/licenses")
-            }
-            into('tools') {
-                from files("$buildDir/tools")
-            }
+			into('licenses') {
+				from files("$buildDir/licenses")
+			}
+			into('tools') {
+				from files("$buildDir/tools")
+			}
 
-            subprojects.each { p ->
-                into('plugins') {
-                    from p.getTasksByName("jar", true)
-                }
-            }
-        }
-    }
+			subprojects.each { p ->
+				into('plugins') {
+					from p.getTasksByName("jar", true)
+				}
+			}
+		}
+	}
 }
 
 distZip {
-    archiveName "$mostlyName-distZip.zip"
+	archiveName "$mostlyName-distZip.zip"
 
-    def list = []
+	def list = []
 
-    // Collect a list of all the JARs produced by submodules
-    subprojects.each { p ->
-        def jar = p.getTasksByName("jar", true).archiveFile
+	// Collect a list of all the JARs produced by submodules
+	subprojects.each { p ->
+		def jar = p.getTasksByName("jar", true).archiveFile
 
-        // We have to leave these out though
-        if (
-        !(p.name in ["master", "core", "launcher"]) &&
-                jar.size > 0
-        ) {
-            list.add(jar.first().getAsFile().get())
-        }
-    }
+		// We have to leave these out though
+		if (
+		!(p.name in ["master", "core", "launcher"]) &&
+		jar.size > 0
+		) {
+			list.add(jar.first().getAsFile().get())
+		}
+	}
 
-    eachFile { file ->
-        // Files in /bin are copied to the main directory
-        // so we can exclude them
-        if (file.path.contains('bin')) {
-            file.exclude()
-        } else if (file.path.contains('lib') &&
-                // Check if the current file is a submodule
-                file.getFile() in list
-                || file.name =~ /Rawky-\d\.\d\.\d\.jar/) {
-            file.exclude()
-        }
-    }
+	eachFile { file ->
+		// Files in /bin are copied to the main directory
+		// so we can exclude them
+		if (file.path.contains('bin')) {
+			file.exclude()
+		} else if (file.path.contains('lib') &&
+		// Check if the current file is a submodule
+		file.getFile() in list
+		|| file.name =~ /Rawky-\d\.\d\.\d\.jar/) {
+			file.exclude()
+		}
+	}
 }
 
 distTar {
-    archiveName "$mostlyName-distTar.tar"
+	archiveName "$mostlyName-distTar.tar"
 }
 
 run {
-    args = ['indev']
+	args = ['indev']
 
-    doFirst {
-        file('run').mkdirs()
+	doFirst {
+		file('run').mkdirs()
 
-        copy {
-            from 'data'
-            into 'run/data'
-        }
-    }
+		copy {
+			from 'data'
+			into 'run/data'
+		}
+	}
 
-    workingDir 'run'
+	workingDir 'run'
 
-    dependencies {
-        implementation project(':launcher')
-        implementation project(":pixelgrid")
+	dependencies {
+		implementation project(':launcher')
+		implementation project(":pixelgrid")
 
-        // Pixel Grid -> Mode
-        implementation project(":mouse")
-        implementation project(":keyboard")
+		// Pixel Grid -> Mode
+		implementation project(":mouse")
+		implementation project(":keyboard")
 
-        // Export -> Image
-        implementation project(":imageio")
-        // Export -> Text
-        implementation project(":ascii")
-        implementation project(":rawr")
+		// Export -> Image
+		implementation project(":imageio")
+		// Export -> Text
+		implementation project(":ascii")
+		implementation project(":rawr")
 
-        // Export -> Text -> Ascii
-        implementation project(":block")
+		// Export -> Text -> Ascii
+		implementation project(":block")
 
-        // Widgets
-        runtimeOnly project(":colourwheel")
+		// Widgets
+		runtimeOnly project(":colourwheel")
 
-        runtimeOnly project(":autosave")
+		runtimeOnly project(":autosave")
+		runtimeOnly project(":autoload")
 
-        runtimeOnly project(":server")
-        runtimeOnly project(":userlist")
-        runtimeOnly project(":chat")
-        runtimeOnly project(":leaderboard")
+		runtimeOnly project(":server")
+		runtimeOnly project(":userlist")
+		runtimeOnly project(":chat")
+		runtimeOnly project(":leaderboard")
 
-        // Encodings
-        runtimeOnly project(":ascii85")
-        runtimeOnly project(":base58")
-        runtimeOnly project(":base62")
-        runtimeOnly project(":base64")
-        runtimeOnly project(":base91")
+		// Encodings
+		runtimeOnly project(":ascii85")
+		runtimeOnly project(":base58")
+		runtimeOnly project(":base62")
+		runtimeOnly project(":base64")
+		runtimeOnly project(":base91")
 
-        runtimeOnly project(":toolbox")
+		runtimeOnly project(":toolbox")
 
-        // Tools
-        runtimeOnly project(":pencil")
-        runtimeOnly project(":eraser")
-        runtimeOnly project(":dropper")
+		// Tools
+		runtimeOnly project(":pencil")
+		runtimeOnly project(":eraser")
+		runtimeOnly project(":dropper")
 
-        // Sniffle
-        // runtimeOnly project(':discordrpc')
-        runtimeOnly project(':pluginmanager')
-        runtimeOnly project(':settingsgui')
-        runtimeOnly project(':tipoftheday')
-        runtimeOnly project(':swingsettings')
-    }
+		// Sniffle
+		// runtimeOnly project(':discordrpc')
+		runtimeOnly project(':pluginmanager')
+		runtimeOnly project(':settingsgui')
+		runtimeOnly project(':tipoftheday')
+		runtimeOnly project(':swingsettings')
+	}
 
-    application {
-        mainClassName = 'com.deflatedpickle.rawky.launcher.MainKt'
-    }
+	application {
+		mainClassName = 'com.deflatedpickle.rawky.launcher.MainKt'
+	}
 }

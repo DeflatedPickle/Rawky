@@ -1,12 +1,12 @@
 pluginManagement {
-    plugins {
-        id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
-        id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlinVersion"
+	plugins {
+		id 'org.jetbrains.kotlin.jvm' version "$kotlinVersion"
+		id 'org.jetbrains.kotlin.plugin.serialization' version "$kotlinVersion"
 
-        id 'com.diffplug.spotless' version "$spotlessVersion"
-        id 'de.undercouch.download' version "$downloadVersion"
-        // id "net.kyori.blossom" version "$blossomVersion"
-    }
+		id 'com.diffplug.spotless' version "$spotlessVersion"
+		id 'de.undercouch.download' version "$downloadVersion"
+		// id "net.kyori.blossom" version "$blossomVersion"
+	}
 }
 
 rootProject.name = 'Rawky'
@@ -18,74 +18,65 @@ include 'launcher'
 
 include 'server'
 [
-        'userlist',
-        'chat',
-        'leaderboard',
+	'userlist',
+	'chat',
+	'leaderboard',
 ].each {
-    include it
-    project(":$it").projectDir = new File(settingsDir, "server/$it")
+	include it
+	project(":$it").projectDir = new File(settingsDir, "server/$it")
 }
 [
-        'ascii85',
-        'base58',
-        'base62',
-        'base64',
-        'base91',
+	'ascii85',
+	'base58',
+	'base62',
+	'base64',
+	'base91',
 ].each {
-    include it
-    project(":$it").projectDir = new File(settingsDir, "server/encoding/$it")
+	include it
+	project(":$it").projectDir = new File(settingsDir, "server/encoding/$it")
 }
 
 include 'pixelgrid'
-[
-        'mouse',
-        'keyboard',
-].each {
-    include it
-    project(":$it").projectDir = new File(settingsDir, "pixelgrid/mode/$it")
+['mouse', 'keyboard',].each {
+	include it
+	project(":$it").projectDir = new File(settingsDir, "pixelgrid/mode/$it")
 }
-[
-        'imageio',
-].each {
-    include it
-    project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/image/$it")
+['imageio',].each {
+	include it
+	project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/image/$it")
 }
-[
-        'ascii',
-        'rawr',
-].each {
-    include it
-    project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/text/$it")
+['ascii', 'rawr',].each {
+	include it
+	project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/text/$it")
 }
-[
-        'block',
-].each {
-    include it
-    project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/text/ascii/$it")
+['block',].each {
+	include it
+	project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/text/ascii/$it")
 }
 
 include 'toolbox'
 [
-        'pencil',
-        'eraser',
-        'dropper',
+	'pencil',
+	'eraser',
+	'dropper',
 ].each {
-    include it
-    project(":$it").projectDir = new File(settingsDir, "toolbox/$it")
+	include it
+	project(":$it").projectDir = new File(settingsDir, "toolbox/$it")
 }
 include 'colourwheel'
 
 include 'autosave'
+include 'autoload'
 
 [
-        'discordrpc',
-        'pluginmanager',
-        'settingsgui',
-        'tipoftheday',
-        'swingsettings'
+	'discordrpc',
+	'pluginmanager',
+	'settingsgui',
+	'tipoftheday',
+	'swingsettings'
 ].each {
-    include it
-    project(":$it").projectDir = new File(settingsDir, "libs/sniffle/$it")
+	include it
+	project(":$it").projectDir = new File(settingsDir, "libs/sniffle/$it")
 }
 
 includeBuild 'libs/haruhi'
