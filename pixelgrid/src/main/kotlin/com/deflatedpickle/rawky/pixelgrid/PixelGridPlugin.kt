@@ -72,7 +72,7 @@ object PixelGridPlugin {
                                     ItemEvent.SELECTED -> {
                                         instance.set(name, it.item)
                                         (it.item as Mode).apply()
-                                        SettingsGUI.serializeConfig(plugin)
+                                        ConfigUtil.serializeConfig(plugin)
                                     }
                                 }
                             }

@@ -54,7 +54,7 @@ object AutoSavePlugin {
                     config.file_type = FileType(exporter, exporter.extensions.first())
 
                     PluginUtil.slugToPlugin("deflatedpickle@auto_save#*")
-                        ?.let { plug -> SettingsGUI.serializeConfig(plug) }
+                        ?.let { plug -> ConfigUtil.serializeConfig(plug) }
                 }
             }
 
@@ -85,7 +85,7 @@ object AutoSavePlugin {
                                 handler.selectedItem as Exporter,
                                 extension.selectedItem as String? ?: "null",
                             ))
-                            SettingsGUI.serializeConfig(plugin)
+                            ConfigUtil.serializeConfig(plugin)
                         }
 
                         extension.addItemListener {
@@ -93,7 +93,7 @@ object AutoSavePlugin {
                                 handler.selectedItem as Exporter,
                                 extension.selectedItem as String? ?: "null",
                             ))
-                            SettingsGUI.serializeConfig(plugin)
+                            ConfigUtil.serializeConfig(plugin)
                         }
 
                         add(handler, FillHorizontal)

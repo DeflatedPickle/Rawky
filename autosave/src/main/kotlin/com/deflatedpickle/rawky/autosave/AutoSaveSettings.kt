@@ -2,11 +2,10 @@
 
 package com.deflatedpickle.rawky.autosave
 
-import com.deflatedpickle.rawky.autosave.serializer.FileSerializer
+import com.deflatedpickle.marvin.serializer.FileSerializer
 import com.deflatedpickle.rawky.autosave.serializer.FileTypeSerializer
 import com.deflatedpickle.rawky.autosave.util.FileType
 import com.deflatedpickle.rawky.settings.api.IntRange
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Required
 import kotlinx.serialization.Serializable
