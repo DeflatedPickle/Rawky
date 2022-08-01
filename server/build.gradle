@@ -9,7 +9,7 @@ dependencies {
 
     // Server
     api 'com.esotericsoftware:kryo:5.2.0'
-    api 'kryonet:kryonet:2.21'
+    api 'kryonet:kryonet:2.21-2'
 
     // UPnP
     implementation 'com.github.geo-gs:WaifUPnP:576d111ae6'
