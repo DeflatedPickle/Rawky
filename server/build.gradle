@@ -15,5 +15,5 @@ dependencies {
     implementation 'com.github.geo-gs:WaifUPnP:576d111ae6'
 
     // Widgets
-    implementation 'lc.kra.swing:better-glass-pane:0.1.4'
+    implementation 'lc.kra.swing:better-glass-pane:0.1.5'
 }
