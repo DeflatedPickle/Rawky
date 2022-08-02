@@ -59,6 +59,7 @@ include 'toolbox'
 	'pencil',
 	'eraser',
 	'dropper',
+	'line',
 ].each {
 	include it
 	project(":$it").projectDir = new File(settingsDir, "toolbox/$it")

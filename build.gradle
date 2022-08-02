@@ -240,6 +240,7 @@ run {
 		runtimeOnly project(":pencil")
 		runtimeOnly project(":eraser")
 		runtimeOnly project(":dropper")
+		runtimeOnly project(":line")
 
 		// Sniffle
 		// runtimeOnly project(':discordrpc')

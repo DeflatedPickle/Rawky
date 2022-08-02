@@ -7,6 +7,7 @@ import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.RawkySettings
+import com.deflatedpickle.rawky.api.Painter
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.event.EventUpdateCell
@@ -90,6 +91,11 @@ object PixelGridPanel : PluginPanel() {
             }
 
             DrawUtil.paintHoverCell(selectedCells, g as Graphics2D)
+
+            val tool = Tool.current
+            if (selectedCells.size > 0 && tool is Painter) {
+                tool.paint(selectedCells.first(), g)
+            }
         }
 
         drawCursor(g)
