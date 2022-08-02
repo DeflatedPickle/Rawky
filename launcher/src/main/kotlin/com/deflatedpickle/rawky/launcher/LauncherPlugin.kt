@@ -4,6 +4,7 @@
 
 package com.deflatedpickle.rawky.launcher
 
+import com.alexandriasoftware.swing.JSplitButton
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
@@ -61,47 +62,26 @@ object LauncherPlugin {
         }
     }
 
+    private val historyMenu = LimitedMenu("History", 0).apply {
+        ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
+            this.limit = it.historyLength
+
+            for (i in it.history) {
+                add("Open \"${i.absolutePath}\"") {
+                    open(i)
+                }
+            }
+        }
+    }
+
     init {
         EventProgramFinishSetup.addListener {
             val menuBar = RegistryUtil.get(MenuCategory.MENU.name)
             (menuBar?.get(MenuCategory.FILE.name) as JMenu).apply {
-                val historyMenu = LimitedMenu("History", 0).apply {
-                    ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
-                        this.limit = it.historyLength
-
-                        for (i in it.history) {
-                            add("Open \"${i.absolutePath}\"") {
-                                open(i)
-                            }
-                        }
-                    }
-                }
-
                 add("New", MonoIcon.FOLDER_NEW) { ActionUtil.newFile() }
 
                 add("Open", MonoIcon.FOLDER_OPEN) {
-                    if (chooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
-                        open(chooser.selectedFile)
-
-                        if (!this.menuComponents.contains(historyMenu)) {
-                            add(historyMenu)
-                        }
-
-                        ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
-                            it.history.add(chooser.selectedFile)
-
-                            if (it.history.size >= it.historyLength) {
-                                for (i in it.historyLength until it.history.size) {
-                                    it.history.removeAt(0)
-                                }
-                            }
-
-                            historyMenu.add("Open \"${chooser.selectedFile.absolutePath}\"")
-
-                            PluginUtil.slugToPlugin("deflatedpickle@launcher#*")
-                                ?.let { plug -> ConfigUtil.serializeConfig(plug) }
-                        }
-                    }
+                    openDialog(this)
                 }
 
                 ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
@@ -112,23 +92,23 @@ object LauncherPlugin {
 
                 addSeparator()
 
-                add("Import", MonoIcon.FILE_NEW) {
-                    if (chooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
-                        import(chooser.selectedFile)
-                    }
-                }
-
-                add("Export", MonoIcon.FILE_EXPORT) {
-                    if (chooser.showSaveDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
-                        export(chooser.selectedFile)
-                    }
-                }
+                add("Import", MonoIcon.FILE_NEW) { importDialog() }
+                add("Export", MonoIcon.FILE_EXPORT) { exportDialog() }
 
                 addSeparator()
             }
 
             Toolbar.apply {
                 add(icon = MonoIcon.FOLDER_NEW, tooltip = "New") { ActionUtil.newFile() }
+                add(icon = MonoIcon.FOLDER_OPEN, tooltip = "Open") {
+                    val fileMenu = (menuBar.get(MenuCategory.FILE.name) as JMenu)
+                    openDialog(fileMenu)
+                }
+
+                addSeparator()
+
+                add(icon = MonoIcon.FILE_NEW, tooltip = "Import") { importDialog() }
+                add(icon = MonoIcon.FILE_EXPORT, tooltip = "Export") { exportDialog() }
             }
         }
     }
@@ -139,7 +119,9 @@ object LauncherPlugin {
         for ((_, v) in Opener.registry) {
             if (file.extension in v.extensions) {
                 none = false
-                RawkyPlugin.document = v.open(file)
+                RawkyPlugin.document = v.open(file).apply {
+                    this.name = file.nameWithoutExtension
+                }
                 EventOpenDocument.trigger(Pair(RawkyPlugin.document!!, file))
 
                 break
@@ -195,6 +177,7 @@ object LauncherPlugin {
                 if (doc != null) {
                     v.export(doc, file)
                     EventSaveDocument.trigger(Pair(doc, file))
+                    doc.name = file.nameWithoutExtension
                 } else {
                     TaskDialogs.error(
                         PluginUtil.window,
@@ -212,6 +195,43 @@ object LauncherPlugin {
                 "Invalid Exporters",
                 "No exporter is registered for this file type"
             )
+        }
+    }
+
+    fun openDialog(menu: JMenu) {
+        if (chooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
+            open(chooser.selectedFile)
+
+            if (!menu.menuComponents.contains(historyMenu)) {
+                menu.add(historyMenu)
+            }
+
+            ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
+                it.history.add(chooser.selectedFile)
+
+                if (it.history.size >= it.historyLength) {
+                    for (i in it.historyLength until it.history.size) {
+                        it.history.removeAt(0)
+                    }
+                }
+
+                historyMenu.add("Open \"${chooser.selectedFile.absolutePath}\"")
+
+                PluginUtil.slugToPlugin("deflatedpickle@launcher#*")
+                    ?.let { plug -> ConfigUtil.serializeConfig(plug) }
+            }
+        }
+    }
+
+    fun importDialog() {
+        if (chooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
+            import(chooser.selectedFile)
+        }
+    }
+
+    fun exportDialog() {
+        if (chooser.showSaveDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
+            export(chooser.selectedFile)
         }
     }
 }

@@ -13,6 +13,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RawkyDocument(
     val version: Int = 1,
+    var name: String? = null,
     override val children: MutableList<Frame>,
     override var selectedIndex: Int = 0
 ) : MultiParent<Frame>, ChildSelector, Document

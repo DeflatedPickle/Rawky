@@ -123,7 +123,12 @@ object AutoSavePlugin {
 
                     if (!config.replace) {
                         val count = config.path.list()?.count { it.startsWith(config.name) }
-                        name = "${config.name}-$count"
+
+                        name = if (doc.name == null) {
+                            "${config.name}-$count"
+                        } else {
+                            "${doc.name}-$count"
+                        }
                     }
 
                     val file = File("${config.path.absolutePath}/$name.${config.fileType?.extension}").apply { createNewFile() }
