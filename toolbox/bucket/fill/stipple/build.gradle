@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(":core")
+    implementation project(":settingsgui")
+
+    implementation project(":bucket")
+}

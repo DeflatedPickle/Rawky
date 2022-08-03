@@ -26,12 +26,6 @@ dependencies {
     api 'com.github.renatoathaydes:kunion:0bd9cbfe38'
     // api 'org.javassist:javassist:3.28.0-GA'
 
-    api 'com.deflatedpickle:marvin:'
-    api 'com.deflatedpickle:undulation:'
-
-    // Plugin framework
-    api 'com.deflatedpickle:haruhi:'
-
     // Events
     api 'com.github.Fylipp:easy-events:v1.1.0'
 
@@ -64,6 +58,15 @@ dependencies {
 
     // Layouts
     api 'com.github.DeflatedPickle:WrapLayout:9ae792ee13'
+
+    // Java util
+    api 'com.deflatedpickle:marvin:'
+
+    // Swing util
+    api 'com.deflatedpickle:undulation:'
+
+    // Plugin framework
+    api 'com.deflatedpickle:haruhi:'
 
     // Toasts
     api 'com.deflatedpickle:tosuto:'

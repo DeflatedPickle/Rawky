@@ -241,6 +241,11 @@ run {
 		runtimeOnly project(":eraser")
 		runtimeOnly project(":dropper")
 		runtimeOnly project(":line")
+		runtimeOnly project(":bucket")
+
+		// Bucket Fills
+		runtimeOnly project(":solid")
+		runtimeOnly project(":stipple")
 
 		// Sniffle
 		// runtimeOnly project(':discordrpc')
