@@ -36,7 +36,7 @@ import com.deflatedpickle.rawky.server.backend.util.UserUpdate
 import com.deflatedpickle.rawky.server.frontend.menu.MenuServer
 import com.deflatedpickle.rawky.server.frontend.widget.ServerPanel
 import com.deflatedpickle.undulation.builder.ProgressMonitorBuilder
-import com.dosse.upnp.UPnP
+import com.deflatedpickle.icupnp.UPnP
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryonet.Client
 import com.esotericsoftware.kryonet.Connection

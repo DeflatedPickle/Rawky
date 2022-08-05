@@ -12,7 +12,8 @@ dependencies {
     api 'kryonet:kryonet:2.21-2'
 
     // UPnP
-    implementation 'com.github.geo-gs:WaifUPnP:576d111ae6'
+    // implementation 'com.github.geo-gs:WaifUPnP:1.2'
+    implementation 'com.deflatedpickle:icupnp:'
 
     // Widgets
     implementation 'lc.kra.swing:better-glass-pane:0.1.5'

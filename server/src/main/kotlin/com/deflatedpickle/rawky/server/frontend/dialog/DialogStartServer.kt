@@ -20,7 +20,7 @@ import com.deflatedpickle.undulation.DocumentAdapter
 import com.deflatedpickle.undulation.builder.ProgressMonitorBuilder
 import com.deflatedpickle.undulation.constraints.StickEast
 import com.deflatedpickle.undulation.constraints.StickEastFinishLine
-import com.dosse.upnp.UPnP
+import com.deflatedpickle.icupnp.UPnP
 import org.apache.logging.log4j.LogManager
 import org.jdesktop.swingx.JXTextField
 import org.oxbow.swingbits.dialog.task.TaskDialog

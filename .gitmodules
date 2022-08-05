@@ -19,3 +19,6 @@
 [submodule "libs/eyellect"]
 	path = libs/eyellect
 	url = https://github.com/DeflatedPickle/eyellect
+[submodule "libs/icupnp"]
+	path = libs/icupnp
+	url = https://github.com/DeflatedPickle/icupnp
