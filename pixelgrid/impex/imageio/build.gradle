@@ -1,0 +1,21 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+dependencies {
+    implementation project(":core")
+    implementation project(":pixelgrid")
+
+    // Read and write support
+    implementation 'com.twelvemonkeys.imageio:imageio-bmp:3.8.2'
+    implementation 'com.twelvemonkeys.imageio:imageio-icns:3.8.2'
+    implementation 'com.twelvemonkeys.imageio:imageio-iff:3.8.2'
+    implementation 'com.twelvemonkeys.imageio:imageio-jpeg:3.8.2'
+    implementation 'com.twelvemonkeys.imageio:imageio-pict:3.8.2'
+    implementation 'com.twelvemonkeys.imageio:imageio-pnm:3.8.2'
+    implementation 'com.twelvemonkeys.imageio:imageio-psd:3.8.2'
+    implementation 'com.twelvemonkeys.imageio:imageio-tga:3.8.2'
+    implementation 'com.twelvemonkeys.imageio:imageio-tiff:3.8.2'
+
+    implementation 'org.sejda.imageio:webp-imageio:0.1.6'
+}

@@ -37,21 +37,21 @@ include 'server'
 }
 
 include 'pixelgrid'
-['mouse', 'keyboard',].each {
+[
+	'mouse',
+ 	'keyboard',
+].each {
 	include it
 	project(":$it").projectDir = new File(settingsDir, "pixelgrid/mode/$it")
 }
-['imageio',].each {
+[
+	'imageio',
+	'ascii',
+	'rawr',
+	'block',
+].each {
 	include it
-	project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/image/$it")
-}
-['ascii', 'rawr',].each {
-	include it
-	project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/text/$it")
-}
-['block',].each {
-	include it
-	project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/text/ascii/$it")
+	project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/$it")
 }
 
 include 'toolbox'

@@ -207,9 +207,8 @@ run {
 		implementation project(":mouse")
 		implementation project(":keyboard")
 
-		// Export -> Image
+		// Impex
 		implementation project(":imageio")
-		// Export -> Text
 		implementation project(":ascii")
 		implementation project(":rawr")
 
