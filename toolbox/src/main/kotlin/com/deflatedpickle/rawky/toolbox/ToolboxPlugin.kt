@@ -19,7 +19,6 @@ import javax.swing.ButtonGroup
 import javax.swing.JToolBar
 import javax.swing.SwingConstants
 
-@ExperimentalSerializationApi
 @Plugin(
     value = "toolbox",
     author = "DeflatedPickle",

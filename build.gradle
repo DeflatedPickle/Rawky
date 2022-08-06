@@ -242,6 +242,10 @@ run {
 		runtimeOnly project(":dropper")
 		runtimeOnly project(":line")
 		runtimeOnly project(":bucket")
+		runtimeOnly project(":shape")
+
+		runtimeOnly project(":rectangle")
+		runtimeOnly project(":circle")
 
 		// Bucket Fills
 		runtimeOnly project(":solid")

@@ -61,6 +61,7 @@ include 'toolbox'
 	'dropper',
 	'line',
 	'bucket',
+	'shape',
 ].each {
 	include it
 	project(":$it").projectDir = new File(settingsDir, "toolbox/$it")
@@ -71,6 +72,13 @@ include 'toolbox'
 ].each {
 	include it
 	project(":$it").projectDir = new File(settingsDir, "toolbox/bucket/fill/$it")
+}
+[
+		'rectangle',
+		'circle',
+].each {
+	include it
+	project(":$it").projectDir = new File(settingsDir, "toolbox/shape/$it")
 }
 include 'colourwheel'
 
