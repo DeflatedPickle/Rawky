@@ -62,12 +62,14 @@ object RectanglePlugin : Shape(
 
                 override fun perform() {
                     colourCache.clear()
-                    colourCache.putAll(
-                        process(
-                            cell.column, cell.row,
-                            other.column, other.column,
-                        )
-                    )
+
+                    for ((k, v) in process(
+                        cell.column, cell.row,
+                        other.column, other.column,
+                    )) {
+                        colourCache[k] = v
+                        k.colour = RawkyPlugin.colour
+                    }
 
                     firstCell = null
                 }
@@ -97,10 +99,10 @@ object RectanglePlugin : Shape(
         }
     }
 
-    private fun <T> process(
+    fun process(
         x0: Int, y0: Int,
         x1: Int?, y1: Int?,
-    ): MutableMap<Cell, T> {
+    ): MutableMap<Cell, Color> {
         val grid: Grid
         RawkyPlugin.document!!.let { doc ->
             val frame = doc.children[doc.selectedIndex]
@@ -122,13 +124,12 @@ object RectanglePlugin : Shape(
                     for (column in x0Temp..x1Temp) {
                         with(grid[row, column]) {
                             cellMap[this] = colour
-                            colour = RawkyPlugin.colour
                         }
                     }
                 }
             }
         }
 
-        return cellMap as MutableMap<Cell, T>
+        return cellMap
     }
 }

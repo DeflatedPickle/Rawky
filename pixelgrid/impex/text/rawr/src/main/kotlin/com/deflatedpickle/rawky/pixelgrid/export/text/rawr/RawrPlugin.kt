@@ -1,6 +1,6 @@
 /* Copyright (c) 2022 DeflatedPickle under the MIT license */
 
-@file:Suppress("unused", "UNUSED_PARAMETER", "SpellCheckingInspection")
+@file:Suppress("unused", "SpellCheckingInspection", "UNCHECKED_CAST")
 
 package com.deflatedpickle.rawky.pixelgrid.export.text.rawr
 
@@ -10,8 +10,11 @@ import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.github.underscore.U
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
+import kotlinx.serialization.cbor.Cbor
+import kotlinx.serialization.encodeToByteArray
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import java.io.File
@@ -32,27 +35,42 @@ import java.io.FileOutputStream
 )
 object RawrPlugin : Exporter, Opener {
     override val name = "Rawr"
-    override val extensions = listOf("rawr")
+    override val extensions = listOf("rawr", "rawrxd")
 
     init {
         Exporter.registry[name] = this
         Opener.registry[name] = this
     }
 
-    @OptIn(InternalSerializationApi::class)
+    @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
     override fun export(doc: RawkyDocument, file: File) {
         val serializer = doc::class.serializer() as KSerializer<Any>
 
-        val json = Json.Default
-        val jsonData = json.encodeToString(serializer, doc)
-
         val out = FileOutputStream(file, false)
 
-        out.write(U.formatJson(jsonData).toByteArray())
+        when (file.extension) {
+            "rawr" -> {
+                val json = Json.Default
+                val jsonData = json.encodeToString(serializer, doc)
+
+                out.write(U.formatJson(jsonData).toByteArray())
+            }
+            "rawrxd" -> {
+                val cbor = Cbor.Default
+                val cborData = cbor.encodeToByteArray(serializer, doc)
+
+                out.write(cborData)
+            }
+        }
+
         out.flush()
         out.close()
     }
 
-    @OptIn(InternalSerializationApi::class)
-    override fun open(file: File) = Json.Default.decodeFromString(RawkyDocument::class.serializer(), file.readText())
+    @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
+    override fun open(file: File) = when (file.extension) {
+        "rawr" -> Json.Default.decodeFromString(RawkyDocument::class.serializer(), file.readText())
+        "rawrxd" -> Cbor.Default.decodeFromByteArray(RawkyDocument::class.serializer(), file.readBytes())
+        else -> RawkyDocument(children = mutableListOf())
+    }
 }
