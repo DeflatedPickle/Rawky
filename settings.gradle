@@ -48,10 +48,15 @@ include 'pixelgrid'
 	'imageio',
 	'ascii',
 	'rawr',
-	'block',
 ].each {
 	include it
 	project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/$it")
+}
+[
+	'block',
+].each {
+	include it
+	project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/ascii/$it")
 }
 
 include 'toolbox'

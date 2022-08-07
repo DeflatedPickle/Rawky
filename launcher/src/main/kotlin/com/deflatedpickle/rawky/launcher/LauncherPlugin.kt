@@ -4,13 +4,9 @@
 
 package com.deflatedpickle.rawky.launcher
 
-import com.alexandriasoftware.swing.JSplitButton
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.api.util.DocumentCreationType.IMPORT
-import com.deflatedpickle.haruhi.api.util.DocumentCreationType.OPEN
-import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventImportDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
@@ -49,15 +45,47 @@ import javax.swing.filechooser.FileNameExtensionFilter
 )
 @Suppress("unused")
 object LauncherPlugin {
-    private val chooser = JFileChooser(File(".")).apply {
+    private val exporterChooser = JFileChooser(File(".")).apply {
         EventProgramFinishSetup.addListener {
             for ((k, v) in Exporter.registry) {
-                addChoosableFileFilter(
-                    FileNameExtensionFilter(
-                        "$k (${v.extensions.joinToString { "*.$it" }})",
-                        *v.extensions.toTypedArray()
+                for ((nk, nv) in v.extensions) {
+                    addChoosableFileFilter(
+                        FileNameExtensionFilter(
+                            "$nk (${nv.joinToString { "*.$it" }}) [${k}]",
+                            *nv.toTypedArray()
+                        )
                     )
-                )
+                }
+            }
+        }
+    }
+
+    private val importerChooser = JFileChooser(File(".")).apply {
+        EventProgramFinishSetup.addListener {
+            for ((k, v) in Importer.registry) {
+                for ((nk, nv) in v.extensions) {
+                    addChoosableFileFilter(
+                        FileNameExtensionFilter(
+                            "$nk (${nv.joinToString { "*.$it" }}) [${k}]",
+                            *nv.toTypedArray()
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    private val openerChooser = JFileChooser(File(".")).apply {
+        EventProgramFinishSetup.addListener {
+            for ((k, v) in Opener.registry) {
+                for ((nk, nv) in v.extensions) {
+                    addChoosableFileFilter(
+                        FileNameExtensionFilter(
+                            "$nk (${nv.joinToString { "*.$it" }}) [${k}]",
+                            *nv.toTypedArray()
+                        )
+                    )
+                }
             }
         }
     }
@@ -117,7 +145,7 @@ object LauncherPlugin {
         var none = true
 
         for ((_, v) in Opener.registry) {
-            if (file.extension in v.extensions) {
+            if (file.extension in v.extensions.flatMap { it.value }) {
                 none = false
                 RawkyPlugin.document = v.open(file).apply {
                     this.name = file.nameWithoutExtension
@@ -141,7 +169,7 @@ object LauncherPlugin {
         var none = true
 
         for ((_, v) in Importer.registry) {
-            if (file.extension in v.extensions) {
+            if (file.extension in v.extensions.flatMap { it.value }) {
                 none = false
 
                 v.import(
@@ -170,7 +198,7 @@ object LauncherPlugin {
         var none = true
 
         for ((_, v) in Exporter.registry) {
-            if (file.extension in v.extensions) {
+            if (file.extension in v.extensions.flatMap { it.value }) {
                 none = false
                 val doc = RawkyPlugin.document
 
@@ -199,15 +227,15 @@ object LauncherPlugin {
     }
 
     fun openDialog(menu: JMenu) {
-        if (chooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
-            open(chooser.selectedFile)
+        if (openerChooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
+            open(openerChooser.selectedFile)
 
             if (!menu.menuComponents.contains(historyMenu)) {
                 menu.add(historyMenu)
             }
 
             ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
-                it.history.add(chooser.selectedFile)
+                it.history.add(openerChooser.selectedFile)
 
                 if (it.history.size >= it.historyLength) {
                     for (i in it.historyLength until it.history.size) {
@@ -215,7 +243,7 @@ object LauncherPlugin {
                     }
                 }
 
-                historyMenu.add("Open \"${chooser.selectedFile.absolutePath}\"")
+                historyMenu.add("Open \"${openerChooser.selectedFile.absolutePath}\"")
 
                 PluginUtil.slugToPlugin("deflatedpickle@launcher#*")
                     ?.let { plug -> ConfigUtil.serializeConfig(plug) }
@@ -224,14 +252,19 @@ object LauncherPlugin {
     }
 
     fun importDialog() {
-        if (chooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
-            import(chooser.selectedFile)
+        if (importerChooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
+            import(importerChooser.selectedFile)
         }
     }
 
     fun exportDialog() {
-        if (chooser.showSaveDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
-            export(chooser.selectedFile)
+        if (exporterChooser.showSaveDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
+            var file = exporterChooser.selectedFile
+            if (file.extension == "") {
+                file = File("${file.absolutePath}.${(exporterChooser.fileFilter as FileNameExtensionFilter).extensions.first()}")
+            }
+
+            export(file)
         }
     }
 }

@@ -29,7 +29,9 @@ import java.io.FileOutputStream
 )
 object AsciiPlugin : Exporter {
     override val name = "ASCII"
-    override val extensions = listOf("txt")
+    override val extensions = mapOf(
+        "Text" to listOf("txt")
+    )
 
     init {
         registry[name] = this

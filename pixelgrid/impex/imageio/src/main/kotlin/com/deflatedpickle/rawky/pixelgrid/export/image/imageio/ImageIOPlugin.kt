@@ -31,19 +31,21 @@ import javax.imageio.ImageIO
 )
 object ImageIOPlugin : Exporter, Importer, Opener {
     override val name = "ImageIO"
-    override val extensions = listOf(
-        "png",
-        "gif",
-        "bmp", "wbmp", "ico",
-        "icns",
-        "iff",
-        "jpeg", "jpg",
-        "pict",
-        "pnm", "ppm",
-        "psd",
-        "tga",
-        "tiff", "tif",
-        "webp"
+    override val extensions = mapOf(
+        "Portable Network Graphics" to listOf("png"),
+        "Graphics Interchange Format" to listOf("gif"),
+        "Bitmap" to listOf("bmp", "dib"),
+        "Wireless Bitmap" to listOf("wbmp"),
+        "MS Windows Icon Format" to listOf("ico"),
+        "Apple Icon Image" to listOf("icns"),
+        "Interchange File Format" to listOf("iff"),
+        "Joint Photographic Experts Group" to listOf("jpg", "jpeg", "jpe", "jif", "jfif", "jfi"),
+        "Apple QuickDraw" to listOf("pict", "pct", "pic"),
+        "Portable Any Map" to listOf("pnm", "ppm"),
+        "Adobe Photoshop Document" to listOf("psd"),
+        "Truevision TGA Image Format" to listOf("tga", "icb", "vda", "vst"),
+        "Tagged Image File Format" to listOf("tiff", "tif"),
+        "Google WebP Format" to listOf("webp"),
     )
 
     init {

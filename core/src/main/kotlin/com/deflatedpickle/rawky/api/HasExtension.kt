@@ -1,5 +1,5 @@
 package com.deflatedpickle.rawky.api
 
 interface HasExtension {
-    val extensions: List<String>
+    val extensions: Map<String, List<String>>
 }

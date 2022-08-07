@@ -34,7 +34,10 @@ import java.io.FileOutputStream
 )
 object RawrPlugin : Exporter, Opener {
     override val name = "Rawr"
-    override val extensions = listOf("rawr", "rawrxd")
+    override val extensions = mapOf(
+        "Rawky" to listOf("rawr"),
+        "Rawky Binary" to listOf("rawrxd")
+    )
 
     init {
         Exporter.registry[name] = this
