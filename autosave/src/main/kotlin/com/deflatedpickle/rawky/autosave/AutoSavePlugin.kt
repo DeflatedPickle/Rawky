@@ -16,11 +16,14 @@ import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.autosave.event.EventAutoSaveDocument
 import com.deflatedpickle.rawky.autosave.util.FileType
+import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.settings.SettingsGUI
 import com.deflatedpickle.undulation.constraints.FillHorizontal
 import java.awt.Component
 import java.awt.GridBagLayout
 import java.awt.Panel
+import java.awt.event.WindowAdapter
+import java.awt.event.WindowEvent
 import java.io.File
 import javax.swing.DefaultComboBoxModel
 import javax.swing.JComboBox
@@ -30,7 +33,7 @@ import javax.swing.Timer
 @Plugin(
     value = "auto_save",
     author = "DeflatedPickle",
-    version = "1.0.0",
+    version = "1.1.0",
     description = """
         <br>
         Adds a timer to automatically save the current file
@@ -48,6 +51,24 @@ object AutoSavePlugin {
     private var timer: Timer? = null
 
     init {
+        object : WindowAdapter() {
+            override fun windowLostFocus(e: WindowEvent?) {
+                ConfigUtil.getSettings<AutoSaveSettings>("deflatedpickle@auto_save#*")?.let { config ->
+                    RawkyPlugin.document?.let { doc ->
+                        if (config.saveOnFocusLost) {
+                            save(doc, config)
+                        }
+                    }
+                }
+            }
+        }.also {
+            with(PluginUtil.window) {
+                addWindowListener(it)
+                addWindowFocusListener(it)
+                addWindowStateListener(it)
+            }
+        }
+
         EventProgramFinishSetup.addListener {
             ConfigUtil.getSettings<AutoSaveSettings>("deflatedpickle@auto_save#*")?.let { config ->
                 if (config.fileType == null) {
@@ -119,26 +140,30 @@ object AutoSavePlugin {
 
             timer = Timer(config.delay * MINUTE) {
                 RawkyPlugin.document?.let { doc ->
-                    var name = config.name
-
-                    if (!config.replace) {
-                        val count = config.path.list()?.count { it.startsWith(config.name) }
-
-                        name = if (doc.name == null) {
-                            "${config.name}-$count"
-                        } else {
-                            "${doc.name}-$count"
-                        }
-                    }
-
-                    val file = File("${config.path.absolutePath}/$name.${config.fileType?.extension}").apply { createNewFile() }
-                    config.fileType?.handler?.export(doc, file)
-
-                    EventAutoSaveDocument.trigger(Pair(doc, file))
+                    save(doc, config)
                 }
             }.apply {
                 start()
             }
         }
+    }
+
+    fun save(doc: RawkyDocument, config: AutoSaveSettings) {
+        var name = config.name
+
+        if (!config.replace) {
+            val count = config.path.list()?.count { it.startsWith(config.name) }
+
+            name = if (doc.name == null) {
+                "${config.name}-$count"
+            } else {
+                "${doc.name}-$count"
+            }
+        }
+
+        val file = File("${config.path.absolutePath}/$name.${config.fileType?.extension}").apply { createNewFile() }
+        config.fileType?.handler?.export(doc, file)
+
+        EventAutoSaveDocument.trigger(Pair(doc, file))
     }
 }

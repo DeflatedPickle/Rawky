@@ -18,4 +18,5 @@ data class AutoSaveSettings(
     @Required var replace: Boolean = false,
     @Required @IntRange(0, 30) var delay: Int = 1,
     @Required var fileType: @Serializable(FileTypeSerializer::class) FileType? = null,
+    @Required var saveOnFocusLost: Boolean = true,
 )

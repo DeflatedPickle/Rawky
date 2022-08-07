@@ -28,11 +28,12 @@ import java.io.File
 import javax.swing.JFileChooser
 import javax.swing.JMenu
 import javax.swing.filechooser.FileNameExtensionFilter
+import kotlin.system.exitProcess
 
 @Plugin(
     value = "launcher",
     author = "DeflatedPickle",
-    version = "1.0.0",
+    version = "1.1.0",
     description = """
         <br>
         A basic launcher
@@ -122,6 +123,10 @@ object LauncherPlugin {
 
                 add("Import", MonoIcon.FILE_NEW) { importDialog() }
                 add("Export", MonoIcon.FILE_EXPORT) { exportDialog() }
+
+                addSeparator()
+
+                add("Exit", MonoIcon.EXIT) { exitProcess(0) }
 
                 addSeparator()
             }
