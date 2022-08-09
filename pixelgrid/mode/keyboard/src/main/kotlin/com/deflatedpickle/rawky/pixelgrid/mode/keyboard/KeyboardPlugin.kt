@@ -1,13 +1,23 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "UNCHECKED_CAST")
 
 package com.deflatedpickle.rawky.pixelgrid.mode.keyboard
 
+import com.deflatedpickle.haruhi.api.Registry
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.ConfigUtil
+import com.deflatedpickle.haruhi.util.RegistryUtil
+import com.deflatedpickle.marvin.extensions.get
+import com.deflatedpickle.marvin.extensions.set
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
 import com.deflatedpickle.rawky.pixelgrid.api.Mode
+import com.deflatedpickle.rawky.pixelgrid.mode.keyboard.dialog.KeyboardDialog
+import com.deflatedpickle.rawky.pixelgrid.mode.keyboard.util.KeyCombo
+import org.jdesktop.swingx.JXButton
+import org.oxbow.swingbits.dialog.task.TaskDialog
+import java.awt.Component
 import java.awt.Point
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
@@ -17,7 +27,7 @@ import java.awt.event.MouseEvent
 @Plugin(
     value = "keyboard",
     author = "DeflatedPickle",
-    version = "1.0.0",
+    version = "1.1.0",
     description = """
         <br>
         Use a keyboard to paint
@@ -39,20 +49,28 @@ object KeyboardPlugin : Mode("Keyboard") {
                 val grid = layer.child
 
                 ConfigUtil.getSettings<KeyboardSettings>("deflatedpickle@keyboard#*")?.let {
-                    when (e.keyCode) {
-                        it.negativeY -> if (point.y - 1 >= 0) {
+                    when {
+                        it.negativeY.accept(e) -> if (point.y - 1 >= 0) {
                             point.translate(0, -1)
+                        } else {
+                            point.move(point.x, grid.rows)
                         }
-                        it.positiveY -> if (point.y + 1 <= grid.rows) {
+                        it.positiveY.accept(e) -> if (point.y + 1 <= grid.rows) {
                             point.translate(0, 1)
+                        } else {
+                            point.move(point.x, 0)
                         }
-                        it.negativeX -> if (point.x - 1 >= 0) {
+                        it.negativeX.accept(e) -> if (point.x - 1 >= 0) {
                             point.translate(-1, 0)
+                        } else {
+                            point.move(grid.columns, point.y)
                         }
-                        it.positiveX -> if (point.x + 1 <= grid.columns) {
+                        it.positiveX.accept(e) -> if (point.x + 1 <= grid.columns) {
                             point.translate(1, 0)
+                        } else {
+                            point.move(0, point.y)
                         }
-                        it.useTool -> PixelGridPanel.paint(
+                        it.useTool.accept(e) -> PixelGridPanel.paint(
                             MouseEvent.BUTTON1,
                             e.isShiftDown,
                             1,
@@ -79,5 +97,43 @@ object KeyboardPlugin : Mode("Keyboard") {
 
     init {
         registry[name] = this
+
+        EventProgramFinishSetup.addListener {
+            (RegistryUtil.get("setting_type") as Registry<String, (Plugin, String, Any) -> Component>?)?.let { registry ->
+                registry.register(KeyCombo::class.qualifiedName!!) { plugin, name, instance ->
+                    JXButton().apply {
+                        fun genText() = mutableListOf(instance.get<KeyCombo>(name).key).apply {
+                            val mod = instance.get<KeyCombo>(name).modifier
+                            if (mod != null) {
+                                add(0, mod)
+                            }
+                        }.joinToString("+") { k ->
+                            KeyEvent::class.java.declaredFields.firstOrNull {
+                                it.name.startsWith("VK_") && it.get(null) == k
+                            }?.name ?: ""
+                        }
+
+                        text = genText()
+
+                        addActionListener {
+                            val dialog = KeyboardDialog()
+                            dialog.isVisible = true
+
+                            if (dialog.result == TaskDialog.StandardCommand.OK) {
+                                val k = instance.get<KeyCombo>(name)
+
+                                instance.set(name, KeyCombo(
+                                    dialog.keyboard.selectedCharacter?.keyCode ?: k.key,
+                                    dialog.keyboard.selectedModifier?.keyCode,
+                                ))
+                                ConfigUtil.serializeConfig(plugin)
+
+                                text = genText()
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
