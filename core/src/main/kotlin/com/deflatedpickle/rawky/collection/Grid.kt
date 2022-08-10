@@ -19,14 +19,14 @@ data class Grid(
         var column = 0
 
         this.children.addAll(
-            Array(this.rows * this.columns) {
-                if (row + 1 == this.rows) {
-                    if (column + 1 == this.columns) column = 0
-                    else column++
+            Array(this.columns * this.rows) {
+                if (column + 1 == this.columns) {
+                    if (row + 1 == this.rows) row = 0
+                    else row++
 
-                    row = 0
+                    column = 0
                 } else {
-                    row++
+                    column++
                 }
 
                 Cell(
@@ -41,6 +41,6 @@ data class Grid(
         )
     }
 
-    operator fun get(row: Int, column: Int) = children[(column * columns) + row]
-    operator fun set(row: Int, column: Int, value: Cell) = children.set((column * columns) + row, value)
+    operator fun get(column: Int, row: Int) = children[(column * columns) + row]
+    operator fun set(column: Int, row: Int, value: Cell) = children.set((column * columns) + row, value)
 }
