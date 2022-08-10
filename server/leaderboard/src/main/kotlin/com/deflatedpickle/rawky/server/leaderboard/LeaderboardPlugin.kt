@@ -33,7 +33,7 @@ import javax.swing.event.TableModelEvent
     """,
     type = PluginType.COMPONENT,
     component = LeaderboardPanel::class,
-    componentMinimizedPosition = ComponentPosition.WEST,
+    componentMinimizedPosition = ComponentPosition.EAST,
     componentVisible = false,
     dependencies = [
         "deflatedpickle@core#*",

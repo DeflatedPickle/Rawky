@@ -25,7 +25,7 @@ import javax.swing.DefaultListModel
     """,
     type = PluginType.COMPONENT,
     component = UserListPanel::class,
-    componentMinimizedPosition = ComponentPosition.WEST,
+    componentMinimizedPosition = ComponentPosition.EAST,
     componentVisible = false,
     dependencies = [
         "deflatedpickle@core#*",

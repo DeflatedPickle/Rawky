@@ -109,7 +109,7 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                             task = {
                                 val securityCode = it as String
 
-                                PluginUtil.toastWindow.addToast(
+                                PluginUtil.toastWindow.add(
                                     ToastItem(
                                         title = "Session Code",
                                         content = securityCode,
