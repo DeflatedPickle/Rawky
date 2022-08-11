@@ -22,7 +22,7 @@ import java.io.FileOutputStream
 @Plugin(
     value = "rawr",
     author = "DeflatedPickle",
-    version = "1.0.0",
+    version = "1.1.1",
     description = """
         <br>
         Export Rawr files
@@ -34,14 +34,22 @@ import java.io.FileOutputStream
 )
 object RawrPlugin : Exporter, Opener {
     override val name = "Rawr"
-    override val extensions = mapOf(
-        "Rawky" to listOf("rawr"),
-        "Rawky Binary" to listOf("rawrxd")
-    )
+
+    override val exporterExtensions: MutableMap<String, List<String>> = mutableMapOf()
+    override val openerExtensions: MutableMap<String, List<String>> = mutableMapOf()
 
     init {
         Exporter.registry[name] = this
         Opener.registry[name] = this
+
+        for (i in listOf(exporterExtensions, openerExtensions)) {
+            i.putAll(
+                mapOf(
+                    "Rawky" to listOf("rawr"),
+                    "Rawky Binary" to listOf("rawrxd")
+                )
+            )
+        }
     }
 
     @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)

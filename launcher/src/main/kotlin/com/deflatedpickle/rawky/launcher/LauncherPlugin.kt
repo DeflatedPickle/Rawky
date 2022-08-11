@@ -33,7 +33,7 @@ import kotlin.system.exitProcess
 @Plugin(
     value = "launcher",
     author = "DeflatedPickle",
-    version = "1.1.0",
+    version = "1.1.1",
     description = """
         <br>
         A basic launcher
@@ -49,7 +49,7 @@ object LauncherPlugin {
     private val exporterChooser = JFileChooser(File(".")).apply {
         EventProgramFinishSetup.addListener {
             for ((k, v) in Exporter.registry) {
-                for ((nk, nv) in v.extensions) {
+                for ((nk, nv) in v.exporterExtensions) {
                     addChoosableFileFilter(
                         FileNameExtensionFilter(
                             "$nk (${nv.joinToString { "*.$it" }}) [${k}]",
@@ -64,7 +64,7 @@ object LauncherPlugin {
     private val importerChooser = JFileChooser(File(".")).apply {
         EventProgramFinishSetup.addListener {
             for ((k, v) in Importer.registry) {
-                for ((nk, nv) in v.extensions) {
+                for ((nk, nv) in v.importerExtensions) {
                     addChoosableFileFilter(
                         FileNameExtensionFilter(
                             "$nk (${nv.joinToString { "*.$it" }}) [${k}]",
@@ -79,7 +79,7 @@ object LauncherPlugin {
     private val openerChooser = JFileChooser(File(".")).apply {
         EventProgramFinishSetup.addListener {
             for ((k, v) in Opener.registry) {
-                for ((nk, nv) in v.extensions) {
+                for ((nk, nv) in v.openerExtensions) {
                     addChoosableFileFilter(
                         FileNameExtensionFilter(
                             "$nk (${nv.joinToString { "*.$it" }}) [${k}]",
@@ -150,7 +150,7 @@ object LauncherPlugin {
         var none = true
 
         for ((_, v) in Opener.registry) {
-            if (file.extension in v.extensions.flatMap { it.value }) {
+            if (file.extension in v.openerExtensions.flatMap { it.value }) {
                 none = false
                 RawkyPlugin.document = v.open(file).apply {
                     this.name = file.nameWithoutExtension
@@ -174,7 +174,7 @@ object LauncherPlugin {
         var none = true
 
         for ((_, v) in Importer.registry) {
-            if (file.extension in v.extensions.flatMap { it.value }) {
+            if (file.extension in v.importerExtensions.flatMap { it.value }) {
                 none = false
 
                 v.import(
@@ -203,7 +203,7 @@ object LauncherPlugin {
         var none = true
 
         for ((_, v) in Exporter.registry) {
-            if (file.extension in v.extensions.flatMap { it.value }) {
+            if (file.extension in v.exporterExtensions.flatMap { it.value }) {
                 none = false
                 val doc = RawkyPlugin.document
 

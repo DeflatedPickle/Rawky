@@ -19,7 +19,7 @@ import javax.imageio.ImageIO
 @Plugin(
     value = "imageio",
     author = "DeflatedPickle",
-    version = "1.0.0",
+    version = "1.0.1",
     description = """
         <br>
         Export images supported by ImageIO
@@ -31,27 +31,58 @@ import javax.imageio.ImageIO
 )
 object ImageIOPlugin : Exporter, Importer, Opener {
     override val name = "ImageIO"
-    override val extensions = mapOf(
-        "Portable Network Graphics" to listOf("png"),
-        "Graphics Interchange Format" to listOf("gif"),
-        "Bitmap" to listOf("bmp", "dib"),
-        "Wireless Bitmap" to listOf("wbmp"),
-        "MS Windows Icon Format" to listOf("ico"),
-        "Apple Icon Image" to listOf("icns"),
-        "Interchange File Format" to listOf("iff"),
-        "Joint Photographic Experts Group" to listOf("jpg", "jpeg", "jpe", "jif", "jfif", "jfi"),
-        "Apple QuickDraw" to listOf("pict", "pct", "pic"),
-        "Portable Any Map" to listOf("pnm", "ppm"),
-        "Adobe Photoshop Document" to listOf("psd"),
-        "Truevision TGA Image Format" to listOf("tga", "icb", "vda", "vst"),
-        "Tagged Image File Format" to listOf("tiff", "tif"),
-        "Google WebP Format" to listOf("webp"),
-    )
+
+    override val exporterExtensions: MutableMap<String, List<String>> = mutableMapOf()
+    override val importerExtensions: MutableMap<String, List<String>> = mutableMapOf()
+    override val openerExtensions: MutableMap<String, List<String>> = mutableMapOf()
 
     init {
         Exporter.registry[name] = this
         Importer.registry[name] = this
         Opener.registry[name] = this
+
+        // Add all the extensions with read/write support
+        for (i in listOf(exporterExtensions, importerExtensions, openerExtensions)) {
+            i.putAll(
+                mapOf(
+                    "Portable Network Graphics" to listOf("png"),
+                    "Graphics Interchange Format" to listOf("gif"),
+                    "Bitmap" to listOf("bmp", "dib"),
+                    "Wireless Bitmap" to listOf("wbmp"),
+                    "MS Windows Icon Format" to listOf("ico"),
+                    "Apple Icon Image" to listOf("icns"),
+                    "Interchange File Format" to listOf("iff"),
+                    "Joint Photographic Experts Group" to listOf("jpg", "jpeg", "jpe", "jif", "jfif", "jfi"),
+                    "Apple QuickDraw" to listOf("pict", "pct", "pic"),
+                    "Portable Any Map" to listOf("pnm", "ppm"),
+                    "Adobe Photoshop Document" to listOf("psd"),
+                    "Truevision TGA Image Format" to listOf("tga", "icb", "vda", "vst"),
+                    "Tagged Image File Format" to listOf("tiff", "tif"),
+                    "Google WebP Format" to listOf("webp"),
+                )
+            )
+        }
+
+        // Add all extensions with only read support
+        for (i in listOf(importerExtensions, openerExtensions)) {
+            i.putAll(
+                mapOf(
+                    "MS Cursor" to listOf("cur"),
+                    "HDRsoft High Dynamic Range" to listOf("hdr"),
+                    "Lossless JPEG" to listOf("jpg", "ljpg", "ljpeg"),
+                    "ZSoft Paintbrush" to listOf("pcx"),
+                    "Zsoft Multi-Page Paintbrush" to listOf("dcx"),
+                    "MacPaint Graphic" to listOf("pntg"),
+                    "NetPBM Portable Bit Map" to listOf("pbm"),
+                    "NetPBM Portable Grey Map" to listOf("pgm"),
+                    "Portable Float Map" to listOf("pfm"),
+                    "Adobe Photoshop Large Document" to listOf("psb"),
+                    "Silicon Graphics Image" to listOf("sgi", "bw", "rgb", "rgba"),
+                    "Windows Thumbnail Cache" to listOf("db"),
+                    "X Window Dump" to listOf("xwd", "xdm"),
+                )
+            )
+        }
     }
 
     override fun export(doc: RawkyDocument, file: File) {

@@ -18,4 +18,15 @@ dependencies {
     implementation 'com.twelvemonkeys.imageio:imageio-tiff:3.8.2'
 
     implementation 'org.sejda.imageio:webp-imageio:0.1.6'
+
+    // Read support
+    implementation 'com.twelvemonkeys.imageio:imageio-hdr:3.8.2'
+    implementation 'com.twelvemonkeys.imageio:imageio-pcx:3.8.2'
+    implementation 'com.twelvemonkeys.imageio:imageio-sgi:3.8.2'
+    implementation 'com.twelvemonkeys.imageio:imageio-thumbsdb:3.8.2'
+    implementation 'com.twelvemonkeys.imageio:imageio-xwd:3.8.2'
+}
+
+repositories {
+    mavenCentral()
 }

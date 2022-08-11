@@ -33,7 +33,7 @@ import javax.swing.Timer
 @Plugin(
     value = "auto_save",
     author = "DeflatedPickle",
-    version = "1.1.0",
+    version = "1.1.1",
     description = """
         <br>
         Adds a timer to automatically save the current file
@@ -73,7 +73,7 @@ object AutoSavePlugin {
             ConfigUtil.getSettings<AutoSaveSettings>("deflatedpickle@auto_save#*")?.let { config ->
                 if (config.fileType == null) {
                     val exporter = Exporter.registry.values.first()
-                    config.fileType = FileType(exporter, exporter.extensions.values.first().first())
+                    config.fileType = FileType(exporter, exporter.exporterExtensions.values.first().first())
 
                     PluginUtil.slugToPlugin("deflatedpickle@auto_save#*")
                         ?.let { plug -> ConfigUtil.serializeConfig(plug) }
@@ -92,14 +92,14 @@ object AutoSavePlugin {
                                 JLabel((value as Exporter).name)
                             }
                         }
-                        val extension = JComboBox((handler.selectedItem as Exporter).extensions.flatMap { it.value }.toTypedArray()).apply {
+                        val extension = JComboBox((handler.selectedItem as Exporter).exporterExtensions.flatMap { it.value }.toTypedArray()).apply {
                             selectedItem = inst.extension
                         }
 
                         handler.addItemListener {
                             (extension.model as DefaultComboBoxModel).apply {
                                 removeAllElements()
-                                addAll((handler.selectedItem as Exporter).extensions.flatMap { it.value })
+                                addAll((handler.selectedItem as Exporter).exporterExtensions.flatMap { it.value })
                             }
                             extension.selectedIndex = 0
 

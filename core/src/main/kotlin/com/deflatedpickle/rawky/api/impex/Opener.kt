@@ -7,10 +7,12 @@ import com.deflatedpickle.rawky.api.HasRegistry
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import java.io.File
 
-interface Opener : HasName, HasExtension {
+interface Opener : HasName {
     companion object : HasRegistry<String, Opener> {
         override val registry = Registry<String, Opener>()
     }
+
+    val openerExtensions: MutableMap<String, List<String>>
 
     /**
      * Replaces the current document

@@ -17,7 +17,7 @@ import java.io.FileOutputStream
 @Plugin(
     value = "ascii",
     author = "DeflatedPickle",
-    version = "1.0.0",
+    version = "1.0.1",
     description = """
         <br>
         Export ASCII files
@@ -29,7 +29,7 @@ import java.io.FileOutputStream
 )
 object AsciiPlugin : Exporter {
     override val name = "ASCII"
-    override val extensions = mapOf(
+    override val exporterExtensions = mutableMapOf(
         "Text" to listOf("txt")
     )
 
