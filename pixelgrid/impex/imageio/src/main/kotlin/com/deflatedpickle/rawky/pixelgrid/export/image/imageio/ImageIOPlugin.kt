@@ -19,7 +19,7 @@ import javax.imageio.ImageIO
 @Plugin(
     value = "imageio",
     author = "DeflatedPickle",
-    version = "1.0.1",
+    version = "1.0.2",
     description = """
         <br>
         Export images supported by ImageIO
@@ -67,6 +67,8 @@ object ImageIOPlugin : Exporter, Importer, Opener {
         for (i in listOf(importerExtensions, openerExtensions)) {
             i.putAll(
                 mapOf(
+                    "Scalable Vector Graphics" to listOf("svg"),
+                    "MS Windows Metafile" to listOf("wmf"),
                     "MS Cursor" to listOf("cur"),
                     "HDRsoft High Dynamic Range" to listOf("hdr"),
                     "Lossless JPEG" to listOf("jpg", "ljpg", "ljpeg"),
