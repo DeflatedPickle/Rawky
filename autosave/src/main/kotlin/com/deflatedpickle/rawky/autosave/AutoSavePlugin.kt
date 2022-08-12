@@ -19,6 +19,7 @@ import com.deflatedpickle.rawky.autosave.util.FileType
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.settings.SettingsGUI
 import com.deflatedpickle.undulation.constraints.FillHorizontal
+import java.awt.Color
 import java.awt.Component
 import java.awt.GridBagLayout
 import java.awt.Panel
@@ -33,7 +34,7 @@ import javax.swing.Timer
 @Plugin(
     value = "auto_save",
     author = "DeflatedPickle",
-    version = "1.1.1",
+    version = "1.2.0",
     description = """
         <br>
         Adds a timer to automatically save the current file
@@ -149,6 +150,10 @@ object AutoSavePlugin {
     }
 
     fun save(doc: RawkyDocument, config: AutoSaveSettings) {
+        if (config.ignoreEmpty && checkEmpty(doc)) {
+            return
+        }
+
         var name = config.name
 
         if (!config.replace) {
@@ -165,5 +170,22 @@ object AutoSavePlugin {
         config.fileType?.handler?.export(doc, file)
 
         EventAutoSaveDocument.trigger(Pair(doc, file))
+    }
+
+    private fun checkEmpty(doc: RawkyDocument): Boolean {
+        val transparent = Color(0, 0, 0, 0)
+        var colour = transparent
+
+        for (f in doc.children) {
+            for (l in f.children) {
+                for (c in l.child.children) {
+                    if (c.colour != transparent) {
+                        colour = c.colour
+                    }
+                }
+            }
+        }
+
+        return colour == transparent
     }
 }
