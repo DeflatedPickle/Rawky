@@ -217,6 +217,10 @@ run {
 
 		// Widgets
 		runtimeOnly project(":colourwheel")
+		runtimeOnly project(":colourpalette")
+
+		// Colour Palette -> Parser
+		runtimeOnly project(":json")
 
 		runtimeOnly project(":autosave")
 		runtimeOnly project(":autoload")

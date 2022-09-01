@@ -1,0 +1,10 @@
+{
+  "rgb(255,0,0)": "Move the pointer to the right",
+  "rgb(0,255,0)": "Output the character signified by the cell at the pointer",
+  "rgb(0,0,255)": "Move the pointer to the left",
+  "rgb(255,255,0)": "Increment the memory cell at the pointer",
+  "rgb(0,255,255)": "Decrement the memory cell at the pointer",
+  "rgb(255,0,188)": "Jump past the matching ] if the cell at the pointer is 0",
+  "rgb(255,128,0)": "Jump back to the matching [ if the cell at the pointer is nonzero",
+  "rgb(102,0,204)": "Input a character and store it in the cell at the pointer"
+}

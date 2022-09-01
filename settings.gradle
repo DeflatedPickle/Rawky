@@ -86,6 +86,13 @@ include 'toolbox'
 	project(":$it").projectDir = new File(settingsDir, "toolbox/shape/$it")
 }
 include 'colourwheel'
+include 'colourpalette'
+[
+		'json',
+].each {
+	include it
+	project(":$it").projectDir = new File(settingsDir, "colourpalette/parser/$it")
+}
 
 include 'autosave'
 include 'autoload'

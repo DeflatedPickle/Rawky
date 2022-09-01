@@ -1,0 +1,7 @@
+{
+  "rgb(0,0,170)": "Add 1 to value",
+  "rgb(0,120,170)": "Change colour to (value - 1) % 64 and set value to 0",
+  "rgb(255,255,255)": "Print value % 256 and set value to 0",
+  "rgb(170,0,0)": "Stop the program",
+  "rgb(0,0,0)": "Go to the next line"
+}

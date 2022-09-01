@@ -13,6 +13,7 @@ dependencies {
 
     // Utility
     api 'org.apache.commons:commons-lang3:3.12.0'
+    // api 'com.google.guava:guava:31.1-jre'
     api 'commons-io:commons-io:2.11.0'
     api 'com.github.javadev:underscore:1.80'
     api 'com.github.erayerdin:kappdirs:v0.3.1-alpha'
@@ -25,6 +26,8 @@ dependencies {
     api 'org.jooq:joor-java-8:0.9.14'
     api 'com.github.renatoathaydes:kunion:0bd9cbfe38'
     // api 'org.javassist:javassist:3.28.0-GA'
+    // api 'io.herrera.kevin:resource:1.1.0'
+    api 'io.hosuaby:inject-resources-core:0.3.2'
 
     // Events
     api 'com.github.Fylipp:easy-events:v1.1.0'

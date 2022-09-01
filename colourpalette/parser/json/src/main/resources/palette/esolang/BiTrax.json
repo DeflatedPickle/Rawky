@@ -1,0 +1,9 @@
+{
+  "#FFFFFF": "Does nothing",
+  "#FFFF00": "Input bit is stored in current cell",
+  "#000000": "Current cell is written to output",
+  "#808080": "Flips current cell",
+  "#00FF00": "Moves memory pointer forward",
+  "#FF0000": "Moves memory pointer backwards",
+  "#0000FF": "Changes direction of execution"
+}
