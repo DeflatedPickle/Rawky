@@ -39,17 +39,17 @@ Thanks to the auto save plugin, files are automatically saved on a timer defined
 Due to the auto load plugin, if there was a previously open file when the program was closed, it'll get loaded in when it's next open
 #### Painting modes
 The pixel grid plugin allows for the user to select between modes for how the pixel grid is to be interacted with. The currently supported modes are;
-- Mouse
-- Keyboard
+- [Mouse](https://github.com/DeflatedPickle/Rawky/tree/rewrite/pixelgrid/mode/mouse)
+- [Keyboard](https://github.com/DeflatedPickle/Rawky/tree/rewrite/pixelgrid/mode/keyboard)
 #### Painting tools
 The tools API allows for more tools to be added via external plugins but Rawky currently comes with the following tools;
-- Pencil (place single pixels, can be dragged)
-- Eraser (remove single pixels, can be dragged)
-- Dropper (set the colour of the chosen pixel to your current colour)
-- Line (click a pixel then a second to draw a line between them)
-- Bucket (click a pixel to have all pixels in the area of the same colour changed)
-- Rectangle (click a pixel then a second to have a rectangle be drawn betwen them)
-- Circle (click a pixel then a second to have a circle be drawn out from the first to the distance of the second)
+- [Pencil](https://github.com/DeflatedPickle/Rawky/tree/rewrite/toolbox/pencil) (place single pixels, can be dragged)
+- [Eraser](https://github.com/DeflatedPickle/Rawky/tree/rewrite/toolbox/eraser) (remove single pixels, can be dragged)
+- [Dropper](https://github.com/DeflatedPickle/Rawky/tree/rewrite/toolbox/dropper) (set the colour of the chosen pixel to your current colour)
+- [Line](https://github.com/DeflatedPickle/Rawky/tree/rewrite/toolbox/line) (click a pixel then a second to draw a line between them)
+- [Bucket](https://github.com/DeflatedPickle/Rawky/tree/rewrite/toolbox/bucket) (click a pixel to have all pixels in the area of the same colour changed)
+- [Rectangle](https://github.com/DeflatedPickle/Rawky/tree/rewrite/toolbox/shape/rectangle) (click a pixel then a second to have a rectangle be drawn betwen them)
+- [Circle](https://github.com/DeflatedPickle/Rawky/tree/rewrite/toolbox/shape/circle) (click a pixel then a second to have a circle be drawn out from the first to the distance of the second)
 #### Server
 Rawky comes with a server plugin enabling you to paint with your friends
 ##### Chat
@@ -57,6 +57,7 @@ A chat plugin is also supplied so that messages may be sent
 ##### Userlist
 A list is also supplied to show all users currently connected to the server
 ##### Scoreboard
+Keeps track of a few stats of users connected to a server such as time since joined and pixels placed
 #### File support
 ##### Rawr
 - Rawky JSON (`.rawr`)
