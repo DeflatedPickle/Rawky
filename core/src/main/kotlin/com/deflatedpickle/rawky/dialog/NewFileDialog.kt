@@ -2,14 +2,17 @@ package com.deflatedpickle.rawky.dialog
 
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.marvin.registry.Registry
+import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.api.TemplateSize
 import com.deflatedpickle.undulation.constraints.FillHorizontal
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
+import com.deflatedpickle.undulation.constraints.FinishLine
 import com.deflatedpickle.undulation.constraints.StickEast
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.Dimension
 import java.awt.GridBagLayout
 import java.awt.event.ItemEvent
+import javax.swing.JButton
 import javax.swing.JComboBox
 import javax.swing.JLabel
 import javax.swing.JPanel
@@ -41,6 +44,13 @@ class NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
 
     val columnInput = JSpinner(SpinnerNumberModel(16, 1, 512, 8))
     val rowInput = JSpinner(SpinnerNumberModel(16, 1, 512, 8))
+    private val sizeSwapper = JButton(MonoIcon.SWAP).apply {
+        addActionListener {
+            val temp = columnInput.value
+            columnInput.value = rowInput.value
+            rowInput.value = temp
+        }
+    }
 
     val framesInput = JSpinner(SpinnerNumberModel(1, 1, 1000, 1))
     val layersInput = JSpinner(SpinnerNumberModel(1, 1, 1000, 1))
@@ -58,7 +68,8 @@ class NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
             add(JLabel("Size:"), StickEast)
             add(columnInput, FillHorizontal)
             add(JLabel("X"))
-            add(rowInput, FillHorizontalFinishLine)
+            add(rowInput, FillHorizontal)
+            add(sizeSwapper, FinishLine)
 
             add(JSeparator(JSeparator.HORIZONTAL), FillHorizontalFinishLine)
 

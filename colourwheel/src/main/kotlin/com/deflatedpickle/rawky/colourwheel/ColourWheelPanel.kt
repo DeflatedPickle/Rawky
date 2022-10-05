@@ -9,19 +9,11 @@ import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
 
 object ColourWheelPanel : PluginPanel() {
-    val colourPicker = ColorPicker(false, true).apply {
+    val colourPicker = ColorPicker(true, true).apply {
         color = RawkyPlugin.colour
 
-        object : MouseAdapter() {
-            fun colour() {
-                RawkyPlugin.colour = this@apply.color
-            }
-
-            override fun mouseReleased(e: MouseEvent) = colour()
-            override fun mouseDragged(e: MouseEvent) = colour()
-        }.apply {
-            colorPanel.addMouseListener(this)
-            colorPanel.addMouseMotionListener(this)
+        addColorListener {
+            RawkyPlugin.colour = it.color
         }
     }
 
