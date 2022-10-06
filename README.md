@@ -16,6 +16,7 @@
     <a href="https://github.com/DeflatedPickle/Rawky/commits/rewrite"><img src="https://img.shields.io/github/last-commit/DeflatedPickle/Rawky.svg"></a>
     <a href="https://www.codefactor.io/repository/github/deflatedpickle/rawky/overview/rewrite"><img src="https://www.codefactor.io/repository/github/deflatedpickle/rawky/badge/rewrite" alt="CodeFactor"/></a>
     <a href="https://codeclimate.com/github/DeflatedPickle/Rawky/maintainability"><img src="https://api.codeclimate.com/v1/badges/b5f7de56e73e0c459a9e/maintainability"></a>
+    <a href="https://www.codacy.com/gh/DeflatedPickle/Rawky/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DeflatedPickle/Rawky&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/55932982ea574f4d893dbcc838d43449"/></a>
 </p>
 
 <p align="center">
@@ -32,13 +33,13 @@
 
 ### Features
 #### Configuration
-Most plugins have their own config files so that the application can be tailored to your workflow, either by editing the files or by using the dialog added via the SettingsGUI plugin
+Most plugins have their own config files so that the application can be tailored to your workflow, either by editing the files or by using the dialog added via the [SettingsGUI](https://github.com/DeflatedPickle/sniffle/tree/master/settingsgui) plugin
 #### Auto-saving
-Thanks to the auto save plugin, files are automatically saved on a timer defined by the user (default: 1 minute) or when the user switches programs (togglable, default: `true`)
+Thanks to the [AutoSave](https://github.com/DeflatedPickle/Rawky/tree/rewrite/autosave) plugin, files are automatically saved on a timer defined by the user (default: 1 minute) or when the user switches programs (togglable, default: `true`)
 #### Auto-loading
-Due to the auto load plugin, if there was a previously open file when the program was closed, it'll get loaded in when it's next open
+Due to the [AutoLoad](https://github.com/DeflatedPickle/Rawky/tree/rewrite/autoload) plugin, if there was a previously open file when the program was closed, it'll get loaded in when it's next open
 #### Painting modes
-The pixel grid plugin allows for the user to select between modes for how the pixel grid is to be interacted with. The currently supported modes are;
+The [PixelGrid](https://github.com/DeflatedPickle/Rawky/tree/rewrite/pixelgrid) plugin allows for the user to select between modes for how the pixel grid is to be interacted with. The currently supported modes are;
 - [Mouse](https://github.com/DeflatedPickle/Rawky/tree/rewrite/pixelgrid/mode/mouse)
 - [Keyboard](https://github.com/DeflatedPickle/Rawky/tree/rewrite/pixelgrid/mode/keyboard)
 #### Painting tools
@@ -51,13 +52,13 @@ The tools API allows for more tools to be added via external plugins but Rawky c
 - [Rectangle](https://github.com/DeflatedPickle/Rawky/tree/rewrite/toolbox/shape/rectangle) (click a pixel then a second to have a rectangle be drawn betwen them)
 - [Circle](https://github.com/DeflatedPickle/Rawky/tree/rewrite/toolbox/shape/circle) (click a pixel then a second to have a circle be drawn out from the first to the distance of the second)
 #### Server
-Rawky comes with a server plugin enabling you to paint with your friends
+Rawky comes with the [Server](https://github.com/DeflatedPickle/Rawky/tree/rewrite/server) plugin, enabling you to paint with your friends
 ##### Chat
-A chat plugin is also supplied so that messages may be sent
+A [Chat](https://github.com/DeflatedPickle/Rawky/tree/rewrite/server/chat) plugin is also supplied so that messages may be sent
 ##### Userlist
-A list is also supplied to show all users currently connected to the server
+The [UserList](https://github.com/DeflatedPickle/Rawky/tree/rewrite/server/userlist) is also supplied to show all users currently connected to the server
 ##### Scoreboard
-Keeps track of a few stats of users connected to a server such as time since joined and pixels placed
+The [Leaderboard](https://github.com/DeflatedPickle/Rawky/tree/rewrite/server/leaderboard) plugin keeps track of a few stats of users connected to a server such as time since joined and pixels placed
 #### File support
 ##### Rawr
 - Rawky JSON (`.rawr`)
