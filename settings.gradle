@@ -85,6 +85,7 @@ include 'toolbox'
 	include it
 	project(":$it").projectDir = new File(settingsDir, "toolbox/shape/$it")
 }
+
 include 'colourwheel'
 include 'colourpalette'
 [
@@ -93,6 +94,7 @@ include 'colourpalette'
 	include it
 	project(":$it").projectDir = new File(settingsDir, "colourpalette/parser/$it")
 }
+include 'colourhistory'
 
 include 'autosave'
 include 'autoload'
