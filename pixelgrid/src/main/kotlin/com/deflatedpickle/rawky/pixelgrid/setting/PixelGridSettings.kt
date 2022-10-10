@@ -15,4 +15,5 @@ data class PixelGridSettings(
     override val version: Int = 1,
     val divide: LineSettings = LineSettings(),
     var mode: @Serializable(ModeSerializer::class) Mode? = null,
+    val guide: GuideSettings = GuideSettings(),
 ) : Config

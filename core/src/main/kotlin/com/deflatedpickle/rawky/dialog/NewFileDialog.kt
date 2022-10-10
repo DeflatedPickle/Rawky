@@ -1,15 +1,13 @@
 package com.deflatedpickle.rawky.dialog
 
 import com.deflatedpickle.haruhi.util.PluginUtil
-import com.deflatedpickle.marvin.registry.Registry
 import com.deflatedpickle.monocons.MonoIcon
-import com.deflatedpickle.rawky.api.TemplateSize
+import com.deflatedpickle.rawky.api.template.Template
 import com.deflatedpickle.undulation.constraints.FillHorizontal
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.constraints.FinishLine
 import com.deflatedpickle.undulation.constraints.StickEast
 import org.oxbow.swingbits.dialog.task.TaskDialog
-import java.awt.Dimension
 import java.awt.GridBagLayout
 import java.awt.event.ItemEvent
 import javax.swing.JButton
@@ -18,13 +16,11 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JSeparator
 import javax.swing.JSpinner
-import javax.swing.JTextField
 import javax.swing.SpinnerNumberModel
-import javax.swing.SwingUtilities
 
 class NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
-    private val templateSize = JComboBox<TemplateSize>().apply {
-        for ((_, v) in TemplateSize.registry) {
+    val template = JComboBox<Template>().apply {
+        for ((_, v) in Template.registry) {
             addItem(v)
         }
 
@@ -33,7 +29,7 @@ class NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
         addItemListener {
             when (it.stateChange) {
                 ItemEvent.SELECTED -> {
-                    with(this.selectedItem as TemplateSize) {
+                    with(this.selectedItem as Template) {
                         columnInput.value = this.width
                         rowInput.value = this.height
                     }
@@ -63,7 +59,7 @@ class NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
             layout = GridBagLayout()
 
             add(JLabel("Template:"), StickEast)
-            add(templateSize, FillHorizontalFinishLine)
+            add(template, FillHorizontalFinishLine)
 
             add(JLabel("Size:"), StickEast)
             add(columnInput, FillHorizontal)

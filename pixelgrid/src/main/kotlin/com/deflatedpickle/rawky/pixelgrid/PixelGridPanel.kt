@@ -5,19 +5,24 @@ package com.deflatedpickle.rawky.pixelgrid
 import com.deflatedpickle.haruhi.api.redraw.RedrawActive
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.util.ConfigUtil
+import com.deflatedpickle.marvin.extensions.set
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.RawkySettings
 import com.deflatedpickle.rawky.api.Painter
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
+import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.pixelgrid.setting.PixelGridSettings
+import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.util.DrawUtil
 import java.awt.BasicStroke
+import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.Image
 import java.awt.MouseInfo
+import java.awt.Stroke
 import javax.swing.SwingUtilities
 
 @RedrawActive
@@ -71,6 +76,16 @@ object PixelGridPanel : PluginPanel() {
         }
     }
 
+    private fun drawGuides(g: Graphics2D, doc: RawkyDocument, colour: Color, stroke: Stroke) {
+        g.color = colour
+        g.stroke = stroke
+
+        for (i in doc.guides) {
+            g.drawString(i.name, i.x * Grid.pixel + 4, i.y * Grid.pixel + g.fontMetrics.height + 4)
+            g.drawRect(i.x * Grid.pixel, i.y * Grid.pixel, i.width * Grid.pixel, i.height * Grid.pixel)
+        }
+    }
+
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
 
@@ -83,18 +98,15 @@ object PixelGridPanel : PluginPanel() {
 
             settings?.let { settings ->
                 val g2d = g as Graphics2D
-                g2d.stroke = BasicStroke(
-                    settings.divide.thickness
-                )
 
-                DrawUtil.paintGrid(g, grid, settings.divide.colour)
-            }
+                DrawUtil.paintGrid(g, grid, settings.divide.colour, BasicStroke(settings.divide.thickness))
+                drawGuides(g, doc, settings.guide.colour, BasicStroke(settings.guide.thickness))
+                DrawUtil.paintHoverCell(selectedCells, g)
 
-            DrawUtil.paintHoverCell(selectedCells, g as Graphics2D)
-
-            val tool = Tool.current
-            if (selectedCells.size > 0 && tool is Painter) {
-                tool.paint(selectedCells.first(), g)
+                val tool = Tool.current
+                if (selectedCells.size > 0 && tool is Painter) {
+                    tool.paint(selectedCells.first(), g)
+                }
             }
         }
 

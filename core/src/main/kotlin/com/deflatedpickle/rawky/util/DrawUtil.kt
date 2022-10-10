@@ -8,11 +8,13 @@ import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.Point
+import java.awt.Stroke
 
 object DrawUtil {
-    fun paintGrid(g: Graphics, grid: Grid, outlineColour: Color = Color.BLACK) {
+    fun paintGrid(g: Graphics2D, grid: Grid, outlineColour: Color = Color.BLACK, stroke: Stroke) {
         for (cell in grid.children) {
             g.color = cell.colour
+            g.stroke = stroke
             g.fillRect(
                 cell.polygon.x, cell.polygon.y,
                 cell.polygon.width, cell.polygon.height

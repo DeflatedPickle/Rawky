@@ -12,9 +12,13 @@ data class Grid(
     override var selectedIndex: Int = 0,
     override val children: MutableList<Cell> = mutableListOf()
 ) : Matrix<Cell>, ChildSelector {
+    companion object {
+        val pixel = 2
+    }
+
     init {
-        val width = 16
-        val height = 16
+        val width = pixel
+        val height = pixel
         var row = 0
         var column = 0
 
@@ -33,7 +37,7 @@ data class Grid(
                     row = row,
                     column = column,
                     polygon = Rectangle(
-                        row * 16, column * 16,
+                        row * pixel, column * pixel,
                         width, height
                     )
                 )
