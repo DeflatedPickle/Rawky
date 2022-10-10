@@ -13,7 +13,7 @@ data class Grid(
     override val children: MutableList<Cell> = mutableListOf()
 ) : Matrix<Cell>, ChildSelector {
     companion object {
-        val pixel = 2
+        const val pixel = 16
     }
 
     init {
