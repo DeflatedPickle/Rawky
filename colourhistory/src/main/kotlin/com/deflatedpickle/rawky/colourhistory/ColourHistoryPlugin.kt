@@ -46,36 +46,37 @@ object ColourHistoryPlugin {
         }
 
         EventChangeColour.addListener { c ->
-            if (ColourHistoryPanel.components.none { b -> (b as ColourButton).color == c }) {
+            if (ColourHistoryPanel.panel.components.none { b -> (b as ColourButton).color == c }) {
                 addButton(c)
 
                 ConfigUtil.getSettings<ColourHistorySettings>("deflatedpickle@colour_history#*")?.let {
                     updateHistory(it, c)
-                    ColourHistoryPanel.remove(ColourHistoryPanel.components.lastIndex)
                 }
 
                 PluginUtil.slugToPlugin("deflatedpickle@colour_history#*")
                     ?.let { plug -> ConfigUtil.serializeConfig(plug) }
             }
 
-            ColourHistoryPanel.repaint()
+            ColourHistoryPanel.panel.revalidate()
+            ColourHistoryPanel.panel.repaint()
         }
     }
 
     private fun addButton(c: Color) {
-        ColourHistoryPanel.add(ColourButton(c).apply {
+        ColourHistoryPanel.panel.add(ColourButton(c).apply {
             addActionListener {
                 RawkyPlugin.colour = this.color
             }
-        }, 0)
+        })
     }
 
     private fun updateHistory(it: ColourHistorySettings, c: Color) {
         it.history.add(c)
 
         if (it.history.size >= it.historyLength) {
-            for (i in it.historyLength until it.history.size) {
+            for (i in it.historyLength .. it.history.size) {
                 it.history.removeAt(0)
+                ColourHistoryPanel.panel.remove(0)
             }
         }
     }
