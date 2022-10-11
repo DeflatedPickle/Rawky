@@ -8,7 +8,7 @@ data class Template(
     val name: String,
     val width: Int,
     val height: Int,
-    val guides: List<Guide> = listOf()
+    val guides: List<String> = listOf(),
 ) {
     companion object {
         val registry = Registry<String, Template>()

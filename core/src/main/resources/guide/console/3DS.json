@@ -1,0 +1,16 @@
+[
+  {
+    "name": "top",
+    "x": 0,
+    "y": 0,
+    "width": 400,
+    "height": 240
+  },
+  {
+    "name": "bottom",
+    "x": 40,
+    "y": 240,
+    "width": 320,
+    "height": 240
+  }
+]

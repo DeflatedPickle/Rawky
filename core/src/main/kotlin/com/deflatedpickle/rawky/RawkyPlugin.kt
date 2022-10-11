@@ -14,6 +14,8 @@ import com.deflatedpickle.rawky.event.EventChangeColour
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import so.jabber.FileUtils
@@ -34,6 +36,7 @@ import java.io.File
 )
 object RawkyPlugin {
     private val templateFolder = (File(".") / "template").apply { mkdirs() }
+    private val guideFolder = (File(".") / "guide").apply { mkdirs() }
 
     var document: RawkyDocument? = null
     var colour: Color = Color.CYAN
@@ -58,8 +61,21 @@ object RawkyPlugin {
 
         for (i in templateFolder.walk()) {
             if (i.isFile && i.extension == "json") {
-                Template.registry[i.nameWithoutExtension] =
-                    Json.Default.decodeFromString(Template::class.serializer(), i.readText())
+                val json = Json.Default.decodeFromString(Template::class.serializer(), i.readText())
+                Template.registry[json.name] = json
+                println(json.guides)
+            }
+        }
+
+        FileUtils.copyResourcesRecursively(
+            RawkyPlugin::class.java.getResource("/guide"),
+            guideFolder
+        )
+
+        for (i in guideFolder.walk()) {
+            if (i.isFile && i.extension == "json") {
+                val json = Json.Default.decodeFromString<List<Guide>>(i.readText())
+                Guide.registry[i.nameWithoutExtension] = json
             }
         }
     }

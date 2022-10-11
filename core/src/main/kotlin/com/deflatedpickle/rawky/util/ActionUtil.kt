@@ -4,6 +4,8 @@ package com.deflatedpickle.rawky.util
 
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.template.Guide
+import com.deflatedpickle.rawky.api.template.Guide.Companion
 import com.deflatedpickle.rawky.api.template.Template
 import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Grid
@@ -24,7 +26,7 @@ object ActionUtil {
             val layers = dialog.layersInput.value as Int
 
             val document = newDocument(maxRows, maxColumns, frames, layers)
-            document.guides = (dialog.template.selectedItem as Template).guides
+            document.guides = (dialog.template.selectedItem as Template).guides.flatMap { Guide.registry[it]!! }
 
             RawkyPlugin.document = document
 
