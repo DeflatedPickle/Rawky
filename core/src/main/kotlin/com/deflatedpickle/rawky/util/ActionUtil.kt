@@ -26,7 +26,8 @@ object ActionUtil {
             val layers = dialog.layersInput.value as Int
 
             val document = newDocument(maxRows, maxColumns, frames, layers)
-            document.guides = (dialog.template.selectedItem as Template).guides.flatMap { Guide.registry[it]!! }
+            (dialog.template.selectedItem as Template?)?.guides
+                ?.flatMap { Guide.registry[it]!! }?.let { document.guides = it }
 
             RawkyPlugin.document = document
 
