@@ -91,6 +91,15 @@ object LauncherPlugin {
         }
     }
 
+    private val gridChooser = JFileChooser(File(".")).apply {
+        isAcceptAllFileFilterUsed = false
+        addChoosableFileFilter(
+            FileNameExtensionFilter(
+                "Theme (.xml)", "xml"
+            )
+        )
+    }
+
     private val historyMenu = LimitedMenu("History", 0).apply {
         ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
             this.limit = it.historyLength
@@ -105,36 +114,63 @@ object LauncherPlugin {
 
     init {
         EventProgramFinishSetup.addListener {
-            val menuBar = RegistryUtil.get(MenuCategory.MENU.name)
-            (menuBar?.get(MenuCategory.FILE.name) as JMenu).apply {
-                add("New", MonoIcon.FOLDER_NEW) { ActionUtil.newFile() }
+            val menuBar = RegistryUtil.get(MenuCategory.MENU.name)?.apply {
+                (get(MenuCategory.FILE.name) as JMenu).apply {
+                    add("New", MonoIcon.FOLDER_NEW) { ActionUtil.newFile() }
 
-                add("Open", MonoIcon.FOLDER_OPEN) {
-                    openDialog(this)
-                }
-
-                ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
-                    if (it.history.isNotEmpty()) {
-                        add(historyMenu)
+                    add("Open", MonoIcon.FOLDER_OPEN) {
+                        openDialog(this)
                     }
+
+                    ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
+                        if (it.history.isNotEmpty()) {
+                            add(historyMenu)
+                        }
+                    }
+
+                    addSeparator()
+
+                    add("Import", MonoIcon.FILE_NEW) { importDialog() }
+                    add("Export", MonoIcon.FILE_EXPORT) { exportDialog() }
+
+                    addSeparator()
+
+                    add("Exit", MonoIcon.EXIT) { exitProcess(0) }
+
+                    addSeparator()
                 }
 
-                addSeparator()
+                (get(MenuCategory.TOOLS.name) as JMenu).apply {
+                    add(JMenu("Dock").apply {
+                        add(JMenu("Theme").apply {
+                            for (i in 0 until PluginUtil.control.themes.size()) {
+                                val k = PluginUtil.control.themes.getKey(i)
+                                add(k.capitalize()) {
+                                    PluginUtil.control.themes.select(k)
+                                }
+                            }
+                        })
 
-                add("Import", MonoIcon.FILE_NEW) { importDialog() }
-                add("Export", MonoIcon.FILE_EXPORT) { exportDialog() }
+                        addSeparator()
 
-                addSeparator()
-
-                add("Exit", MonoIcon.EXIT) { exitProcess(0) }
-
-                addSeparator()
+                        add("Save") {
+                            if (gridChooser.showSaveDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
+                                PluginUtil.control.writeXML(gridChooser.selectedFile)
+                            }
+                        }
+                        add("Open") {
+                            if (gridChooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
+                                PluginUtil.control.readXML(gridChooser.selectedFile)
+                            }
+                        }
+                    })
+                }
             }
 
             Toolbar.apply {
                 add(icon = MonoIcon.FOLDER_NEW, tooltip = "New") { ActionUtil.newFile() }
                 add(icon = MonoIcon.FOLDER_OPEN, tooltip = "Open") {
-                    val fileMenu = (menuBar.get(MenuCategory.FILE.name) as JMenu)
+                    val fileMenu = (menuBar?.get(MenuCategory.FILE.name) as JMenu)
                     openDialog(fileMenu)
                 }
 

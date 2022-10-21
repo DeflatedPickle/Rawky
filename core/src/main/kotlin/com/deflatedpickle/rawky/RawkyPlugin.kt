@@ -63,7 +63,6 @@ object RawkyPlugin {
             if (i.isFile && i.extension == "json") {
                 val json = Json.Default.decodeFromString(Template::class.serializer(), i.readText())
                 Template.registry[json.name] = json
-                println(json.guides)
             }
         }
 
