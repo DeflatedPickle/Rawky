@@ -17,14 +17,20 @@ import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.marvin.util.OSUtil
 import com.deflatedpickle.rawky.launcher.gui.Window
 import com.jidesoft.plaf.LookAndFeelFactory
-import kotlinx.serialization.InternalSerializationApi
-import org.apache.logging.log4j.LogManager
-import org.fusesource.jansi.AnsiConsole
-import org.oxbow.swingbits.dialog.task.TaskDialogs
 import java.awt.Dimension
 import java.io.File
 import javax.swing.SwingUtilities
 import kotlin.system.exitProcess
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import kotlinx.serialization.InternalSerializationApi
+import org.apache.logging.log4j.LogManager
+import org.fusesource.jansi.AnsiConsole
+import org.oxbow.swingbits.dialog.task.TaskDialogs
+import org.oxbow.swingbits.util.Strings
 
 @InternalSerializationApi
 fun main(args: Array<String>) {
@@ -79,6 +85,25 @@ fun main(args: Array<String>) {
     // Handle all uncaught exceptions to open a pop-up
     Thread.setDefaultUncaughtExceptionHandler { t, e ->
         logger.warn("${t.name} threw $e")
+
+        File("error").apply {
+            if (!this.exists()) {
+                this.mkdirs()
+            }
+
+            e::class.simpleName?.let { name ->
+                val currentMoment = Clock.System.now()
+                val systemZone = currentMoment.toLocalDateTime(
+                    TimeZone.currentSystemDefault()
+                )
+
+                File("error/$name-$systemZone.log").apply {
+                    createNewFile()
+                    writeText(Strings.stackStraceAsString(e))
+                }
+            }
+        }
+
         // We'll invoke it on the Swing thread
         // This will wait at least for the window to open first
         SwingUtilities.invokeLater {
