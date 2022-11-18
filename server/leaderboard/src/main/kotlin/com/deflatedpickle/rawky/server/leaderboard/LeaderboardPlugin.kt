@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused")
 
 package com.deflatedpickle.rawky.server.leaderboard
@@ -8,20 +10,15 @@ import com.deflatedpickle.haruhi.api.util.ComponentPosition
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.backend.event.EventJoinServer
 import com.deflatedpickle.rawky.server.backend.event.EventRegisterPackets
-import com.deflatedpickle.rawky.server.backend.event.EventStartServer
 import com.deflatedpickle.rawky.server.backend.event.EventUserJoinServer
 import com.deflatedpickle.rawky.server.backend.util.User
-import com.deflatedpickle.rawky.server.frontend.widget.ServerPanel
 import com.deflatedpickle.rawky.server.leaderboard.query.QueryUserStats
 import com.deflatedpickle.rawky.server.leaderboard.request.RequestSyncOldStats
 import com.deflatedpickle.rawky.server.leaderboard.util.Stats
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
 import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
-import java.awt.Color
 import java.time.Instant
 import java.util.Vector
-import javax.swing.Timer
-import javax.swing.event.TableModelEvent
 
 @Plugin(
     value = "leaderboard",

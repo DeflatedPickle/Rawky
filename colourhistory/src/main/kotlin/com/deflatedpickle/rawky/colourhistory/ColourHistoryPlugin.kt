@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.colourhistory
@@ -10,7 +12,6 @@ import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.event.EventChangeColour
-import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
 import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
 import com.deflatedpickle.undulation.widget.ColourButton
@@ -63,18 +64,20 @@ object ColourHistoryPlugin {
     }
 
     private fun addButton(c: Color) {
-        ColourHistoryPanel.panel.add(ColourButton(c).apply {
-            addActionListener {
-                RawkyPlugin.colour = this.color
+        ColourHistoryPanel.panel.add(
+            ColourButton(c).apply {
+                addActionListener {
+                    RawkyPlugin.colour = this.color
+                }
             }
-        })
+        )
     }
 
     private fun updateHistory(it: ColourHistorySettings, c: Color) {
         it.history.add(c)
 
         if (it.history.size >= it.historyLength) {
-            for (i in it.historyLength .. it.history.size) {
+            for (i in it.historyLength..it.history.size) {
                 it.history.removeAt(0)
                 ColourHistoryPanel.panel.remove(0)
             }

@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused")
 
 package com.deflatedpickle.rawky.tool.pencil
@@ -10,9 +12,7 @@ import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.ActionStack.Action
-import com.deflatedpickle.rawky.util.ActionStack.MultiAction
 import java.awt.Graphics2D
-import java.awt.Point
 
 @Plugin(
     value = "pencil",

@@ -1,9 +1,9 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.server.chat.request
 
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.backend.request.Request
-import com.deflatedpickle.rawky.server.backend.response.ResponseActiveUsers
-import com.deflatedpickle.rawky.server.backend.util.UserUpdate.RENAME
 import com.deflatedpickle.rawky.server.chat.ChatPanel
 import com.deflatedpickle.rawky.server.chat.response.ResponseSyncOldChat
 import com.esotericsoftware.kryonet.Connection

@@ -1,13 +1,12 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.setting
 
 import com.deflatedpickle.haruhi.api.Config
 import com.deflatedpickle.rawky.pixelgrid.api.Mode
 import com.deflatedpickle.rawky.pixelgrid.serializer.ModeSerializer
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.Required
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
 
 @OptIn(ExperimentalSerializationApi::class)
 @Serializable

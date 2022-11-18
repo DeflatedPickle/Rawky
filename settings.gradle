@@ -37,10 +37,7 @@ include 'server'
 }
 
 include 'pixelgrid'
-[
-	'mouse',
- 	'keyboard',
-].each {
+['mouse', 'keyboard',].each {
 	include it
 	project(":$it").projectDir = new File(settingsDir, "pixelgrid/mode/$it")
 }
@@ -52,9 +49,7 @@ include 'pixelgrid'
 	include it
 	project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/$it")
 }
-[
-	'block',
-].each {
+['block',].each {
 	include it
 	project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/ascii/$it")
 }
@@ -71,26 +66,18 @@ include 'toolbox'
 	include it
 	project(":$it").projectDir = new File(settingsDir, "toolbox/$it")
 }
-[
-        'solid',
-		'stipple',
-].each {
+['solid', 'stipple',].each {
 	include it
 	project(":$it").projectDir = new File(settingsDir, "toolbox/bucket/fill/$it")
 }
-[
-		'rectangle',
-		'circle',
-].each {
+['rectangle', 'circle',].each {
 	include it
 	project(":$it").projectDir = new File(settingsDir, "toolbox/shape/$it")
 }
 
 include 'colourwheel'
 include 'colourpalette'
-[
-		'json',
-].each {
+['json',].each {
 	include it
 	project(":$it").projectDir = new File(settingsDir, "colourpalette/parser/$it")
 }

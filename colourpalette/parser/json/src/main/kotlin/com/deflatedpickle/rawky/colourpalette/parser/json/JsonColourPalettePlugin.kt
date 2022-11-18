@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.colourpalette.parser.json
@@ -75,9 +77,8 @@ object JsonColourPalettePlugin : PaletteParser {
 
     private fun isColour(s: String) =
         s.startsWith("#") ||
-                (s.startsWith("rgb(") && s.endsWith(")")) ||
-                (s.startsWith("hsb(") && s.endsWith(")"))
-
+            (s.startsWith("rgb(") && s.endsWith(")")) ||
+            (s.startsWith("hsb(") && s.endsWith(")"))
 
     private fun getColour(element: JsonElement): Color? {
         if (element is JsonPrimitive && element.isString) {
@@ -103,5 +104,4 @@ object JsonColourPalettePlugin : PaletteParser {
         } else {
             null
         }
-
 }

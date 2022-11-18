@@ -1,10 +1,11 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.server.backend.response
 
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.esotericsoftware.kryonet.Client
 import com.esotericsoftware.kryonet.Connection
 import java.awt.Point
-import java.util.*
 
 data class ResponseMoveMouse(
     override val id: Int = -1,

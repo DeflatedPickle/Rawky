@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.colourhistory
@@ -8,7 +10,7 @@ import kotlinx.serialization.Serializable
 import java.awt.Color
 
 @Serializable
-data class ColourHistorySettings (
+data class ColourHistorySettings(
     override val version: Int = 1,
     val history: MutableList<@Serializable(ColorSerializer::class) Color> = mutableListOf(),
     var historyLength: Int = 24,

@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.setting
 
 import com.deflatedpickle.rawky.settings.api.range.FloatRange

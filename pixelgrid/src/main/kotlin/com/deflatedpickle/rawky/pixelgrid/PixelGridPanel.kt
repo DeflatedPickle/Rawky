@@ -1,10 +1,11 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid
 
 import com.deflatedpickle.haruhi.api.redraw.RedrawActive
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.setting.RawkySettings
 import com.deflatedpickle.rawky.api.Painter
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
@@ -12,6 +13,7 @@ import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.pixelgrid.setting.PixelGridSettings
 import com.deflatedpickle.rawky.setting.RawkyDocument
+import com.deflatedpickle.rawky.setting.RawkySettings
 import com.deflatedpickle.rawky.util.DrawUtil
 import java.awt.BasicStroke
 import java.awt.Color

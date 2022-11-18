@@ -1,9 +1,9 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.server.backend.util
 
-import com.deflatedpickle.marvin.Colour
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
-import com.deflatedpickle.undulation.functions.extensions.toColour
 import java.awt.Color
 import java.awt.Point
 

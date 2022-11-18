@@ -1,8 +1,9 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.collection
 
 import com.deflatedpickle.undulation.serializer.ColorSerializer
 import com.deflatedpickle.undulation.serializer.RectangleSerializer
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.awt.Color

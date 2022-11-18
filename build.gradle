@@ -66,7 +66,7 @@ allprojects { p ->
 	}
 
 	spotless {
-		ratchetFrom 'origin/rewrite'
+		// ratchetFrom 'origin/rewrite'
 
 		java {
 			importOrder()

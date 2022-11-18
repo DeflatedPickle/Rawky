@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("UNCHECKED_CAST")
 
 package com.deflatedpickle.rawky.server.frontend.dialog
@@ -16,8 +18,6 @@ import com.deflatedpickle.undulation.DocumentAdapter
 import com.deflatedpickle.undulation.builder.ProgressMonitorBuilder
 import org.jdesktop.swingx.JXTextField
 import org.oxbow.swingbits.dialog.task.TaskDialog
-import java.util.*
-import javax.swing.JComboBox
 import javax.swing.JSpinner
 import javax.swing.SpinnerNumberModel
 import javax.swing.SwingUtilities
@@ -88,16 +88,20 @@ class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
             text = it.defaultUserName
         }
 
-        this.document.addDocumentListener(DocumentAdapter {
-            fireValidationFinished(validationCheck())
-        })
+        this.document.addDocumentListener(
+            DocumentAdapter {
+                fireValidationFinished(validationCheck())
+            }
+        )
     }
 
     // Connection
     private val securityCodeField = JXTextField("Session Code").apply {
-        this.document.addDocumentListener(DocumentAdapter {
-            fireValidationFinished(validationCheck())
-        })
+        this.document.addDocumentListener(
+            DocumentAdapter {
+                fireValidationFinished(validationCheck())
+            }
+        )
     }
     private val encodingComboBox = EncoderComboBox()
     private val timeoutField = JSpinner(SpinnerNumberModel(5000, 0, 5000 * 5, 5))

@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("MemberVisibilityCanBePrivate", "unused", "LeakingThis")
 
 package com.deflatedpickle.rawky.pixelgrid.api

@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.mode.keyboard.serializer
 
 import com.deflatedpickle.rawky.pixelgrid.mode.keyboard.util.KeyCombo
@@ -26,11 +28,13 @@ object KeySerializer : KSerializer<KeyCombo> {
             code.add(0, value.modifier)
         }
 
-        encoder.encodeString(code.joinToString("+") { k ->
-            KeyEvent::class.java.declaredFields.first {
-                it.name.startsWith("VK_") && it.get(null) == k
-            }.name
-        })
+        encoder.encodeString(
+            code.joinToString("+") { k ->
+                KeyEvent::class.java.declaredFields.first {
+                    it.name.startsWith("VK_") && it.get(null) == k
+                }.name
+            }
+        )
     }
 
     override fun deserialize(decoder: Decoder): KeyCombo {

@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("MemberVisibilityCanBePrivate")
 
 package com.deflatedpickle.rawky.toolbox
@@ -13,7 +15,6 @@ import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.toolbox.event.EventToolboxFinish
 import com.deflatedpickle.undulation.api.ButtonType
 import com.deflatedpickle.undulation.functions.extensions.add
-import kotlinx.serialization.ExperimentalSerializationApi
 import java.awt.BorderLayout
 import javax.swing.ButtonGroup
 import javax.swing.JToolBar

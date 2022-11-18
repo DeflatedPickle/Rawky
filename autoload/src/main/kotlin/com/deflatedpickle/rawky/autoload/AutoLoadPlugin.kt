@@ -42,7 +42,7 @@ object AutoLoadPlugin {
             }
         }
 
-        EventSaveDocument.addListener {  save ->
+        EventSaveDocument.addListener { save ->
             ConfigUtil.getSettings<AutoLoadSettings>("deflatedpickle@auto_load#*")?.let {
                 if (it.loadType == LAST_SAVED) {
                     it.lastFile = save.second

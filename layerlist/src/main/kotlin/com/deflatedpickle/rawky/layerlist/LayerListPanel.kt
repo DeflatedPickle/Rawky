@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.layerlist
 
 import com.deflatedpickle.haruhi.component.PluginPanel
@@ -20,7 +22,7 @@ import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Graphics
 import java.awt.Graphics2D
-import java.util.*
+import java.util.EventObject
 import javax.swing.AbstractCellEditor
 import javax.swing.DefaultCellEditor
 import javax.swing.JCheckBox
@@ -51,7 +53,8 @@ object LayerListPanel : PluginPanel() {
                     )
 
                     model.insertRow(
-                        0, arrayOf(
+                        0,
+                        arrayOf(
                             null,
                             layerDialog.nameInput.text,
                             true,
@@ -65,13 +68,10 @@ object LayerListPanel : PluginPanel() {
             }
         }
         add(icon = MonoIcon.EDIT_ELEMENT, tooltip = "Edit element", enabled = false) {
-
         }
         add(icon = MonoIcon.DELETE_ELEMENT, tooltip = "Delete element", enabled = false) {
-
         }
         add(icon = MonoIcon.DELETE_ALL_ELEMENTS, tooltip = "Delete all elements", enabled = false) {
-
         }
     }
 
@@ -116,8 +116,8 @@ object LayerListPanel : PluginPanel() {
     }
 
     private val columnZeroRenderer = TableCellRenderer { _: JTable, _: Any?,
-                                                         _: Boolean, _: Boolean,
-                                                         row: Int, _: Int ->
+        _: Boolean, _: Boolean,
+        row: Int, _: Int ->
         object : JPanel() {
             override fun paintComponent(g: Graphics) {
                 if (RawkyPlugin.document == null) return
@@ -146,21 +146,26 @@ object LayerListPanel : PluginPanel() {
             table: JTable,
             value: Any?,
             isSelected: Boolean,
-            row: Int, column: Int
+            row: Int,
+            column: Int
         ) = JPanel() as Component
 
         override fun getCellEditorValue() = 0
     }
-    private val columnTwoEditor = DefaultCellEditor(JCheckBox().apply {
-        isVisible = false
-    })
+    private val columnTwoEditor = DefaultCellEditor(
+        JCheckBox().apply {
+            isVisible = false
+        }
+    )
     private val columnTwoRenderer = TableCellRenderer { _, value, _, _, _, _ ->
         JCheckBox(if (value as Boolean) MonoIcon.SHOW else MonoIcon.HIDE)
             .apply { isOpaque = false }
     }
-    private val columnThreeEditor = DefaultCellEditor(JCheckBox().apply {
-        isVisible = false
-    })
+    private val columnThreeEditor = DefaultCellEditor(
+        JCheckBox().apply {
+            isVisible = false
+        }
+    )
     private val columnThreeRenderer = TableCellRenderer { _, value, _, _, _, _ ->
         JCheckBox(if (value as Boolean) MonoIcon.LOCK_OPEN else MonoIcon.LOCK_CLOSED)
             .apply { isOpaque = false }

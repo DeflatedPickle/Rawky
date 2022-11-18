@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.colourpalette
 
 import com.deflatedpickle.haruhi.component.PluginPanel
@@ -14,7 +16,6 @@ import java.awt.GridBagLayout
 import java.awt.event.ItemEvent
 import javax.swing.JComboBox
 import javax.swing.JScrollPane
-
 
 object ColourPalettePanel : PluginPanel() {
     private val combo = JComboBox<Palette>().apply {

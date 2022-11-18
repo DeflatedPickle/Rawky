@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("MemberVisibilityCanBePrivate")
 
 package com.deflatedpickle.rawky.server.chat

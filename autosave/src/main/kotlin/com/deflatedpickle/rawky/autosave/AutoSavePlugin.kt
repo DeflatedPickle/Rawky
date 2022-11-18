@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection", "UNCHECKED_CAST")
 
 package com.deflatedpickle.rawky.autosave
@@ -17,7 +19,6 @@ import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.autosave.event.EventAutoSaveDocument
 import com.deflatedpickle.rawky.autosave.util.FileType
 import com.deflatedpickle.rawky.setting.RawkyDocument
-import com.deflatedpickle.rawky.settings.SettingsGUI
 import com.deflatedpickle.undulation.constraints.FillHorizontal
 import java.awt.Color
 import java.awt.Component
@@ -58,7 +59,8 @@ object AutoSavePlugin {
                     RawkyPlugin.document?.let { doc ->
                         if (e.oppositeWindow !in PluginUtil.window.ownedWindows &&
                             e.oppositeWindow != null &&
-                            e.oppositeWindow.owner == PluginUtil.window) {
+                            e.oppositeWindow.owner == PluginUtil.window
+                        ) {
                             if (config.saveOnFocusLost) {
                                 save(doc, config)
                             }
@@ -108,18 +110,24 @@ object AutoSavePlugin {
                             }
                             extension.selectedIndex = 0
 
-                            instance.set(name, FileType(
-                                handler.selectedItem as Exporter,
-                                extension.selectedItem as String? ?: "null",
-                            ))
+                            instance.set(
+                                name,
+                                FileType(
+                                    handler.selectedItem as Exporter,
+                                    extension.selectedItem as String? ?: "null",
+                                )
+                            )
                             ConfigUtil.serializeConfig(plugin)
                         }
 
                         extension.addItemListener {
-                            instance.set(name, FileType(
-                                handler.selectedItem as Exporter,
-                                extension.selectedItem as String? ?: "null",
-                            ))
+                            instance.set(
+                                name,
+                                FileType(
+                                    handler.selectedItem as Exporter,
+                                    extension.selectedItem as String? ?: "null",
+                                )
+                            )
                             ConfigUtil.serializeConfig(plugin)
                         }
 

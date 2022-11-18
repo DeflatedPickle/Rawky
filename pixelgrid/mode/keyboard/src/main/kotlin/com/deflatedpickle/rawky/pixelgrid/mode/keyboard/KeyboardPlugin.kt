@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused", "UNCHECKED_CAST")
 
 package com.deflatedpickle.rawky.pixelgrid.mode.keyboard
@@ -22,7 +24,6 @@ import java.awt.Point
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
 import java.awt.event.MouseEvent
-
 
 @Plugin(
     value = "keyboard",
@@ -122,10 +123,13 @@ object KeyboardPlugin : Mode("Keyboard") {
                             if (dialog.result == TaskDialog.StandardCommand.OK) {
                                 val k = instance.get<KeyCombo>(name)
 
-                                instance.set(name, KeyCombo(
-                                    dialog.keyboard.selectedCharacter?.keyCode ?: k.key,
-                                    dialog.keyboard.selectedModifier?.keyCode,
-                                ))
+                                instance.set(
+                                    name,
+                                    KeyCombo(
+                                        dialog.keyboard.selectedCharacter?.keyCode ?: k.key,
+                                        dialog.keyboard.selectedModifier?.keyCode,
+                                    )
+                                )
                                 ConfigUtil.serializeConfig(plugin)
 
                                 text = genText()

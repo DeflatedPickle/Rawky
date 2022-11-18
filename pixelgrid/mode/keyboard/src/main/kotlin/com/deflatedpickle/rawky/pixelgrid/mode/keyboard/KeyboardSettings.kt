@@ -1,12 +1,11 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.mode.keyboard
 
 import com.deflatedpickle.haruhi.api.Config
 import com.deflatedpickle.rawky.pixelgrid.mode.keyboard.serializer.KeySerializer
 import com.deflatedpickle.rawky.pixelgrid.mode.keyboard.util.KeyCombo
-import com.deflatedpickle.rawky.settings.api.range.IntRange
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
-import java.awt.event.KeyEvent.VK_ALT_GRAPH
 import java.awt.event.KeyEvent.VK_DOWN
 import java.awt.event.KeyEvent.VK_ENTER
 import java.awt.event.KeyEvent.VK_LEFT
@@ -21,4 +20,4 @@ data class KeyboardSettings(
     var negativeX: @Serializable(KeySerializer::class) KeyCombo = KeyCombo(key = VK_LEFT),
     var positiveX: @Serializable(KeySerializer::class) KeyCombo = KeyCombo(key = VK_RIGHT),
     var useTool: @Serializable(KeySerializer::class) KeyCombo = KeyCombo(key = VK_ENTER),
-): Config
+) : Config

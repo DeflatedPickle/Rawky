@@ -1,16 +1,19 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("UNCHECKED_CAST")
 
 package com.deflatedpickle.rawky.server.frontend.dialog
 
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
+import com.deflatedpickle.icupnp.UPnP
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.ServerPlugin.portMax
 import com.deflatedpickle.rawky.server.ServerPlugin.portMin
 import com.deflatedpickle.rawky.server.ServerSettings
 import com.deflatedpickle.rawky.server.backend.api.Encoder
-import com.deflatedpickle.rawky.server.backend.util.functions.ipToByteArray
 import com.deflatedpickle.rawky.server.backend.util.functions.getPublicIP
+import com.deflatedpickle.rawky.server.backend.util.functions.ipToByteArray
 import com.deflatedpickle.rawky.server.backend.util.functions.portToByteArray
 import com.deflatedpickle.rawky.server.frontend.widget.EncoderComboBox
 import com.deflatedpickle.rawky.server.frontend.widget.form
@@ -20,16 +23,13 @@ import com.deflatedpickle.undulation.DocumentAdapter
 import com.deflatedpickle.undulation.builder.ProgressMonitorBuilder
 import com.deflatedpickle.undulation.constraints.StickEast
 import com.deflatedpickle.undulation.constraints.StickEastFinishLine
-import com.deflatedpickle.icupnp.UPnP
 import org.apache.logging.log4j.LogManager
 import org.jdesktop.swingx.JXTextField
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.Toolkit
 import java.awt.datatransfer.StringSelection
 import java.io.IOException
-import java.util.*
 import javax.swing.JCheckBox
-import javax.swing.JComboBox
 import javax.swing.JSpinner
 import javax.swing.SpinnerNumberModel
 import javax.swing.SwingUtilities
@@ -170,9 +170,11 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
             text = it.defaultHostName
         }
 
-        this.document.addDocumentListener(DocumentAdapter {
-            fireValidationFinished(validationCheck())
-        })
+        this.document.addDocumentListener(
+            DocumentAdapter {
+                fireValidationFinished(validationCheck())
+            }
+        )
     }
 
     // Connection

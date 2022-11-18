@@ -1,24 +1,23 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.server.frontend.widget
 
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.ServerPlugin.client
 import com.deflatedpickle.rawky.server.ServerPlugin.server
 import com.deflatedpickle.rawky.server.ServerSettings
 import com.deflatedpickle.rawky.server.backend.event.EventStartServer
+import com.deflatedpickle.rawky.server.backend.query.QueryUpdateCell
 import com.deflatedpickle.rawky.server.backend.request.RequestMoveMouse
 import com.deflatedpickle.rawky.server.backend.response.ResponseNewDocument
-import com.deflatedpickle.rawky.server.backend.query.QueryUpdateCell
 import com.deflatedpickle.rawky.setting.RawkyDocument
-import com.deflatedpickle.undulation.functions.extensions.toAwt
 import kotlinx.datetime.Clock
 import lc.kra.swing.BetterGlassPane
 import org.apache.logging.log4j.LogManager
-import java.awt.Color
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.RenderingHints

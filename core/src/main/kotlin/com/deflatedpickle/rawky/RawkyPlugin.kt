@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 @file:OptIn(InternalSerializationApi::class)
 
@@ -12,9 +14,9 @@ import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.marvin.extensions.div
-import com.deflatedpickle.rawky.api.template.Template
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.api.template.Guide
+import com.deflatedpickle.rawky.api.template.Template
 import com.deflatedpickle.rawky.event.EventChangeColour
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateGrid

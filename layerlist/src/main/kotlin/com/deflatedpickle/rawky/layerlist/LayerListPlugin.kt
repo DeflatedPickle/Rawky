@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused")
 
 package com.deflatedpickle.rawky.layerlist
@@ -7,8 +9,6 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.api.util.ComponentPosition.WEST
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
-import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.collection.Layer
 import com.deflatedpickle.rawky.event.EventChangeFrame
 import com.deflatedpickle.rawky.extension.removeAll
 import com.deflatedpickle.rawky.setting.RawkyDocument
@@ -54,7 +54,8 @@ object LayerListPlugin {
 
             for (i in it.new.children) {
                 LayerListPanel.model.insertRow(
-                    0, arrayOf(
+                    0,
+                    arrayOf(
                         null,
                         i.name,
                         i.visible,
@@ -68,7 +69,8 @@ object LayerListPlugin {
     private fun createInitialLayers(it: RawkyDocument) {
         for (i in it.children[0].children) {
             LayerListPanel.model.insertRow(
-                0, arrayOf(
+                0,
+                arrayOf(
                     null,
                     i.name,
                     i.visible,

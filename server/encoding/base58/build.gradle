@@ -1,10 +1,10 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm'
+	id 'org.jetbrains.kotlin.jvm'
 }
 
 dependencies {
-    implementation project(":core")
-    implementation project(":server")
+	implementation project(":core")
+	implementation project(":server")
 
-    implementation 'com.github.NovaCrypto:Base58:0.1.2'
+	implementation 'com.github.NovaCrypto:Base58:0.1.2'
 }

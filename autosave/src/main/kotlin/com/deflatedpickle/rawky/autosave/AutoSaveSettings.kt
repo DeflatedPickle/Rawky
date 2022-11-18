@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:OptIn(ExperimentalSerializationApi::class)
 
 package com.deflatedpickle.rawky.autosave

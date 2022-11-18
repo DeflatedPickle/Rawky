@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.timeline
 
 import com.deflatedpickle.haruhi.component.PluginPanel
@@ -9,7 +11,6 @@ import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.dialog.NewFrameDialog
 import com.deflatedpickle.rawky.dialog.NewLayerDialog
 import com.deflatedpickle.rawky.event.EventChangeFrame
-import com.deflatedpickle.rawky.event.EventChangeLayer
 import com.deflatedpickle.rawky.event.EventNewFrame
 import com.deflatedpickle.rawky.event.EventNewLayer
 import com.deflatedpickle.rawky.event.EventUpdateCell
@@ -80,13 +81,10 @@ object TimelinePanel : PluginPanel() {
             }
         }
         add(icon = MonoIcon.EDIT_ELEMENT, tooltip = "Edit element", enabled = false) {
-
         }
         add(icon = MonoIcon.DELETE_ELEMENT, tooltip = "Delete element", enabled = false) {
-
         }
         add(icon = MonoIcon.DELETE_ALL_ELEMENTS, tooltip = "Delete all elements", enabled = false) {
-
         }
     }
 
@@ -148,9 +146,11 @@ object TimelinePanel : PluginPanel() {
                 }
             })
 
-            add(JLabel((value as Frame).name).apply {
-                alignmentX = JLabel.CENTER_ALIGNMENT
-            })
+            add(
+                JLabel((value as Frame).name).apply {
+                    alignmentX = JLabel.CENTER_ALIGNMENT
+                }
+            )
         }
     }
 

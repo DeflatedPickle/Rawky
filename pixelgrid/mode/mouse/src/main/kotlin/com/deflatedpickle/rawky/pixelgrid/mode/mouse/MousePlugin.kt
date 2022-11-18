@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused", "UNUSED_PARAMETER")
 
 package com.deflatedpickle.rawky.pixelgrid.mode.mouse
@@ -5,11 +7,8 @@ package com.deflatedpickle.rawky.pixelgrid.mode.mouse
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.api.Tool
-import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
 import com.deflatedpickle.rawky.pixelgrid.api.Mode
-import com.deflatedpickle.rawky.util.DrawUtil
 import java.awt.MouseInfo
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent

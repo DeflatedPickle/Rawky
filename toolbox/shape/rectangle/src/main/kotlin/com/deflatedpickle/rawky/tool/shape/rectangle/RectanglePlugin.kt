@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused")
 
 package com.deflatedpickle.rawky.tool.shape.rectangle
@@ -7,7 +9,6 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.Painter
-import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.tool.shape.api.Shape
@@ -32,10 +33,12 @@ import kotlin.math.min
         "deflatedpickle@core#1.0.0"
     ],
 )
-object RectanglePlugin : Shape(
-    name = "Rectangle",
-    icon = MonoIcon.SHAPE_RECT,
-), Painter {
+object RectanglePlugin :
+    Shape(
+        name = "Rectangle",
+        icon = MonoIcon.SHAPE_RECT,
+    ),
+    Painter {
     private var firstCell: Cell? = null
 
     init {
@@ -63,10 +66,12 @@ object RectanglePlugin : Shape(
                 override fun perform() {
                     colourCache.clear()
 
-                    for ((k, v) in process(
-                        cell.column, cell.row,
-                        other.column, other.column,
-                    )) {
+                    for (
+                        (k, v) in process(
+                            cell.column, cell.row,
+                            other.column, other.column,
+                        )
+                    ) {
                         colourCache[k] = v
                         k.colour = RawkyPlugin.colour
                     }
@@ -100,8 +105,10 @@ object RectanglePlugin : Shape(
     }
 
     fun process(
-        x0: Int, y0: Int,
-        x1: Int?, y1: Int?,
+        x0: Int,
+        y0: Int,
+        x1: Int?,
+        y1: Int?,
     ): MutableMap<Cell, Color> {
         val grid: Grid
         RawkyPlugin.document!!.let { doc ->

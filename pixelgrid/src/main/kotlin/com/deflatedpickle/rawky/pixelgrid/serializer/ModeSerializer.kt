@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.serializer
 
 import com.deflatedpickle.rawky.pixelgrid.api.Mode
@@ -8,7 +10,6 @@ import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
-import java.awt.Color
 
 @ExperimentalSerializationApi
 @Serializer(forClass = Mode::class)

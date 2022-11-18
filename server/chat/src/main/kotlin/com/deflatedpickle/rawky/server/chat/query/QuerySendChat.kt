@@ -1,6 +1,7 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.server.chat.query
 
-import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.backend.query.Query
 import com.deflatedpickle.rawky.server.chat.ChatPanel
 import com.deflatedpickle.rawky.server.chat.Message

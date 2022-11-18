@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused", "SpellCheckingInspection", "UNCHECKED_CAST")
 
 package com.deflatedpickle.rawky.tool.bucket
@@ -111,7 +113,8 @@ object BucketPlugin : Tool(
         while (cellList.isNotEmpty()) {
             with(cellList.poll()) {
                 if (this.first in 0 until grid.rows &&
-                    this.second in 0 until grid.columns) {
+                    this.second in 0 until grid.columns
+                ) {
                     val cell = grid[this.first, this.second]
 
                     val cellColour = cell.colour

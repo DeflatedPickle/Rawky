@@ -52,7 +52,7 @@ object LauncherPlugin {
                 for ((nk, nv) in v.exporterExtensions) {
                     addChoosableFileFilter(
                         FileNameExtensionFilter(
-                            "$nk (${nv.joinToString { "*.$it" }}) [${k}]",
+                            "$nk (${nv.joinToString { "*.$it" }}) [$k]",
                             *nv.toTypedArray()
                         )
                     )
@@ -67,7 +67,7 @@ object LauncherPlugin {
                 for ((nk, nv) in v.importerExtensions) {
                     addChoosableFileFilter(
                         FileNameExtensionFilter(
-                            "$nk (${nv.joinToString { "*.$it" }}) [${k}]",
+                            "$nk (${nv.joinToString { "*.$it" }}) [$k]",
                             *nv.toTypedArray()
                         )
                     )
@@ -82,7 +82,7 @@ object LauncherPlugin {
                 for ((nk, nv) in v.openerExtensions) {
                     addChoosableFileFilter(
                         FileNameExtensionFilter(
-                            "$nk (${nv.joinToString { "*.$it" }}) [${k}]",
+                            "$nk (${nv.joinToString { "*.$it" }}) [$k]",
                             *nv.toTypedArray()
                         )
                     )
@@ -141,29 +141,33 @@ object LauncherPlugin {
                 }
 
                 (get(MenuCategory.TOOLS.name) as JMenu).apply {
-                    add(JMenu("Dock").apply {
-                        add(JMenu("Theme").apply {
-                            for (i in 0 until PluginUtil.control.themes.size()) {
-                                val k = PluginUtil.control.themes.getKey(i)
-                                add(k.capitalize()) {
-                                    PluginUtil.control.themes.select(k)
+                    add(
+                        JMenu("Dock").apply {
+                            add(
+                                JMenu("Theme").apply {
+                                    for (i in 0 until PluginUtil.control.themes.size()) {
+                                        val k = PluginUtil.control.themes.getKey(i)
+                                        add(k.capitalize()) {
+                                            PluginUtil.control.themes.select(k)
+                                        }
+                                    }
+                                }
+                            )
+
+                            addSeparator()
+
+                            add("Save") {
+                                if (gridChooser.showSaveDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
+                                    PluginUtil.control.writeXML(gridChooser.selectedFile)
                                 }
                             }
-                        })
-
-                        addSeparator()
-
-                        add("Save") {
-                            if (gridChooser.showSaveDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
-                                PluginUtil.control.writeXML(gridChooser.selectedFile)
+                            add("Open") {
+                                if (gridChooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
+                                    PluginUtil.control.readXML(gridChooser.selectedFile)
+                                }
                             }
                         }
-                        add("Open") {
-                            if (gridChooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
-                                PluginUtil.control.readXML(gridChooser.selectedFile)
-                            }
-                        }
-                    })
+                    )
                 }
             }
 

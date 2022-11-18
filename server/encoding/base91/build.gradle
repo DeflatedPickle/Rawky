@@ -1,10 +1,10 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm'
+	id 'org.jetbrains.kotlin.jvm'
 }
 
 dependencies {
-    implementation project(":core")
-    implementation project(":server")
+	implementation project(":core")
+	implementation project(":server")
 
-    implementation 'com.github.bwaldvogel:base91:26d6fc6207'
+	implementation 'com.github.bwaldvogel:base91:26d6fc6207'
 }

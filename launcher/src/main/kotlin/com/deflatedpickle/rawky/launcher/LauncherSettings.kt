@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.launcher
 
 import com.deflatedpickle.haruhi.api.Config

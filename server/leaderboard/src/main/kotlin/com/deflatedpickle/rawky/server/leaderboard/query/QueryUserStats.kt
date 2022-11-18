@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("MemberVisibilityCanBePrivate")
 
 package com.deflatedpickle.rawky.server.leaderboard.query
@@ -10,7 +12,6 @@ import com.deflatedpickle.rawky.server.leaderboard.util.Stats
 import com.esotericsoftware.kryonet.Client
 import com.esotericsoftware.kryonet.Connection
 import com.esotericsoftware.kryonet.Server
-import java.util.*
 import javax.swing.event.TableModelEvent
 
 class QueryUserStats(

@@ -1,7 +1,8 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.mode.keyboard.util
 
 import java.awt.event.KeyEvent
-
 
 data class KeyCombo(
     val key: Int,

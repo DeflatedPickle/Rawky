@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.launcher
 
 import com.deflatedpickle.haruhi.api.plugin.DependencyComparator
@@ -137,14 +139,14 @@ fun main(args: Array<String>) {
     PluginUtil.loadPlugins {
         // Versions must be semantic
         PluginUtil.validateVersion(it) &&
-                // Descriptions must contain a <br> tag
-                PluginUtil.validateDescription(it) &&
-                // Specific types need a specified field
-                PluginUtil.validateType(it) &&
-                // Dependencies should be "author@plugin#version"
-                // PluginUtil.validateDependencySlug(it) &&
-                // The dependency should exist
-                PluginUtil.validateDependencyExistence(it)
+            // Descriptions must contain a <br> tag
+            PluginUtil.validateDescription(it) &&
+            // Specific types need a specified field
+            PluginUtil.validateType(it) &&
+            // Dependencies should be "author@plugin#version"
+            // PluginUtil.validateDependencySlug(it) &&
+            // The dependency should exist
+            PluginUtil.validateDependencyExistence(it)
     }
     logger.info("Loaded plugins; ${PluginUtil.loadedPlugins.map { PluginUtil.pluginToSlug(it) }}")
     EventLoadedPlugins.trigger(PluginUtil.loadedPlugins)

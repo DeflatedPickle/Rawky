@@ -1,8 +1,9 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.server.leaderboard.request
 
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.backend.request.Request
-import com.deflatedpickle.rawky.server.leaderboard.LeaderboardPanel
 import com.deflatedpickle.rawky.server.leaderboard.LeaderboardPlugin
 import com.deflatedpickle.rawky.server.leaderboard.query.QueryUserStats
 import com.esotericsoftware.kryonet.Connection

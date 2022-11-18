@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("UNCHECKED_CAST")
 
 package com.deflatedpickle.rawky.pixelgrid
@@ -8,18 +10,13 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
-import com.deflatedpickle.haruhi.event.EventSerializeConfig
 import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.marvin.extensions.get
 import com.deflatedpickle.marvin.extensions.set
-import com.deflatedpickle.rawky.api.Tool
-import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.pixelgrid.api.Mode
 import com.deflatedpickle.rawky.pixelgrid.setting.PixelGridSettings
-import com.deflatedpickle.rawky.settings.SettingsGUI
 import kotlinx.serialization.ExperimentalSerializationApi
 import java.awt.Component
 import java.awt.event.ItemEvent

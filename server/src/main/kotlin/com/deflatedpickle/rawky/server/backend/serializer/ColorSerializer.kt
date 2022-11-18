@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.server.backend.serializer
 
 import com.esotericsoftware.kryo.Kryo
@@ -12,7 +14,7 @@ class ColorSerializer(kryo: Kryo) : FieldSerializer<Color>(kryo, Color::class.ja
             String.format(
                 "#%08x",
                 (`object`.alpha and 0xFF shl 24) or (`object`.red and 0xFF shl 16) or
-                        (`object`.green and 0xFF shl 8) or (`object`.blue and 0xFF shl 0)
+                    (`object`.green and 0xFF shl 8) or (`object`.blue and 0xFF shl 0)
             )
         )
     }

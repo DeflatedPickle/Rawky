@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused")
 
 package com.deflatedpickle.rawky.tool.shape
@@ -10,7 +12,6 @@ import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.tool.shape.api.Shape
-import com.deflatedpickle.rawky.tool.shape.api.Shape.Companion
 import com.deflatedpickle.rawky.toolbox.ToolboxPlugin
 import com.deflatedpickle.rawky.toolbox.event.EventToolboxFinish
 import javax.swing.JMenuItem

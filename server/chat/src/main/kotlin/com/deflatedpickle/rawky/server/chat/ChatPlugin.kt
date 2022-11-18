@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused")
 
 package com.deflatedpickle.rawky.server.chat
@@ -6,20 +8,14 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.api.util.ComponentPosition
 import com.deflatedpickle.rawky.server.ServerPlugin
-import com.deflatedpickle.rawky.server.backend.event.EventCloseServer
-import com.deflatedpickle.rawky.server.backend.event.EventDisconnect
 import com.deflatedpickle.rawky.server.backend.event.EventJoinServer
 import com.deflatedpickle.rawky.server.backend.event.EventRegisterPackets
-import com.deflatedpickle.rawky.server.backend.event.EventUserJoinServer
-import com.deflatedpickle.rawky.server.backend.event.EventUserLeaveServer
-import com.deflatedpickle.rawky.server.backend.event.EventUserRename
 import com.deflatedpickle.rawky.server.chat.query.QueryDeleteChat
 import com.deflatedpickle.rawky.server.chat.query.QuerySendChat
 import com.deflatedpickle.rawky.server.chat.request.RequestSyncOldChat
 import com.deflatedpickle.rawky.server.chat.response.ResponseSyncOldChat
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
 import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
-import javax.swing.DefaultListModel
 
 @Plugin(
     value = "chat",

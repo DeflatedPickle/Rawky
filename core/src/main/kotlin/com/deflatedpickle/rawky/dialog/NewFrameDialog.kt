@@ -1,25 +1,17 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.dialog
 
 import com.deflatedpickle.haruhi.util.PluginUtil
-import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.api.template.Template
-import com.deflatedpickle.rawky.event.EventUpdateGrid
-import com.deflatedpickle.undulation.constraints.FillHorizontal
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
-import com.deflatedpickle.undulation.constraints.FinishLine
 import com.deflatedpickle.undulation.constraints.StickEast
 import org.jdesktop.swingx.JXTextField
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.GridBagLayout
-import java.awt.event.ItemEvent
-import javax.swing.JButton
-import javax.swing.JComboBox
 import javax.swing.JLabel
 import javax.swing.JPanel
-import javax.swing.JSeparator
 import javax.swing.JSpinner
-import javax.swing.JTextField
 import javax.swing.SpinnerNumberModel
 
 class NewFrameDialog : TaskDialog(PluginUtil.window, "New Frame") {

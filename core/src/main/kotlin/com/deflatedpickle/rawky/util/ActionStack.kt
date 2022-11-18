@@ -10,7 +10,6 @@ import com.deflatedpickle.rawky.event.EventRedoAction
 import com.deflatedpickle.rawky.event.EventUndoAction
 import java.awt.Graphics2D
 import javax.swing.tree.DefaultMutableTreeNode
-import javax.swing.tree.TreeNode
 
 object ActionStack {
     val undoQueue = mutableListOf<Action>()
@@ -33,11 +32,13 @@ object ActionStack {
 
     fun undo(): Boolean {
         if (undoQueue.isNotEmpty()) {
-            redoQueue.add(undoQueue.last().apply {
-                undoQueue.remove(this)
-                cleanup()
-                EventUndoAction.trigger(this)
-            })
+            redoQueue.add(
+                undoQueue.last().apply {
+                    undoQueue.remove(this)
+                    cleanup()
+                    EventUndoAction.trigger(this)
+                }
+            )
         }
 
         return undoQueue.isNotEmpty()
@@ -45,11 +46,13 @@ object ActionStack {
 
     fun redo(): Boolean {
         if (redoQueue.isNotEmpty()) {
-            undoQueue.add(redoQueue.last().apply {
-                redoQueue.remove(this)
-                perform()
-                EventRedoAction.trigger(this)
-            })
+            undoQueue.add(
+                redoQueue.last().apply {
+                    redoQueue.remove(this)
+                    perform()
+                    EventRedoAction.trigger(this)
+                }
+            )
         }
 
         return redoQueue.isNotEmpty()

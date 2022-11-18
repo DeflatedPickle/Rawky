@@ -1,10 +1,12 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.server.userlist
 
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.server.ServerPlugin
-import com.deflatedpickle.rawky.server.backend.event.EventUserJoinServer
 import com.deflatedpickle.rawky.server.backend.event.EventStartServer
+import com.deflatedpickle.rawky.server.backend.event.EventUserJoinServer
 import com.deflatedpickle.rawky.server.backend.request.RequestChangeName
 import com.deflatedpickle.rawky.server.backend.util.User
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
@@ -27,20 +29,22 @@ object UserListPanel : PluginPanel() {
     }
     private val userBar = JToolBar("User Settings").apply {
         add(JButton("Leave") { ServerPlugin.leaveServer() })
-        add(JButton("Rename") {
-            ServerPlugin.client.sendTCP(
-                RequestChangeName(
-                    ServerPlugin.id,
-                    ServerPlugin.userMap[ServerPlugin.id]!!.userName,
-                    TaskDialogs.input(
-                        PluginUtil.window,
-                        "Change Name",
-                        "Input new name",
+        add(
+            JButton("Rename") {
+                ServerPlugin.client.sendTCP(
+                    RequestChangeName(
+                        ServerPlugin.id,
                         ServerPlugin.userMap[ServerPlugin.id]!!.userName,
+                        TaskDialogs.input(
+                            PluginUtil.window,
+                            "Change Name",
+                            "Input new name",
+                            ServerPlugin.userMap[ServerPlugin.id]!!.userName,
+                        )
                     )
                 )
-            )
-        })
+            }
+        )
     }
 
     private val model = DefaultListModel<User>()

@@ -1,4 +1,4 @@
 dependencies {
-    implementation project(":core")
-    implementation project(":pixelgrid")
+	implementation project(":core")
+	implementation project(":pixelgrid")
 }

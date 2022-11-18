@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused", "UNUSED_PARAMETER")
 
 package com.deflatedpickle.rawky.pixelgrid.export.image.imageio

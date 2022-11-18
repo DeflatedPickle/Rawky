@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("UNCHECKED_CAST")
 
 package com.deflatedpickle.rawky.server.leaderboard
@@ -11,7 +13,7 @@ import java.awt.BorderLayout
 import java.awt.Color
 import java.time.Duration
 import java.time.Instant
-import java.util.*
+import java.util.Vector
 import javax.swing.JLabel
 import javax.swing.JScrollPane
 import javax.swing.JTable
@@ -71,7 +73,8 @@ object LeaderboardPanel : PluginPanel() {
                             value as Instant,
                             Instant.now()
                         ).toMillis(),
-                        "HH:mm:ss")
+                        "HH:mm:ss"
+                    )
                 )
             }
         }

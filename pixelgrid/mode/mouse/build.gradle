@@ -1,8 +1,8 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm'
+	id 'org.jetbrains.kotlin.jvm'
 }
 
 dependencies {
-    implementation project(":core")
-    implementation project(":pixelgrid")
+	implementation project(":core")
+	implementation project(":pixelgrid")
 }

@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused")
 
 package com.deflatedpickle.rawky.tool.line
@@ -11,15 +13,12 @@ import com.deflatedpickle.rawky.api.Painter
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.collection.Grid
-import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
-import com.deflatedpickle.rawky.pixelgrid.setting.PixelGridSettings
 import com.deflatedpickle.rawky.tool.line.api.Mode.CONTINUOUS
 import com.deflatedpickle.rawky.tool.line.api.Mode.SINGLE
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.ActionStack.Action
 import java.awt.BasicStroke
 import java.awt.Color
-import java.awt.Graphics
 import java.awt.Graphics2D
 import kotlin.math.abs
 
@@ -37,10 +36,12 @@ import kotlin.math.abs
     ],
     settings = LineSettings::class,
 )
-object LinePlugin : Tool(
-    name = "Line",
-    icon = MonoIcon.LINE,
-), Painter {
+object LinePlugin :
+    Tool(
+        name = "Line",
+        icon = MonoIcon.LINE,
+    ),
+    Painter {
     private var firstCell: Cell? = null
 
     init {
@@ -110,8 +111,10 @@ object LinePlugin : Tool(
     }
 
     private fun <T> process(
-        x0: Int, y0: Int,
-        x1: Int?, y1: Int?,
+        x0: Int,
+        y0: Int,
+        x1: Int?,
+        y1: Int?,
     ): MutableMap<Cell, T> {
         val grid: Grid
         RawkyPlugin.document!!.let { doc ->

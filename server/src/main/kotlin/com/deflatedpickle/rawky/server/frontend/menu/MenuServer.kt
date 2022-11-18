@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 @file:Suppress("JoinDeclarationAndAssignment")
 
 package com.deflatedpickle.rawky.server.frontend.menu

@@ -1,10 +1,10 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.setting
 
-import com.deflatedpickle.rawky.settings.api.range.FloatRange
 import com.deflatedpickle.rawky.settings.widget.ConfigSection
 import com.deflatedpickle.undulation.serializer.ColorSerializer
 import com.deflatedpickle.undulation.serializer.FontSerializer
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.awt.Color
 import java.awt.Font

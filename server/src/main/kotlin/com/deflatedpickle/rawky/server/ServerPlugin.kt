@@ -1,3 +1,5 @@
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.server
 
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
@@ -6,6 +8,7 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
+import com.deflatedpickle.icupnp.UPnP
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
@@ -21,11 +24,21 @@ import com.deflatedpickle.rawky.server.backend.event.EventDisconnect
 import com.deflatedpickle.rawky.server.backend.event.EventJoinServer
 import com.deflatedpickle.rawky.server.backend.event.EventRegisterPackets
 import com.deflatedpickle.rawky.server.backend.event.EventStartServer
-import com.deflatedpickle.rawky.server.backend.query.QueryUpdateCell
 import com.deflatedpickle.rawky.server.backend.query.QueryChangeColour
 import com.deflatedpickle.rawky.server.backend.query.QueryChangeTool
-import com.deflatedpickle.rawky.server.backend.request.*
-import com.deflatedpickle.rawky.server.backend.response.*
+import com.deflatedpickle.rawky.server.backend.query.QueryUpdateCell
+import com.deflatedpickle.rawky.server.backend.request.RequestChangeName
+import com.deflatedpickle.rawky.server.backend.request.RequestMoveMouse
+import com.deflatedpickle.rawky.server.backend.request.RequestRemoveUser
+import com.deflatedpickle.rawky.server.backend.request.RequestUserJoin
+import com.deflatedpickle.rawky.server.backend.request.RequestUserLeave
+import com.deflatedpickle.rawky.server.backend.response.ResponseActiveUsers
+import com.deflatedpickle.rawky.server.backend.response.ResponseChangeName
+import com.deflatedpickle.rawky.server.backend.response.ResponseJoinFail
+import com.deflatedpickle.rawky.server.backend.response.ResponseMoveMouse
+import com.deflatedpickle.rawky.server.backend.response.ResponseNewDocument
+import com.deflatedpickle.rawky.server.backend.response.ResponseUserJoin
+import com.deflatedpickle.rawky.server.backend.response.ResponseUserLeave
 import com.deflatedpickle.rawky.server.backend.serializer.ColorSerializer
 import com.deflatedpickle.rawky.server.backend.util.JoinFail
 import com.deflatedpickle.rawky.server.backend.util.LeaveReason
@@ -36,7 +49,6 @@ import com.deflatedpickle.rawky.server.backend.util.UserUpdate
 import com.deflatedpickle.rawky.server.frontend.menu.MenuServer
 import com.deflatedpickle.rawky.server.frontend.widget.ServerPanel
 import com.deflatedpickle.undulation.builder.ProgressMonitorBuilder
-import com.deflatedpickle.icupnp.UPnP
 import com.esotericsoftware.kryo.Kryo
 import com.esotericsoftware.kryonet.Client
 import com.esotericsoftware.kryonet.Connection
@@ -312,7 +324,8 @@ object ServerPlugin {
     fun connectServer(
         timeoutMilliseconds: Int,
         ipAddress: String,
-        tcpPort: Int, udpPort: Int,
+        tcpPort: Int,
+        udpPort: Int,
         userName: String,
         progressMonitor: ProgressMonitorBuilder,
         retries: Int?,
