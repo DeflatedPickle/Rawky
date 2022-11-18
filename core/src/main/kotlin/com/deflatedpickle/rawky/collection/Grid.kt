@@ -16,6 +16,8 @@ data class Grid(
         const val pixel = 16
     }
 
+    lateinit var layer: Layer
+
     init {
         val width = pixel
         val height = pixel
@@ -40,7 +42,9 @@ data class Grid(
                         row * pixel, column * pixel,
                         width, height
                     )
-                )
+                ).apply {
+                    grid = this@Grid
+                }
             }
         )
     }

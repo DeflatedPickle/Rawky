@@ -226,6 +226,9 @@ run {
 		runtimeOnly project(":autosave")
 		runtimeOnly project(":autoload")
 
+		runtimeOnly project(":timeline")
+		runtimeOnly project(":layerlist")
+
 		runtimeOnly project(":server")
 		runtimeOnly project(":userlist")
 		runtimeOnly project(":chat")

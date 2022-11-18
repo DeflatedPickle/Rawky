@@ -18,4 +18,16 @@ data class RawkyDocument(
     override val children: MutableList<Frame>,
     override var selectedIndex: Int = 0,
     var guides: List<Guide> = listOf(),
-) : MultiParent<Frame>, ChildSelector, Document
+) : MultiParent<Frame>, ChildSelector, Document {
+    fun addFrame(name: String? = null, index: Int = -1): Frame {
+        val frame = Frame(name = name ?: "Frame ${children.size}")
+
+        if (index == -1) {
+            children.add(frame)
+        } else {
+            children.add(index, frame)
+        }
+
+        return frame
+    }
+}

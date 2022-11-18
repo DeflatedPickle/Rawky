@@ -76,6 +76,9 @@ dependencies {
 
     // Icons
     api 'com.deflatedpickle:monocons:'
+
+    // Plugins
+    implementation project(":settingsgui")
 }
 
 compileKotlin {

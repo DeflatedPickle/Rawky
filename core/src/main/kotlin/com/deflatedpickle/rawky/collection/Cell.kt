@@ -8,7 +8,6 @@ import kotlinx.serialization.Transient
 import java.awt.Color
 import java.awt.Rectangle
 
-@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class Cell(
     val row: Int = 0,
@@ -16,6 +15,8 @@ data class Cell(
     @Transient val polygon: @Serializable(RectangleSerializer::class) Rectangle = defaultPolygon,
     var colour: @Serializable(ColorSerializer::class) Color = defaultColour,
 ) {
+    lateinit var grid: Grid
+
     operator fun invoke(func: Cell.() -> Unit) = this.apply(func)
 
     companion object {

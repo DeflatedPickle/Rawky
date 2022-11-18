@@ -53,11 +53,15 @@ object AutoSavePlugin {
 
     init {
         object : WindowAdapter() {
-            override fun windowLostFocus(e: WindowEvent?) {
+            override fun windowLostFocus(e: WindowEvent) {
                 ConfigUtil.getSettings<AutoSaveSettings>("deflatedpickle@auto_save#*")?.let { config ->
                     RawkyPlugin.document?.let { doc ->
-                        if (config.saveOnFocusLost) {
-                            save(doc, config)
+                        if (e.oppositeWindow !in PluginUtil.window.ownedWindows &&
+                            e.oppositeWindow != null &&
+                            e.oppositeWindow.owner == PluginUtil.window) {
+                            if (config.saveOnFocusLost) {
+                                save(doc, config)
+                            }
                         }
                     }
                 }

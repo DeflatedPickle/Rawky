@@ -1,13 +1,10 @@
-@file:Suppress("USELESS_ELVIS")
-
 package com.deflatedpickle.rawky.pixelgrid
 
 import com.deflatedpickle.haruhi.api.redraw.RedrawActive
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.marvin.extensions.set
 import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.RawkySettings
+import com.deflatedpickle.rawky.setting.RawkySettings
 import com.deflatedpickle.rawky.api.Painter
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
@@ -43,6 +40,8 @@ object PixelGridPanel : PluginPanel() {
         tool: Tool = Tool.current,
     ) {
         for (cell in cells) {
+            if (cell.grid.layer.lock) continue
+
             tool.perform(
                 cell,
                 button,
@@ -86,26 +85,59 @@ object PixelGridPanel : PluginPanel() {
         }
     }
 
+    private fun drawDebug(g: Graphics2D, doc: RawkyDocument) {
+        val frame = doc.children[doc.selectedIndex]
+        val layer = frame.children[frame.selectedIndex]
+        val grid = layer.child
+
+        ConfigUtil.getSettings<RawkySettings>("deflatedpickle@core#*")?.let {
+            g.color = it.debug.colour
+            g.font = it.debug.font
+        }
+
+        g.drawString("grid: ${grid.rows}x${grid.columns}", 5, g.fontMetrics.height + 5)
+        g.drawString("frame: ${doc.selectedIndex}", 5, g.fontMetrics.height * 2 + 5)
+        g.drawString("layer: ${frame.selectedIndex}", 5, g.fontMetrics.height * 3 + 5)
+
+        g.drawString("visible: ${layer.visible}", 5, g.fontMetrics.height * 5 + 5)
+        g.drawString("lock: ${layer.lock}", 5, g.fontMetrics.height * 6 + 5)
+    }
+
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
 
+        val g2d = g as Graphics2D
+
         RawkyPlugin.document?.let { doc ->
             val frame = doc.children[doc.selectedIndex]
-            val layer = frame.children[frame.selectedIndex]
-            val grid = layer.child
 
-            val settings = ConfigUtil.getSettings<PixelGridSettings>("deflatedpickle@pixel_grid#*")
+            for (layer in frame.children) {
+                val grid = layer.child
 
-            settings?.let { settings ->
-                val g2d = g as Graphics2D
+                ConfigUtil.getSettings<PixelGridSettings>("deflatedpickle@pixel_grid#*")?.let { settings ->
+                    if (layer.visible) {
+                        DrawUtil.paintGridFill(g2d, grid, settings.divide.colour)
+                    }
 
-                DrawUtil.paintGrid(g, grid, settings.divide.colour, BasicStroke(settings.divide.thickness))
-                drawGuides(g, doc, settings.guide.colour, BasicStroke(settings.guide.thickness))
-                DrawUtil.paintHoverCell(selectedCells, g)
+                    DrawUtil.paintGridOutline(g2d, grid, settings.divide.colour, BasicStroke(settings.divide.thickness))
+                }
+            }
 
-                val tool = Tool.current
-                if (selectedCells.size > 0 && tool is Painter) {
-                    tool.paint(selectedCells.first(), g)
+            ConfigUtil.getSettings<PixelGridSettings>("deflatedpickle@pixel_grid#*")?.let { settings ->
+                drawGuides(g2d, doc, settings.guide.colour, BasicStroke(settings.guide.thickness))
+                DrawUtil.paintHoverCell(selectedCells, g2d)
+
+                if (Tool.isToolValid()) {
+                    val tool = Tool.current
+                    if (selectedCells.size > 0 && tool is Painter) {
+                        tool.paint(selectedCells.first(), g2d)
+                    }
+                }
+            }
+
+            ConfigUtil.getSettings<RawkySettings>("deflatedpickle@core#*")?.let {
+                if (it.debug.enabled) {
+                    drawDebug(g2d, doc)
                 }
             }
         }

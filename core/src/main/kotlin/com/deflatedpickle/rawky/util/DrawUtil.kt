@@ -11,17 +11,26 @@ import java.awt.Point
 import java.awt.Stroke
 
 object DrawUtil {
-    fun paintGrid(g: Graphics2D, grid: Grid, outlineColour: Color = Color.BLACK, stroke: Stroke) {
+    fun paintGrid(g: Graphics2D, grid: Grid, outlineColour: Color = Color.BLACK, stroke: Stroke = BasicStroke(1f)) {
+        paintGridFill(g, grid, outlineColour)
+        paintGridOutline(g, grid, outlineColour, stroke)
+    }
+
+    fun paintGridOutline(g: Graphics2D, grid: Grid, outlineColour: Color = Color.BLACK, stroke: Stroke) {
         for (cell in grid.children) {
-            g.color = cell.colour
             g.stroke = stroke
-            g.fillRect(
+            g.color = outlineColour
+            g.drawRect(
                 cell.polygon.x, cell.polygon.y,
                 cell.polygon.width, cell.polygon.height
             )
+        }
+    }
 
-            g.color = outlineColour
-            g.drawRect(
+    fun paintGridFill(g: Graphics2D, grid: Grid, outlineColour: Color = Color.BLACK) {
+        for (cell in grid.children) {
+            g.color = cell.colour
+            g.fillRect(
                 cell.polygon.x, cell.polygon.y,
                 cell.polygon.width, cell.polygon.height
             )

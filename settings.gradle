@@ -96,6 +96,9 @@ include 'colourpalette'
 }
 include 'colourhistory'
 
+include 'timeline'
+include 'layerlist'
+
 include 'autosave'
 include 'autoload'
 

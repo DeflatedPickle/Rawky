@@ -38,9 +38,11 @@ object ActionUtil {
     fun newDocument(columns: Int, rows: Int, frames: Int, layers: Int): RawkyDocument = RawkyDocument(
         children = Array(frames) {
             Frame(
-                Array(layers) {
+                name = "Frame 0",
+                children = Array(layers) {
                     Layer(
-                        Grid(
+                        name = "Layer 0",
+                        child = Grid(
                             rows = rows,
                             columns = columns
                         )

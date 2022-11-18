@@ -11,6 +11,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import java.io.File
 
+// TODO: Add a file limit
 @Serializable
 data class AutoSaveSettings(
     override val version: Int = 1,
