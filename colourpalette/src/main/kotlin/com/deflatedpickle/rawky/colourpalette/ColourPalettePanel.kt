@@ -16,24 +16,27 @@ import java.awt.GridBagLayout
 import java.awt.event.ItemEvent
 import javax.swing.JComboBox
 import javax.swing.JScrollPane
+import so.n0weak.ExtendedComboBox
 
 object ColourPalettePanel : PluginPanel() {
-    private val combo = JComboBox<Palette>().apply {
+    private val combo = ExtendedComboBox().apply {
         addItemListener {
             when (it.stateChange) {
                 ItemEvent.SELECTED -> {
                     colourPanel.removeAll()
 
-                    for (i in (this.selectedItem as Palette).colours) {
-                        colourPanel.add(
-                            ColourButton(i.key).apply {
-                                toolTipText = i.value
+                    if (this.selectedItem is Palette) {
+                        for (i in (this.selectedItem as Palette).colours) {
+                            colourPanel.add(
+                                ColourButton(i.key).apply {
+                                    toolTipText = i.value
 
-                                addActionListener {
-                                    RawkyPlugin.colour = i.key
+                                    addActionListener {
+                                        RawkyPlugin.colour = i.key
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
 
                     colourPanel.validate()
@@ -57,6 +60,8 @@ object ColourPalettePanel : PluginPanel() {
                     PaletteParser.registry[i.extension]?.let { pp ->
                         combo.addItem(pp.parse(i))
                     }
+                } else if (i.isDirectory && i.name != "palette") {
+                    combo.addDelimiter(i.name)
                 }
             }
         }

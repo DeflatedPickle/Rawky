@@ -9,7 +9,14 @@ plugins {
 	id 'com.diffplug.spotless'
 	id 'de.undercouch.download'
 	// id 'net.kyori.blossom'
+
+	id "com.github.johnrengelman.shadow" version "7.1.2"
+	id 'edu.sc.seis.launch4j' version '2.5.4'
+	id "nebula.ospackage" version "9.1.1"
 }
+
+apply plugin: 'nebula.deb'
+apply plugin: 'nebula.rpm'
 
 group "$group"
 archivesBaseName = "$name"
@@ -18,7 +25,7 @@ sourceCompatibility = targetCompatibility = "$jvmTarget"
 
 project.ext {
 	ver = project.properties["pre"] ?: version
-	vendor = System.getProperty("java.vendor").replace(" ", "").toLowerCase()
+	vendor = System.getProperty("java.vendor").replace(" ", "").replace(".", "").toLowerCase()
 
 	if (vendor == "internationalbusinessmachinescorporation") {
 		vendor = "ibm"
@@ -183,6 +190,52 @@ distZip {
 
 distTar {
 	archiveName "$mostlyName-distTar.tar"
+}
+
+launch4j {
+	headerType = "gui"
+	outfile = "${mostlyName}.exe"
+	mainClassName = project.mainClassName
+	jarTask = project.tasks.shadowJar
+	bundledJrePath = "~/.jdks/jbr-11.0.14.1"
+}
+
+task deb(type: Deb) {
+	packageName = 'rawky'
+	version = project.properties["pre"] ?: version
+	release = 1
+	os LINUX
+
+	from(jar.outputs.files) {
+		into 'lib'
+	}
+	from('lib') {
+		into 'lib'
+	}
+	from('home') {
+		createDirectoryEntry = true
+		fileMode 0500
+		into 'home'
+	}
+}
+
+task rpm(type: Rpm) {
+	packageName = 'rawky'
+	version = project.properties["pre"] ?: version
+	release = 1
+	os LINUX
+
+	from(jar.outputs.files) {
+		into 'lib'
+	}
+	from('lib') {
+		into 'lib'
+	}
+	from('home') {
+		createDirectoryEntry = true
+		fileMode 0500
+		into 'home'
+	}
 }
 
 run {
