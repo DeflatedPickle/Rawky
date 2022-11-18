@@ -7,6 +7,7 @@ package com.deflatedpickle.rawky.tool.shape
 import com.alexandriasoftware.swing.JSplitButton
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.api.Tool
@@ -41,12 +42,14 @@ object ShapePlugin {
                         v.name,
                         v.icon,
                     ).apply {
-                        ToolboxPlugin.group.add(this)
+                        isEnabled = false
 
                         addActionListener {
                             Tool.current = v
                             EventChangeTool.trigger(v)
                         }
+
+                        ToolboxPlugin.group.add(this)
                     }
                 )
             }
@@ -59,6 +62,12 @@ object ShapePlugin {
                     isAlwaysPopup = true
                 }
             )
+        }
+
+        EventCreateDocument.addListener {
+            for (i in menu.components) {
+                i.isEnabled = true
+            }
         }
     }
 }

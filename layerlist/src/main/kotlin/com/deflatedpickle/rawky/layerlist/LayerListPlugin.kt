@@ -9,6 +9,7 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.api.util.ComponentPosition.WEST
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
+import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.rawky.event.EventChangeFrame
 import com.deflatedpickle.rawky.extension.removeAll
 import com.deflatedpickle.rawky.setting.RawkyDocument
@@ -62,6 +63,16 @@ object LayerListPlugin {
                         i.lock
                     )
                 )
+            }
+        }
+
+        EventCreateDocument.addListener {
+            for (i in LayerListPanel.toolbar.components) {
+                i.isEnabled = true
+            }
+
+            for (i in LayerListPanel.navbar.components) {
+                i.isEnabled = true
             }
         }
     }

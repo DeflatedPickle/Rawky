@@ -9,6 +9,7 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.api.util.ComponentPosition.SOUTH
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
+import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
 import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
@@ -45,6 +46,16 @@ object TimelinePlugin {
             TimelinePanel.model.removeAllElements()
             createInitialFrames(it.first as RawkyDocument)
             TimelinePanel.list.selectedIndex = 0
+        }
+
+        EventCreateDocument.addListener {
+            for (i in TimelinePanel.toolbar.components) {
+                i.isEnabled = true
+            }
+
+            for (i in TimelinePanel.navbar.components) {
+                i.isEnabled = true
+            }
         }
     }
 

@@ -37,8 +37,8 @@ import javax.swing.table.TableCellRenderer
 import kotlin.math.min
 
 object LayerListPanel : PluginPanel() {
-    private val toolbar = JToolBar("Layer list").apply {
-        add(icon = MonoIcon.ADD_ELEMENT, tooltip = "Add element") {
+    val toolbar = JToolBar("Layer list").apply {
+        add(icon = MonoIcon.ADD_ELEMENT, tooltip = "Add element", enabled = false) {
             RawkyPlugin.document?.let { doc ->
                 val layerDialog = NewLayerDialog()
                 layerDialog.isVisible = true
@@ -67,18 +67,15 @@ object LayerListPanel : PluginPanel() {
                 }
             }
         }
-        add(icon = MonoIcon.EDIT_ELEMENT, tooltip = "Edit element", enabled = false) {
-        }
-        add(icon = MonoIcon.DELETE_ELEMENT, tooltip = "Delete element", enabled = false) {
-        }
-        add(icon = MonoIcon.DELETE_ALL_ELEMENTS, tooltip = "Delete all elements", enabled = false) {
-        }
+        // add(icon = MonoIcon.EDIT_ELEMENT, tooltip = "Edit element", enabled = false) {}
+        // add(icon = MonoIcon.DELETE_ELEMENT, tooltip = "Delete element", enabled = false) {}
+        // add(icon = MonoIcon.DELETE_ALL_ELEMENTS, tooltip = "Delete all elements", enabled = false) {}
     }
 
-    private val navbar = JToolBar("Navbar").apply {
+    val navbar = JToolBar("Navbar").apply {
         orientation = JToolBar.VERTICAL
 
-        add(icon = MonoIcon.ARROW_UP, tooltip = "Decrement layer") {
+        add(icon = MonoIcon.ARROW_UP, tooltip = "Decrement layer", enabled = false) {
             RawkyPlugin.document?.let { doc ->
                 val frame = doc.children[doc.selectedIndex]
 
@@ -88,7 +85,7 @@ object LayerListPanel : PluginPanel() {
             }
         }
 
-        add(icon = MonoIcon.ARROW_DOWN, tooltip = "Increment layer") {
+        add(icon = MonoIcon.ARROW_DOWN, tooltip = "Increment layer", enabled = false) {
             RawkyPlugin.document?.let { doc ->
                 val frame = doc.children[doc.selectedIndex]
 

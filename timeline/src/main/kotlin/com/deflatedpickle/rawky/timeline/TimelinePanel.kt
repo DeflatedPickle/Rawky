@@ -40,10 +40,10 @@ import javax.swing.UIManager
 import javax.swing.border.LineBorder
 
 object TimelinePanel : PluginPanel() {
-    private val toolbar = JToolBar("Timeline").apply {
+    val toolbar = JToolBar("Timeline").apply {
         orientation = JToolBar.VERTICAL
 
-        add(icon = MonoIcon.ADD_ELEMENT, tooltip = "Add element") {
+        add(icon = MonoIcon.ADD_ELEMENT, tooltip = "Add element", enabled = false) {
             RawkyPlugin.document?.let { doc ->
                 val frameDialog = NewFrameDialog()
                 frameDialog.isVisible = true
@@ -80,16 +80,13 @@ object TimelinePanel : PluginPanel() {
                 }
             }
         }
-        add(icon = MonoIcon.EDIT_ELEMENT, tooltip = "Edit element", enabled = false) {
-        }
-        add(icon = MonoIcon.DELETE_ELEMENT, tooltip = "Delete element", enabled = false) {
-        }
-        add(icon = MonoIcon.DELETE_ALL_ELEMENTS, tooltip = "Delete all elements", enabled = false) {
-        }
+        // add(icon = MonoIcon.EDIT_ELEMENT, tooltip = "Edit element", enabled = false) {}
+        // add(icon = MonoIcon.DELETE_ELEMENT, tooltip = "Delete element", enabled = false) {}
+        // add(icon = MonoIcon.DELETE_ALL_ELEMENTS, tooltip = "Delete all elements", enabled = false) {}
     }
 
-    private val navbar = JToolBar("Navbar").apply {
-        add(icon = MonoIcon.ARROW_LEFT, tooltip = "Decrement frame") {
+    val navbar = JToolBar("Navbar").apply {
+        add(icon = MonoIcon.ARROW_LEFT, tooltip = "Decrement frame", enabled = false) {
             RawkyPlugin.document?.let { doc ->
                 if (doc.selectedIndex - 1 >= 0) {
                     list.selectedIndex = --doc.selectedIndex
@@ -97,7 +94,7 @@ object TimelinePanel : PluginPanel() {
             }
         }
 
-        add(icon = MonoIcon.ARROW_RIGHT, tooltip = "Increment frame") {
+        add(icon = MonoIcon.ARROW_RIGHT, tooltip = "Increment frame", enabled = false) {
             RawkyPlugin.document?.let { doc ->
                 if (doc.selectedIndex + 1 < doc.children.size) {
                     list.selectedIndex = ++doc.selectedIndex
