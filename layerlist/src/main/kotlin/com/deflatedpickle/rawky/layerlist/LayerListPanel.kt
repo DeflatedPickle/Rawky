@@ -164,7 +164,7 @@ object LayerListPanel : PluginPanel() {
         }
     )
     private val columnThreeRenderer = TableCellRenderer { _, value, _, _, _, _ ->
-        JCheckBox(if (value as Boolean) MonoIcon.LOCK_OPEN else MonoIcon.LOCK_CLOSED)
+        JCheckBox(if (value as Boolean) MonoIcon.LOCK_CLOSED else MonoIcon.LOCK_OPEN)
             .apply { isOpaque = false }
     }
 

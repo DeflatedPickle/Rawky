@@ -49,21 +49,21 @@ object TimelinePanel : PluginPanel() {
                 frameDialog.isVisible = true
 
                 if (frameDialog.result == TaskDialog.StandardCommand.OK) {
-                    val layerDialog = NewLayerDialog()
+                    val layerDialog = NewLayerDialog(0)
                     layerDialog.isVisible = true
 
-                    val properFrameName = if (frameDialog.nameInput.text == "") null else frameDialog.nameInput.text
-
-                    val frame = doc.addFrame(
-                        properFrameName,
-                        frameDialog.indexInput.value as Int
-                    )
-
-                    model.addElement(frame)
-
-                    EventNewFrame.trigger(frame)
-
                     if (layerDialog.result == TaskDialog.StandardCommand.OK) {
+                        val properFrameName = if (frameDialog.nameInput.text == "") null else frameDialog.nameInput.text
+
+                        val frame = doc.addFrame(
+                            properFrameName,
+                            frameDialog.indexInput.value as Int
+                        )
+
+                        model.addElement(frame)
+
+                        EventNewFrame.trigger(frame)
+
                         val properLayerName = if (layerDialog.nameInput.text == "") null else layerDialog.nameInput.text
 
                         val layer = frame.addLayer(

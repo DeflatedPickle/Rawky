@@ -18,12 +18,13 @@ import javax.swing.JPanel
 import javax.swing.JSpinner
 import javax.swing.SpinnerNumberModel
 
-class NewLayerDialog : TaskDialog(PluginUtil.window, "New Layer") {
+class NewLayerDialog(val index: Int = -1) : TaskDialog(PluginUtil.window, "New Layer") {
     val nameInput = JXTextField("Name").apply {
-        RawkyPlugin.document?.let { doc ->
-            val frame = doc.children[doc.selectedIndex]
-            text = "Layer ${frame.children.size}"
-        }
+        text = "Layer ${if (index == -1) {
+            RawkyPlugin.document?.let { doc ->
+                val frame = doc.children[doc.selectedIndex]
+                frame.children.size}
+        } else index}"
     }
     /*val indexInput = JSpinner(SpinnerNumberModel(0, 0, null, 1)).apply {
         RawkyPlugin.document?.let { doc ->

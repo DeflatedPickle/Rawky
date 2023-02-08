@@ -40,8 +40,8 @@ class NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
         }
     }
 
-    val columnInput = JSpinner(SpinnerNumberModel(16, 1, 512, 8))
-    val rowInput = JSpinner(SpinnerNumberModel(16, 1, 512, 8))
+    val columnInput = JSpinner(SpinnerNumberModel(16, 1, null, 8))
+    val rowInput = JSpinner(SpinnerNumberModel(16, 1, null, 8))
     private val sizeSwapper = JButton(MonoIcon.SWAP).apply {
         addActionListener {
             val temp = columnInput.value
@@ -50,8 +50,8 @@ class NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
         }
     }
 
-    val framesInput = JSpinner(SpinnerNumberModel(1, 1, 1000, 1))
-    val layersInput = JSpinner(SpinnerNumberModel(1, 1, 1000, 1))
+    val framesInput = JSpinner(SpinnerNumberModel(1, 1, null, 1))
+    val layersInput = JSpinner(SpinnerNumberModel(1, 1, null, 1))
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
