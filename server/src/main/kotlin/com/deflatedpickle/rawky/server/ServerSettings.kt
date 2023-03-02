@@ -2,7 +2,7 @@
 
 package com.deflatedpickle.rawky.server
 
-import com.deflatedpickle.haruhi.api.Config
+import com.deflatedpickle.haruhi.api.config.Config
 import com.deflatedpickle.rawky.server.ServerPlugin.portMax
 import com.deflatedpickle.rawky.server.ServerPlugin.portMin
 import com.deflatedpickle.rawky.settings.api.range.IntRange

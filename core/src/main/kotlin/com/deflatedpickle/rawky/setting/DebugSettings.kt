@@ -2,7 +2,7 @@
 
 package com.deflatedpickle.rawky.setting
 
-import com.deflatedpickle.rawky.settings.widget.ConfigSection
+import com.deflatedpickle.haruhi.api.config.ConfigSection
 import com.deflatedpickle.undulation.serializer.ColorSerializer
 import com.deflatedpickle.undulation.serializer.FontSerializer
 import kotlinx.serialization.Serializable

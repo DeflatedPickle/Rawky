@@ -2,7 +2,7 @@
 
 package com.deflatedpickle.rawky.tool.line
 
-import com.deflatedpickle.haruhi.api.Config
+import com.deflatedpickle.haruhi.api.config.Config
 import com.deflatedpickle.rawky.tool.line.api.Mode
 import com.deflatedpickle.rawky.tool.line.api.Mode.SINGLE
 import kotlinx.serialization.Serializable

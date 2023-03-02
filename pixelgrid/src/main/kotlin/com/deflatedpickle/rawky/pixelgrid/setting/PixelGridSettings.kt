@@ -2,7 +2,7 @@
 
 package com.deflatedpickle.rawky.pixelgrid.setting
 
-import com.deflatedpickle.haruhi.api.Config
+import com.deflatedpickle.haruhi.api.config.Config
 import com.deflatedpickle.rawky.pixelgrid.api.Mode
 import com.deflatedpickle.rawky.pixelgrid.serializer.ModeSerializer
 import kotlinx.serialization.ExperimentalSerializationApi

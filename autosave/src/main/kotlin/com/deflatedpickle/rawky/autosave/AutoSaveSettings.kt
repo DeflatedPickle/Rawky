@@ -4,7 +4,7 @@
 
 package com.deflatedpickle.rawky.autosave
 
-import com.deflatedpickle.haruhi.api.Config
+import com.deflatedpickle.haruhi.api.config.Config
 import com.deflatedpickle.marvin.serializer.FileSerializer
 import com.deflatedpickle.rawky.autosave.serializer.FileTypeSerializer
 import com.deflatedpickle.rawky.autosave.util.FileType

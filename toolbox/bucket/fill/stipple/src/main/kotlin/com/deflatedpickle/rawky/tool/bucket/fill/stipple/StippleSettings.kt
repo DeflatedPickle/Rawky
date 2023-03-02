@@ -2,7 +2,7 @@
 
 package com.deflatedpickle.rawky.tool.bucket.fill.stipple
 
-import com.deflatedpickle.haruhi.api.Config
+import com.deflatedpickle.haruhi.api.config.Config
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.settings.api.range.IntRange
 import com.deflatedpickle.undulation.serializer.ColorSerializer

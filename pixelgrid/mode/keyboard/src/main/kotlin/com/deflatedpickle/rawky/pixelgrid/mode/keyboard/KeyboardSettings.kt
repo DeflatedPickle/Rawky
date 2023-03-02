@@ -2,7 +2,7 @@
 
 package com.deflatedpickle.rawky.pixelgrid.mode.keyboard
 
-import com.deflatedpickle.haruhi.api.Config
+import com.deflatedpickle.haruhi.api.config.Config
 import com.deflatedpickle.rawky.pixelgrid.mode.keyboard.serializer.KeySerializer
 import com.deflatedpickle.rawky.pixelgrid.mode.keyboard.util.KeyCombo
 import kotlinx.serialization.Serializable

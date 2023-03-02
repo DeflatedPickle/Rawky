@@ -4,7 +4,7 @@
 
 package com.deflatedpickle.rawky.colourhistory
 
-import com.deflatedpickle.haruhi.api.Config
+import com.deflatedpickle.haruhi.api.config.Config
 import com.deflatedpickle.undulation.serializer.ColorSerializer
 import kotlinx.serialization.Serializable
 import java.awt.Color

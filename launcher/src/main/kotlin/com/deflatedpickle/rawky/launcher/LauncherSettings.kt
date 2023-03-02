@@ -2,7 +2,7 @@
 
 package com.deflatedpickle.rawky.launcher
 
-import com.deflatedpickle.haruhi.api.Config
+import com.deflatedpickle.haruhi.api.config.Config
 import com.deflatedpickle.marvin.serializer.FileSerializer
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
