@@ -159,9 +159,13 @@ object TimelinePanel : PluginPanel() {
 
         addListSelectionListener {
             RawkyPlugin.document?.let { doc ->
+                if (doc.selectedIndex >= doc.children.size) return@let
+
                 val oldFrame = doc.children[doc.selectedIndex]
 
                 doc.selectedIndex = selectionModel.anchorSelectionIndex
+
+                if (doc.selectedIndex >= doc.children.size) return@let
 
                 val newFrame = doc.children[doc.selectedIndex]
                 val layer = newFrame.children[newFrame.selectedIndex]

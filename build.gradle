@@ -275,6 +275,7 @@ run {
 
 		// Colour Palette -> Parser
 		runtimeOnly project(":json")
+		runtimeOnly project(":png")
 
 		runtimeOnly project(":autosave")
 		runtimeOnly project(":autoload")

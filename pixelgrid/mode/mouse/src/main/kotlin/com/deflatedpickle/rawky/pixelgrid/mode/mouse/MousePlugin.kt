@@ -30,7 +30,9 @@ import javax.swing.SwingUtilities
 object MousePlugin : Mode("Mouse", 1) {
     private val adapter = object : MouseAdapter() {
         fun click(e: MouseEvent, dragged: Boolean) {
-            RawkyPlugin.document?.let {
+            RawkyPlugin.document?.let { doc ->
+                if (doc.selectedIndex >= doc.children.size) return
+
                 PixelGridPanel.paint(
                     e.button,
                     dragged,
@@ -41,6 +43,8 @@ object MousePlugin : Mode("Mouse", 1) {
 
         fun move(e: MouseEvent) {
             RawkyPlugin.document?.let { doc ->
+                if (doc.selectedIndex >= doc.children.size) return
+
                 val frame = doc.children[doc.selectedIndex]
                 val layer = frame.children[frame.selectedIndex]
                 val grid = layer.child

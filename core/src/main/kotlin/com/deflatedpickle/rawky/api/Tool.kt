@@ -10,11 +10,11 @@ import com.deflatedpickle.rawky.event.EventChangeTool
 import javax.swing.ImageIcon
 
 abstract class Tool(
-    val name: String,
+    override val name: String,
     val icon: ImageIcon,
-) {
-    companion object {
-        val registry = Registry<String, Tool>()
+) : HasName {
+    companion object : HasRegistry<String, Tool> {
+        override val registry = Registry<String, Tool>()
 
         const val defaultSize = 32
         lateinit var current: Tool

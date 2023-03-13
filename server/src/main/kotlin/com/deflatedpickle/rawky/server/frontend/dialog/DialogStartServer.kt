@@ -7,11 +7,13 @@ package com.deflatedpickle.rawky.server.frontend.dialog
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.icupnp.UPnP
+import com.deflatedpickle.icupnp.UPnP.getExternalIP
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.ServerPlugin.portMax
 import com.deflatedpickle.rawky.server.ServerPlugin.portMin
 import com.deflatedpickle.rawky.server.ServerSettings
 import com.deflatedpickle.rawky.server.backend.api.Encoder
+import com.deflatedpickle.rawky.server.backend.util.functions.getInternalIP
 import com.deflatedpickle.rawky.server.backend.util.functions.getPublicIP
 import com.deflatedpickle.rawky.server.backend.util.functions.ipToByteArray
 import com.deflatedpickle.rawky.server.backend.util.functions.portToByteArray
@@ -44,6 +46,9 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
 
             when (dialog.show()?.tag) {
                 CommandTag.OK -> {
+                    val tcpPort = dialog.tcpPortField.value as Int
+                    val udpPort = dialog.udpPortField.value as Int
+
                     ProgressMonitorBuilder(PluginUtil.window)
                         .title("Starting a Server")
                         .queue {
@@ -51,8 +56,8 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                             task = {
                                 if (dialog.uPnPCheckBox.isSelected) {
                                     ServerPlugin.upnpStart(
-                                        dialog.tcpPortField.value as Int,
-                                        dialog.udpPortField.value as Int,
+                                        tcpPort,
+                                        udpPort,
                                     )
                                 }
                             }
@@ -61,8 +66,8 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                             note = "Starting server"
                             task = { pm, _ ->
                                 ServerPlugin.startServer(
-                                    dialog.tcpPortField.value as Int,
-                                    dialog.udpPortField.value as Int,
+                                    tcpPort,
+                                    udpPort,
                                     pm,
                                 )
                             }
@@ -70,9 +75,9 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                         .queue {
                             note = "Encoding IP and ports"
                             task = {
-                                val ipByteArray = ipToByteArray(getPublicIP())
-                                val tcpPortByteArray = portToByteArray(dialog.tcpPortField.value as Int)
-                                val udpPortByteArray = portToByteArray(dialog.udpPortField.value as Int)
+                                val ipByteArray = ipToByteArray(getExternalIP())
+                                val tcpPortByteArray = portToByteArray(tcpPort)
+                                val udpPortByteArray = portToByteArray(udpPort)
 
                                 // println("IP: ${getPublicIP()}\nTCP: ${dialog.tcpPortField.value}\nUDP: ${dialog.udpPortField.value}")
 
@@ -138,8 +143,8 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                                         ServerPlugin.connectServer(
                                             dialog.timeoutField.value as Int,
                                             "localhost",
-                                            dialog.tcpPortField.value as Int,
-                                            dialog.udpPortField.value as Int,
+                                            tcpPort,
+                                            udpPort,
                                             dialog.userNameField.text,
                                             pm,
                                             null,

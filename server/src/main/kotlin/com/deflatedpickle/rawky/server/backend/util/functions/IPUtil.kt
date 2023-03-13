@@ -9,6 +9,8 @@ import java.io.InputStreamReader
 import java.net.URL
 import java.nio.ByteBuffer
 
+fun getInternalIP(): String = "127.0.0.1"
+
 fun getPublicIP(service: Service = AWS): String {
     val url = URL(service.address)
     val bufferedReader = BufferedReader(

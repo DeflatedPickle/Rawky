@@ -45,6 +45,7 @@ object ColourPalettePanel : PluginPanel() {
             }
         }
     }
+
     private val colourPanel = JXPanel().apply {
         layout = WrapLayout()
     }

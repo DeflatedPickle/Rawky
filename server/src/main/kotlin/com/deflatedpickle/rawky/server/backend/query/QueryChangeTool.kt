@@ -4,7 +4,6 @@ package com.deflatedpickle.rawky.server.backend.query
 
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.server.ServerPlugin
-import com.deflatedpickle.rawky.server.ServerPlugin.server
 import com.esotericsoftware.kryonet.Client
 import com.esotericsoftware.kryonet.Connection
 import com.esotericsoftware.kryonet.Server

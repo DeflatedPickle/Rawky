@@ -41,6 +41,10 @@ object PixelGridPanel : PluginPanel() {
         cells: List<Cell> = selectedCells,
         tool: Tool = Tool.current,
     ) {
+        RawkyPlugin.document?.let { doc ->
+            if (doc.selectedIndex >= doc.children.size) return
+        }
+
         for (cell in cells) {
             if (cell.grid.layer.lock) continue
 
@@ -111,6 +115,8 @@ object PixelGridPanel : PluginPanel() {
         val g2d = g as Graphics2D
 
         RawkyPlugin.document?.let { doc ->
+            if (doc.selectedIndex >= doc.children.size) return
+
             val frame = doc.children[doc.selectedIndex]
 
             for (layer in frame.children) {

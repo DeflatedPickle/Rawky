@@ -1,29 +1,36 @@
 /* Copyright (c) 2022 DeflatedPickle under the MIT license */
 
+@file:OptIn(InternalSerializationApi::class, InternalSerializationApi::class)
+
 package com.deflatedpickle.rawky.dialog
 
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
+import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.template.Template
 import com.deflatedpickle.undulation.constraints.FillHorizontal
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.constraints.FinishLine
 import com.deflatedpickle.undulation.constraints.StickEast
+import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import org.oxbow.swingbits.dialog.task.TaskDialog
+import so.n0weak.ExtendedComboBox
 import java.awt.GridBagLayout
 import java.awt.event.ItemEvent
-import javax.swing.JButton
-import javax.swing.JComboBox
-import javax.swing.JLabel
-import javax.swing.JPanel
-import javax.swing.JSeparator
-import javax.swing.JSpinner
-import javax.swing.SpinnerNumberModel
+import javax.swing.*
 
 class NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
-    val template = JComboBox<Template>().apply {
-        for ((_, v) in Template.registry) {
-            addItem(v)
+    val template = ExtendedComboBox().apply {
+        for (i in RawkyPlugin.templateFolder.walk()) {
+            if (i.isFile && i.extension == "json") {
+                val json = Json.Default.decodeFromString(Template::class.serializer(), i.readText())
+                Template.registry[json.name] = json
+                addItem(json)
+            } else if (i.isDirectory && i.name != "template") {
+                addDelimiter(i.name)
+            }
         }
 
         selectedIndex = -1
