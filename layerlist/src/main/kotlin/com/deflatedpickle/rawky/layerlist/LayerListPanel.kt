@@ -1,5 +1,7 @@
 /* Copyright (c) 2022 DeflatedPickle under the MIT license */
 
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package com.deflatedpickle.rawky.layerlist
 
 import com.deflatedpickle.haruhi.component.PluginPanel
@@ -7,14 +9,13 @@ import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.dialog.EditLayerDialog
 import com.deflatedpickle.rawky.dialog.NewLayerDialog
-import com.deflatedpickle.rawky.event.EventChangeLayer
-import com.deflatedpickle.rawky.event.EventNewLayer
-import com.deflatedpickle.rawky.event.EventUpdateCell
-import com.deflatedpickle.rawky.event.EventUpdateGrid
+import com.deflatedpickle.rawky.event.*
 import com.deflatedpickle.rawky.event.packet.PacketChange
 import com.deflatedpickle.rawky.pixelgrid.setting.PixelGridSettings
 import com.deflatedpickle.rawky.util.DrawUtil
+import com.deflatedpickle.undulation.functions.AbstractButton
 import com.deflatedpickle.undulation.functions.extensions.add
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.BasicStroke
@@ -37,38 +38,96 @@ import javax.swing.table.TableCellRenderer
 import kotlin.math.min
 
 object LayerListPanel : PluginPanel() {
-    val toolbar = JToolBar("Layer list").apply {
-        add(icon = MonoIcon.ADD_ELEMENT, tooltip = "Add element", enabled = false) {
-            RawkyPlugin.document?.let { doc ->
-                val layerDialog = NewLayerDialog()
-                layerDialog.isVisible = true
+    val addButton = AbstractButton(icon = MonoIcon.ADD_ELEMENT, tooltip = "Add element", enabled = false) {
+        RawkyPlugin.document?.let { doc ->
+            val layerDialog = NewLayerDialog()
+            layerDialog.isVisible = true
 
-                if (layerDialog.result == TaskDialog.StandardCommand.OK) {
+            if (layerDialog.result == TaskDialog.StandardCommand.OK) {
 
-                    val layer = doc.children[doc.selectedIndex].addLayer(
+                val layer = doc.children[doc.selectedIndex].addLayer(
+                    layerDialog.nameInput.text,
+                    layerDialog.columnInput.value as Int,
+                    layerDialog.rowInput.value as Int,
+                    // layerDialog.indexInput.value as Int
+                )
+
+                model.insertRow(
+                    0,
+                    arrayOf(
+                        null,
                         layerDialog.nameInput.text,
-                        layerDialog.columnInput.value as Int,
-                        layerDialog.rowInput.value as Int,
-                        // layerDialog.indexInput.value as Int
+                        true,
+                        false
                     )
+                )
+                table.setRowSelectionInterval(0, 0)
 
-                    model.insertRow(
-                        0,
-                        arrayOf(
-                            null,
-                            layerDialog.nameInput.text,
-                            true,
-                            false
-                        )
+                EventNewLayer.trigger(layer)
+                EventChangeLayer.trigger(
+                    PacketChange(
+                        System.nanoTime(),
+                        PluginUtil.slugToPlugin("deflatedpickle@layer_list")!!,
+                        layer,
+                        layer,
                     )
-                    table.setRowSelectionInterval(0, 0)
-
-                    EventNewLayer.trigger(layer)
-                }
+                )
             }
         }
-        // add(icon = MonoIcon.EDIT_ELEMENT, tooltip = "Edit element", enabled = false) {}
-        // add(icon = MonoIcon.DELETE_ELEMENT, tooltip = "Delete element", enabled = false) {}
+    }
+    val editButton = AbstractButton(icon = MonoIcon.EDIT_ELEMENT, tooltip = "Edit element", enabled = false) {
+        RawkyPlugin.document?.let { doc ->
+            val layerDialog = EditLayerDialog()
+            layerDialog.isVisible = true
+
+            if (layerDialog.result == TaskDialog.StandardCommand.OK) {
+                val frame = doc.children[doc.selectedIndex]
+                val layer = frame.children[frame.selectedIndex]
+
+                layer.name = layerDialog.nameInput.text
+
+                val grid = layer.child
+
+                EventUpdateGrid.trigger(grid)
+                EventChangeLayer.trigger(
+                    PacketChange(
+                        System.nanoTime(),
+                        PluginUtil.slugToPlugin("deflatedpickle@layer_list")!!,
+                        layer,
+                        layer,
+                    )
+                )
+            }
+        }
+    }
+
+    val deleteButton = AbstractButton(icon = MonoIcon.DELETE_ELEMENT, tooltip = "Delete element", enabled = false) {
+        RawkyPlugin.document?.let { doc ->
+            val frame = doc.children[doc.selectedIndex]
+
+            if (frame.selectedIndex > frame.children.size ||
+                frame.selectedIndex < 0) return@let
+
+            val layer = frame.children[frame.selectedIndex]
+
+            model.removeRow(frame.selectedIndex)
+            frame.children.removeAt(frame.selectedIndex)
+            frame.selectedIndex = min(0, frame.selectedIndex--)
+
+            EventChangeLayer.trigger(
+                PacketChange(
+                    source = PluginUtil.slugToPlugin("deflatedpickle@layer_list")!!,
+                    old = layer,
+                    new = doc.children[doc.selectedIndex].children[frame.selectedIndex],
+                )
+            )
+        }
+    }
+
+    val toolbar = JToolBar("Layer list").apply {
+        add(addButton)
+        add(editButton)
+        add(deleteButton)
         // add(icon = MonoIcon.DELETE_ALL_ELEMENTS, tooltip = "Delete all elements", enabled = false) {}
     }
 
@@ -113,8 +172,8 @@ object LayerListPanel : PluginPanel() {
     }
 
     private val columnZeroRenderer = TableCellRenderer { _: JTable, _: Any?,
-        _: Boolean, _: Boolean,
-        row: Int, _: Int ->
+                                                         _: Boolean, _: Boolean,
+                                                         row: Int, _: Int ->
         object : JPanel() {
             override fun paintComponent(g: Graphics) {
                 if (RawkyPlugin.document == null) return
@@ -210,14 +269,14 @@ object LayerListPanel : PluginPanel() {
                 cellEditor = columnOneEditor
             }
 
-            columnModel.getColumn(2).apply {
+            getColumn(2).apply {
                 maxWidth = 30
 
                 cellEditor = columnTwoEditor
                 cellRenderer = columnTwoRenderer
             }
 
-            columnModel.getColumn(3).apply {
+            getColumn(3).apply {
                 maxWidth = 30
 
                 cellEditor = columnThreeEditor

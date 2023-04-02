@@ -1,23 +1,24 @@
 /* Copyright (c) 2022 DeflatedPickle under the MIT license */
 
+@file:Suppress("MemberVisibilityCanBePrivate")
+
 package com.deflatedpickle.rawky.timeline
 
 import com.deflatedpickle.haruhi.component.PluginPanel
+import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.collection.Frame
+import com.deflatedpickle.rawky.dialog.EditFrameDialog
 import com.deflatedpickle.rawky.dialog.NewFrameDialog
 import com.deflatedpickle.rawky.dialog.NewLayerDialog
-import com.deflatedpickle.rawky.event.EventChangeFrame
-import com.deflatedpickle.rawky.event.EventNewFrame
-import com.deflatedpickle.rawky.event.EventNewLayer
-import com.deflatedpickle.rawky.event.EventUpdateCell
-import com.deflatedpickle.rawky.event.EventUpdateGrid
+import com.deflatedpickle.rawky.event.*
 import com.deflatedpickle.rawky.event.packet.PacketChange
 import com.deflatedpickle.rawky.pixelgrid.setting.PixelGridSettings
 import com.deflatedpickle.rawky.util.DrawUtil
+import com.deflatedpickle.undulation.functions.AbstractButton
 import com.deflatedpickle.undulation.functions.extensions.add
 import org.jdesktop.swingx.JXList
 import org.oxbow.swingbits.dialog.task.TaskDialog
@@ -38,50 +39,107 @@ import javax.swing.ListCellRenderer
 import javax.swing.ListSelectionModel
 import javax.swing.UIManager
 import javax.swing.border.LineBorder
+import kotlin.math.min
 
 object TimelinePanel : PluginPanel() {
-    val toolbar = JToolBar("Timeline").apply {
-        orientation = JToolBar.VERTICAL
+    val addButton = AbstractButton(icon = MonoIcon.ADD_ELEMENT, tooltip = "Add element", enabled = false) {
+        RawkyPlugin.document?.let { doc ->
+            val frameDialog = NewFrameDialog()
+            frameDialog.isVisible = true
 
-        add(icon = MonoIcon.ADD_ELEMENT, tooltip = "Add element", enabled = false) {
-            RawkyPlugin.document?.let { doc ->
-                val frameDialog = NewFrameDialog()
-                frameDialog.isVisible = true
+            if (frameDialog.result == TaskDialog.StandardCommand.OK) {
+                val layerDialog = NewLayerDialog(0)
+                layerDialog.isVisible = true
 
-                if (frameDialog.result == TaskDialog.StandardCommand.OK) {
-                    val layerDialog = NewLayerDialog(0)
-                    layerDialog.isVisible = true
+                if (layerDialog.result == TaskDialog.StandardCommand.OK) {
+                    val properFrameName = if (frameDialog.nameInput.text == "") null else frameDialog.nameInput.text
 
-                    if (layerDialog.result == TaskDialog.StandardCommand.OK) {
-                        val properFrameName = if (frameDialog.nameInput.text == "") null else frameDialog.nameInput.text
+                    val frame = doc.addFrame(
+                        properFrameName,
+                        frameDialog.indexInput.value as Int
+                    )
 
-                        val frame = doc.addFrame(
-                            properFrameName,
-                            frameDialog.indexInput.value as Int
+                    model.addElement(frame)
+
+                    EventNewFrame.trigger(frame)
+
+                    val properLayerName = if (layerDialog.nameInput.text == "") null else layerDialog.nameInput.text
+
+                    val layer = frame.addLayer(
+                        properLayerName,
+                        layerDialog.columnInput.value as Int,
+                        layerDialog.rowInput.value as Int,
+                        // layerDialog.indexInput.value as Int
+                    )
+
+                    list.selectedIndex = frameDialog.indexInput.value as Int
+
+                    EventNewLayer.trigger(layer)
+                    EventChangeFrame.trigger(
+                        PacketChange(
+                            System.nanoTime(),
+                            PluginUtil.slugToPlugin("deflatedpickle@layer_list")!!,
+                            frame,
+                            frame,
                         )
-
-                        model.addElement(frame)
-
-                        EventNewFrame.trigger(frame)
-
-                        val properLayerName = if (layerDialog.nameInput.text == "") null else layerDialog.nameInput.text
-
-                        val layer = frame.addLayer(
-                            properLayerName,
-                            layerDialog.columnInput.value as Int,
-                            layerDialog.rowInput.value as Int,
-                            // layerDialog.indexInput.value as Int
-                        )
-
-                        list.selectedIndex = frameDialog.indexInput.value as Int
-
-                        EventNewLayer.trigger(layer)
-                    }
+                    )
                 }
             }
         }
-        // add(icon = MonoIcon.EDIT_ELEMENT, tooltip = "Edit element", enabled = false) {}
-        // add(icon = MonoIcon.DELETE_ELEMENT, tooltip = "Delete element", enabled = false) {}
+    }
+    val editButton = AbstractButton(icon = MonoIcon.EDIT_ELEMENT, tooltip = "Edit element", enabled = false) {
+        RawkyPlugin.document?.let { doc ->
+            val frameDialog = EditFrameDialog()
+            frameDialog.isVisible = true
+
+            if (frameDialog.result == TaskDialog.StandardCommand.OK) {
+                val frame = doc.children[doc.selectedIndex]
+
+                frame.name = frameDialog.nameInput.text
+
+                val layer = frame.children[frame.selectedIndex]
+                val grid = layer.child
+
+                EventUpdateGrid.trigger(grid)
+                EventChangeFrame.trigger(
+                    PacketChange(
+                        System.nanoTime(),
+                        PluginUtil.slugToPlugin("deflatedpickle@layer_list")!!,
+                        frame,
+                        frame,
+                    )
+                )
+            }
+        }
+    }
+    val deleteButton = AbstractButton(icon = MonoIcon.DELETE_ELEMENT, tooltip = "Delete element", enabled = false) {
+        RawkyPlugin.document?.let { doc ->
+            if (doc.selectedIndex > doc.children.size ||
+                doc.selectedIndex < 0
+            ) return@let
+
+            val frame = doc.children[doc.selectedIndex]
+
+            model.remove(doc.selectedIndex)
+            doc.children.removeAt(doc.selectedIndex)
+            doc.selectedIndex = min(0, doc.selectedIndex--)
+
+            EventChangeFrame.trigger(
+                PacketChange(
+                    source = PluginUtil.slugToPlugin("deflatedpickle@layer_list")!!,
+                    old = frame,
+                    new = doc.children[doc.selectedIndex],
+                )
+            )
+        }
+    }
+
+    val toolbar = JToolBar("Timeline").apply {
+        orientation = JToolBar.VERTICAL
+
+        add(addButton)
+        add(editButton)
+        add(deleteButton)
         // add(icon = MonoIcon.DELETE_ALL_ELEMENTS, tooltip = "Delete all elements", enabled = false) {}
     }
 
@@ -195,6 +253,13 @@ object TimelinePanel : PluginPanel() {
 
         EventUpdateCell.addListener {
             list.repaint()
+        }
+
+        EventChangeFrame.addListener {
+            RawkyPlugin.document?.let { doc ->
+                deleteButton.isEnabled =
+                    doc.children.size > 1
+            }
         }
 
         add(toolbar, BorderLayout.WEST)

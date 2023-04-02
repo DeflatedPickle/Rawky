@@ -14,13 +14,6 @@ rootProject.name = 'Rawky'
 include 'master'
 
 include 'core'
-[
-		'thecolorapi',
-		'dmc',
-].each {
-	include it
-	project(":$it").projectDir = new File(settingsDir, "core/swatch/$it")
-}
 include 'launcher'
 
 include 'server'
@@ -84,7 +77,7 @@ include 'toolbox'
 
 include 'colourwheel'
 include 'colourpalette'
-['json', 'png'].each {
+['json', 'png', "gpl", "pal", "txt"].each {
 	include it
 	project(":$it").projectDir = new File(settingsDir, "colourpalette/parser/$it")
 }

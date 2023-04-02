@@ -10,7 +10,10 @@ import com.deflatedpickle.haruhi.api.util.ComponentPosition.WEST
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
+import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.event.EventChangeFrame
+import com.deflatedpickle.rawky.event.EventChangeLayer
+import com.deflatedpickle.rawky.event.EventNewLayer
 import com.deflatedpickle.rawky.extension.removeAll
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
@@ -42,12 +45,16 @@ object LayerListPlugin {
             LayerListPanel.model.removeAll()
             createInitialLayers(it as RawkyDocument)
             LayerListPanel.table.setRowSelectionInterval(0, 0)
+
+            triggerButtons()
         }
 
         EventOpenDocument.addListener {
             LayerListPanel.model.removeAll()
             createInitialLayers(it.first as RawkyDocument)
             LayerListPanel.table.setRowSelectionInterval(0, 0)
+
+            triggerButtons()
         }
 
         EventChangeFrame.addListener {
@@ -64,16 +71,12 @@ object LayerListPlugin {
                     )
                 )
             }
+
+            triggerButtons()
         }
 
-        EventCreateDocument.addListener {
-            for (i in LayerListPanel.toolbar.components) {
-                i.isEnabled = true
-            }
-
-            for (i in LayerListPanel.navbar.components) {
-                i.isEnabled = true
-            }
+        EventChangeLayer.addListener {
+            triggerButtons()
         }
     }
 
@@ -88,6 +91,22 @@ object LayerListPlugin {
                     i.lock
                 )
             )
+        }
+    }
+
+    private fun triggerButtons() {
+        LayerListPanel.addButton.isEnabled = true
+        LayerListPanel.editButton.isEnabled = true
+
+        RawkyPlugin.document?.let { doc ->
+            val frame = doc.children[doc.selectedIndex]
+
+            LayerListPanel.deleteButton.isEnabled =
+                frame.children.size > 1
+        }
+
+        for (i in LayerListPanel.navbar.components) {
+            i.isEnabled = true
         }
     }
 }

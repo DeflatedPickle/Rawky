@@ -25,6 +25,9 @@ dependencies {
 
 	implementation 'org.sejda.imageio:webp-imageio:0.1.6'
 
+	implementation 'me.saharnooby:qoi-java:1.2.1'
+	implementation 'me.saharnooby:qoi-java-awt:1.2.1'
+
 	// Read support
 	implementation 'com.twelvemonkeys.imageio:imageio-batik:3.8.2'
 	implementation 'com.twelvemonkeys.imageio:imageio-hdr:3.8.2'

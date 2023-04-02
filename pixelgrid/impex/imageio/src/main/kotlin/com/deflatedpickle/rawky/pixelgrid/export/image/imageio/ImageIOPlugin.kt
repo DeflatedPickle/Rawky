@@ -61,6 +61,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
                     "Truevision TGA Image Format" to listOf("tga", "icb", "vda", "vst"),
                     "Tagged Image File Format" to listOf("tiff", "tif"),
                     "Google WebP Format" to listOf("webp"),
+                    "Quit Ok Image" to listOf("qoi")
                 )
             )
         }
