@@ -13,7 +13,7 @@
 </p>
 
 
-![2023-04-01_05-22](https://user-images.githubusercontent.com/24986480/229325800-7def73d1-03fd-491a-94cf-872169b6b49d.png)
+![Screenshot](https://user-images.githubusercontent.com/24986480/229325800-7def73d1-03fd-491a-94cf-872169b6b49d.png)
 
 <p align="center">
 	<a href="https://github.com/DeflatedPickle/Rawky/commits/rewrite"><img src="https://img.shields.io/github/last-commit/DeflatedPickle/Rawky.svg"></a>
