@@ -2,8 +2,10 @@
 
 package com.deflatedpickle.rawky.collection
 
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.relation.ChildSelector
 import com.deflatedpickle.rawky.api.relation.Matrix
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.awt.Rectangle
 
@@ -12,8 +14,8 @@ data class Grid(
     override val rows: Int = 0,
     override val columns: Int = 0,
     override var selectedIndex: Int = 0,
-    override val children: MutableList<Cell> = mutableListOf()
-) : Matrix<Cell>, ChildSelector {
+    override val children: MutableList<Cell<@Contextual Any>> = mutableListOf()
+) : Matrix<Cell<Any>>, ChildSelector {
     companion object {
         const val pixel = 16
     }
@@ -37,20 +39,19 @@ data class Grid(
                     column++
                 }
 
-                Cell(
-                    row = row,
-                    column = column,
+                CellProvider.current.provide(
+                    row, column
+                ).apply {
+                    grid = this@Grid
                     polygon = Rectangle(
                         row * pixel, column * pixel,
                         width, height
                     )
-                ).apply {
-                    grid = this@Grid
                 }
             }
         )
     }
 
     operator fun get(column: Int, row: Int) = children[(column * columns) + row]
-    operator fun set(column: Int, row: Int, value: Cell) = children.set((column * columns) + row, value)
+    operator fun set(column: Int, row: Int, value: Cell<Any>) = children.set((column * columns) + row, value)
 }

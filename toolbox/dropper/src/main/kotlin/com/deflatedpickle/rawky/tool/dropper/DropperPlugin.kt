@@ -8,6 +8,7 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.util.ActionStack
@@ -37,21 +38,17 @@ object DropperPlugin : Tool(
     }
 
     override fun perform(
-        cell: Cell,
+        cell: Cell<out Any>,
         button: Int,
         dragged: Boolean,
         clickCount: Int,
     ) {
         val action = object : Action(name) {
-            var old: Color? = null
-
             override fun perform() {
-                old = RawkyPlugin.colour
-                RawkyPlugin.colour = cell.colour
+                // CellProvider.current.current = cell.content
             }
 
             override fun cleanup() {
-                old?.let { RawkyPlugin.colour = it }
             }
 
             override fun outline(g2D: Graphics2D) {

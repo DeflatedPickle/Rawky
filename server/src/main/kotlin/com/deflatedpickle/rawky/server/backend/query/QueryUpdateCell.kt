@@ -9,7 +9,7 @@ import com.esotericsoftware.kryonet.Connection
 import com.esotericsoftware.kryonet.Server
 
 data class QueryUpdateCell(
-    val cell: Cell? = null,
+    val cell: Cell<out Any>? = null,
 ) : Query() {
     override fun runServer(connection: Connection, server: Server) {
         ServerPlugin.updateCell(this)

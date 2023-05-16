@@ -78,7 +78,7 @@ dependencies {
 	api 'com.deflatedpickle:monocons:'
 
 	// Plugins
-	implementation project(":settingsgui")
+	implementation project(":sniffle.settingsgui")
 }
 
 compileKotlin {

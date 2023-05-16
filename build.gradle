@@ -257,16 +257,20 @@ run {
 		implementation project(":pixelgrid")
 
 		// Pixel Grid -> Mode
-		implementation project(":mouse")
-		implementation project(":keyboard")
+		implementation project(":pixelgrid.mode.mouse")
+		implementation project(":pixelgrid.mode.keyboard")
 
-		// Impex
-		implementation project(":imageio")
-		implementation project(":ascii")
-		implementation project(":rawr")
+		// Pixel Grid -> Impex
+		implementation project(":pixelgrid.impex.imageio")
+		implementation project(":pixelgrid.impex.ascii")
+		implementation project(":pixelgrid.impex.rawr")
 
 		// Export -> Text -> Ascii
-		implementation project(":block")
+		implementation project(":pixelgrid.impex.ascii.block")
+
+		// Pixel Grid -> Grid
+		implementation project(":pixelgrid.grid.pixel")
+		implementation project(":pixelgrid.grid.tile")
 
 		// Widgets
 		runtimeOnly project(":colourwheel")
@@ -274,8 +278,18 @@ run {
 		runtimeOnly project(":colourhistory")
 
 		// Colour Palette -> Parser
-		runtimeOnly project(":json")
-		runtimeOnly project(":png")
+		runtimeOnly project(":colourpalette.parser.json")
+		runtimeOnly project(":colourpalette.parser.png")
+		runtimeOnly project(":colourpalette.parser.gpl")
+		runtimeOnly project(":colourpalette.parser.hex")
+		runtimeOnly project(":colourpalette.parser.pal")
+		runtimeOnly project(":colourpalette.parser.txt")
+
+		runtimeOnly project(":tilepalette")
+		runtimeOnly project(":tilepalette.parser.png")
+		// runtimeOnly project(":tilepalette.parser.tmx")
+		// runtimeOnly project(":tilepalette.parser.ogmo")
+		// runtimeOnly project(":tilepalette.parser.ldtk")
 
 		runtimeOnly project(":autosave")
 		runtimeOnly project(":autoload")
@@ -284,40 +298,40 @@ run {
 		runtimeOnly project(":layerlist")
 
 		runtimeOnly project(":server")
-		runtimeOnly project(":userlist")
-		runtimeOnly project(":chat")
-		runtimeOnly project(":leaderboard")
+		runtimeOnly project(":server.userlist")
+		runtimeOnly project(":server.chat")
+		runtimeOnly project(":server.leaderboard")
 
 		// Encodings
-		runtimeOnly project(":ascii85")
-		runtimeOnly project(":base58")
-		runtimeOnly project(":base62")
-		runtimeOnly project(":base64")
-		runtimeOnly project(":base91")
+		runtimeOnly project(":server.encoding.ascii85")
+		runtimeOnly project(":server.encoding.base58")
+		runtimeOnly project(":server.encoding.base62")
+		runtimeOnly project(":server.encoding.base64")
+		runtimeOnly project(":server.encoding.base91")
 
 		runtimeOnly project(":toolbox")
 
 		// Tools
-		runtimeOnly project(":pencil")
-		runtimeOnly project(":eraser")
-		runtimeOnly project(":dropper")
-		runtimeOnly project(":line")
-		runtimeOnly project(":bucket")
-		runtimeOnly project(":shape")
+		runtimeOnly project(":toolbox.pencil")
+		runtimeOnly project(":toolbox.eraser")
+		runtimeOnly project(":toolbox.dropper")
+		runtimeOnly project(":toolbox.line")
+		runtimeOnly project(":toolbox.bucket")
+		runtimeOnly project(":toolbox.shape")
 
-		runtimeOnly project(":rectangle")
-		runtimeOnly project(":circle")
+		runtimeOnly project(":toolbox.shape.rectangle")
+		runtimeOnly project(":toolbox.shape.circle")
 
 		// Bucket Fills
-		runtimeOnly project(":solid")
-		runtimeOnly project(":stipple")
+		runtimeOnly project(":toolbox.bucket.fill.solid")
+		runtimeOnly project(":toolbox.bucket.fill.stipple")
 
 		// Sniffle
 		// runtimeOnly project(':discordrpc')
-		runtimeOnly project(':pluginmanager')
-		runtimeOnly project(':settingsgui')
-		runtimeOnly project(':tipoftheday')
-		runtimeOnly project(':swingsettings')
+		runtimeOnly project(':sniffle.pluginmanager')
+		runtimeOnly project(':sniffle.settingsgui')
+		runtimeOnly project(':sniffle.tipoftheday')
+		runtimeOnly project(':sniffle.swingsettings')
 	}
 
 	application {

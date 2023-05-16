@@ -9,6 +9,7 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.Painter
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
@@ -41,18 +42,18 @@ object LinePlugin :
         name = "Line",
         icon = MonoIcon.LINE,
     ),
-    Painter {
-    private var firstCell: Cell? = null
+    Painter<Any> {
+    private var firstCell: Cell<out Any>? = null
 
     init {
         registry["deflatedpickle@$name"] = this
     }
 
     override fun perform(
-        cell: Cell,
+        cell: Cell<out Any>,
         button: Int,
         dragged: Boolean,
-        clickCount: Int,
+        clickCount: Int
     ) {
         val other = firstCell
         // First point
@@ -62,7 +63,7 @@ object LinePlugin :
         // Second point
         else {
             val action = object : Action(name) {
-                val colourCache = mutableMapOf<Cell, Color>()
+                val colourCache = mutableMapOf<Cell<out Any>, Color>()
 
                 override fun perform() {
                     colourCache.clear()
@@ -76,7 +77,9 @@ object LinePlugin :
 
                 override fun cleanup() {
                     for ((c, colour) in colourCache) {
-                        c.colour = colour
+                        CellProvider.current.perform(
+                            c, button, dragged, clickCount
+                        )
                     }
                 }
 
@@ -99,7 +102,10 @@ object LinePlugin :
         }
     }
 
-    override fun paint(hoverCell: Cell, graphics: Graphics2D) {
+    override fun paint(
+        hoverCell: Cell<out Any>,
+        graphics: Graphics2D
+    ) {
         firstCell?.let { cell ->
             graphics.stroke = BasicStroke(4f)
             graphics.color = RawkyPlugin.colour
@@ -115,7 +121,7 @@ object LinePlugin :
         y0: Int,
         x1: Int?,
         y1: Int?,
-    ): MutableMap<Cell, T> {
+    ): MutableMap<Cell<out Any>, T> {
         val grid: Grid
         RawkyPlugin.document!!.let { doc ->
             val frame = doc.children[doc.selectedIndex]
@@ -133,12 +139,13 @@ object LinePlugin :
         val sy = if (tempY0 < y1) 1 else -1
         var err = dx + dy
 
-        val cellMap = mutableMapOf<Cell, Color>()
+        val cellMap = mutableMapOf<Cell<out Any>, Color>()
 
         while (true) {
             with(grid[tempY0, tempX0]) {
-                cellMap[this] = colour
-                colour = RawkyPlugin.colour
+                // TODO
+                /*cellMap[this] = colour
+                colour = RawkyPlugin.colour*/
             }
 
             if (tempX0 == x1 && tempY0 == y1) break
@@ -156,6 +163,6 @@ object LinePlugin :
             }
         }
 
-        return cellMap as MutableMap<Cell, T>
+        return cellMap as MutableMap<Cell<out Any>, T>
     }
 }

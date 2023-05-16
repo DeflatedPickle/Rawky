@@ -30,5 +30,5 @@ interface Fill {
 
     val name: String
 
-    fun perform(cell: Cell, row: Int, column: Int, shade: Color)
+    fun perform(cell: Cell<out Any>, row: Int, column: Int)
 }

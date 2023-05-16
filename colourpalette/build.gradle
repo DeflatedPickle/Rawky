@@ -4,5 +4,5 @@ plugins {
 
 dependencies {
 	implementation project(":core")
-	implementation project(":swingsettings")
+	implementation project(":sniffle.swingsettings")
 }

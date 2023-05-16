@@ -5,7 +5,7 @@ plugins {
 dependencies {
 	implementation project(":core")
 	implementation project(":launcher")
-	implementation project(":settingsgui")
+	implementation project(":sniffle.settingsgui")
 
 	// Server
 	api 'com.esotericsoftware:kryo:5.3.0'

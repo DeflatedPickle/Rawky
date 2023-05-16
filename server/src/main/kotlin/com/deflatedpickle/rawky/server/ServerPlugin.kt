@@ -460,7 +460,8 @@ object ServerPlugin {
 
             any.cell?.let { cell ->
                 grid[cell.row, cell.column + 1] {
-                    colour = cell.colour
+                    // TODO
+                    // colour = cell.colour
                 }
             }
 

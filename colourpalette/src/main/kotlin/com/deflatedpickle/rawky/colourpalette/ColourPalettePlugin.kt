@@ -8,8 +8,11 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.api.util.ComponentPosition
 import com.deflatedpickle.marvin.extensions.div
+import com.deflatedpickle.marvin.registry.Registry
+import com.deflatedpickle.rawky.api.palette.PaletteParser
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
 import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
+import java.awt.Color
 import java.io.File
 
 @Plugin(
@@ -28,6 +31,7 @@ import java.io.File
 @Suppress("unused")
 object ColourPalettePlugin {
     val folder = (File(".") / "palette").apply { mkdirs() }
+    val registry = Registry<String, PaletteParser<Color>>()
 
     init {
         EventChangeTheme.addListener {

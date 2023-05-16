@@ -2,6 +2,7 @@
 
 package com.deflatedpickle.rawky.util
 
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.collection.Grid
 import java.awt.BasicStroke
@@ -28,21 +29,16 @@ object DrawUtil {
 
     fun paintGridFill(g: Graphics2D, grid: Grid, outlineColour: Color = Color.BLACK) {
         for (cell in grid.children) {
-            g.color = cell.colour
-            g.fillRect(
-                cell.polygon.x, cell.polygon.y,
-                cell.polygon.width, cell.polygon.height
+            CellProvider.current.paintGrid(
+                g, cell
             )
         }
     }
 
-    fun paintHoverCell(cells: List<Cell>, g: Graphics2D) {
+    fun paintHoverCell(cells: MutableList<Cell<out Any>>, g: Graphics2D) {
         for (cell in cells) {
-            g.stroke = BasicStroke(4f)
-            g.color = Color.BLACK
-            g.drawRect(
-                cell.polygon.x, cell.polygon.y,
-                cell.polygon.width, cell.polygon.height
+            CellProvider.current.paintHover(
+                g, cell
             )
         }
     }

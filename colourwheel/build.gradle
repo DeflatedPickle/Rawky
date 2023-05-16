@@ -5,7 +5,7 @@ plugins {
 dependencies {
 	implementation project(":core")
 
-	implementation project(":swingsettings")
+	implementation project(":sniffle.swingsettings")
 
 	implementation 'org.drjekyll:colorpicker:1.4.5'
 }

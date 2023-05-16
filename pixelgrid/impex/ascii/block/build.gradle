@@ -5,5 +5,5 @@ plugins {
 dependencies {
 	implementation project(":core")
 	implementation project(":pixelgrid")
-	implementation project(":ascii")
+	implementation project(":pixelgrid.impex.ascii")
 }

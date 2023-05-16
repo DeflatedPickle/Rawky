@@ -26,7 +26,7 @@ import javax.swing.SwingUtilities
 
 @RedrawActive
 object PixelGridPanel : PluginPanel() {
-    val selectedCells = mutableListOf<Cell>()
+    val selectedCells = mutableListOf<Cell<out Any>>()
 
     init {
         EventUpdateCell.addListener {
@@ -38,7 +38,7 @@ object PixelGridPanel : PluginPanel() {
         button: Int,
         dragged: Boolean,
         count: Int,
-        cells: List<Cell> = selectedCells,
+        cells: List<Cell<Any>> = selectedCells,
         tool: Tool = Tool.current,
     ) {
         RawkyPlugin.document?.let { doc ->
@@ -137,7 +137,7 @@ object PixelGridPanel : PluginPanel() {
 
                 if (Tool.isToolValid()) {
                     val tool = Tool.current
-                    if (selectedCells.size > 0 && tool is Painter) {
+                    if (selectedCells.size > 0 && tool is Painter<*>) {
                         tool.paint(selectedCells.first(), g2d)
                     }
                 }

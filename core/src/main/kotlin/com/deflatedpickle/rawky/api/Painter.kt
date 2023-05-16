@@ -5,9 +5,9 @@ package com.deflatedpickle.rawky.api
 import com.deflatedpickle.rawky.collection.Cell
 import java.awt.Graphics2D
 
-interface Painter {
+interface Painter<out T> {
     fun paint(
-        hoverCell: Cell,
+        hoverCell: Cell<out @UnsafeVariance T>,
         graphics: Graphics2D,
     )
 }

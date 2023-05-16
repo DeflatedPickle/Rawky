@@ -6,5 +6,5 @@ dependencies {
 	implementation project(":core")
 	implementation project(":pixelgrid")
 
-	implementation project(":settingsgui")
+	implementation project(":sniffle.settingsgui")
 }

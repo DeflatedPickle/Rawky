@@ -1,6 +1,6 @@
 dependencies {
 	implementation project(":core")
-	implementation project(":settingsgui")
+	implementation project(":sniffle.settingsgui")
 
-	implementation project(":bucket")
+	implementation project(":toolbox.bucket")
 }

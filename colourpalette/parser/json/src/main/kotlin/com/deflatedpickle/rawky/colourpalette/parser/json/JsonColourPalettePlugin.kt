@@ -6,8 +6,8 @@ package com.deflatedpickle.rawky.colourpalette.parser.json
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.rawky.colourpalette.ColourPalettePlugin
-import com.deflatedpickle.rawky.colourpalette.api.Palette
-import com.deflatedpickle.rawky.colourpalette.api.PaletteParser
+import com.deflatedpickle.rawky.api.palette.Palette
+import com.deflatedpickle.rawky.api.palette.PaletteParser
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
@@ -28,9 +28,11 @@ import java.io.File
     """,
 )
 @Suppress("unused")
-object JsonColourPalettePlugin : PaletteParser {
+object JsonColourPalettePlugin : PaletteParser<Color> {
+    override val name = "JSON"
+
     init {
-        PaletteParser.registry["json"] = this
+        ColourPalettePlugin.registry["json"] = this
 
         FileUtils.copyResourcesRecursively(
             JsonColourPalettePlugin::class.java.getResource("/palette"),
@@ -38,7 +40,7 @@ object JsonColourPalettePlugin : PaletteParser {
         )
     }
 
-    override fun parse(file: File): Palette {
+    override fun parse(file: File): Palette<Color> {
         val colours = mutableMapOf<Color, String?>()
 
         when (val json = Json.Default.parseToJsonElement(file.readText())) {

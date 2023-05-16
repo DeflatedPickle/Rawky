@@ -5,5 +5,5 @@ plugins {
 dependencies {
 	implementation project(":core")
 	// implementation project(":discordrpc")
-	implementation project(":settingsgui")
+	implementation project(":sniffle.settingsgui")
 }

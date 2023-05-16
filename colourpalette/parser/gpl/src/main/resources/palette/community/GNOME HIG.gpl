@@ -1,0 +1,49 @@
+GIMP Palette
+Name: GNOME HIG Colors
+Columns: 0
+#
+153 193 241	Blue 1
+ 98 160 234	Blue 2
+ 53 132 228	Blue 3
+ 28 113 216	Blue 4
+ 26  95 180	Blue 5
+143 240 164	Green 1
+ 87 227 137	Green 2
+ 51 209 122	Green 3
+ 46 194 126	Green 4
+ 38 162 105	Green 5
+249 240 107	Yellow 1
+248 228  92	Yellow 2
+246 211  45	Yellow 3
+245 194  17	Yellow 4
+229 165  10	Yellow 5
+255 190 111	Orange 1
+255 163  72	Orange 2
+255 120   0	Orange 3
+230  97	  0	Orange 4
+198  70   0	Orange 5
+246  97  81	Red 1
+237  51  59	Red 2
+224  27  36	Red 3
+192  28  40	Red 4
+165  29  45	Red 5
+220 138 221	Purple 1
+192  97 203	Purple 2
+145  65 172	Purple 3
+129  61 156	Purple 4
+ 97  53 131	Purple 5
+205 171 143	Brown 1
+181 131  90	Brown 2
+152 106  68	Brown 3
+134  94  60	Brown 4
+ 99  69  44	Brown 5
+255 255 255	Light 1
+246 245 244	Light 2
+222 221 218	Light 3
+192 191 188	Light 4
+154 153 150	Light 5
+119 118 123	Dark 1
+ 94  92 100	Dark 2
+ 61  56	 70	Dark 3
+ 36  31  49	Dark 4
+  0   0   0	Dark 5

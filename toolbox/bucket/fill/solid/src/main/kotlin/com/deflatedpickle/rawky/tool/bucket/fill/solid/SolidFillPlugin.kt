@@ -6,6 +6,7 @@ package com.deflatedpickle.rawky.tool.bucket.fill.solid
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.tool.bucket.api.Fill
 import com.deflatedpickle.rawky.tool.bucket.api.Fill.Companion.registry
@@ -31,7 +32,9 @@ object SolidFillPlugin : Fill {
         registry["deflatedpickle@$name"] = this
     }
 
-    override fun perform(cell: Cell, row: Int, column: Int, shade: Color) {
-        cell.colour = shade
+    override fun perform(cell: Cell<Any>, row: Int, column: Int) {
+        CellProvider.current.perform(
+            cell, 0, false, 1
+        )
     }
 }

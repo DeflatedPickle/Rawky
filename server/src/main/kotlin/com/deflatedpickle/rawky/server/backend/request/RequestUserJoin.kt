@@ -50,9 +50,10 @@ data class RequestUserJoin(
             val grid = layer.child
 
             for (i in grid.children) {
-                if (i.colour != Cell.defaultColour) {
+                // TODO
+                /*if (i.colour != Cell.defaultColour) {
                     server.sendToAllExceptTCP(ServerPlugin.id, QueryUpdateCell(i))
-                }
+                }*/
             }
         }
     }

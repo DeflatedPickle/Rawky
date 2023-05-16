@@ -1,5 +1,5 @@
 dependencies {
 	implementation project(":core")
 	implementation project(":pixelgrid")
-	implementation project(":shape")
+	implementation project(":toolbox.shape")
 }

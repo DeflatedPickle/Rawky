@@ -8,6 +8,7 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.tool.bucket.api.Fill
 import com.deflatedpickle.rawky.tool.bucket.api.Fill.Companion.registry
@@ -34,14 +35,12 @@ object StippleFillPlugin : Fill {
         registry["deflatedpickle@$name"] = this
     }
 
-    override fun perform(cell: Cell, row: Int, column: Int, shade: Color) {
+    override fun perform(cell: Cell<Any>, row: Int, column: Int) {
         ConfigUtil.getSettings<StippleSettings>("deflatedpickle@stipple#*")?.let {
             if (row % it.modulusRow == column % it.modulusColumn) {
-                cell.colour = shade
-            } else {
-                if (it.altColour != RawkyPlugin.colour) {
-                    cell.colour = it.altColour
-                }
+                CellProvider.current.perform(
+                    cell, 0, false, 1
+                )
             }
         }
     }

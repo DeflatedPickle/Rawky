@@ -14,6 +14,7 @@ import com.deflatedpickle.marvin.extensions.get
 import com.deflatedpickle.marvin.extensions.set
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.collection.Grid
@@ -79,11 +80,15 @@ object BucketPlugin : Tool(
         }
     }
 
-    override fun perform(cell: Cell, button: Int, dragged: Boolean, clickCount: Int) {
+    override fun perform(
+        cell: Cell<Any>,
+        button: Int, dragged: Boolean,
+        clickCount: Int
+    ) {
         // TODO: Write undo code for the fill bucket
         val action = object : Action(name) {
             override fun perform() {
-                process(cell.row, cell.column, cell.colour)
+                process(cell.row, cell.column, cell.content)
             }
 
             override fun cleanup() {
@@ -96,7 +101,7 @@ object BucketPlugin : Tool(
         ActionStack.push(action)
     }
 
-    fun process(row: Int, column: Int, colour: Color) {
+    fun process(row: Int, column: Int, any: Any) {
         val grid: Grid
         RawkyPlugin.document!!.let { doc ->
             val frame = doc.children[doc.selectedIndex]
@@ -117,13 +122,14 @@ object BucketPlugin : Tool(
                 ) {
                     val cell = grid[this.first, this.second]
 
-                    val cellColour = cell.colour
+                    // TODO
+                    val cellColour = cell.content
                     // val rgb = cellColour.rgb
                     // val hsb = Color.RGBtoHSB(cellColour.red, cellColour.green, cellColour.blue, null)
 
-                    if (cellColour == colour) {
+                    if (cellColour == any) {
                         ConfigUtil.getSettings<BucketSettings>("deflatedpickle@bucket#*")?.let {
-                            it.fill?.perform(cell, this.first, this.second, RawkyPlugin.colour)
+                            it.fill?.perform(cell, this.first, this.second)
                         }
 
                         cellList.add(Pair(this.first, this.second + 1))

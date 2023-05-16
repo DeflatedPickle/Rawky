@@ -4,8 +4,10 @@ package com.deflatedpickle.rawky.util
 
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.template.Guide
 import com.deflatedpickle.rawky.api.template.Template
+import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
@@ -23,6 +25,8 @@ object ActionUtil {
             val maxColumns = dialog.columnInput.value as Int
             val frames = dialog.framesInput.value as Int
             val layers = dialog.layersInput.value as Int
+
+            CellProvider.current = dialog.gridModeComboBox.selectedItem as CellProvider<Cell<Any>>
 
             val document = newDocument(maxRows, maxColumns, frames, layers)
             (dialog.template.selectedItem as Template?)?.guides

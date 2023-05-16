@@ -8,6 +8,7 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.Painter
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.collection.Grid
@@ -38,15 +39,15 @@ object RectanglePlugin :
         name = "Rectangle",
         icon = MonoIcon.SHAPE_RECT,
     ),
-    Painter {
-    private var firstCell: Cell? = null
+    Painter<Any> {
+    private var firstCell: Cell<Any>? = null
 
     init {
         registry["deflatedpickle@$name"] = this
     }
 
     override fun perform(
-        cell: Cell,
+        cell: Cell<Any>,
         button: Int,
         dragged: Boolean,
         clickCount: Int,
@@ -61,7 +62,7 @@ object RectanglePlugin :
         // Second point
         else {
             val action = object : Action(name) {
-                val colourCache = mutableMapOf<Cell, Color>()
+                val colourCache = mutableMapOf<Cell<Any>, Color>()
 
                 override fun perform() {
                     colourCache.clear()
@@ -73,7 +74,10 @@ object RectanglePlugin :
                         )
                     ) {
                         colourCache[k] = v
-                        k.colour = RawkyPlugin.colour
+
+                        CellProvider.current.perform(
+                            k, button, dragged, clickCount
+                        )
                     }
 
                     firstCell = null
@@ -81,7 +85,7 @@ object RectanglePlugin :
 
                 override fun cleanup() {
                     for ((c, colour) in colourCache) {
-                        c.colour = colour
+                        // c.colour = colour
                     }
                 }
 
@@ -93,7 +97,7 @@ object RectanglePlugin :
         }
     }
 
-    override fun paint(hoverCell: Cell, graphics: Graphics2D) {
+    override fun paint(hoverCell: Cell<Any>, graphics: Graphics2D) {
         firstCell?.let { cell ->
             graphics.stroke = BasicStroke(4f)
             graphics.color = RawkyPlugin.colour
@@ -109,7 +113,7 @@ object RectanglePlugin :
         y0: Int,
         x1: Int?,
         y1: Int?,
-    ): MutableMap<Cell, Color> {
+    ): MutableMap<Cell<Any>, Color> {
         val grid: Grid
         RawkyPlugin.document!!.let { doc ->
             val frame = doc.children[doc.selectedIndex]
@@ -117,7 +121,7 @@ object RectanglePlugin :
             grid = layer.child
         }
 
-        val cellMap = mutableMapOf<Cell, Color>()
+        val cellMap = mutableMapOf<Cell<Any>, Color>()
 
         y1?.let { y1NonNull ->
             x1?.let { x1NonNull ->
@@ -130,7 +134,7 @@ object RectanglePlugin :
 
                     for (column in x0Temp..x1Temp) {
                         with(grid[row, column]) {
-                            cellMap[this] = colour
+                            // cellMap[this] = colour
                         }
                     }
                 }

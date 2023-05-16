@@ -99,7 +99,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
             for (row in 0 until this.height) {
                 for (column in 0 until this.width) {
                     for (layer in layers.reversed()) {
-                        layer.child[column, row].colour.rgb.let { setRGB(column, row, it) }
+                        // layer.child[column, row].colour.rgb.let { setRGB(column, row, it) }
                     }
                 }
             }
@@ -125,7 +125,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
 
             for (row in 0 until this.height) {
                 for (column in 0 until this.width) {
-                    layers[0].child[column, row].colour = Color(getRGB(column, row), true)
+                    // layers[0].child[column, row].colour = Color(getRGB(column, row), true)
                 }
             }
         }
@@ -142,7 +142,8 @@ object ImageIOPlugin : Exporter, Importer, Opener {
 
             for (row in 0 until this.height) {
                 for (column in 0 until this.width) {
-                    layers[0].child[column, row].colour = Color(getRGB(column, row), true)
+                    // TODO
+                    // layers[0].child[column, row].colour = Color(getRGB(column, row), true)
                 }
             }
         }

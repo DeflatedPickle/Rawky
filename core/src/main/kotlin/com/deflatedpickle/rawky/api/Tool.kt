@@ -13,11 +13,11 @@ abstract class Tool(
     override val name: String,
     val icon: ImageIcon,
 ) : HasName {
-    companion object : HasRegistry<String, Tool> {
+    companion object : HasRegistry<String, Tool>, HasCurrent<Tool> {
         override val registry = Registry<String, Tool>()
 
         const val defaultSize = 32
-        lateinit var current: Tool
+        override lateinit var current: Tool
 
         init {
             EventCreateDocument.addListener {
@@ -35,7 +35,7 @@ abstract class Tool(
     }
 
     abstract fun perform(
-        cell: Cell,
+        cell: Cell<out Any>,
         button: Int,
         dragged: Boolean,
         clickCount: Int,

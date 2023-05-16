@@ -2,26 +2,28 @@
 
 package com.deflatedpickle.rawky.collection
 
-import com.deflatedpickle.undulation.serializer.ColorSerializer
-import com.deflatedpickle.undulation.serializer.RectangleSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.awt.Color
 import java.awt.Rectangle
 
 @Serializable
-data class Cell(
-    val row: Int = 0,
-    val column: Int = 0,
-    @Transient val polygon: @Serializable(RectangleSerializer::class) Rectangle = defaultPolygon,
-    var colour: @Serializable(ColorSerializer::class) Color = defaultColour,
-) {
+abstract class Cell<out T> {
+    abstract val row: Int
+    abstract val column: Int
+    abstract var content: @UnsafeVariance T
+
+    @Transient lateinit var polygon: Rectangle
+
     lateinit var grid: Grid
 
-    operator fun invoke(func: Cell.() -> Unit) = this.apply(func)
+    fun <S : @UnsafeVariance T> set(value: S) {
+        content = value
+    }
+
+    operator fun invoke(func: Cell<T>.() -> Unit) = this.apply(func)
 
     companion object {
-        val defaultPolygon = Rectangle()
         val defaultColour = Color(0, 0, 0, 0)
     }
 }

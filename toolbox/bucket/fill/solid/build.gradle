@@ -1,5 +1,5 @@
 dependencies {
 	implementation project(":core")
 
-	implementation project(":bucket")
+	implementation project(":toolbox.bucket")
 }

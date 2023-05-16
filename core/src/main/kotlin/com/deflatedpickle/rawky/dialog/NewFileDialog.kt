@@ -7,6 +7,7 @@ package com.deflatedpickle.rawky.dialog
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.template.Template
 import com.deflatedpickle.undulation.constraints.FillHorizontal
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
@@ -21,6 +22,7 @@ import java.awt.GridBagLayout
 import java.awt.event.ItemEvent
 import javax.swing.*
 
+@OptIn(InternalSerializationApi::class)
 class NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
     val template = ExtendedComboBox().apply {
         for (i in RawkyPlugin.templateFolder.walk()) {
@@ -60,6 +62,12 @@ class NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
     val framesInput = JSpinner(SpinnerNumberModel(1, 1, null, 1))
     val layersInput = JSpinner(SpinnerNumberModel(1, 1, null, 1))
 
+    val gridModeComboBox = JComboBox<CellProvider<*>>().apply {
+        for ((k, v) in CellProvider.registry) {
+            addItem(v)
+        }
+    }
+
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
 
@@ -82,6 +90,11 @@ class NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
             add(framesInput, FillHorizontalFinishLine)
             add(JLabel("Initial Layers:"), StickEast)
             add(layersInput, FillHorizontalFinishLine)
+
+            add(JSeparator(JSeparator.HORIZONTAL), FillHorizontalFinishLine)
+
+            add(JLabel("Grid Mode:"), StickEast)
+            add(gridModeComboBox, FillHorizontalFinishLine)
         }
     }
 }

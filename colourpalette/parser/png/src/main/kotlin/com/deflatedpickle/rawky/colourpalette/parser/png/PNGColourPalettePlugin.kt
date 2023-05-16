@@ -6,18 +6,10 @@ package com.deflatedpickle.rawky.colourpalette.parser.png
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.rawky.colourpalette.ColourPalettePlugin
-import com.deflatedpickle.rawky.colourpalette.api.Palette
-import com.deflatedpickle.rawky.colourpalette.api.PaletteParser
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonArray
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.JsonPrimitive
-import kotlinx.serialization.json.jsonPrimitive
+import com.deflatedpickle.rawky.api.palette.Palette
+import com.deflatedpickle.rawky.api.palette.PaletteParser
 import so.jabber.FileUtils
 import java.awt.Color
-import java.awt.Image
-import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
 
@@ -31,17 +23,19 @@ import javax.imageio.ImageIO
     """,
 )
 @Suppress("unused")
-object PngColourPalettePlugin : PaletteParser {
+object PNGColourPalettePlugin : PaletteParser<Color> {
+    override val name = "PNG"
+
     init {
-        PaletteParser.registry["png"] = this
+        ColourPalettePlugin.registry["png"] = this
 
         FileUtils.copyResourcesRecursively(
-            PngColourPalettePlugin::class.java.getResource("/palette/scheme"),
+            PNGColourPalettePlugin::class.java.getResource("/palette/scheme"),
             ColourPalettePlugin.folder
         )
     }
 
-    override fun parse(file: File): Palette {
+    override fun parse(file: File): Palette<Color> {
         val colours = mutableMapOf<Color, String?>()
 
         val img = ImageIO.read(file)

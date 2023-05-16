@@ -53,10 +53,11 @@ object AsciiPlugin : Exporter {
                 for (row in 0 until grid.rows) {
                     for (column in 0 until grid.columns) {
                         for (layer in layers.reversed()) {
-                            write(
+                            // TODO
+                            /*write(
                                 (dialog.paletteCombo.selectedItem as Palette)
                                     .char(column, row, layer.child[column, row].colour)
-                            )
+                            )*/
                         }
                     }
                     write("\n")

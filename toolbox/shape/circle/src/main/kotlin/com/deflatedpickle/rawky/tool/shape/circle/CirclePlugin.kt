@@ -38,15 +38,15 @@ object CirclePlugin :
         name = "Circle",
         icon = MonoIcon.SHAPE_OVAL,
     ),
-    Painter {
-    private var firstCell: Cell? = null
+    Painter<Any> {
+    private var firstCell: Cell<out Any>? = null
 
     init {
         registry["deflatedpickle@$name"] = this
     }
 
     override fun perform(
-        cell: Cell,
+        cell: Cell<out Any>,
         button: Int,
         dragged: Boolean,
         clickCount: Int,
@@ -61,7 +61,7 @@ object CirclePlugin :
         // Second point
         else {
             val action = object : Action(name) {
-                val colourCache = mutableMapOf<Cell, Color>()
+                val colourCache = mutableMapOf<Cell<Any>, Color>()
 
                 override fun perform() {
                     colourCache.clear()
@@ -78,7 +78,7 @@ object CirclePlugin :
 
                 override fun cleanup() {
                     for ((c, colour) in colourCache) {
-                        c.colour = colour
+                        // c.colour = colour
                     }
                 }
 
@@ -90,7 +90,7 @@ object CirclePlugin :
         }
     }
 
-    override fun paint(hoverCell: Cell, graphics: Graphics2D) {
+    override fun paint(hoverCell: Cell<out Any>, graphics: Graphics2D) {
         firstCell?.let { cell ->
             graphics.stroke = BasicStroke(4f)
             graphics.color = RawkyPlugin.colour
@@ -105,7 +105,7 @@ object CirclePlugin :
         x0: Int,
         y0: Int,
         x1: Int,
-    ): MutableMap<Cell, T> {
+    ): MutableMap<Cell<Any>, T> {
         val grid: Grid
         RawkyPlugin.document!!.let { doc ->
             val frame = doc.children[doc.selectedIndex]
@@ -113,7 +113,7 @@ object CirclePlugin :
             grid = layer.child
         }
 
-        val cellMap = mutableMapOf<Cell, Color>()
+        val cellMap = mutableMapOf<Cell<Any>, Color>()
 
         // https://www.geeksforgeeks.org/mid-point-circle-drawing-algorithm/
 
@@ -123,12 +123,13 @@ object CirclePlugin :
             var x: Int = r
             var y = 0
 
-            grid[x + x0, y + y0].colour = RawkyPlugin.colour
+            // TODO
+            // grid[x + x0, y + y0].colour = RawkyPlugin.colour
 
             if (r > 0) {
-                grid[x + x0, -y + y0].colour = RawkyPlugin.colour
+                /*grid[x + x0, -y + y0].colour = RawkyPlugin.colour
                 grid[y + x0, x + y0].colour = RawkyPlugin.colour
-                grid[-y + x0, x + y0].colour = RawkyPlugin.colour
+                grid[-y + x0, x + y0].colour = RawkyPlugin.colour*/
             }
 
             var p: Int = 1 - r
@@ -142,22 +143,22 @@ object CirclePlugin :
 
                 if (x < y) break
 
-                grid[x + x0, y + y0].colour = RawkyPlugin.colour
+                /*grid[x + x0, y + y0].colour = RawkyPlugin.colour
                 grid[-x + x0, y + y0].colour = RawkyPlugin.colour
                 grid[x + x0, -y + y0].colour = RawkyPlugin.colour
-                grid[-x + x0, -y + y0].colour = RawkyPlugin.colour
+                grid[-x + x0, -y + y0].colour = RawkyPlugin.colour*/
 
                 if (x != y) {
-                    grid[y + x0, x + y0].colour = RawkyPlugin.colour
+                    /*grid[y + x0, x + y0].colour = RawkyPlugin.colour
                     grid[-y + x0, x + y0].colour = RawkyPlugin.colour
                     grid[y + x0, -x + y0].colour = RawkyPlugin.colour
-                    grid[-y + x0, -x + y0].colour = RawkyPlugin.colour
+                    grid[-y + x0, -x + y0].colour = RawkyPlugin.colour*/
                 }
             }
 
             r -= 1
         }
 
-        return cellMap as MutableMap<Cell, T>
+        return cellMap as MutableMap<Cell<Any>, T>
     }
 }

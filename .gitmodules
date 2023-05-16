@@ -22,3 +22,9 @@
 [submodule "libs/icupnp"]
 	path = libs/icupnp
 	url = https://github.com/DeflatedPickle/icupnp
+[submodule "libs/ogmowo"]
+	path = libs/ogmowo
+	url = https://github.com/DeflatedPickle/ogmowo
+[submodule "libs/ldtkudos"]
+	path = libs/ldtkudos
+	url = https://github.com/DeflatedPickle/ldtkudos

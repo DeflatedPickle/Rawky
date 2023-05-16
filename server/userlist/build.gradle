@@ -6,5 +6,5 @@ dependencies {
 	implementation project(":core")
 	implementation project(":server")
 
-	implementation project(":swingsettings")
+	implementation project(":sniffle.swingsettings")
 }

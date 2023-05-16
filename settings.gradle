@@ -22,8 +22,8 @@ include 'server'
 	'chat',
 	'leaderboard',
 ].each {
-	include it
-	project(":$it").projectDir = new File(settingsDir, "server/$it")
+	include "server.$it"
+	project(":server.$it").projectDir = new File(settingsDir, "server/$it")
 }
 [
 	'ascii85',
@@ -32,26 +32,30 @@ include 'server'
 	'base64',
 	'base91',
 ].each {
-	include it
-	project(":$it").projectDir = new File(settingsDir, "server/encoding/$it")
+	include "server.encoding.$it"
+	project(":server.encoding.$it").projectDir = new File(settingsDir, "server/encoding/$it")
 }
 
 include 'pixelgrid'
 ['mouse', 'keyboard',].each {
-	include it
-	project(":$it").projectDir = new File(settingsDir, "pixelgrid/mode/$it")
+	include "pixelgrid.mode.$it"
+	project(":pixelgrid.mode.$it").projectDir = new File(settingsDir, "pixelgrid/mode/$it")
 }
 [
 	'imageio',
 	'ascii',
 	'rawr',
 ].each {
-	include it
-	project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/$it")
+	include "pixelgrid.impex.$it"
+	project(":pixelgrid.impex.$it").projectDir = new File(settingsDir, "pixelgrid/impex/$it")
 }
 ['block',].each {
-	include it
-	project(":$it").projectDir = new File(settingsDir, "pixelgrid/impex/ascii/$it")
+	include "pixelgrid.impex.ascii.$it"
+	project(":pixelgrid.impex.ascii.$it").projectDir = new File(settingsDir, "pixelgrid/impex/ascii/$it")
+}
+['pixel', 'tile',].each {
+	include "pixelgrid.grid.$it"
+	project(":pixelgrid.grid.$it").projectDir = new File(settingsDir, "pixelgrid/grid/$it")
 }
 
 include 'toolbox'
@@ -63,25 +67,31 @@ include 'toolbox'
 	'bucket',
 	'shape',
 ].each {
-	include it
-	project(":$it").projectDir = new File(settingsDir, "toolbox/$it")
+	include "toolbox.$it"
+	project(":toolbox.$it").projectDir = new File(settingsDir, "toolbox/$it")
 }
 ['solid', 'stipple',].each {
-	include it
-	project(":$it").projectDir = new File(settingsDir, "toolbox/bucket/fill/$it")
+	include "toolbox.bucket.fill.$it"
+	project(":toolbox.bucket.fill.$it").projectDir = new File(settingsDir, "toolbox/bucket/fill/$it")
 }
 ['rectangle', 'circle',].each {
-	include it
-	project(":$it").projectDir = new File(settingsDir, "toolbox/shape/$it")
+	include "toolbox.shape.$it"
+	project(":toolbox.shape.$it").projectDir = new File(settingsDir, "toolbox/shape/$it")
 }
 
 include 'colourwheel'
 include 'colourpalette'
-['json', 'png', "gpl", "pal", "txt"].each {
-	include it
-	project(":$it").projectDir = new File(settingsDir, "colourpalette/parser/$it")
+['json', 'png', "gpl", "pal", "txt", "hex"].each {
+	include "colourpalette.parser.$it"
+	project(":colourpalette.parser.$it").projectDir = new File(settingsDir, "colourpalette/parser/$it")
 }
 include 'colourhistory'
+
+include 'tilepalette'
+['png'].each {
+	include "tilepalette.parser.$it"
+	project(":tilepalette.parser.$it").projectDir = new File(settingsDir, "tilepalette/parser/$it")
+}
 
 include 'timeline'
 include 'layerlist'
@@ -96,8 +106,8 @@ include 'autoload'
 	'tipoftheday',
 	'swingsettings'
 ].each {
-	include it
-	project(":$it").projectDir = new File(settingsDir, "libs/sniffle/$it")
+	include "sniffle.$it"
+	project(":sniffle.$it").projectDir = new File(settingsDir, "libs/sniffle/$it")
 }
 
 includeBuild 'libs/haruhi'
@@ -107,3 +117,5 @@ includeBuild 'libs/tosuto'
 includeBuild 'libs/undulation'
 includeBuild 'libs/eyellect'
 includeBuild 'libs/icupnp'
+// includeBuild 'libs/ogmowo'
+// includeBuild 'libs/ldtkudos'

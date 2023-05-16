@@ -191,9 +191,10 @@ object AutoSavePlugin {
         for (f in doc.children) {
             for (l in f.children) {
                 for (c in l.child.children) {
-                    if (c.colour != transparent) {
+                    // TODO
+                    /*if (c.colour != transparent) {
                         colour = c.colour
-                    }
+                    }*/
                 }
             }
         }

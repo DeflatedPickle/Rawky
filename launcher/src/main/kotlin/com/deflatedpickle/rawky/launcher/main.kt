@@ -5,16 +5,13 @@ package com.deflatedpickle.rawky.launcher
 import com.deflatedpickle.haruhi.api.plugin.DependencyComparator
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.component.PluginPanel
-import com.deflatedpickle.haruhi.event.EventCreatePluginComponent
-import com.deflatedpickle.haruhi.event.EventCreatedPluginComponents
-import com.deflatedpickle.haruhi.event.EventDeserializedConfig
-import com.deflatedpickle.haruhi.event.EventLoadedPlugins
-import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
-import com.deflatedpickle.haruhi.event.EventProgramShutdown
+import com.deflatedpickle.haruhi.event.*
 import com.deflatedpickle.haruhi.util.ClassGraphUtil
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.marvin.util.OSUtil
+import com.deflatedpickle.rawky.collection.Cell
+import com.deflatedpickle.rawky.event.EventRegisterCellClass
 import com.deflatedpickle.rawky.launcher.gui.Window
 import com.jidesoft.plaf.LookAndFeelFactory
 import java.awt.Dimension
@@ -27,6 +24,8 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.modules.SerializersModule
+import kotlinx.serialization.modules.polymorphic
 import org.apache.logging.log4j.LogManager
 import org.fusesource.jansi.AnsiConsole
 import org.oxbow.swingbits.dialog.task.TaskDialogs
@@ -60,6 +59,14 @@ fun main(args: Array<String>) {
         |Dev?: ${PluginUtil.isInDev}
     """.trimMargin()
     )
+
+    EventCreateJsonSerializer.addListener {
+        it.serializersModule = SerializersModule {
+            polymorphic(Cell::class) {
+                EventRegisterCellClass.trigger(this)
+            }
+        }
+    }
 
     PluginUtil.window = Window
     PluginUtil.toastWindow = Window.toastWindow
