@@ -2,6 +2,7 @@
 
 package com.deflatedpickle.rawky.launcher
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.DependencyComparator
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.component.PluginPanel
@@ -13,6 +14,8 @@ import com.deflatedpickle.marvin.util.OSUtil
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.event.EventRegisterCellClass
 import com.deflatedpickle.rawky.launcher.gui.Window
+import com.deflatedpickle.rawky.pixelcell.collection.PixelCell
+import com.deflatedpickle.rawky.tilecell.collection.TileCell
 import com.jidesoft.plaf.LookAndFeelFactory
 import java.awt.Dimension
 import java.io.File
@@ -24,8 +27,12 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.InternalSerializationApi
+import kotlinx.serialization.PolymorphicSerializer
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
+import kotlinx.serialization.modules.subclass
+import kotlinx.serialization.serializer
 import org.apache.logging.log4j.LogManager
 import org.fusesource.jansi.AnsiConsole
 import org.oxbow.swingbits.dialog.task.TaskDialogs
@@ -60,10 +67,15 @@ fun main(args: Array<String>) {
     """.trimMargin()
     )
 
-    EventCreateJsonSerializer.addListener {
-        it.serializersModule = SerializersModule {
+    Haruhi.json = Json {
+        encodeDefaults = true
+        ignoreUnknownKeys = true
+        prettyPrint = true
+
+        serializersModule = SerializersModule {
             polymorphic(Cell::class) {
-                EventRegisterCellClass.trigger(this)
+                subclass(PixelCell::class)
+                subclass(TileCell::class)
             }
         }
     }

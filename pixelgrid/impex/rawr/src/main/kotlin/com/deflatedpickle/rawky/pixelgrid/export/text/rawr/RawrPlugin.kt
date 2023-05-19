@@ -4,6 +4,7 @@
 
 package com.deflatedpickle.rawky.pixelgrid.export.text.rawr
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.rawky.api.impex.Exporter
@@ -60,7 +61,7 @@ object RawrPlugin : Exporter, Opener {
 
         when (file.extension) {
             "rawr" -> {
-                val json = Json.Default
+                val json = Haruhi.json
                 val jsonData = json.encodeToString(serializer, doc)
 
                 out.write(U.formatJson(jsonData).toByteArray())
@@ -79,7 +80,7 @@ object RawrPlugin : Exporter, Opener {
 
     @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
     override fun open(file: File) = when (file.extension) {
-        "rawr" -> Json.Default.decodeFromString(RawkyDocument::class.serializer(), file.readText())
+        "rawr" -> Haruhi.json.decodeFromString(RawkyDocument::class.serializer(), file.readText())
         "rawrxd" -> Cbor.Default.decodeFromByteArray(RawkyDocument::class.serializer(), file.readBytes())
         else -> RawkyDocument(children = mutableListOf())
     }

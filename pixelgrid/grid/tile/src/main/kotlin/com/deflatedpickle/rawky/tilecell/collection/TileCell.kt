@@ -5,6 +5,8 @@ import com.deflatedpickle.marvin.serializer.FileSerializer
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.undulation.serializer.PointSerializer
 import com.deflatedpickle.undulation.serializer.RectangleSerializer
+import kotlinx.serialization.Polymorphic
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.awt.Image
@@ -14,6 +16,7 @@ import java.awt.image.BufferedImage
 import java.io.File
 
 @Serializable
+@SerialName("TileCell")
 data class TileCell(
     override val row: Int = 0,
     override val column: Int = 0,

@@ -3,4 +3,7 @@ dependencies {
 	implementation 'org.fusesource.jansi:jansi:2.4.0'
 
 	implementation project(':core')
+
+	implementation project(":pixelgrid.grid.pixel")
+	implementation project(":pixelgrid.grid.tile")
 }

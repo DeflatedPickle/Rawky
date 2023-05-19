@@ -2,6 +2,7 @@
 
 package com.deflatedpickle.rawky.collection
 
+import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.awt.Color
@@ -11,11 +12,10 @@ import java.awt.Rectangle
 abstract class Cell<out T> {
     abstract val row: Int
     abstract val column: Int
-    abstract var content: @UnsafeVariance T
+    @Polymorphic abstract var content: @UnsafeVariance T
 
     @Transient lateinit var polygon: Rectangle
-
-    lateinit var grid: Grid
+    @Transient lateinit var grid: Grid
 
     fun <S : @UnsafeVariance T> set(value: S) {
         content = value

@@ -4,6 +4,7 @@ package com.deflatedpickle.rawky.collection
 
 import com.deflatedpickle.rawky.api.relation.SingleParent
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 
 @Serializable
 data class Layer(
@@ -12,7 +13,7 @@ data class Layer(
     var visible: Boolean = true,
     var lock: Boolean = false,
 ) : SingleParent<Grid> {
-    lateinit var frame: Frame
+    @Transient lateinit var frame: Frame
 
     init {
         child.layer = this

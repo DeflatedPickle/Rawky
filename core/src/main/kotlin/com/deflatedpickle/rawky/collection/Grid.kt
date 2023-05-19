@@ -6,7 +6,9 @@ import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.relation.ChildSelector
 import com.deflatedpickle.rawky.api.relation.Matrix
 import kotlinx.serialization.Contextual
+import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import java.awt.Rectangle
 
 @Serializable
@@ -14,13 +16,13 @@ data class Grid(
     override val rows: Int = 0,
     override val columns: Int = 0,
     override var selectedIndex: Int = 0,
-    override val children: MutableList<Cell<@Contextual Any>> = mutableListOf()
-) : Matrix<Cell<Any>>, ChildSelector {
+    override val children: MutableList<@Polymorphic Cell<@Contextual Any>> = mutableListOf()
+) : Matrix<@Polymorphic Cell<@Contextual Any>>, ChildSelector {
     companion object {
         const val pixel = 16
     }
 
-    lateinit var layer: Layer
+    @Transient lateinit var layer: Layer
 
     init {
         val width = pixel
