@@ -32,6 +32,8 @@ object ActionUtil {
             (dialog.template.selectedItem as Template?)?.guides
                 ?.flatMap { Guide.registry[it]!! }?.let { document.guides = it }
 
+            document.cellProvider = CellProvider.current.name
+
             RawkyPlugin.document = document
 
             EventCreateDocument.trigger(document)

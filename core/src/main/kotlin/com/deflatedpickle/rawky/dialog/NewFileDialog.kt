@@ -4,6 +4,7 @@
 
 package com.deflatedpickle.rawky.dialog
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
@@ -23,7 +24,7 @@ import java.awt.event.ItemEvent
 import javax.swing.*
 
 @OptIn(InternalSerializationApi::class)
-class NewFileDialog : TaskDialog(PluginUtil.window, "New File") {
+class NewFileDialog : TaskDialog(Haruhi.window, "New File") {
     val template = ExtendedComboBox().apply {
         for (i in RawkyPlugin.templateFolder.walk()) {
             if (i.isFile && i.extension == "json") {

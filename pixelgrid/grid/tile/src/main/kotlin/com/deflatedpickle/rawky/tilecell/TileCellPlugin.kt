@@ -4,12 +4,14 @@ package com.deflatedpickle.rawky.tilecell
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.marvin.extensions.getSubimage
 import com.deflatedpickle.marvin.serializer.BufferedImageSerializer
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.event.EventRegisterCellClass
+import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.tilecell.collection.TileCell
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
@@ -42,8 +44,10 @@ object TileCellPlugin : CellProvider<BufferedImage>() {
     init {
         registry[name] = this
 
-        EventRegisterCellClass.addListener {
-            it.subclass(TileCell::class)
+        EventOpenDocument.addListener {
+            if ((it.first as RawkyDocument).children[0].children[0].child.children[0] is TileCell) {
+                CellProvider.current = this
+            }
         }
     }
 

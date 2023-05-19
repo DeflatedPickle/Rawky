@@ -2,6 +2,7 @@
 
 package com.deflatedpickle.rawky.server
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
@@ -117,15 +118,15 @@ object ServerPlugin {
         }
 
         EventJoinServer.addListener {
-            oldPane = PluginUtil.window.glassPane
+            oldPane = Haruhi.window.glassPane
 
-            ServerPanel.rootPane = PluginUtil.window.rootPane
-            PluginUtil.window.glassPane = ServerPanel
-            PluginUtil.window.glassPane.isVisible = true
+            ServerPanel.rootPane = Haruhi.window.rootPane
+            Haruhi.window.glassPane = ServerPanel
+            Haruhi.window.glassPane.isVisible = true
         }
 
         EventDisconnect.addListener {
-            PluginUtil.window.glassPane = oldPane
+            Haruhi.window.glassPane = oldPane
         }
 
         EventChangeTool.addListener {
@@ -377,7 +378,7 @@ object ServerPlugin {
                 note = "Disabling toolbar"
                 task = {
                     if (server == null) {
-                        for (i in PluginUtil.toolbar.components) {
+                        for (i in Haruhi.toolbar.components) {
                             i.isEnabled = false
                         }
                     }
@@ -396,7 +397,7 @@ object ServerPlugin {
         client.stop()
         client = Client()
 
-        for (i in PluginUtil.toolbar.components) {
+        for (i in Haruhi.toolbar.components) {
             i.isEnabled = true
         }
     }

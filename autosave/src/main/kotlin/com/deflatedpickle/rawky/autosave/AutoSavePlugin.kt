@@ -4,6 +4,7 @@
 
 package com.deflatedpickle.rawky.autosave
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.Registry
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.event.EventCreateDocument
@@ -57,9 +58,9 @@ object AutoSavePlugin {
             override fun windowLostFocus(e: WindowEvent) {
                 ConfigUtil.getSettings<AutoSaveSettings>("deflatedpickle@auto_save#*")?.let { config ->
                     RawkyPlugin.document?.let { doc ->
-                        if (e.oppositeWindow !in PluginUtil.window.ownedWindows &&
+                        if (e.oppositeWindow !in Haruhi.window.ownedWindows &&
                             e.oppositeWindow != null &&
-                            e.oppositeWindow.owner == PluginUtil.window
+                            e.oppositeWindow.owner == Haruhi.window
                         ) {
                             if (config.saveOnFocusLost) {
                                 save(doc, config)
@@ -69,7 +70,7 @@ object AutoSavePlugin {
                 }
             }
         }.also {
-            with(PluginUtil.window) {
+            with(Haruhi.window) {
                 addWindowListener(it)
                 addWindowFocusListener(it)
                 addWindowStateListener(it)

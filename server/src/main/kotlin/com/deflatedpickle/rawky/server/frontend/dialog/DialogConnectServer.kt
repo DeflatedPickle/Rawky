@@ -4,6 +4,7 @@
 
 package com.deflatedpickle.rawky.server.frontend.dialog
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.server.ServerPlugin
@@ -22,14 +23,14 @@ import javax.swing.JSpinner
 import javax.swing.SpinnerNumberModel
 import javax.swing.SwingUtilities
 
-class DialogConnectServer : TaskDialog(PluginUtil.window, "Connect to Server") {
+class DialogConnectServer : TaskDialog(Haruhi.window, "Connect to Server") {
     companion object {
         fun open() {
             val dialog = DialogConnectServer()
 
             when (dialog.show().tag) {
                 CommandTag.OK -> {
-                    ProgressMonitorBuilder(PluginUtil.window)
+                    ProgressMonitorBuilder(Haruhi.window)
                         .title("Connecting to Server")
                         .queue {
                             note = "Decoding security code"

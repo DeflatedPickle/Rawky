@@ -17,8 +17,9 @@ import kotlinx.serialization.Serializable
 data class RawkyDocument(
     val version: Int = 1,
     var name: String? = null,
-    override val children: MutableList<Frame>,
+    var cellProvider: String = "",
     override var selectedIndex: Int = 0,
+    override val children: MutableList<Frame>,
     var guides: List<Guide> = listOf(),
 ) : MultiParent<Frame>, ChildSelector, Document {
     fun addFrame(name: String? = null, index: Int = -1): Frame {

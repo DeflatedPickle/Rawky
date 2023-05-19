@@ -2,6 +2,7 @@
 
 package com.deflatedpickle.rawky.pixelgrid.export.text.ascii.dialog
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.pixelgrid.export.text.ascii.api.Palette
@@ -17,7 +18,7 @@ import javax.swing.JSeparator
 import javax.swing.JSpinner
 import javax.swing.SpinnerNumberModel
 
-class ExportDialog : TaskDialog(PluginUtil.window, "Export") {
+class ExportDialog : TaskDialog(Haruhi.window, "Export") {
     val paletteCombo = JComboBox(Palette.registry.values.toTypedArray())
 
     val frameSpinner = JSpinner(

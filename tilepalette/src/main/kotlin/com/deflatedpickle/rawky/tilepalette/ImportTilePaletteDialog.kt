@@ -1,5 +1,6 @@
 package com.deflatedpickle.rawky.tilepalette
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.undulation.constraints.FillHorizontal
@@ -9,7 +10,7 @@ import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.GridBagLayout
 import javax.swing.*
 
-class ImportTilePaletteDialog : TaskDialog(PluginUtil.window, "Import Tile Palette") {
+class ImportTilePaletteDialog : TaskDialog(Haruhi.window, "Import Tile Palette") {
     val tileWidthInput = JSpinner(SpinnerNumberModel(16, 1, null, 8))
     val tileHeightInput = JSpinner(SpinnerNumberModel(16, 1, null, 8))
     private val sizeSwapper = JButton(MonoIcon.SWAP).apply {

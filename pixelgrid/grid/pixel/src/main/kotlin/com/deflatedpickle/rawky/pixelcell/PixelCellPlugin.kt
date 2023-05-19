@@ -4,11 +4,13 @@ package com.deflatedpickle.rawky.pixelcell
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.event.EventRegisterCellClass
 import com.deflatedpickle.rawky.pixelcell.collection.PixelCell
+import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.undulation.serializer.ColorSerializer
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
@@ -37,14 +39,16 @@ object PixelCellPlugin : CellProvider<Color>() {
     init {
         registry[name] = this
 
-        EventRegisterCellClass.addListener {
-            it.subclass(PixelCell::class)
+        EventOpenDocument.addListener {
+            if ((it.first as RawkyDocument).children[0].children[0].child.children[0] is PixelCell) {
+                CellProvider.current = this
+            }
         }
     }
 
     override fun provide(
         row: Int, column: Int,
-    ): PixelCell = PixelCell(row, column, Cell.defaultColour)
+    ): PixelCell = PixelCell(row, column, PixelCell.default)
 
     override fun perform(
         cell: Cell<Any>,
@@ -62,7 +66,7 @@ object PixelCellPlugin : CellProvider<Color>() {
         clickCount: Int
     ) {
         when (button) {
-            0 -> cell.content = Cell.defaultColour
+            0 -> cell.content = PixelCell.default
         }
     }
 

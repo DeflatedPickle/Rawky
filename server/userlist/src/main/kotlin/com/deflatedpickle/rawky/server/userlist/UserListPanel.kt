@@ -2,6 +2,7 @@
 
 package com.deflatedpickle.rawky.server.userlist
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.server.ServerPlugin
@@ -36,7 +37,7 @@ object UserListPanel : PluginPanel() {
                         ServerPlugin.id,
                         ServerPlugin.userMap[ServerPlugin.id]!!.userName,
                         TaskDialogs.input(
-                            PluginUtil.window,
+                            Haruhi.window,
                             "Change Name",
                             "Input new name",
                             ServerPlugin.userMap[ServerPlugin.id]!!.userName,

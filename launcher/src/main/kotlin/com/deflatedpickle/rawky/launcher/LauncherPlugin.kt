@@ -4,6 +4,8 @@
 
 package com.deflatedpickle.rawky.launcher
 
+import blue.endless.jankson.Jankson
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
@@ -16,6 +18,7 @@ import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.api.impex.Importer
 import com.deflatedpickle.rawky.api.impex.Opener
@@ -46,6 +49,8 @@ import kotlin.system.exitProcess
 )
 @Suppress("unused")
 object LauncherPlugin {
+    private val jankson = Jankson.builder().build()
+
     private val exporterChooser = JFileChooser(File(".")).apply {
         EventProgramFinishSetup.addListener {
             for ((k, v) in Exporter.registry) {
@@ -145,10 +150,10 @@ object LauncherPlugin {
                         JMenu("Dock").apply {
                             add(
                                 JMenu("Theme").apply {
-                                    for (i in 0 until PluginUtil.control.themes.size()) {
-                                        val k = PluginUtil.control.themes.getKey(i)
+                                    for (i in 0 until Haruhi.control.themes.size()) {
+                                        val k = Haruhi.control.themes.getKey(i)
                                         add(k.capitalize()) {
-                                            PluginUtil.control.themes.select(k)
+                                            Haruhi.control.themes.select(k)
                                         }
                                     }
                                 }
@@ -157,13 +162,13 @@ object LauncherPlugin {
                             addSeparator()
 
                             add("Save") {
-                                if (gridChooser.showSaveDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
-                                    PluginUtil.control.writeXML(gridChooser.selectedFile)
+                                if (gridChooser.showSaveDialog(Haruhi.window) == JFileChooser.APPROVE_OPTION) {
+                                    Haruhi.control.writeXML(gridChooser.selectedFile)
                                 }
                             }
                             add("Open") {
-                                if (gridChooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
-                                    PluginUtil.control.readXML(gridChooser.selectedFile)
+                                if (gridChooser.showOpenDialog(Haruhi.window) == JFileChooser.APPROVE_OPTION) {
+                                    Haruhi.control.readXML(gridChooser.selectedFile)
                                 }
                             }
                         }
@@ -192,6 +197,8 @@ object LauncherPlugin {
         for ((_, v) in Opener.registry) {
             if (file.extension in v.openerExtensions.flatMap { it.value }) {
                 none = false
+
+                CellProvider.current = CellProvider.registry[jankson.load(file).get(String::class.java, "cellProvider")!!]!!
                 RawkyPlugin.document = v.open(file).apply {
                     this.name = file.nameWithoutExtension
                 }
@@ -203,7 +210,7 @@ object LauncherPlugin {
 
         if (none) {
             TaskDialogs.error(
-                PluginUtil.window,
+                Haruhi.window,
                 "Invalid Openers",
                 "No opener is registered for this file type"
             )
@@ -232,7 +239,7 @@ object LauncherPlugin {
 
         if (none) {
             TaskDialogs.error(
-                PluginUtil.window,
+                Haruhi.window,
                 "Invalid Importers",
                 "No importer is registered for this file type"
             )
@@ -253,7 +260,7 @@ object LauncherPlugin {
                     doc.name = file.nameWithoutExtension
                 } else {
                     TaskDialogs.error(
-                        PluginUtil.window,
+                        Haruhi.window,
                         "Invalid Document",
                         "No document exists to export"
                     )
@@ -264,7 +271,7 @@ object LauncherPlugin {
 
         if (none) {
             TaskDialogs.error(
-                PluginUtil.window,
+                Haruhi.window,
                 "Invalid Exporters",
                 "No exporter is registered for this file type"
             )
@@ -272,7 +279,7 @@ object LauncherPlugin {
     }
 
     fun openDialog(menu: JMenu) {
-        if (openerChooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
+        if (openerChooser.showOpenDialog(Haruhi.window) == JFileChooser.APPROVE_OPTION) {
             open(openerChooser.selectedFile)
 
             if (!menu.menuComponents.contains(historyMenu)) {
@@ -297,13 +304,13 @@ object LauncherPlugin {
     }
 
     fun importDialog() {
-        if (importerChooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
+        if (importerChooser.showOpenDialog(Haruhi.window) == JFileChooser.APPROVE_OPTION) {
             import(importerChooser.selectedFile)
         }
     }
 
     fun exportDialog() {
-        if (exporterChooser.showSaveDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
+        if (exporterChooser.showSaveDialog(Haruhi.window) == JFileChooser.APPROVE_OPTION) {
             var file = exporterChooser.selectedFile
             if (file.extension == "") {
                 file = File("${file.absolutePath}.${(exporterChooser.fileFilter as FileNameExtensionFilter).extensions.first()}")

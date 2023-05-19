@@ -67,6 +67,7 @@ object RawrPlugin : Exporter, Opener {
                 out.write(U.formatJson(jsonData).toByteArray())
             }
             "rawrxd" -> {
+                // Doesn't support Cell polymorphism
                 val cbor = Cbor.Default
                 val cborData = cbor.encodeToByteArray(serializer, doc)
 

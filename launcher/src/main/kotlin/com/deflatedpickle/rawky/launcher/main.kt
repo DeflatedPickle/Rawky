@@ -7,9 +7,7 @@ import com.deflatedpickle.haruhi.api.plugin.DependencyComparator
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.event.*
-import com.deflatedpickle.haruhi.util.ClassGraphUtil
-import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.haruhi.util.PluginUtil
+import com.deflatedpickle.haruhi.util.*
 import com.deflatedpickle.marvin.util.OSUtil
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.event.EventRegisterCellClass
@@ -55,7 +53,7 @@ fun main(args: Array<String>) {
 
     // The gradle tasks pass in "indev" argument
     // if it doesn't exist it's not indev
-    PluginUtil.isInDev = args.contains("indev")
+    Haruhi.isInDev = args.contains("indev")
 
     logger.info(
         """
@@ -63,7 +61,7 @@ fun main(args: Array<String>) {
         |OS  : ${OSUtil.getOS()} (${OSUtil.os})
         |Java: ${System.getProperty("java.version")} (${System.getProperty("java.vm.name")})
         |Dir : ${System.getProperty("user.dir")}
-        |Dev?: ${PluginUtil.isInDev}
+        |Dev?: ${Haruhi.isInDev}
     """.trimMargin()
     )
 
@@ -80,10 +78,10 @@ fun main(args: Array<String>) {
         }
     }
 
-    PluginUtil.window = Window
-    PluginUtil.toastWindow = Window.toastWindow
-    PluginUtil.control = Window.control
-    PluginUtil.grid = Window.grid
+    Haruhi.window = Window
+    Haruhi.toastWindow = Window.toastWindow
+    Haruhi.control = Window.control
+    Haruhi.grid = Window.grid
 
     // Adds a single shutdown thread with an event
     // to reduce the instance count
@@ -142,7 +140,7 @@ fun main(args: Array<String>) {
 
     // Plugins are distributed and loaded as JARs
     // when the program is built
-    if (!PluginUtil.isInDev) {
+    if (!Haruhi.isInDev) {
         // EventCreateFile.trigger(
         PluginUtil.createPluginsFolder().apply {
             logger.info("Created the plugins folder at ${this.absolutePath}")
@@ -182,15 +180,15 @@ fun main(args: Array<String>) {
     // But validate all the small things before loading
     PluginUtil.loadPlugins {
         // Versions must be semantic
-        PluginUtil.validateVersion(it) &&
-            // Descriptions must contain a <br> tag
-            PluginUtil.validateDescription(it) &&
-            // Specific types need a specified field
-            PluginUtil.validateType(it) &&
-            // Dependencies should be "author@plugin#version"
-            // PluginUtil.validateDependencySlug(it) &&
-            // The dependency should exist
-            PluginUtil.validateDependencyExistence(it)
+        ValidateUtil.validateVersion(it) &&
+                // Descriptions must contain a <br> tag
+                ValidateUtil.validateDescription(it) &&
+                // Specific types need a specified field
+                ValidateUtil.validateType(it) &&
+                // Dependencies should be "author@plugin#version"
+                // PluginUtil.validateDependencySlug(it) &&
+                // The dependency should exist
+                ValidateUtil.validateDependencyExistence(it)
     }
     logger.info("Loaded plugins; ${PluginUtil.loadedPlugins.map { PluginUtil.pluginToSlug(it) }}")
     EventLoadedPlugins.trigger(PluginUtil.loadedPlugins)
@@ -203,7 +201,7 @@ fun main(args: Array<String>) {
     for (plugin in PluginUtil.discoveredPlugins) {
         if (plugin.component != Nothing::class) {
             with(plugin.component.objectInstance!!) {
-                PluginUtil.createComponent(plugin, this)
+                DockUtil.createComponent(plugin, this)
                 componentList.add(this)
                 EventCreatePluginComponent.trigger(this)
             }

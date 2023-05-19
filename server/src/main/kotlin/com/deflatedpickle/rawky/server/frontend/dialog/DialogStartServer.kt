@@ -4,6 +4,7 @@
 
 package com.deflatedpickle.rawky.server.frontend.dialog
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.icupnp.UPnP
@@ -37,7 +38,7 @@ import javax.swing.SpinnerNumberModel
 import javax.swing.SwingUtilities
 import kotlin.random.Random
 
-class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
+class DialogStartServer : TaskDialog(Haruhi.window, "Start a Server") {
     companion object {
         private val logger = LogManager.getLogger()
 
@@ -49,7 +50,7 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                     val tcpPort = dialog.tcpPortField.value as Int
                     val udpPort = dialog.udpPortField.value as Int
 
-                    ProgressMonitorBuilder(PluginUtil.window)
+                    ProgressMonitorBuilder(Haruhi.window)
                         .title("Starting a Server")
                         .queue {
                             note = "Starting UPnP connection"
@@ -114,7 +115,7 @@ class DialogStartServer : TaskDialog(PluginUtil.window, "Start a Server") {
                             task = {
                                 val securityCode = it as String
 
-                                PluginUtil.toastWindow.add(
+                                Haruhi.toastWindow.add(
                                     ToastItem(
                                         title = "Session Code",
                                         content = securityCode,

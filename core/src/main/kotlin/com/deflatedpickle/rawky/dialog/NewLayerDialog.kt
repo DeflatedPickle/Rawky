@@ -2,6 +2,7 @@
 
 package com.deflatedpickle.rawky.dialog
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
@@ -18,7 +19,7 @@ import javax.swing.JPanel
 import javax.swing.JSpinner
 import javax.swing.SpinnerNumberModel
 
-class NewLayerDialog(val index: Int = -1) : TaskDialog(PluginUtil.window, "New Layer") {
+class NewLayerDialog(val index: Int = -1) : TaskDialog(Haruhi.window, "New Layer") {
     val nameInput = JXTextField("Name").apply {
         text = "Layer ${if (index == -1) {
             RawkyPlugin.document?.let { doc ->

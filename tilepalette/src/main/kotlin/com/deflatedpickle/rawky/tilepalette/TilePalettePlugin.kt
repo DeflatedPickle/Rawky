@@ -4,6 +4,7 @@
 
 package com.deflatedpickle.rawky.tilepalette
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
@@ -72,7 +73,7 @@ object TilePalettePlugin {
     }
 
     private fun importTilePalette() {
-        if (chooser.showOpenDialog(PluginUtil.window) == JFileChooser.APPROVE_OPTION) {
+        if (chooser.showOpenDialog(Haruhi.window) == JFileChooser.APPROVE_OPTION) {
             val i = chooser.selectedFile
 
             if (i.isFile) {

@@ -4,6 +4,7 @@
 
 package com.deflatedpickle.rawky.toolbox
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventCreateDocument
@@ -52,7 +53,7 @@ object ToolboxPlugin {
                 }.also { group.add(it) }
             }
 
-            PluginUtil.window.add(toolbar, BorderLayout.LINE_START)
+            Haruhi.window.add(toolbar, BorderLayout.LINE_START)
 
             EventToolboxFinish.trigger(toolbar)
         }

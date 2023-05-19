@@ -2,6 +2,7 @@
 
 package com.deflatedpickle.rawky.dialog
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
@@ -14,7 +15,7 @@ import javax.swing.JPanel
 import javax.swing.JSpinner
 import javax.swing.SpinnerNumberModel
 
-class NewFrameDialog : TaskDialog(PluginUtil.window, "New Frame") {
+class NewFrameDialog : TaskDialog(Haruhi.window, "New Frame") {
     val nameInput = JXTextField("Name").apply {
         RawkyPlugin.document?.let { doc ->
             text = "Frame ${doc.children.size}"

@@ -2,6 +2,7 @@
 
 package com.deflatedpickle.rawky.dialog
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
@@ -18,7 +19,7 @@ import javax.swing.JPanel
 import javax.swing.JSpinner
 import javax.swing.SpinnerNumberModel
 
-class EditFrameDialog(val index: Int = -1) : TaskDialog(PluginUtil.window, "Edit Frame") {
+class EditFrameDialog(val index: Int = -1) : TaskDialog(Haruhi.window, "Edit Frame") {
     val nameInput = JXTextField("Name").apply {
         text = RawkyPlugin.document?.let { doc ->
             doc.children[doc.selectedIndex].name
