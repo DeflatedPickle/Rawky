@@ -17,7 +17,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.cbor.Cbor
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import java.io.File
 import java.io.FileOutputStream
@@ -98,6 +97,7 @@ object RawrPlugin : Exporter, Opener {
         "rawrxd" ->
             // Can't pre-parse to find a cell provider
             Cbor.Default.decodeFromByteArray(RawkyDocument::class.serializer(), file.readBytes())
+        // Should never actually be anything else but necessary for the compiler
         else -> RawkyDocument(children = mutableListOf())
     }
 }

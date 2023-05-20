@@ -327,7 +327,6 @@ run {
 		runtimeOnly project(":toolbox.bucket.fill.stipple")
 
 		// Sniffle
-		// runtimeOnly project(':discordrpc')
 		runtimeOnly project(':sniffle.pluginmanager')
 		runtimeOnly project(':sniffle.settingsgui')
 		runtimeOnly project(':sniffle.tipoftheday')
