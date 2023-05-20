@@ -4,14 +4,14 @@ package com.deflatedpickle.rawky.colourwheel
 
 import com.bric.colorpicker.ColorPicker
 import com.deflatedpickle.haruhi.component.PluginPanel
-import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
 
 object ColourWheelPanel : PluginPanel() {
     val colourPicker = ColorPicker(true, true).apply {
-        color = RawkyPlugin.colour
+        color = PixelCellPlugin.current
 
         addColorListener {
-            RawkyPlugin.colour = it.color
+            PixelCellPlugin.current = it.color
         }
     }
 

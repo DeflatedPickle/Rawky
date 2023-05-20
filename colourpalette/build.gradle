@@ -4,5 +4,7 @@ plugins {
 
 dependencies {
 	implementation project(":core")
+	implementation project(":pixelgrid.grid.pixel")
+
 	implementation project(":sniffle.swingsettings")
 }

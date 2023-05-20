@@ -4,7 +4,10 @@
 
 package com.deflatedpickle.rawky.launcher
 
-import blue.endless.jankson.Jankson
+import bibliothek.gui.dock.common.menu.CLayoutChoiceMenuPiece
+import bibliothek.gui.dock.common.menu.CThemeMenuPiece
+import bibliothek.gui.dock.facile.menu.RootMenuPiece
+import bibliothek.gui.dock.facile.menu.SubmenuPiece
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.api.plugin.Plugin
@@ -18,7 +21,6 @@ import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.api.impex.Importer
 import com.deflatedpickle.rawky.api.impex.Opener
@@ -146,28 +148,11 @@ object LauncherPlugin {
                 (get(MenuCategory.TOOLS.name) as JMenu).apply {
                     add(
                         JMenu("Dock").apply {
-                            add(
-                                JMenu("Theme").apply {
-                                    for (i in 0 until Haruhi.control.themes.size()) {
-                                        val k = Haruhi.control.themes.getKey(i)
-                                        add(k.capitalize()) {
-                                            Haruhi.control.themes.select(k)
-                                        }
-                                    }
-                                }
-                            )
-
-                            addSeparator()
-
-                            add("Save") {
-                                if (gridChooser.showSaveDialog(Haruhi.window) == JFileChooser.APPROVE_OPTION) {
-                                    Haruhi.control.writeXML(gridChooser.selectedFile)
-                                }
-                            }
-                            add("Open") {
-                                if (gridChooser.showOpenDialog(Haruhi.window) == JFileChooser.APPROVE_OPTION) {
-                                    Haruhi.control.readXML(gridChooser.selectedFile)
-                                }
+                            RootMenuPiece(this).apply {
+                                add(SubmenuPiece("Themes", true, CThemeMenuPiece(Haruhi.control)))
+                                // add(SubmenuPiece("Look & Feel", true, CLookAndFeelMenuPiece(Haruhi.control)))
+                                add(SubmenuPiece("Layout", true, CLayoutChoiceMenuPiece(Haruhi.control, true)))
+                                // add(SubmenuPiece("Dockables", true, SingleCDockableListMenuPiece(Haruhi.control)))
                             }
                         }
                     )

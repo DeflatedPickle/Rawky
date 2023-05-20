@@ -52,11 +52,6 @@ object RawkyPlugin {
     var columns = -1
 
     var document: RawkyDocument? = null
-    var colour: Color = Color.CYAN
-        set(value) {
-            field = value
-            EventChangeColour.trigger(value)
-        }
 
     init {
         EventSerializeConfig.addListener {

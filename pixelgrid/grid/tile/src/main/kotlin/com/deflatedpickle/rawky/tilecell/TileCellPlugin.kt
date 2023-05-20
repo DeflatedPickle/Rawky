@@ -39,7 +39,7 @@ import javax.imageio.ImageIO
 )
 object TileCellPlugin : CellProvider<BufferedImage>() {
     override val name = "Tile"
-    override lateinit var current: BufferedImage
+    override var current: BufferedImage = TileCell.default
 
     init {
         registry[name] = this
@@ -47,7 +47,7 @@ object TileCellPlugin : CellProvider<BufferedImage>() {
 
     override fun provide(
         row: Int, column: Int,
-    ) = TileCell(row, column, BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB))
+    ) = TileCell(row, column, TileCell.default)
 
     override fun perform(
         cell: Cell<Any>, button: Int,

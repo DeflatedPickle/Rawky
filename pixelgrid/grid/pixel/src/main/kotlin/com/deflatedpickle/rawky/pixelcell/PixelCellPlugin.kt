@@ -34,7 +34,7 @@ import java.awt.Graphics2D
 )
 object PixelCellPlugin : CellProvider<Color>() {
     override val name = "Pixel"
-    override lateinit var current: Color
+    override var current: Color = Color.CYAN
 
     init {
         registry[name] = this
@@ -50,7 +50,7 @@ object PixelCellPlugin : CellProvider<Color>() {
         clickCount: Int
     ) {
         when (button) {
-            0 -> cell.content = RawkyPlugin.colour
+            0 -> cell.content = current
         }
     }
 

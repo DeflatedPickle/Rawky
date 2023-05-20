@@ -100,7 +100,12 @@ object RectanglePlugin :
     override fun paint(hoverCell: Cell<Any>, graphics: Graphics2D) {
         firstCell?.let { cell ->
             graphics.stroke = BasicStroke(4f)
-            graphics.color = RawkyPlugin.colour
+
+            val color = CellProvider.current.current
+            if (color is Color) {
+                graphics.color = color
+            }
+
             graphics.fillRect(
                 (cell.row * 16) + 8, (cell.column * 16) + 8,
                 (hoverCell.row * 16) + 8, (hoverCell.column * 16) + 8,

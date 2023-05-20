@@ -108,7 +108,12 @@ object LinePlugin :
     ) {
         firstCell?.let { cell ->
             graphics.stroke = BasicStroke(4f)
-            graphics.color = RawkyPlugin.colour
+
+            val color = CellProvider.current.current
+            if (color is Color) {
+                graphics.color = color
+            }
+
             graphics.drawLine(
                 (cell.row * 16) + 8, (cell.column * 16) + 8,
                 (hoverCell.row * 16) + 8, (hoverCell.column * 16) + 8,

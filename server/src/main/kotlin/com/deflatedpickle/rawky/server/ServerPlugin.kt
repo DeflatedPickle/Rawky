@@ -134,7 +134,7 @@ object ServerPlugin {
         }
 
         EventChangeColour.addListener {
-            client.sendTCP(QueryChangeColour(id, RawkyPlugin.colour))
+            // client.sendTCP(QueryChangeColour(id, RawkyPlugin.colour))
         }
 
         EventRegisterPackets.addListener {

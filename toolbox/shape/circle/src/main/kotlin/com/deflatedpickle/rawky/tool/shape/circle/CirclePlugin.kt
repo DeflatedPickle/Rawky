@@ -8,6 +8,7 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.Painter
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.collection.Grid
@@ -93,7 +94,12 @@ object CirclePlugin :
     override fun paint(hoverCell: Cell<out Any>, graphics: Graphics2D) {
         firstCell?.let { cell ->
             graphics.stroke = BasicStroke(4f)
-            graphics.color = RawkyPlugin.colour
+
+            val color = CellProvider.current.current
+            if (color is Color) {
+                graphics.color = color
+            }
+
             graphics.fillOval(
                 (cell.row * 16) + 8, (cell.column * 16) + 8,
                 (hoverCell.row * 16) + 8, (hoverCell.column * 16) + 8,

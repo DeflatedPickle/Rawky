@@ -12,6 +12,7 @@ import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.event.EventChangeColour
+import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
 import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
 import com.deflatedpickle.undulation.widget.ColourButton
@@ -67,7 +68,7 @@ object ColourHistoryPlugin {
         ColourHistoryPanel.panel.add(
             ColourButton(c).apply {
                 addActionListener {
-                    RawkyPlugin.colour = this.color
+                    PixelCellPlugin.current = this.color
                 }
             }
         )
