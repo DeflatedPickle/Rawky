@@ -12,6 +12,7 @@ import com.deflatedpickle.rawky.pixelgrid.export.text.ascii.api.Palette
 import com.deflatedpickle.rawky.pixelgrid.export.text.ascii.dialog.ExportDialog
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import org.oxbow.swingbits.dialog.task.TaskDialog
+import java.awt.Color
 import java.awt.Desktop
 import java.io.File
 import java.io.FileOutputStream
@@ -53,11 +54,10 @@ object AsciiPlugin : Exporter {
                 for (row in 0 until grid.rows) {
                     for (column in 0 until grid.columns) {
                         for (layer in layers.reversed()) {
-                            // TODO
-                            /*write(
+                            write(
                                 (dialog.paletteCombo.selectedItem as Palette)
-                                    .char(column, row, layer.child[column, row].colour)
-                            )*/
+                                    .char(column, row, layer.child[column, row].content as Color)
+                            )
                         }
                     }
                     write("\n")

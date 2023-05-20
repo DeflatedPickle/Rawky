@@ -38,12 +38,6 @@ object PixelCellPlugin : CellProvider<Color>() {
 
     init {
         registry[name] = this
-
-        EventOpenDocument.addListener {
-            if ((it.first as RawkyDocument).children[0].children[0].child.children[0] is PixelCell) {
-                CellProvider.current = this
-            }
-        }
     }
 
     override fun provide(

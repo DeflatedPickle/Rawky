@@ -5,6 +5,7 @@ plugins {
 dependencies {
 	implementation project(":core")
 	implementation project(":pixelgrid")
+	implementation project(":pixelgrid.grid.pixel")
 
 	implementation 'com.twelvemonkeys.common:common-lang:3.8.2'
 	implementation 'com.twelvemonkeys.common:common-io:3.8.2'

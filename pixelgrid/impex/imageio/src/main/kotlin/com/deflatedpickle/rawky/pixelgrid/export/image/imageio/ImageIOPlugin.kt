@@ -4,15 +4,19 @@
 
 package com.deflatedpickle.rawky.pixelgrid.export.image.imageio
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.api.impex.Importer
 import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
+import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.util.ActionUtil
+import org.oxbow.swingbits.dialog.task.TaskDialogs
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
@@ -99,7 +103,10 @@ object ImageIOPlugin : Exporter, Importer, Opener {
             for (row in 0 until this.height) {
                 for (column in 0 until this.width) {
                     for (layer in layers.reversed()) {
-                        // layer.child[column, row].colour.rgb.let { setRGB(column, row, it) }
+                        setRGB(
+                            column, row,
+                            (layer.child[column, row].content as Color).rgb
+                        )
                     }
                 }
             }
@@ -109,6 +116,16 @@ object ImageIOPlugin : Exporter, Importer, Opener {
     }
 
     override fun import(document: RawkyDocument, file: File) {
+        if (CellProvider.current != PixelCellPlugin) {
+            TaskDialogs.error(
+                Haruhi.window,
+                "Incompatible cell provider",
+                "This file uses a cell provider other than the one currently loaded"
+            )
+
+            return
+        }
+
         ImageIO.read(file).apply {
             val frame = document.children[0]
             val layers = frame.children
@@ -125,7 +142,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
 
             for (row in 0 until this.height) {
                 for (column in 0 until this.width) {
-                    // layers[0].child[column, row].colour = Color(getRGB(column, row), true)
+                    layers[0].child[column, row].content = Color(getRGB(column, row), true)
                 }
             }
         }
@@ -133,6 +150,8 @@ object ImageIOPlugin : Exporter, Importer, Opener {
 
     override fun open(file: File): RawkyDocument {
         val doc: RawkyDocument
+
+        CellProvider.current = PixelCellPlugin
 
         ImageIO.read(file).apply {
             doc = ActionUtil.newDocument(this.width, this.height, 1, 1)
@@ -142,8 +161,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
 
             for (row in 0 until this.height) {
                 for (column in 0 until this.width) {
-                    // TODO
-                    // layers[0].child[column, row].colour = Color(getRGB(column, row), true)
+                    layers[0].child[column, row].content = Color(getRGB(column, row), true)
                 }
             }
         }

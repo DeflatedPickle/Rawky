@@ -4,9 +4,11 @@
 
 package com.deflatedpickle.rawky.pixelgrid.export.text.rawr
 
+import blue.endless.jankson.Jankson
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.setting.RawkyDocument
@@ -39,6 +41,8 @@ object RawrPlugin : Exporter, Opener {
     override val exporterExtensions: MutableMap<String, List<String>> = mutableMapOf()
     override val openerExtensions: MutableMap<String, List<String>> = mutableMapOf()
 
+    private val jankson = Jankson.builder().build()
+
     init {
         Exporter.registry[name] = this
         Opener.registry[name] = this
@@ -66,6 +70,7 @@ object RawrPlugin : Exporter, Opener {
 
                 out.write(U.formatJson(jsonData).toByteArray())
             }
+
             "rawrxd" -> {
                 // Doesn't support Cell polymorphism
                 val cbor = Cbor.Default
@@ -81,8 +86,18 @@ object RawrPlugin : Exporter, Opener {
 
     @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
     override fun open(file: File) = when (file.extension) {
-        "rawr" -> Haruhi.json.decodeFromString(RawkyDocument::class.serializer(), file.readText())
-        "rawrxd" -> Cbor.Default.decodeFromByteArray(RawkyDocument::class.serializer(), file.readBytes())
+        "rawr" -> {
+            CellProvider.current = CellProvider.registry[
+                jankson
+                    .load(file)
+                    .get(String::class.java, "cellProvider")!!
+            ]!!
+            Haruhi.json.decodeFromString(RawkyDocument::class.serializer(), file.readText())
+        }
+
+        "rawrxd" ->
+            // Can't pre-parse to find a cell provider
+            Cbor.Default.decodeFromByteArray(RawkyDocument::class.serializer(), file.readBytes())
         else -> RawkyDocument(children = mutableListOf())
     }
 }

@@ -43,12 +43,6 @@ object TileCellPlugin : CellProvider<BufferedImage>() {
 
     init {
         registry[name] = this
-
-        EventOpenDocument.addListener {
-            if ((it.first as RawkyDocument).children[0].children[0].child.children[0] is TileCell) {
-                CellProvider.current = this
-            }
-        }
     }
 
     override fun provide(

@@ -49,8 +49,6 @@ import kotlin.system.exitProcess
 )
 @Suppress("unused")
 object LauncherPlugin {
-    private val jankson = Jankson.builder().build()
-
     private val exporterChooser = JFileChooser(File(".")).apply {
         EventProgramFinishSetup.addListener {
             for ((k, v) in Exporter.registry) {
@@ -198,7 +196,6 @@ object LauncherPlugin {
             if (file.extension in v.openerExtensions.flatMap { it.value }) {
                 none = false
 
-                CellProvider.current = CellProvider.registry[jankson.load(file).get(String::class.java, "cellProvider")!!]!!
                 RawkyPlugin.document = v.open(file).apply {
                     this.name = file.nameWithoutExtension
                 }

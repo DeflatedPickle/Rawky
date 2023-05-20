@@ -5,7 +5,7 @@
 	<a href='https://ko-fi.com/Q5Q0CSWL' target='_blank'><img height='24' style='border:0px;height:24px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com'/></a>
 </p>
 
-<h4 align="center">A pixel art & tile editor</h4>
+<h4 align="center">A pixel art & tile map editor</h4>
 
 <p align="center">
 	<a href="https://discord.gg/QEz4fb93xd"><img alt="Discord members" src="https://img.shields.io/discord/448452090147110913?label=Join%20The%20Discord&style=social"></a>
