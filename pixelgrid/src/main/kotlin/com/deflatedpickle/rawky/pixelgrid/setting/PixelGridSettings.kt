@@ -12,7 +12,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PixelGridSettings(
     override val version: Int = 1,
-    val divide: LineSettings = LineSettings(),
     var mode: @Serializable(ModeSerializer::class) Mode? = null,
+    val divide: LineSettings = LineSettings(),
     val guide: GuideSettings = GuideSettings(),
+    val background: BackgroundSettings = BackgroundSettings(),
 ) : Config

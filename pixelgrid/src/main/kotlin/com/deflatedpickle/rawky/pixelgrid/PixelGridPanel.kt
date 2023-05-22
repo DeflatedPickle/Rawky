@@ -5,12 +5,14 @@ package com.deflatedpickle.rawky.pixelgrid
 import com.deflatedpickle.haruhi.api.redraw.RedrawActive
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.util.ConfigUtil
+import com.deflatedpickle.marvin.extensions.set
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.Painter
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.event.EventUpdateCell
+import com.deflatedpickle.rawky.pixelgrid.api.FillType
 import com.deflatedpickle.rawky.pixelgrid.setting.PixelGridSettings
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.setting.RawkySettings
@@ -56,6 +58,31 @@ object PixelGridPanel : PluginPanel() {
             )
 
             EventUpdateCell.trigger(cell)
+        }
+    }
+
+    private fun drawBackground(
+        g: Graphics2D,
+        grid: Grid,
+        fillType: FillType,
+        size: Int,
+        evenColour: Color,
+        oddColour: Color
+    ) {
+        val fill = when (fillType) {
+            FillType.ALL -> Pair(g.clipBounds.width, g.clipBounds.height)
+            FillType.GRID -> Pair(grid.rows, grid.columns)
+        }
+
+        for (r in 0 until fill.first * Grid.pixel / size) {
+            for (c in 0 until fill.second * Grid.pixel / size) {
+                g.color = if (r % 2 == c % 2) evenColour else oddColour
+                g.fillRect(
+                    c * size,
+                    r * size,
+                    size, size
+                )
+            }
         }
     }
 
@@ -112,6 +139,8 @@ object PixelGridPanel : PluginPanel() {
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
 
+        val settings = ConfigUtil.getSettings<PixelGridSettings>("deflatedpickle@pixel_grid#*")
+
         val g2d = g as Graphics2D
 
         RawkyPlugin.document?.let { doc ->
@@ -119,20 +148,34 @@ object PixelGridPanel : PluginPanel() {
 
             val frame = doc.children[doc.selectedIndex]
 
-            for (layer in frame.children) {
-                val grid = layer.child
-
-                ConfigUtil.getSettings<PixelGridSettings>("deflatedpickle@pixel_grid#*")?.let { settings ->
-                    if (layer.visible) {
-                        DrawUtil.paintGridFill(g2d, grid, settings.divide.colour)
-                    }
-
-                    DrawUtil.paintGridOutline(g2d, grid, settings.divide.colour, BasicStroke(settings.divide.thickness))
+            settings?.let {
+                if (it.background.enabled) {
+                    drawBackground(
+                        g2d,
+                        frame.children.first().child,
+                        it.background.fill,
+                        it.background.size,
+                        it.background.even,
+                        it.background.odd
+                    )
                 }
             }
 
-            ConfigUtil.getSettings<PixelGridSettings>("deflatedpickle@pixel_grid#*")?.let { settings ->
-                drawGuides(g2d, doc, settings.guide.colour, BasicStroke(settings.guide.thickness))
+            for (layer in frame.children) {
+                val grid = layer.child
+
+
+                settings?.let {
+                    if (layer.visible) {
+                        DrawUtil.paintGridFill(g2d, grid, it.divide.colour)
+                    }
+
+                    DrawUtil.paintGridOutline(g2d, grid, it.divide.colour, BasicStroke(it.divide.thickness))
+                }
+            }
+
+            settings?.let {
+                drawGuides(g2d, doc, it.guide.colour, BasicStroke(it.guide.thickness))
                 DrawUtil.paintHoverCell(selectedCells, g2d)
 
                 if (Tool.isToolValid()) {
