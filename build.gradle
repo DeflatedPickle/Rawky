@@ -276,6 +276,7 @@ run {
 		runtimeOnly project(":colourwheel")
 		runtimeOnly project(":colourpalette")
 		runtimeOnly project(":colourhistory")
+		runtimeOnly project(":colourshades")
 
 		// Colour Palette -> Parser
 		runtimeOnly project(":colourpalette.parser.json")

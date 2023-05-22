@@ -86,6 +86,7 @@ include 'colourpalette'
 	project(":colourpalette.parser.$it").projectDir = new File(settingsDir, "colourpalette/parser/$it")
 }
 include 'colourhistory'
+include 'colourshades'
 
 include 'tilepalette'
 ['png'].each {

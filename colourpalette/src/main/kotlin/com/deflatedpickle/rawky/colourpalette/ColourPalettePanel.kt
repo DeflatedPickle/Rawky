@@ -9,6 +9,7 @@ import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.palette.Palette
 import com.deflatedpickle.rawky.api.palette.PaletteParser
+import com.deflatedpickle.rawky.event.EventChangeColour
 import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
 import com.deflatedpickle.undulation.constraints.FillBothFinishLine
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
@@ -36,6 +37,7 @@ object ColourPalettePanel : PluginPanel() {
 
                                     addActionListener {
                                         PixelCellPlugin.current = i.key
+                                        EventChangeColour.trigger(i.key)
                                     }
                                 }
                             )
