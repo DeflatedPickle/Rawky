@@ -11,6 +11,7 @@ import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import java.awt.Graphics
 import java.awt.Graphics2D
+import java.awt.image.BufferedImage
 
 @RedrawActive
 object PixelGridPanel : PluginPanel() {
@@ -51,9 +52,18 @@ object PixelGridPanel : PluginPanel() {
         super.paintComponent(g)
 
         val g2d = g as Graphics2D
+        val bufferedImage = BufferedImage(
+            visibleRect.x + visibleRect.width,
+            visibleRect.y + visibleRect.height,
+            BufferedImage.TYPE_INT_ARGB
+        )
 
         for (v in PaintLayer.registry.getAll().values.sortedBy { it.layer }) {
-            v.paint(g2d)
+            val temp = bufferedImage.createGraphics()
+            v.paint(temp)
+            temp.dispose()
         }
+
+        g2d.drawRenderedImage(bufferedImage, null)
     }
 }
