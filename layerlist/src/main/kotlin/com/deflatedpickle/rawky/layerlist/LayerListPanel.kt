@@ -11,32 +11,26 @@ import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.dialog.EditLayerDialog
 import com.deflatedpickle.rawky.dialog.NewLayerDialog
-import com.deflatedpickle.rawky.event.*
+import com.deflatedpickle.rawky.event.EventChangeLayer
+import com.deflatedpickle.rawky.event.EventNewLayer
+import com.deflatedpickle.rawky.event.EventUpdateCell
+import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.event.packet.PacketChange
+import com.deflatedpickle.rawky.pixelgrid.layer.grid.DivideSettings
 import com.deflatedpickle.rawky.pixelgrid.setting.PixelGridSettings
 import com.deflatedpickle.rawky.util.DrawUtil
 import com.deflatedpickle.undulation.functions.AbstractButton
 import com.deflatedpickle.undulation.functions.extensions.add
 import org.oxbow.swingbits.dialog.task.TaskDialog
-import java.awt.BasicStroke
-import java.awt.BorderLayout
-import java.awt.Component
-import java.awt.Graphics
-import java.awt.Graphics2D
+import java.awt.*
 import java.util.EventObject
-import javax.swing.AbstractCellEditor
-import javax.swing.DefaultCellEditor
-import javax.swing.JCheckBox
-import javax.swing.JPanel
-import javax.swing.JScrollPane
-import javax.swing.JTable
-import javax.swing.JToolBar
-import javax.swing.ListSelectionModel
+import javax.swing.*
 import javax.swing.table.DefaultTableModel
 import javax.swing.table.TableCellEditor
 import javax.swing.table.TableCellRenderer
 import kotlin.math.min
 
+// TODO add reordering of layers
 object LayerListPanel : PluginPanel() {
     val addButton = AbstractButton(icon = MonoIcon.ADD_ELEMENT, tooltip = "Add element", enabled = false) {
         RawkyPlugin.document?.let { doc ->
@@ -183,13 +177,13 @@ object LayerListPanel : PluginPanel() {
                 // TODO: Scale based on the grid size
                 g2D.scale(0.14, 0.14)
 
-                ConfigUtil.getSettings<PixelGridSettings>("deflatedpickle@pixel_grid#*")?.let { settings ->
+                ConfigUtil.getSettings<DivideSettings>("deflatedpickle@pixel_grid_grid_layer#*")?.let { settings ->
                     RawkyPlugin.document?.let {
                         val layer = it.children[it.selectedIndex].children[row]
 
                         DrawUtil.paintGrid(
-                            g, layer.child, settings.divide.colour,
-                            BasicStroke(settings.divide.thickness)
+                            g, layer.child, settings.colour,
+                            BasicStroke(settings.thickness)
                         )
                     }
                 }

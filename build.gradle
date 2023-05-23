@@ -256,29 +256,31 @@ run {
 		implementation project(':launcher')
 		implementation project(":pixelgrid")
 
-		// Pixel Grid -> Mode
 		implementation project(":pixelgrid.mode.mouse")
 		implementation project(":pixelgrid.mode.keyboard")
 
-		// Pixel Grid -> Impex
 		implementation project(":pixelgrid.impex.imageio")
 		implementation project(":pixelgrid.impex.ascii")
 		implementation project(":pixelgrid.impex.rawr")
 
-		// Export -> Text -> Ascii
 		implementation project(":pixelgrid.impex.ascii.block")
 
-		// Pixel Grid -> Grid
 		implementation project(":pixelgrid.grid.pixel")
 		implementation project(":pixelgrid.grid.tile")
 
-		// Widgets
+		implementation project(":pixelgrid.layer.background")
+		implementation project(":pixelgrid.layer.grid")
+		implementation project(":pixelgrid.layer.guides")
+		implementation project(":pixelgrid.layer.onionskin")
+		implementation project(":pixelgrid.layer.toolpaint")
+		implementation project(":pixelgrid.layer.cursor")
+		implementation project(":pixelgrid.layer.debug")
+
 		runtimeOnly project(":colourwheel")
 		runtimeOnly project(":colourpalette")
 		runtimeOnly project(":colourhistory")
 		runtimeOnly project(":colourshades")
 
-		// Colour Palette -> Parser
 		runtimeOnly project(":colourpalette.parser.json")
 		runtimeOnly project(":colourpalette.parser.png")
 		runtimeOnly project(":colourpalette.parser.gpl")
@@ -312,7 +314,6 @@ run {
 
 		runtimeOnly project(":toolbox")
 
-		// Tools
 		runtimeOnly project(":toolbox.pencil")
 		runtimeOnly project(":toolbox.eraser")
 		runtimeOnly project(":toolbox.dropper")
@@ -323,11 +324,9 @@ run {
 		runtimeOnly project(":toolbox.shape.rectangle")
 		runtimeOnly project(":toolbox.shape.circle")
 
-		// Bucket Fills
 		runtimeOnly project(":toolbox.bucket.fill.solid")
 		runtimeOnly project(":toolbox.bucket.fill.stipple")
 
-		// Sniffle
 		runtimeOnly project(':sniffle.pluginmanager')
 		runtimeOnly project(':sniffle.settingsgui')
 		runtimeOnly project(':sniffle.tipoftheday')
