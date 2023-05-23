@@ -39,7 +39,8 @@ import javax.imageio.ImageIO
 )
 object TileCellPlugin : CellProvider<BufferedImage>() {
     override val name = "Tile"
-    override var current: BufferedImage = TileCell.default
+    override var default: BufferedImage = TileCell.default
+    override var current: BufferedImage = default
 
     init {
         registry[name] = this

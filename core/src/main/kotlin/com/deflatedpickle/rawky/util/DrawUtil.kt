@@ -12,7 +12,7 @@ import java.awt.Stroke
 
 object DrawUtil {
     fun paintGrid(g: Graphics2D, grid: Grid, outlineColour: Color = Color.BLACK, stroke: Stroke = BasicStroke(1f)) {
-        paintGridFill(g, grid, outlineColour)
+        paintGridFill(g, grid)
         paintGridOutline(g, grid, outlineColour, stroke)
     }
 
@@ -27,7 +27,7 @@ object DrawUtil {
         }
     }
 
-    fun paintGridFill(g: Graphics2D, grid: Grid, outlineColour: Color = Color.BLACK) {
+    fun paintGridFill(g: Graphics2D, grid: Grid) {
         for (cell in grid.children) {
             CellProvider.current.paintGrid(
                 g, cell
@@ -35,7 +35,7 @@ object DrawUtil {
         }
     }
 
-    fun paintHoverCell(cells: MutableList<Cell<out Any>>, g: Graphics2D) {
+    fun paintHoverCell(cells: MutableList<Cell<Any>>, g: Graphics2D) {
         for (cell in cells) {
             CellProvider.current.paintHover(
                 g, cell

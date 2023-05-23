@@ -12,6 +12,7 @@ abstract class CellProvider<T> : Provider<Cell<T>>, HasName {
     }
 
     abstract var current: @UnsafeVariance T
+    abstract var default: @UnsafeVariance T
 
     abstract fun perform(
         cell: Cell<Any>,

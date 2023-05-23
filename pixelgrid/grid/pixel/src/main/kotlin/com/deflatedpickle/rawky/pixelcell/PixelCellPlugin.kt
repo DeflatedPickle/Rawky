@@ -34,7 +34,8 @@ import java.awt.Graphics2D
 )
 object PixelCellPlugin : CellProvider<Color>() {
     override val name = "Pixel"
-    override var current: Color = Color.CYAN
+    override var default: Color = Color(0, 0, 0, 0)
+    override var current: Color = default
 
     init {
         registry[name] = this

@@ -56,7 +56,7 @@ object PixelGridGridLayerPlugin : PaintLayer {
 
                 settings?.let {
                     if (layer.visible) {
-                        DrawUtil.paintGridFill(g2d, grid, settings.colour)
+                        DrawUtil.paintGridFill(g2d, grid)
                     }
 
                     DrawUtil.paintGridOutline(g2d, grid, settings.colour, BasicStroke(settings.thickness))
