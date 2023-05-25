@@ -299,6 +299,7 @@ run {
 
 		runtimeOnly project(":timeline")
 		runtimeOnly project(":layerlist")
+		runtimeOnly project(":animationpreview")
 
 		runtimeOnly project(":server")
 		runtimeOnly project(":server.userlist")

@@ -1,6 +1,9 @@
 package com.deflatedpickle.rawky.pixelgrid.api
 
 import com.deflatedpickle.marvin.registry.Registry
+import com.deflatedpickle.rawky.collection.Frame
+import com.deflatedpickle.rawky.collection.Layer
+import com.deflatedpickle.rawky.setting.RawkyDocument
 import java.awt.Graphics2D
 
 interface PaintLayer {
@@ -9,7 +12,12 @@ interface PaintLayer {
     }
 
     val name: String
-    val layer: Layer
+    val layer: LayerCategory
 
-    fun paint(g2d: Graphics2D)
+    fun paint(
+        doc: RawkyDocument?,
+        frame: Frame?,
+        layer: Layer?,
+        g2d: Graphics2D
+    )
 }

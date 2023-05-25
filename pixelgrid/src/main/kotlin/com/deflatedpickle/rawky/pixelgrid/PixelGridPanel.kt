@@ -60,7 +60,12 @@ object PixelGridPanel : PluginPanel() {
 
         for (v in PaintLayer.registry.getAll().values.sortedBy { it.layer }) {
             val temp = bufferedImage.createGraphics()
-            v.paint(temp)
+
+            val doc = RawkyPlugin.document
+            val frame = if (doc != null) doc.children[doc.selectedIndex] else null
+            val layer = if (frame != null) frame.children[frame.selectedIndex] else null
+
+            v.paint(doc, frame, layer, temp)
             temp.dispose()
         }
 

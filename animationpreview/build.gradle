@@ -1,0 +1,11 @@
+plugins {
+	id 'org.jetbrains.kotlin.jvm'
+}
+
+dependencies {
+	implementation project(":core")
+	implementation project(":pixelgrid")
+
+	implementation project(":sniffle.settingsgui")
+	implementation project(":sniffle.swingsettings")
+}

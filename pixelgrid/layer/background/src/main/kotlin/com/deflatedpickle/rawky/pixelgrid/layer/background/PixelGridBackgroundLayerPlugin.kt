@@ -8,10 +8,13 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Grid
-import com.deflatedpickle.rawky.pixelgrid.api.Layer
+import com.deflatedpickle.rawky.collection.Layer
+import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer.Companion.registry
+import com.deflatedpickle.rawky.setting.RawkyDocument
 import kotlinx.serialization.ExperimentalSerializationApi
 import java.awt.Color
 import java.awt.Graphics2D
@@ -35,30 +38,35 @@ import java.awt.Graphics2D
 @Suppress("unused")
 object PixelGridBackgroundLayerPlugin : PaintLayer {
     override val name = "Background"
-    override val layer = Layer.BACKGROUND
+    override val layer = LayerCategory.BACKGROUND
 
     init {
         registry["background"] = this
     }
 
-    override fun paint(g2d: Graphics2D) {
+    override fun paint(
+        doc: RawkyDocument?,
+        frame: Frame?,
+        layer: Layer?,
+        g2d: Graphics2D
+    ) {
         val settings = ConfigUtil.getSettings<BackgroundSettings>("deflatedpickle@pixel_grid_background_layer#*")
 
-        RawkyPlugin.document?.let { doc ->
+        doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
-
-            val frame = doc.children[doc.selectedIndex]
 
             settings?.let {
                 if (it.enabled) {
-                    drawBackground(
-                        g2d,
-                        frame.children.first().child,
-                        it.fill,
-                        it.size,
-                        it.even,
-                        it.odd
-                    )
+                    frame?.children?.first()?.child?.let { grid ->
+                        drawBackground(
+                            g2d,
+                            grid,
+                            it.fill,
+                            it.size,
+                            it.even,
+                            it.odd
+                        )
+                    }
                 }
             }
         }

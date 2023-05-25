@@ -9,9 +9,12 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.CellProvider
-import com.deflatedpickle.rawky.pixelgrid.api.Layer
+import com.deflatedpickle.rawky.collection.Frame
+import com.deflatedpickle.rawky.collection.Layer
+import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer.Companion.registry
+import com.deflatedpickle.rawky.setting.RawkyDocument
 import kotlinx.serialization.ExperimentalSerializationApi
 import java.awt.AlphaComposite
 import java.awt.Color
@@ -36,14 +39,14 @@ import java.awt.Graphics2D
 @Suppress("unused")
 object PixelGridOnionSkinLayerPlugin : PaintLayer {
     override val name = "OnionSkin"
-    override val layer = Layer.UNDER_DECO
+    override val layer = LayerCategory.UNDER_DECO
 
     init {
         registry["onionskin"] = this
     }
 
-    override fun paint(g2d: Graphics2D) {
-        RawkyPlugin.document?.let { doc ->
+    override fun paint(doc: RawkyDocument?, frame: Frame?, layer: Layer?, g2d: Graphics2D) {
+        doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
 
             ConfigUtil.getSettings<OnionSkinSettings>("deflatedpickle@pixel_grid_onion_skin_layer#*")?.let {

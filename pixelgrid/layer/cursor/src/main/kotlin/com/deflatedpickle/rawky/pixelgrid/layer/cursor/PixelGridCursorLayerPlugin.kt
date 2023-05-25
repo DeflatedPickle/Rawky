@@ -7,13 +7,14 @@ package com.deflatedpickle.rawky.pixelgrid.layer.cursor
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.Tool
-import com.deflatedpickle.rawky.collection.Grid
+import com.deflatedpickle.rawky.collection.Frame
+import com.deflatedpickle.rawky.collection.Layer
 import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
-import com.deflatedpickle.rawky.pixelgrid.api.Layer
+import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer.Companion.registry
+import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.setting.RawkySettings
 import kotlinx.serialization.ExperimentalSerializationApi
 import java.awt.*
@@ -37,13 +38,13 @@ import javax.swing.SwingUtilities
 @Suppress("unused")
 object PixelGridCursorLayerPlugin : PaintLayer {
     override val name = "Cursor"
-    override val layer = Layer.CURSOR
+    override val layer = LayerCategory.CURSOR
 
     init {
         registry["cursor"] = this
     }
 
-    override fun paint(g2d: Graphics2D) {
+    override fun paint(doc: RawkyDocument?, frame: Frame?, layer: Layer?, g2d: Graphics2D) {
         drawCursor(g2d)
     }
 

@@ -8,14 +8,15 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.collection.Grid
-import com.deflatedpickle.rawky.pixelgrid.api.Layer
+import com.deflatedpickle.rawky.collection.Frame
+import com.deflatedpickle.rawky.collection.Layer
+import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer.Companion.registry
+import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.util.DrawUtil
 import kotlinx.serialization.ExperimentalSerializationApi
 import java.awt.BasicStroke
-import java.awt.Color
 import java.awt.Graphics2D
 
 @ExperimentalSerializationApi
@@ -37,29 +38,34 @@ import java.awt.Graphics2D
 @Suppress("unused")
 object PixelGridGridLayerPlugin : PaintLayer {
     override val name = "Grid"
-    override val layer = Layer.GRID
+    override val layer = LayerCategory.GRID
 
     init {
         registry["grid"] = this
     }
 
-    override fun paint(g2d: Graphics2D) {
+    override fun paint(
+        doc: RawkyDocument?,
+        frame: Frame?,
+        layer: Layer?,
+        g2d: Graphics2D
+    ) {
         val settings = ConfigUtil.getSettings<DivideSettings>("deflatedpickle@pixel_grid_grid_layer#*")
 
-        RawkyPlugin.document?.let { doc ->
+        doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
 
-            val frame = doc.children[doc.selectedIndex]
+            frame?.let { l ->
+                for (l in frame.children) {
+                    val grid = l.child
 
-            for (layer in frame.children) {
-                val grid = layer.child
+                    settings?.let {
+                        if (l.visible) {
+                            DrawUtil.paintGridFill(g2d, grid)
+                        }
 
-                settings?.let {
-                    if (layer.visible) {
-                        DrawUtil.paintGridFill(g2d, grid)
+                        DrawUtil.paintGridOutline(g2d, grid, settings.colour, BasicStroke(settings.thickness))
                     }
-
-                    DrawUtil.paintGridOutline(g2d, grid, settings.colour, BasicStroke(settings.thickness))
                 }
             }
         }

@@ -8,15 +8,13 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.api.Painter
-import com.deflatedpickle.rawky.api.Tool
+import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Grid
-import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
-import com.deflatedpickle.rawky.pixelgrid.api.Layer
+import com.deflatedpickle.rawky.collection.Layer
+import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer.Companion.registry
 import com.deflatedpickle.rawky.setting.RawkyDocument
-import com.deflatedpickle.rawky.util.DrawUtil
 import kotlinx.serialization.ExperimentalSerializationApi
 import java.awt.BasicStroke
 import java.awt.Color
@@ -42,16 +40,16 @@ import java.awt.Stroke
 @Suppress("unused")
 object PixelGridGuideLayerPlugin : PaintLayer {
     override val name = "Guide"
-    override val layer = Layer.OVER_DECO
+    override val layer = LayerCategory.OVER_DECO
 
     init {
         registry["guide"] = this
     }
 
-    override fun paint(g2d: Graphics2D) {
+    override fun paint(doc: RawkyDocument?, frame: Frame?, layer: Layer?, g2d: Graphics2D) {
         val settings = ConfigUtil.getSettings<GuideSettings>("deflatedpickle@pixel_grid_guide_layer#*")
 
-        RawkyPlugin.document?.let { doc ->
+        doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
 
             settings?.let {
