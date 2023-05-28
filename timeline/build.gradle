@@ -5,7 +5,7 @@ plugins {
 dependencies {
 	implementation project(":core")
 	implementation project(":pixelgrid")
-	implementation project(":pixelgrid.layer.grid")
+	implementation project(":pixelgrid.layer.gridfill")
 
 	implementation project(":sniffle.settingsgui")
 	implementation project(":sniffle.swingsettings")

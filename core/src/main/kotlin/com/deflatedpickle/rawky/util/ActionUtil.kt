@@ -47,6 +47,8 @@ object ActionUtil {
     }
 
     fun newDocument(columns: Int, rows: Int, frames: Int, layers: Int): RawkyDocument = RawkyDocument(
+        rows = rows,
+        columns = columns,
         children = Array(frames) { f ->
             Frame(
                 name = "Frame $f",

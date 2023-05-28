@@ -57,7 +57,7 @@ include 'pixelgrid'
 	include "pixelgrid.grid.$it"
 	project(":pixelgrid.grid.$it").projectDir = new File(settingsDir, "pixelgrid/grid/$it")
 }
-['background', 'grid', "guides", "onionskin", "toolpaint", "cursor", "debug"].each {
+['background', 'gridfill', 'gridlines', "guides", "onionskin", "toolpaint", "cursor", "debug"].each {
 	include "pixelgrid.layer.$it"
 	project(":pixelgrid.layer.$it").projectDir = new File(settingsDir, "pixelgrid/layer/$it")
 }
@@ -101,6 +101,7 @@ include 'tilepalette'
 include 'timeline'
 include 'layerlist'
 include 'animationpreview'
+include 'tiledview'
 
 include 'autosave'
 include 'autoload'

@@ -16,8 +16,6 @@ import com.deflatedpickle.rawky.event.EventNewLayer
 import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.event.packet.PacketChange
-import com.deflatedpickle.rawky.pixelgrid.layer.grid.DivideSettings
-import com.deflatedpickle.rawky.pixelgrid.setting.PixelGridSettings
 import com.deflatedpickle.rawky.util.DrawUtil
 import com.deflatedpickle.undulation.functions.AbstractButton
 import com.deflatedpickle.undulation.functions.extensions.add
@@ -177,15 +175,10 @@ object LayerListPanel : PluginPanel() {
                 // TODO: Scale based on the grid size
                 g2D.scale(0.14, 0.14)
 
-                ConfigUtil.getSettings<DivideSettings>("deflatedpickle@pixel_grid_grid_layer#*")?.let { settings ->
-                    RawkyPlugin.document?.let {
-                        val layer = it.children[it.selectedIndex].children[row]
+                RawkyPlugin.document?.let {
+                    val layer = it.children[it.selectedIndex].children[row]
 
-                        DrawUtil.paintGrid(
-                            g, layer.child, settings.colour,
-                            BasicStroke(settings.thickness)
-                        )
-                    }
+                    DrawUtil.paintGridFill(g, layer.child)
                 }
             }
         }

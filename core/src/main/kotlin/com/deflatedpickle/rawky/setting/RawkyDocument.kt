@@ -17,6 +17,8 @@ import kotlinx.serialization.Serializable
 data class RawkyDocument(
     val version: Int = 1,
     var name: String? = null,
+    var rows: Int = -1,
+    var columns: Int = -1,
     var cellProvider: String = "",
     override var selectedIndex: Int = 0,
     override val children: MutableList<Frame>,

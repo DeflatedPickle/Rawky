@@ -4,7 +4,6 @@ package com.deflatedpickle.rawky.pixelgrid.layer.grid
 
 import com.deflatedpickle.haruhi.api.config.Config
 import com.deflatedpickle.rawky.settings.api.range.FloatRange
-import com.deflatedpickle.haruhi.api.config.ConfigSection
 import com.deflatedpickle.undulation.serializer.ColorSerializer
 import kotlinx.serialization.Serializable
 import java.awt.Color

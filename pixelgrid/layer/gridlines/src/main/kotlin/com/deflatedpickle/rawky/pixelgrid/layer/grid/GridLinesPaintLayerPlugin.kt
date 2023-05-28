@@ -7,7 +7,6 @@ package com.deflatedpickle.rawky.pixelgrid.layer.grid
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Layer
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
@@ -21,12 +20,12 @@ import java.awt.Graphics2D
 
 @ExperimentalSerializationApi
 @Plugin(
-    value = "pixel_grid_grid_layer",
+    value = "grid_lines_paint_layer",
     author = "DeflatedPickle",
     version = "1.0.0",
     description = """
         <br>
-        Paints the frames and layers of a grid
+        Paints the lines of a grid
     """,
     type = PluginType.OTHER,
     dependencies = [
@@ -36,12 +35,12 @@ import java.awt.Graphics2D
     settings = DivideSettings::class
 )
 @Suppress("unused")
-object PixelGridGridLayerPlugin : PaintLayer {
-    override val name = "Grid"
-    override val layer = LayerCategory.GRID
+object GridLinesPaintLayerPlugin : PaintLayer {
+    override val name = "Grid Lines"
+    override val layer = LayerCategory.OVER_DECO
 
     init {
-        registry["grid"] = this
+        registry["grid_lines"] = this
     }
 
     override fun paint(
@@ -50,21 +49,15 @@ object PixelGridGridLayerPlugin : PaintLayer {
         layer: Layer?,
         g2d: Graphics2D
     ) {
-        val settings = ConfigUtil.getSettings<DivideSettings>("deflatedpickle@pixel_grid_grid_layer#*")
+        val settings = ConfigUtil.getSettings<DivideSettings>("deflatedpickle@grid_lines_paint_layer#*")
 
         doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
 
-            frame?.let { l ->
+            frame?.let {
                 for (l in frame.children) {
-                    val grid = l.child
-
                     settings?.let {
-                        if (l.visible) {
-                            DrawUtil.paintGridFill(g2d, grid)
-                        }
-
-                        DrawUtil.paintGridOutline(g2d, grid, settings.colour, BasicStroke(settings.thickness))
+                        DrawUtil.paintGridOutline(g2d, l.child, settings.colour, BasicStroke(settings.thickness))
                     }
                 }
             }

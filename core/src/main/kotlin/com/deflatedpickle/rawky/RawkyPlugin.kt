@@ -1,7 +1,6 @@
 /* Copyright (c) 2022 DeflatedPickle under the MIT license */
 
 @file:Suppress("SpellCheckingInspection", "MemberVisibilityCanBePrivate")
-@file:OptIn(InternalSerializationApi::class)
 
 package com.deflatedpickle.rawky
 
@@ -16,18 +15,14 @@ import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.marvin.extensions.div
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.api.template.Guide
-import com.deflatedpickle.rawky.event.EventChangeColour
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.setting.RawkySettings
 import com.deflatedpickle.undulation.api.MenuButtonType.CHECK
 import com.deflatedpickle.undulation.functions.extensions.add
-import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import so.jabber.FileUtils
-import java.awt.Color
 import java.io.File
 import javax.swing.JCheckBoxMenuItem
 import javax.swing.JMenu

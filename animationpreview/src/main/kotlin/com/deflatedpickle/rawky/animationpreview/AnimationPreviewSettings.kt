@@ -1,4 +1,4 @@
-/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
 
 package com.deflatedpickle.rawky.animationpreview
 

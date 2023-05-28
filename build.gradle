@@ -269,7 +269,8 @@ run {
 		implementation project(":pixelgrid.grid.tile")
 
 		implementation project(":pixelgrid.layer.background")
-		implementation project(":pixelgrid.layer.grid")
+		implementation project(":pixelgrid.layer.gridfill")
+		implementation project(":pixelgrid.layer.gridlines")
 		implementation project(":pixelgrid.layer.guides")
 		implementation project(":pixelgrid.layer.onionskin")
 		implementation project(":pixelgrid.layer.toolpaint")
@@ -300,6 +301,7 @@ run {
 		runtimeOnly project(":timeline")
 		runtimeOnly project(":layerlist")
 		runtimeOnly project(":animationpreview")
+		runtimeOnly project(":tiledview")
 
 		runtimeOnly project(":server")
 		runtimeOnly project(":server.userlist")

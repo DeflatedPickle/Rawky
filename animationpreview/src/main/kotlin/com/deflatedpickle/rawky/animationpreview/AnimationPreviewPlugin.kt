@@ -1,4 +1,4 @@
-/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
 
 @file:Suppress("SpellCheckingInspection")
 
@@ -17,6 +17,7 @@ import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
 import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
+import javax.swing.Timer
 
 @Plugin(
     value = "animation_preview",
@@ -34,7 +35,29 @@ import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
 )
 @Suppress("unused")
 object AnimationPreviewPlugin {
+    private val timer: Timer
+
+    var playing = false
+    var currentFrame = 0
+
     init {
+        val fps = 4
+        timer = Timer(1000 / fps) {
+            if (!playing) return@Timer
+
+            RawkyPlugin.document?.let { doc ->
+                if (currentFrame + 1 < doc.children.size) {
+                    currentFrame++
+                } else {
+                    currentFrame = 0
+                }
+
+                triggerButtons()
+            }
+
+            AnimationPreviewPanel.animationPanel.repaint()
+        }
+
         EventChangeTheme.addListener {
             AnimationPreviewPanel.updateUIRecursively()
         }
@@ -61,20 +84,20 @@ object AnimationPreviewPlugin {
 
         EventProgramFinishSetup.addListener {
             ConfigUtil.getSettings<AnimationPreviewSettings>("deflatedpickle@animation_preview#*")?.let {
-                AnimationPreviewPanel.timer.delay = 1000 / it.speed
+                timer.delay = 1000 / it.speed
             }
 
-            AnimationPreviewPanel.timer.start()
+            timer.start()
         }
     }
 
     fun triggerButtons() {
         RawkyPlugin.document?.let { doc ->
-            AnimationPreviewPanel.rewindButton.isEnabled = AnimationPreviewPanel.currentFrame - 1 >= 0
-            AnimationPreviewPanel.backButton.isEnabled = AnimationPreviewPanel.currentFrame - 1 >= 0
+            AnimationPreviewPanel.rewindButton.isEnabled = currentFrame - 1 >= 0
+            AnimationPreviewPanel.backButton.isEnabled = currentFrame - 1 >= 0
             AnimationPreviewPanel.playButton.isEnabled = doc.children.size >= 1
-            AnimationPreviewPanel.forwardButton.isEnabled = AnimationPreviewPanel.currentFrame + 1 < doc.children.size
-            AnimationPreviewPanel.fastforwardButton.isEnabled = AnimationPreviewPanel.currentFrame + 1 < doc.children.size
+            AnimationPreviewPanel.forwardButton.isEnabled = currentFrame + 1 < doc.children.size
+            AnimationPreviewPanel.fastforwardButton.isEnabled = currentFrame + 1 < doc.children.size
         }
     }
 }
