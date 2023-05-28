@@ -133,7 +133,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
             layers.add(
                 0,
                 Layer(
-                    Grid(
+                    child = Grid(
                         rows = this.height,
                         columns = this.width
                     )

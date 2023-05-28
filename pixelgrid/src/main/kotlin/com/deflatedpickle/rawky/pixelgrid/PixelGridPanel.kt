@@ -51,24 +51,26 @@ object PixelGridPanel : PluginPanel() {
     override fun paintComponent(g: Graphics) {
         super.paintComponent(g)
 
-        val g2d = g as Graphics2D
-        val bufferedImage = BufferedImage(
-            visibleRect.x + visibleRect.width,
-            visibleRect.y + visibleRect.height,
-            BufferedImage.TYPE_INT_ARGB
-        )
+        RawkyPlugin.document?.let { doc ->
+            doc.children.getOrNull(doc.selectedIndex)?.let { frame ->
+                frame.children.getOrNull(frame.selectedIndex).let { layer ->
+                    val g2d = g as Graphics2D
+                    val bufferedImage = BufferedImage(
+                        visibleRect.x + visibleRect.width,
+                        visibleRect.y + visibleRect.height,
+                        BufferedImage.TYPE_INT_ARGB
+                    )
 
-        for (v in PaintLayer.registry.getAll().values.sortedBy { it.layer }) {
-            val temp = bufferedImage.createGraphics()
+                    for (v in PaintLayer.registry.getAll().values.sortedBy { it.layer }) {
+                        val temp = bufferedImage.createGraphics()
 
-            val doc = RawkyPlugin.document
-            val frame = if (doc != null) doc.children[doc.selectedIndex] else null
-            val layer = if (frame != null) frame.children[frame.selectedIndex] else null
+                        v.paint(doc, frame, layer, temp)
+                        temp.dispose()
+                    }
 
-            v.paint(doc, frame, layer, temp)
-            temp.dispose()
+                    g2d.drawRenderedImage(bufferedImage, null)
+                }
+            }
         }
-
-        g2d.drawRenderedImage(bufferedImage, null)
     }
 }

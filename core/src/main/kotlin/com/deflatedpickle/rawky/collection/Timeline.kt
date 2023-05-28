@@ -8,6 +8,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Timeline(
-    override val children: MutableList<Frame> = mutableListOf(),
     override var selectedIndex: Int = 0,
+    override val children: MutableList<Frame> = mutableListOf(),
 ) : MultiParent<Frame>, ChildSelector

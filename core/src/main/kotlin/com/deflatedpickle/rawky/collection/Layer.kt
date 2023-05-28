@@ -8,10 +8,10 @@ import kotlinx.serialization.Transient
 
 @Serializable
 data class Layer(
-    override var child: Grid = Grid(),
     var name: String = "",
     var visible: Boolean = true,
     var lock: Boolean = false,
+    override var child: Grid = Grid(),
 ) : SingleParent<Grid> {
     @Transient lateinit var frame: Frame
 

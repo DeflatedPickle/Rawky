@@ -39,6 +39,8 @@ object PixelCellPlugin : CellProvider<Color>() {
 
     init {
         registry[name] = this
+
+        current = Color.BLACK
     }
 
     override fun provide(

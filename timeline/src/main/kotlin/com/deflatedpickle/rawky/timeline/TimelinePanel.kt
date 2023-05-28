@@ -201,7 +201,7 @@ object TimelinePanel : PluginPanel() {
 
                 val oldFrame = doc.children[doc.selectedIndex]
 
-                doc.selectedIndex = selectionModel.anchorSelectionIndex
+                doc.selectedIndex = min(doc.children.size - 1, selectionModel.anchorSelectionIndex)
 
                 if (doc.selectedIndex >= doc.children.size) return@let
 

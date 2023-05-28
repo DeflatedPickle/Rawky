@@ -37,12 +37,6 @@ object ActionUtil {
             RawkyPlugin.document = document
 
             EventCreateDocument.trigger(document)
-
-            // Despite no obvious culprit,
-            // when a document is already open and another one is made,
-            // for whatever reason, the current frame is incremented,
-            // so we must set it back to zero
-            document.selectedIndex = 0
         }
     }
 

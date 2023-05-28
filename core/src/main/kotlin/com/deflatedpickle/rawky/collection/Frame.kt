@@ -8,12 +8,12 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Frame(
-    override val children: MutableList<Layer> = mutableListOf(),
-    override var selectedIndex: Int = 0,
     var name: String = "",
+    override var selectedIndex: Int = 0,
+    override val children: MutableList<Layer> = mutableListOf(),
 ) : MultiParent<Layer>, ChildSelector {
     fun addLayer(name: String? = null, rows: Int, columns: Int, /*index: Int = -1*/): Layer {
-        val layer = Layer(Grid(rows, columns), name = name ?: "Layer ${children.size}")
+        val layer = Layer(name = name ?: "Layer ${children.size}", child = Grid(rows, columns))
             .apply { frame = this@Frame }
 
         children.add(layer)
