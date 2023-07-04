@@ -15,6 +15,15 @@ include 'master'
 
 include 'core'
 include 'launcher'
+[
+		'default',
+		"animation",
+		"tilemap",
+		"server"
+].each {
+	include "launcher.layout.$it"
+	project(":launcher.layout.$it").projectDir = new File(settingsDir, "launcher/layout/$it")
+}
 
 include 'server'
 [

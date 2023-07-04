@@ -2,6 +2,9 @@ dependencies {
 	// Terminal colours
 	implementation 'org.fusesource.jansi:jansi:2.4.0'
 
+	// Default theme
+	implementation 'com.formdev:flatlaf:3.1.1'
+
 	implementation project(':core')
 
 	implementation project(":pixelgrid.grid.pixel")

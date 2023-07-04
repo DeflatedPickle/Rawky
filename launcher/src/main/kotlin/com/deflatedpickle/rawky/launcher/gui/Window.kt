@@ -2,15 +2,13 @@
 
 package com.deflatedpickle.rawky.launcher.gui
 
-import bibliothek.gui.dock.common.CControl
-import bibliothek.gui.dock.common.CGrid
+import ModernDocking.RootDockingPanel
 import com.deflatedpickle.tosuto.ToastWindow
 import java.awt.BorderLayout
 import javax.swing.JFrame
 
 object Window : JFrame("Rawky") {
-    val control = CControl(this)
-    val grid = CGrid(control)
+    lateinit var root: RootDockingPanel
 
     val toastWindow = ToastWindow(
         parent = this,
@@ -23,9 +21,8 @@ object Window : JFrame("Rawky") {
         jMenuBar = MenuBar
 
         add(Toolbar, BorderLayout.PAGE_START)
-        this.add(control.contentArea, BorderLayout.CENTER)
 
-        this.pack()
+        pack()
     }
 
     override fun setVisible(b: Boolean) {

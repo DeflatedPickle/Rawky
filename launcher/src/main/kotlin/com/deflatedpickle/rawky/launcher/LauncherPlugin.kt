@@ -4,10 +4,12 @@
 
 package com.deflatedpickle.rawky.launcher
 
-import bibliothek.gui.dock.common.menu.CLayoutChoiceMenuPiece
-import bibliothek.gui.dock.common.menu.CThemeMenuPiece
-import bibliothek.gui.dock.facile.menu.RootMenuPiece
-import bibliothek.gui.dock.facile.menu.SubmenuPiece
+import ModernDocking.Docking
+import ModernDocking.DockingState
+import ModernDocking.internal.DockableWrapper
+import ModernDocking.internal.DockingInternal
+import ModernDocking.layouts.DockingLayouts
+import ModernDocking.ui.ApplicationLayoutMenuItem
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.api.plugin.Plugin
@@ -25,13 +27,21 @@ import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.api.impex.Importer
 import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.launcher.gui.Toolbar
+import com.deflatedpickle.rawky.launcher.gui.Window
 import com.deflatedpickle.rawky.util.ActionUtil
+import com.deflatedpickle.undulation.api.MenuButtonType
 import com.deflatedpickle.undulation.functions.extensions.add
 import com.deflatedpickle.undulation.widget.LimitedMenu
 import org.oxbow.swingbits.dialog.task.TaskDialogs
+import java.awt.Dimension
+import java.awt.event.ItemEvent
 import java.io.File
+import javax.swing.AbstractButton
+import javax.swing.Box
+import javax.swing.JComboBox
 import javax.swing.JFileChooser
 import javax.swing.JMenu
+import javax.swing.SwingUtilities
 import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.system.exitProcess
 
@@ -146,16 +156,40 @@ object LauncherPlugin {
                 }
 
                 (get(MenuCategory.TOOLS.name) as JMenu).apply {
-                    add(
-                        JMenu("Dock").apply {
-                            RootMenuPiece(this).apply {
-                                add(SubmenuPiece("Themes", true, CThemeMenuPiece(Haruhi.control)))
-                                // add(SubmenuPiece("Look & Feel", true, CLookAndFeelMenuPiece(Haruhi.control)))
-                                add(SubmenuPiece("Layout", true, CLayoutChoiceMenuPiece(Haruhi.control, true)))
-                                // add(SubmenuPiece("Dockables", true, SingleCDockableListMenuPiece(Haruhi.control)))
+                    add(JMenu("Dock").apply {
+                        DockingInternal::class.java.getDeclaredField("dockables").apply {
+                            isAccessible = true
+
+                            // TODO: sync with current layout
+                            for ((_, v) in get(null) as HashMap<String, DockableWrapper>) {
+                                add(v.dockable.tabText, type = MenuButtonType.CHECK) {
+                                    if ((it.source as AbstractButton).isSelected) {
+                                        Docking.dock(v.dockable, Window)
+                                    } else {
+                                        Docking.undock(v.dockable)
+                                    }
+                                }
                             }
                         }
-                    )
+
+                        addSeparator()
+
+                        add(JMenu("Load").apply {
+                            for (l in DockingLayouts.getLayoutNames()) {
+                                add(l.capitalize()) {
+                                    DockingState.restoreApplicationLayout(DockingLayouts.getLayout(l))
+                                }
+                            }
+                        })
+
+                        addSeparator()
+
+                        add(
+                            ApplicationLayoutMenuItem(
+                                "default", "Restore Default Layout"
+                            )
+                        )
+                    })
                 }
             }
 
@@ -170,6 +204,27 @@ object LauncherPlugin {
 
                 add(icon = MonoIcon.FILE_NEW, tooltip = "Import") { importDialog() }
                 add(icon = MonoIcon.FILE_EXPORT, tooltip = "Export") { exportDialog() }
+
+                addSeparator()
+
+                add(Box.createHorizontalGlue())
+
+                add(JComboBox(arrayOf<String>()).apply {
+                    for (l in DockingLayouts.getLayoutNames()) {
+                        addItem(l.capitalize())
+                    }
+
+                    selectedItem = "Default"
+                    maximumSize = Dimension(200, preferredSize.height)
+
+                    addItemListener {
+                        when (it.stateChange) {
+                            ItemEvent.SELECTED -> {
+                                DockingState.restoreApplicationLayout(DockingLayouts.getLayout((it.item as String).lowercase()))
+                            }
+                        }
+                    }
+                })
             }
         }
     }
@@ -295,7 +350,8 @@ object LauncherPlugin {
         if (exporterChooser.showSaveDialog(Haruhi.window) == JFileChooser.APPROVE_OPTION) {
             var file = exporterChooser.selectedFile
             if (file.extension == "") {
-                file = File("${file.absolutePath}.${(exporterChooser.fileFilter as FileNameExtensionFilter).extensions.first()}")
+                file =
+                    File("${file.absolutePath}.${(exporterChooser.fileFilter as FileNameExtensionFilter).extensions.first()}")
             }
 
             export(file)

@@ -54,7 +54,8 @@ dependencies {
 	api 'de.tisoft.rsyntaxtextarea:rsyntaxtextarea-antlr4-extension:0.0.3'
 
 	// Docking framework
-	api 'org.dockingframes:docking-frames-common:1.1.1'
+	// api 'org.dockingframes:docking-frames-common:1.1.1'
+	api 'io.github.andrewauclair.ModernDocking:ModernDocking:0.6.0'
 
 	// Dialogs
 	api 'org.oxbow:swing-bits:1.0.0-SNAPSHOT'

@@ -2,6 +2,9 @@
 
 package com.deflatedpickle.rawky.launcher
 
+import ModernDocking.Dockable
+import ModernDocking.Docking
+import ModernDocking.RootDockingPanel
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.DependencyComparator
 import com.deflatedpickle.haruhi.api.plugin.Plugin
@@ -10,31 +13,28 @@ import com.deflatedpickle.haruhi.event.*
 import com.deflatedpickle.haruhi.util.*
 import com.deflatedpickle.marvin.util.OSUtil
 import com.deflatedpickle.rawky.collection.Cell
-import com.deflatedpickle.rawky.event.EventRegisterCellClass
 import com.deflatedpickle.rawky.launcher.gui.Window
 import com.deflatedpickle.rawky.pixelcell.collection.PixelCell
 import com.deflatedpickle.rawky.tilecell.collection.TileCell
+import com.formdev.flatlaf.FlatDarkLaf
 import com.jidesoft.plaf.LookAndFeelFactory
-import java.awt.Dimension
-import java.io.File
-import javax.swing.SwingUtilities
-import kotlin.system.exitProcess
 import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.InternalSerializationApi
-import kotlinx.serialization.PolymorphicSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import kotlinx.serialization.modules.polymorphic
 import kotlinx.serialization.modules.subclass
-import kotlinx.serialization.serializer
 import org.apache.logging.log4j.LogManager
 import org.fusesource.jansi.AnsiConsole
 import org.oxbow.swingbits.dialog.task.TaskDialogs
 import org.oxbow.swingbits.util.Strings
+import java.awt.BorderLayout
+import java.awt.Dimension
+import java.io.File
+import javax.swing.SwingUtilities
+import kotlin.system.exitProcess
 
 @InternalSerializationApi
 fun main(args: Array<String>) {
@@ -80,8 +80,11 @@ fun main(args: Array<String>) {
 
     Haruhi.window = Window
     Haruhi.toastWindow = Window.toastWindow
-    Haruhi.control = Window.control
-    Haruhi.grid = Window.grid
+
+    Docking.initialize(Window)
+
+    Window.root = RootDockingPanel(Window)
+    Window.add(Window.root, BorderLayout.CENTER)
 
     // Adds a single shutdown thread with an event
     // to reduce the instance count
@@ -200,8 +203,10 @@ fun main(args: Array<String>) {
     val componentList = mutableListOf<PluginPanel>()
     for (plugin in PluginUtil.discoveredPlugins) {
         if (plugin.component != Nothing::class) {
+            plugin.component.objectInstance?.plugin = plugin
             with(plugin.component.objectInstance!!) {
-                DockUtil.createComponent(plugin, this)
+                Docking.registerDockable(this)
+                Docking.dock(plugin.component.objectInstance as Dockable, Window)
                 componentList.add(this)
                 EventCreatePluginComponent.trigger(this)
             }
@@ -241,8 +246,6 @@ fun main(args: Array<String>) {
     SwingUtilities.invokeLater {
         Window.size = Dimension(800, 600)
         Window.setLocationRelativeTo(null)
-
-        Window.control.contentArea.deploy(Window.grid)
 
         // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
         // SwingUtilities.updateComponentTreeUI(Window)

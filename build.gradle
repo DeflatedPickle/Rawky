@@ -254,6 +254,11 @@ run {
 
 	dependencies {
 		implementation project(':launcher')
+		implementation project(":launcher.layout.default")
+		implementation project(":launcher.layout.animation")
+		implementation project(":launcher.layout.tilemap")
+		implementation project(":launcher.layout.server")
+
 		implementation project(":pixelgrid")
 
 		implementation project(":pixelgrid.mode.mouse")

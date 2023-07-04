@@ -1,0 +1,15 @@
+plugins {
+	id 'org.jetbrains.kotlin.jvm'
+}
+
+dependencies {
+	implementation project(":core")
+	implementation project(":launcher")
+	implementation project(":pixelgrid")
+	implementation project(":colourwheel")
+	implementation project(":layerlist")
+	implementation project(":timeline")
+	implementation project(":animationpreview")
+
+	implementation project(":sniffle.settingsgui")
+}

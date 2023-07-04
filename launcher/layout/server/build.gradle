@@ -1,0 +1,14 @@
+plugins {
+	id 'org.jetbrains.kotlin.jvm'
+}
+
+dependencies {
+	implementation project(":core")
+	implementation project(":pixelgrid")
+	implementation project(":layerlist")
+	implementation project(":server.chat")
+	implementation project(":server.leaderboard")
+	implementation project(":server.userlist")
+
+	implementation project(":sniffle.settingsgui")
+}
