@@ -13,8 +13,8 @@ import com.deflatedpickle.undulation.constraints.FillBothFinishLine
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.widget.ColourButton
 import org.jdesktop.swingx.JXPanel
-import org.jdesktop.swingx.WrapLayout
 import so.n0weak.ExtendedComboBox
+import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.Color
 import java.awt.GridBagLayout
 import java.awt.event.ItemEvent

@@ -16,7 +16,7 @@ include 'master'
 include 'core'
 include 'launcher'
 [
-	'default',
+	'sprite',
 	"animation",
 	"tilemap",
 	"server"

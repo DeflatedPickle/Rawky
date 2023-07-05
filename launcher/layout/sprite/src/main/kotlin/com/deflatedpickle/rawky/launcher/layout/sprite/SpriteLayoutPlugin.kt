@@ -2,7 +2,7 @@
 
 @file:Suppress("unused")
 
-package com.deflatedpickle.rawky.launcher.layout.default
+package com.deflatedpickle.rawky.launcher.layout.sprite
 
 import ModernDocking.DockingRegion
 import ModernDocking.layouts.DockingLayouts
@@ -13,7 +13,7 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 
 @Plugin(
-    value = "default_layout",
+    value = "sprite_layout",
     author = "DeflatedPickle",
     version = "1.0.0",
     description = """
@@ -31,7 +31,7 @@ import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
         "deflatedpickle@layer_list#*",
     ],
 )
-object DefaultLayoutPlugin {
+object SpriteLayoutPlugin {
     init {
         val layout = WindowLayoutBuilder("deflatedpickle@pixel_grid")
             .dock("deflatedpickle@colour_wheel", "deflatedpickle@pixel_grid", DockingRegion.WEST, 0.2)
@@ -40,7 +40,7 @@ object DefaultLayoutPlugin {
             .dock("deflatedpickle@layer_list", "deflatedpickle@pixel_grid", DockingRegion.EAST, 0.2)
             .buildApplicationLayout()
 
-        DockingLayouts.addLayout("default", layout)
+        DockingLayouts.addLayout("sprite", layout)
         AppState.setDefaultApplicationLayout(layout)
 
         EventProgramFinishSetup.addListener {

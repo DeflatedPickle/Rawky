@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
-        task: [ distZip ]
+        task: [ packageAll ]
         java-v: [ 11 ]
         java-d: [ temurin ]
 
@@ -53,11 +53,11 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          path: "./build/distributions/*"
+          path: "./build/*"
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: "dist-latest"
+          tag_name: ${GITHUB_SHA::7}
           prerelease: true
-          files: ./build/distributions/*
+          files: ./build/*

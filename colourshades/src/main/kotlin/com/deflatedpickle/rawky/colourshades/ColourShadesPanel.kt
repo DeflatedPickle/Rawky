@@ -12,7 +12,7 @@ import com.deflatedpickle.undulation.constraints.FillBothFinishLine
 import com.deflatedpickle.undulation.functions.ColourButton
 import com.deflatedpickle.undulation.widget.ColourButton
 import org.jdesktop.swingx.JXPanel
-import org.jdesktop.swingx.WrapLayout
+import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.GridBagLayout
 import javax.swing.JScrollPane
 

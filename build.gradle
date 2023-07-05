@@ -1,3 +1,14 @@
+import io.github.fvarrui.javapackager.gradle.PackageTask
+
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'io.github.fvarrui:javapackager:1.7.2'
+	}
+}
+
 plugins {
 	id 'java'
 	id 'org.jetbrains.kotlin.jvm'
@@ -12,11 +23,10 @@ plugins {
 
 	id "com.github.johnrengelman.shadow" version "7.1.2"
 	id 'edu.sc.seis.launch4j' version '2.5.4'
-	id "nebula.ospackage" version "9.1.1"
+	id "org.gradlex.extra-java-module-info" version "1.4.1"
 }
 
-apply plugin: 'nebula.deb'
-apply plugin: 'nebula.rpm'
+apply plugin: 'io.github.fvarrui.javapackager.plugin'
 
 group "$group"
 archivesBaseName = "$name"
@@ -200,6 +210,49 @@ launch4j {
 	bundledJrePath = "~/.jdks/jbr-11.0.14.1"
 }
 
+javapackager {
+	mainClass = "com.deflatedpickle.rawky.launcher.MainKt"
+	description = "A pixel art & tile map editor"
+
+	bundleJre = true
+	customizedJre = false
+	generateInstaller = true
+	administratorRequired = false
+	copyDependencies = true
+
+	createTarball = true
+	createZipball = true
+}
+
+
+task packageLinux(type: PackageTask, dependsOn: build) {
+	platform = "linux"
+}
+
+task packageMac(type: PackageTask, dependsOn: build) {
+	platform = "mac"
+}
+
+task packageWindows(type: PackageTask, dependsOn: build) {
+	platform = "windows"
+}
+
+task packageAll(dependsOn: [
+	'packageLinux',
+	'packageMac',
+	'packageWindows'
+])
+
+configurations {
+	runtimeClasspath {
+		attributes { attribute(Attribute.of("javaModule", Boolean), false) }
+	}
+}
+
+extraJavaModuleInfo {
+	automaticModule("io.github.andrewauclair.ModernDocking:modern_docking", "ModernDocking")
+}
+
 run {
 	args = ['indev']
 
@@ -216,7 +269,7 @@ run {
 
 	dependencies {
 		runtimeOnly project(':launcher')
-		runtimeOnly project(":launcher.layout.default")
+		runtimeOnly project(":launcher.layout.sprite")
 		runtimeOnly project(":launcher.layout.animation")
 		runtimeOnly project(":launcher.layout.tilemap")
 		runtimeOnly project(":launcher.layout.server")

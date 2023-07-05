@@ -4,7 +4,7 @@ package com.deflatedpickle.rawky.colourhistory
 
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.undulation.constraints.FillBothFinishLine
-import org.jdesktop.swingx.WrapLayout
+import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.GridBagLayout
 import javax.swing.JPanel
 import javax.swing.JScrollPane

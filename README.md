@@ -51,4 +51,8 @@
 	<a href="https://catppuccin.com/"><img alt="Catppuccin" src="https://avatars.githubusercontent.com/u/93489351?s=200&v=4" width="64"></a>
 	<a href="https://formdev.com/flatlaf/"><img alt="FlatLAF" src="https://raw.githubusercontent.com/JFormDesigner/FlatLaf/aa4c6ee9da21eceaebede8b3196ab0476c0abd07/flatlaf-demo/src/main/resources/com/formdev/flatlaf/demo/FlatLaf.svg" width="64"></a>
 	<a href="https://opendyslexic.org/"><img alt="OpenDyslexic" src="https://avatars.githubusercontent.com/u/39324024?s=200&v=4" width="64"></a>
+	<br>
+	<a href="https://github.com/andrewauclair/ModernDocking">ModernDocking</a>
+	<a href="https://github.com/fvarrui/JavaPackager">JavaPackager</a>
+	<a href="https://github.com/dheid/colorpicker">ColorPicker</a>
 </p>
