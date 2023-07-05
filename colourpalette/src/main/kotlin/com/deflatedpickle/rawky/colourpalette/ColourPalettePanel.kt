@@ -6,9 +6,7 @@ package com.deflatedpickle.rawky.colourpalette
 
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
-import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.palette.Palette
-import com.deflatedpickle.rawky.api.palette.PaletteParser
 import com.deflatedpickle.rawky.event.EventChangeColour
 import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
 import com.deflatedpickle.undulation.constraints.FillBothFinishLine

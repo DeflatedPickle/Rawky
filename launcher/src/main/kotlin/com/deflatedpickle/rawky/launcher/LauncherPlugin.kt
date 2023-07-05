@@ -167,40 +167,44 @@ object LauncherPlugin {
                 }
 
                 (get(MenuCategory.TOOLS.name) as JMenu).apply {
-                    add(JMenu("Dock").apply {
-                        DockingInternal::class.java.getDeclaredField("dockables").apply {
-                            isAccessible = true
+                    add(
+                        JMenu("Dock").apply {
+                            DockingInternal::class.java.getDeclaredField("dockables").apply {
+                                isAccessible = true
 
-                            // TODO: sync with current layout
-                            for ((_, v) in get(null) as HashMap<String, DockableWrapper>) {
-                                add(v.dockable.tabText, type = MenuButtonType.CHECK) {
-                                    if ((it.source as AbstractButton).isSelected) {
-                                        Docking.dock(v.dockable, Window)
-                                    } else {
-                                        Docking.undock(v.dockable)
+                                // TODO: sync with current layout
+                                for ((_, v) in get(null) as HashMap<String, DockableWrapper>) {
+                                    add(v.dockable.tabText, type = MenuButtonType.CHECK) {
+                                        if ((it.source as AbstractButton).isSelected) {
+                                            Docking.dock(v.dockable, Window)
+                                        } else {
+                                            Docking.undock(v.dockable)
+                                        }
                                     }
                                 }
                             }
-                        }
 
-                        addSeparator()
+                            addSeparator()
 
-                        add(JMenu("Load").apply {
-                            for (l in DockingLayouts.getLayoutNames()) {
-                                add(l.capitalize()) {
-                                    DockingState.restoreApplicationLayout(DockingLayouts.getLayout(l))
+                            add(
+                                JMenu("Load").apply {
+                                    for (l in DockingLayouts.getLayoutNames()) {
+                                        add(l.capitalize()) {
+                                            DockingState.restoreApplicationLayout(DockingLayouts.getLayout(l))
+                                        }
+                                    }
                                 }
-                            }
-                        })
-
-                        addSeparator()
-
-                        add(
-                            ApplicationLayoutMenuItem(
-                                "default", "Restore Default Layout"
                             )
-                        )
-                    })
+
+                            addSeparator()
+
+                            add(
+                                ApplicationLayoutMenuItem(
+                                    "default", "Restore Default Layout"
+                                )
+                            )
+                        }
+                    )
                 }
             }
 
@@ -220,22 +224,24 @@ object LauncherPlugin {
 
                 add(Box.createHorizontalGlue())
 
-                add(JComboBox(arrayOf<String>()).apply {
-                    for (l in DockingLayouts.getLayoutNames()) {
-                        addItem(l.capitalize())
-                    }
+                add(
+                    JComboBox(arrayOf<String>()).apply {
+                        for (l in DockingLayouts.getLayoutNames()) {
+                            addItem(l.capitalize())
+                        }
 
-                    selectedItem = "Default"
-                    maximumSize = Dimension(200, preferredSize.height)
+                        selectedItem = "Default"
+                        maximumSize = Dimension(200, preferredSize.height)
 
-                    addItemListener {
-                        when (it.stateChange) {
-                            ItemEvent.SELECTED -> {
-                                DockingState.restoreApplicationLayout(DockingLayouts.getLayout((it.item as String).lowercase()))
+                        addItemListener {
+                            when (it.stateChange) {
+                                ItemEvent.SELECTED -> {
+                                    DockingState.restoreApplicationLayout(DockingLayouts.getLayout((it.item as String).lowercase()))
+                                }
                             }
                         }
                     }
-                })
+                )
             }
         }
     }
@@ -372,7 +378,7 @@ object LauncherPlugin {
     fun saveLayouts() {
         for (l in DockingLayouts.getLayoutNames()) {
             ApplicationLayoutXML.saveLayoutToFile(
-                folder / "${l}.xml",
+                folder / "$l.xml",
                 DockingLayouts.getLayout(l)
             )
         }
@@ -381,7 +387,7 @@ object LauncherPlugin {
     fun loadUserLayouts() {
         for (f in folder.walk()) {
             if (f.isFile && f.extension == "xml" && DockingLayouts.getLayoutNames()
-                    .indexOf(f.nameWithoutExtension) == -1
+                .indexOf(f.nameWithoutExtension) == -1
             ) {
                 DockingLayouts.addLayout(f.name, ApplicationLayoutXML.loadLayoutFromFile(f))
             }

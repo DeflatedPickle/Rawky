@@ -20,7 +20,7 @@
 </table>
 
 <p align="center">
- 	<a href="https://github.com/DeflatedPickle/Rawky/commits/rewrite"><img src="https://img.shields.io/github/last-commit/DeflatedPickle/Rawky.svg"></a>
+	<a href="https://github.com/DeflatedPickle/Rawky/commits/rewrite"><img src="https://img.shields.io/github/last-commit/DeflatedPickle/Rawky.svg"></a>
 	<img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/DeflatedPickle/Rawky/gradle-dist.yml">
 	<a href="https://github.com/DeflatedPickle/Rawky/wiki"><img src="https://img.shields.io/badge/wiki-documentation-forestgreen"></a>
 </p>
@@ -47,8 +47,8 @@
 
 <p align="center">this project depends on the following other open-source projects</p>
 <p align="center">
-	<a href=""><img alt="Kotlin" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kotlin_Icon.svg/512px-Kotlin_Icon.svg.png?20171012085709" width="64"></a>
-	<a href=""><img alt="Catppuccin" src="https://avatars.githubusercontent.com/u/93489351?s=200&v=4" width="64"></a>
-	<a href=""><img alt="FlatLAF" src="https://raw.githubusercontent.com/JFormDesigner/FlatLaf/aa4c6ee9da21eceaebede8b3196ab0476c0abd07/flatlaf-demo/src/main/resources/com/formdev/flatlaf/demo/FlatLaf.svg" width="64"></a>
+	<a href="https://kotlinlang.org/"><img alt="Kotlin" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kotlin_Icon.svg/512px-Kotlin_Icon.svg.png?20171012085709" width="64"></a>
+	<a href="https://catppuccin.com/"><img alt="Catppuccin" src="https://avatars.githubusercontent.com/u/93489351?s=200&v=4" width="64"></a>
+	<a href="https://formdev.com/flatlaf/"><img alt="FlatLAF" src="https://raw.githubusercontent.com/JFormDesigner/FlatLaf/aa4c6ee9da21eceaebede8b3196ab0476c0abd07/flatlaf-demo/src/main/resources/com/formdev/flatlaf/demo/FlatLaf.svg" width="64"></a>
 	<a href="https://opendyslexic.org/"><img alt="OpenDyslexic" src="https://avatars.githubusercontent.com/u/39324024?s=200&v=4" width="64"></a>
 </p>

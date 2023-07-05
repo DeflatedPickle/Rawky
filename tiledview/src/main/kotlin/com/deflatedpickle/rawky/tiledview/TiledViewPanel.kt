@@ -4,19 +4,15 @@ package com.deflatedpickle.rawky.tiledview
 
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
-import com.deflatedpickle.undulation.api.ButtonType
-import com.deflatedpickle.undulation.functions.AbstractButton
 import org.jdesktop.swingx.JXPanel
 import java.awt.BorderLayout
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.image.BufferedImage
-import javax.swing.JToolBar
 
 object TiledViewPanel : PluginPanel() {
     val tilePanel = object : JXPanel() {
@@ -47,8 +43,10 @@ object TiledViewPanel : PluginPanel() {
             g2d.scale(scale, scale)
 
             RawkyPlugin.document?.let { doc ->
-                for (v in PaintLayer.registry.getAll().values
-                    .filter { it.layer == LayerCategory.GRID }) {
+                for (
+                    v in PaintLayer.registry.getAll().values
+                        .filter { it.layer == LayerCategory.GRID }
+                ) {
                     for (row in 0 until rows) {
                         for (column in 0 until columns) {
                             val temp = bufferedImage.createGraphics()

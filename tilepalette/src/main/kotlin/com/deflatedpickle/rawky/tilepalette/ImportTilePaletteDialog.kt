@@ -1,14 +1,19 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.tilepalette
 
 import com.deflatedpickle.haruhi.Haruhi
-import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.undulation.constraints.FillHorizontal
 import com.deflatedpickle.undulation.constraints.FinishLine
 import com.deflatedpickle.undulation.constraints.StickEast
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.GridBagLayout
-import javax.swing.*
+import javax.swing.JButton
+import javax.swing.JLabel
+import javax.swing.JPanel
+import javax.swing.JSpinner
+import javax.swing.SpinnerNumberModel
 
 class ImportTilePaletteDialog : TaskDialog(Haruhi.window, "Import Tile Palette") {
     val tileWidthInput = JSpinner(SpinnerNumberModel(16, 1, null, 8))

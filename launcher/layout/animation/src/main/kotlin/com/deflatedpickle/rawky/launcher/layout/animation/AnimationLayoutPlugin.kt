@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused")
 
 package com.deflatedpickle.rawky.launcher.layout.animation
@@ -5,10 +7,8 @@ package com.deflatedpickle.rawky.launcher.layout.animation
 import ModernDocking.DockingRegion
 import ModernDocking.layouts.DockingLayouts
 import ModernDocking.layouts.WindowLayoutBuilder
-import ModernDocking.persist.AppState
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 
 @Plugin(
     value = "animation_layout",

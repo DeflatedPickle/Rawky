@@ -8,7 +8,6 @@ import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.marvin.registry.Registry
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.tool.bucket.BucketSettings
-import java.awt.Color
 
 interface Fill {
     companion object {

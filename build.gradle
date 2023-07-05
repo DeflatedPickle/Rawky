@@ -133,7 +133,7 @@ distributions {
 	//noinspection GroovyAssignabilityCheck
 	main {
 		contents {
-			from files('README.MD', 'LICENSE')
+			from files('README.md', 'LICENSE')
 			from startScripts
 
 			into('data') {
@@ -200,44 +200,6 @@ launch4j {
 	bundledJrePath = "~/.jdks/jbr-11.0.14.1"
 }
 
-task deb(type: Deb) {
-	packageName = 'rawky'
-	version = project.properties["pre"] ?: version
-	release = 1
-	os LINUX
-
-	from(jar.outputs.files) {
-		into 'lib'
-	}
-	from('lib') {
-		into 'lib'
-	}
-	from('home') {
-		createDirectoryEntry = true
-		fileMode 0500
-		into 'home'
-	}
-}
-
-task rpm(type: Rpm) {
-	packageName = 'rawky'
-	version = project.properties["pre"] ?: version
-	release = 1
-	os LINUX
-
-	from(jar.outputs.files) {
-		into 'lib'
-	}
-	from('lib') {
-		into 'lib'
-	}
-	from('home') {
-		createDirectoryEntry = true
-		fileMode 0500
-		into 'home'
-	}
-}
-
 run {
 	args = ['indev']
 
@@ -253,34 +215,34 @@ run {
 	workingDir 'run'
 
 	dependencies {
-		implementation project(':launcher')
-		implementation project(":launcher.layout.default")
-		implementation project(":launcher.layout.animation")
-		implementation project(":launcher.layout.tilemap")
-		implementation project(":launcher.layout.server")
+		runtimeOnly project(':launcher')
+		runtimeOnly project(":launcher.layout.default")
+		runtimeOnly project(":launcher.layout.animation")
+		runtimeOnly project(":launcher.layout.tilemap")
+		runtimeOnly project(":launcher.layout.server")
 
-		implementation project(":pixelgrid")
+		runtimeOnly project(":pixelgrid")
 
-		implementation project(":pixelgrid.mode.mouse")
-		implementation project(":pixelgrid.mode.keyboard")
+		runtimeOnly project(":pixelgrid.mode.mouse")
+		runtimeOnly project(":pixelgrid.mode.keyboard")
 
-		implementation project(":pixelgrid.impex.imageio")
-		implementation project(":pixelgrid.impex.ascii")
-		implementation project(":pixelgrid.impex.rawr")
+		runtimeOnly project(":pixelgrid.impex.imageio")
+		runtimeOnly project(":pixelgrid.impex.ascii")
+		runtimeOnly project(":pixelgrid.impex.rawr")
 
-		implementation project(":pixelgrid.impex.ascii.block")
+		runtimeOnly project(":pixelgrid.impex.ascii.block")
 
-		implementation project(":pixelgrid.grid.pixel")
-		implementation project(":pixelgrid.grid.tile")
+		runtimeOnly project(":pixelgrid.grid.pixel")
+		runtimeOnly project(":pixelgrid.grid.tile")
 
-		implementation project(":pixelgrid.layer.background")
-		implementation project(":pixelgrid.layer.gridfill")
-		implementation project(":pixelgrid.layer.gridlines")
-		implementation project(":pixelgrid.layer.guides")
-		implementation project(":pixelgrid.layer.onionskin")
-		implementation project(":pixelgrid.layer.toolpaint")
-		implementation project(":pixelgrid.layer.cursor")
-		implementation project(":pixelgrid.layer.debug")
+		runtimeOnly project(":pixelgrid.layer.background")
+		runtimeOnly project(":pixelgrid.layer.gridfill")
+		runtimeOnly project(":pixelgrid.layer.gridlines")
+		runtimeOnly project(":pixelgrid.layer.guides")
+		runtimeOnly project(":pixelgrid.layer.onionskin")
+		runtimeOnly project(":pixelgrid.layer.toolpaint")
+		runtimeOnly project(":pixelgrid.layer.cursor")
+		runtimeOnly project(":pixelgrid.layer.debug")
 
 		runtimeOnly project(":colourwheel")
 		runtimeOnly project(":colourpalette")

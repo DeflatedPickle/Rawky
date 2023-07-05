@@ -1,3 +1,7 @@
+plugins {
+	id 'org.jetbrains.kotlin.jvm'
+}
+
 dependencies {
 	// Terminal colours
 	implementation 'org.fusesource.jansi:jansi:2.4.0'

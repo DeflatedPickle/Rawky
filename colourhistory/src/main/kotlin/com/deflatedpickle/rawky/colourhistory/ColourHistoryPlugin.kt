@@ -10,7 +10,6 @@ import com.deflatedpickle.haruhi.api.util.ComponentPosition
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
-import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.event.EventChangeColour
 import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme

@@ -9,11 +9,9 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.api.util.ComponentPosition.WEST
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
-import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.event.EventChangeFrame
 import com.deflatedpickle.rawky.event.EventChangeLayer
-import com.deflatedpickle.rawky.event.EventNewLayer
 import com.deflatedpickle.rawky.extension.removeAll
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme

@@ -1,16 +1,16 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused")
 
 package com.deflatedpickle.rawky.launcher.layout.default
 
 import ModernDocking.DockingRegion
-import ModernDocking.DockingState
 import ModernDocking.layouts.DockingLayouts
 import ModernDocking.layouts.WindowLayoutBuilder
 import ModernDocking.persist.AppState
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
-import javax.swing.SwingUtilities
 
 @Plugin(
     value = "default_layout",

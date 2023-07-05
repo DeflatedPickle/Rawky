@@ -10,7 +10,6 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
-import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.toolbox.event.EventToolboxFinish

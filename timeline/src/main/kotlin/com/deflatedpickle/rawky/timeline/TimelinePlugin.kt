@@ -9,7 +9,6 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.api.util.ComponentPosition.SOUTH
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
-import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.event.EventChangeFrame
 import com.deflatedpickle.rawky.setting.RawkyDocument

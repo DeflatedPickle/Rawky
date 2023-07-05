@@ -7,7 +7,6 @@ package com.deflatedpickle.rawky.pixelgrid.layer.background
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer

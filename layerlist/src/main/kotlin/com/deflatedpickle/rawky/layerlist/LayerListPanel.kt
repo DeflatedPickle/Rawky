@@ -5,7 +5,6 @@
 package com.deflatedpickle.rawky.layerlist
 
 import com.deflatedpickle.haruhi.component.PluginPanel
-import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
@@ -20,9 +19,19 @@ import com.deflatedpickle.rawky.util.DrawUtil
 import com.deflatedpickle.undulation.functions.AbstractButton
 import com.deflatedpickle.undulation.functions.extensions.add
 import org.oxbow.swingbits.dialog.task.TaskDialog
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Component
+import java.awt.Graphics
+import java.awt.Graphics2D
 import java.util.EventObject
-import javax.swing.*
+import javax.swing.AbstractCellEditor
+import javax.swing.DefaultCellEditor
+import javax.swing.JCheckBox
+import javax.swing.JPanel
+import javax.swing.JScrollPane
+import javax.swing.JTable
+import javax.swing.JToolBar
+import javax.swing.ListSelectionModel
 import javax.swing.table.DefaultTableModel
 import javax.swing.table.TableCellEditor
 import javax.swing.table.TableCellRenderer
@@ -98,7 +107,8 @@ object LayerListPanel : PluginPanel() {
             val frame = doc.children[doc.selectedIndex]
 
             if (frame.selectedIndex > frame.children.size ||
-                frame.selectedIndex < 0) return@let
+                frame.selectedIndex < 0
+            ) return@let
 
             val layer = frame.children[frame.selectedIndex]
 
@@ -164,8 +174,8 @@ object LayerListPanel : PluginPanel() {
     }
 
     private val columnZeroRenderer = TableCellRenderer { _: JTable, _: Any?,
-                                                         _: Boolean, _: Boolean,
-                                                         row: Int, _: Int ->
+        _: Boolean, _: Boolean,
+        row: Int, _: Int ->
         object : JPanel() {
             override fun paintComponent(g: Graphics) {
                 if (RawkyPlugin.document == null) return

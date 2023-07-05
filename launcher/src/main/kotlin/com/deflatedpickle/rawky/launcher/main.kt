@@ -10,17 +10,23 @@ import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.DependencyComparator
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.component.PluginPanel
-import com.deflatedpickle.haruhi.event.*
-import com.deflatedpickle.haruhi.util.*
+import com.deflatedpickle.haruhi.event.EventCreatePluginComponent
+import com.deflatedpickle.haruhi.event.EventCreatedPluginComponents
+import com.deflatedpickle.haruhi.event.EventDeserializedConfig
+import com.deflatedpickle.haruhi.event.EventLoadedPlugins
+import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
+import com.deflatedpickle.haruhi.event.EventProgramShutdown
+import com.deflatedpickle.haruhi.util.ClassGraphUtil
+import com.deflatedpickle.haruhi.util.ConfigUtil
+import com.deflatedpickle.haruhi.util.PluginUtil
+import com.deflatedpickle.haruhi.util.ValidateUtil
 import com.deflatedpickle.marvin.util.OSUtil
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.launcher.gui.Window
 import com.deflatedpickle.rawky.pixelcell.collection.PixelCell
 import com.deflatedpickle.rawky.tilecell.collection.TileCell
-import com.formdev.flatlaf.FlatDarkLaf
 import com.formdev.flatlaf.FlatLaf
 import com.formdev.flatlaf.IntelliJTheme
-import com.formdev.flatlaf.util.FontUtils
 import com.jidesoft.plaf.LookAndFeelFactory
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -35,13 +41,11 @@ import org.fusesource.jansi.AnsiConsole
 import org.oxbow.swingbits.dialog.task.TaskDialogs
 import org.oxbow.swingbits.util.Strings
 import java.awt.BorderLayout
-import java.awt.Color
 import java.awt.Dimension
 import java.io.File
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
 import kotlin.system.exitProcess
-
 
 @InternalSerializationApi
 fun main(args: Array<String>) {
@@ -206,14 +210,14 @@ fun main(args: Array<String>) {
     PluginUtil.loadPlugins {
         // Versions must be semantic
         ValidateUtil.validateVersion(it) &&
-                // Descriptions must contain a <br> tag
-                ValidateUtil.validateDescription(it) &&
-                // Specific types need a specified field
-                ValidateUtil.validateType(it) &&
-                // Dependencies should be "author@plugin#version"
-                // PluginUtil.validateDependencySlug(it) &&
-                // The dependency should exist
-                ValidateUtil.validateDependencyExistence(it)
+            // Descriptions must contain a <br> tag
+            ValidateUtil.validateDescription(it) &&
+            // Specific types need a specified field
+            ValidateUtil.validateType(it) &&
+            // Dependencies should be "author@plugin#version"
+            // PluginUtil.validateDependencySlug(it) &&
+            // The dependency should exist
+            ValidateUtil.validateDependencyExistence(it)
     }
     logger.info("Loaded plugins; ${PluginUtil.loadedPlugins.map { PluginUtil.pluginToSlug(it) }}")
     EventLoadedPlugins.trigger(PluginUtil.loadedPlugins)

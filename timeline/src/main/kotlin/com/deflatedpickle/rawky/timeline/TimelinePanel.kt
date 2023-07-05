@@ -5,7 +5,6 @@
 package com.deflatedpickle.rawky.timeline
 
 import com.deflatedpickle.haruhi.component.PluginPanel
-import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
@@ -13,15 +12,32 @@ import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.dialog.EditFrameDialog
 import com.deflatedpickle.rawky.dialog.NewFrameDialog
 import com.deflatedpickle.rawky.dialog.NewLayerDialog
-import com.deflatedpickle.rawky.event.*
+import com.deflatedpickle.rawky.event.EventChangeFrame
+import com.deflatedpickle.rawky.event.EventNewFrame
+import com.deflatedpickle.rawky.event.EventNewLayer
+import com.deflatedpickle.rawky.event.EventUpdateCell
+import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.event.packet.PacketChange
 import com.deflatedpickle.rawky.util.DrawUtil
 import com.deflatedpickle.undulation.functions.AbstractButton
 import com.deflatedpickle.undulation.functions.extensions.add
 import org.jdesktop.swingx.JXList
 import org.oxbow.swingbits.dialog.task.TaskDialog
-import java.awt.*
-import javax.swing.*
+import java.awt.BorderLayout
+import java.awt.Color
+import java.awt.Dimension
+import java.awt.Graphics
+import java.awt.Graphics2D
+import javax.swing.BoxLayout
+import javax.swing.DefaultListModel
+import javax.swing.JLabel
+import javax.swing.JList
+import javax.swing.JPanel
+import javax.swing.JScrollPane
+import javax.swing.JToolBar
+import javax.swing.ListCellRenderer
+import javax.swing.ListSelectionModel
+import javax.swing.UIManager
 import javax.swing.border.LineBorder
 import kotlin.math.min
 

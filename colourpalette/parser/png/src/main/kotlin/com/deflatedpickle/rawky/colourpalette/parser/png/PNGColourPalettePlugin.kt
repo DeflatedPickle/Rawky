@@ -5,9 +5,9 @@
 package com.deflatedpickle.rawky.colourpalette.parser.png
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
-import com.deflatedpickle.rawky.colourpalette.ColourPalettePlugin
 import com.deflatedpickle.rawky.api.palette.Palette
 import com.deflatedpickle.rawky.api.palette.PaletteParser
+import com.deflatedpickle.rawky.colourpalette.ColourPalettePlugin
 import so.jabber.FileUtils
 import java.awt.Color
 import java.io.File

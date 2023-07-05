@@ -16,10 +16,10 @@ include 'master'
 include 'core'
 include 'launcher'
 [
-		'default',
-		"animation",
-		"tilemap",
-		"server"
+	'default',
+	"animation",
+	"tilemap",
+	"server"
 ].each {
 	include "launcher.layout.$it"
 	project(":launcher.layout.$it").projectDir = new File(settingsDir, "launcher/layout/$it")
@@ -66,7 +66,16 @@ include 'pixelgrid'
 	include "pixelgrid.grid.$it"
 	project(":pixelgrid.grid.$it").projectDir = new File(settingsDir, "pixelgrid/grid/$it")
 }
-['background', 'gridfill', 'gridlines', "guides", "onionskin", "toolpaint", "cursor", "debug"].each {
+[
+	'background',
+	'gridfill',
+	'gridlines',
+	"guides",
+	"onionskin",
+	"toolpaint",
+	"cursor",
+	"debug"
+].each {
 	include "pixelgrid.layer.$it"
 	project(":pixelgrid.layer.$it").projectDir = new File(settingsDir, "pixelgrid/layer/$it")
 }
@@ -94,7 +103,14 @@ include 'toolbox'
 
 include 'colourwheel'
 include 'colourpalette'
-['json', 'png', "gpl", "pal", "txt", "hex"].each {
+[
+	'json',
+	'png',
+	"gpl",
+	"pal",
+	"txt",
+	"hex"
+].each {
 	include "colourpalette.parser.$it"
 	project(":colourpalette.parser.$it").projectDir = new File(settingsDir, "colourpalette/parser/$it")
 }

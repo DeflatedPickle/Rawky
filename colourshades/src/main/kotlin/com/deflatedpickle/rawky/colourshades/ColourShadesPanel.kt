@@ -36,7 +36,8 @@ object ColourShadesPanel : PluginPanel() {
                     ColourButton(
                         PixelCellPlugin
                             .current
-                            .darken(i / (settings.darkShades.toDouble() / 2) + 0.1,
+                            .darken(
+                                i / (settings.darkShades.toDouble() / 2) + 0.1,
                                 settings.brightnessStep
                             )
                     ) {
@@ -53,7 +54,8 @@ object ColourShadesPanel : PluginPanel() {
                     ColourButton(
                         PixelCellPlugin
                             .current
-                            .lighten(i / (settings.darkShades.toDouble() / 2) + 0.1,
+                            .lighten(
+                                i / (settings.darkShades.toDouble() / 2) + 0.1,
                                 settings.brightnessStep
                             )
                     ) {

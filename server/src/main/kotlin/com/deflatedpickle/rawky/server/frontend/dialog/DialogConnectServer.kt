@@ -6,7 +6,6 @@ package com.deflatedpickle.rawky.server.frontend.dialog
 
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.ServerSettings
 import com.deflatedpickle.rawky.server.backend.api.Encoder

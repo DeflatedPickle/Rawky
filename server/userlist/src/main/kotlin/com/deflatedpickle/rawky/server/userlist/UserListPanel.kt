@@ -4,7 +4,6 @@ package com.deflatedpickle.rawky.server.userlist
 
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.component.PluginPanel
-import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.backend.event.EventStartServer
 import com.deflatedpickle.rawky.server.backend.event.EventUserJoinServer

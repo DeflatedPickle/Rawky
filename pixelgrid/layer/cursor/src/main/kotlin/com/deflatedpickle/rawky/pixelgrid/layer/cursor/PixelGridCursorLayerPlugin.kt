@@ -17,7 +17,10 @@ import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer.Companion.registry
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.setting.RawkySettings
 import kotlinx.serialization.ExperimentalSerializationApi
-import java.awt.*
+import java.awt.Graphics
+import java.awt.Graphics2D
+import java.awt.Image
+import java.awt.MouseInfo
 import javax.swing.SwingUtilities
 
 @ExperimentalSerializationApi

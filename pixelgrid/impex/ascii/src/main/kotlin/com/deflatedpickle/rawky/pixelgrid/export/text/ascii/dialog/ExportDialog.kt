@@ -3,7 +3,6 @@
 package com.deflatedpickle.rawky.pixelgrid.export.text.ascii.dialog
 
 import com.deflatedpickle.haruhi.Haruhi
-import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.pixelgrid.export.text.ascii.api.Palette
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine

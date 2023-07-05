@@ -1,8 +1,9 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelcell.collection
 
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.undulation.serializer.ColorSerializer
-import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.awt.Color

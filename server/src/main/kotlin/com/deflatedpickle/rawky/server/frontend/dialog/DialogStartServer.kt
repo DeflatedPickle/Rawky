@@ -6,7 +6,6 @@ package com.deflatedpickle.rawky.server.frontend.dialog
 
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.icupnp.UPnP
 import com.deflatedpickle.icupnp.UPnP.getExternalIP
 import com.deflatedpickle.rawky.server.ServerPlugin
@@ -14,8 +13,6 @@ import com.deflatedpickle.rawky.server.ServerPlugin.portMax
 import com.deflatedpickle.rawky.server.ServerPlugin.portMin
 import com.deflatedpickle.rawky.server.ServerSettings
 import com.deflatedpickle.rawky.server.backend.api.Encoder
-import com.deflatedpickle.rawky.server.backend.util.functions.getInternalIP
-import com.deflatedpickle.rawky.server.backend.util.functions.getPublicIP
 import com.deflatedpickle.rawky.server.backend.util.functions.ipToByteArray
 import com.deflatedpickle.rawky.server.backend.util.functions.portToByteArray
 import com.deflatedpickle.rawky.server.frontend.widget.EncoderComboBox

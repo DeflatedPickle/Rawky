@@ -3,7 +3,6 @@
 package com.deflatedpickle.rawky.launcher.gui
 
 import com.deflatedpickle.haruhi.Haruhi
-import com.deflatedpickle.haruhi.util.PluginUtil
 import javax.swing.JToolBar
 
 object Toolbar : JToolBar() {

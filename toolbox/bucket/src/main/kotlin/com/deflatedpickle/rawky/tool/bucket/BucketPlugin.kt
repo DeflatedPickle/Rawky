@@ -14,14 +14,12 @@ import com.deflatedpickle.marvin.extensions.get
 import com.deflatedpickle.marvin.extensions.set
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.tool.bucket.api.Fill
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.ActionStack.Action
-import java.awt.Color
 import java.awt.Component
 import java.awt.Graphics2D
 import java.awt.event.ItemEvent
@@ -82,7 +80,8 @@ object BucketPlugin : Tool(
 
     override fun perform(
         cell: Cell<Any>,
-        button: Int, dragged: Boolean,
+        button: Int,
+        dragged: Boolean,
         clickCount: Int
     ) {
         // TODO: Write undo code for the fill bucket

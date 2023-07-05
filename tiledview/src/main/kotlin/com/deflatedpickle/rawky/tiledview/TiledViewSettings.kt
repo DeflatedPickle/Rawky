@@ -5,7 +5,6 @@ package com.deflatedpickle.rawky.tiledview
 import com.deflatedpickle.haruhi.api.config.Config
 import com.deflatedpickle.rawky.settings.api.range.DoubleRange
 import com.deflatedpickle.rawky.settings.api.range.IntRange
-import com.deflatedpickle.rawky.settings.api.widget.SliderSpinner
 import kotlinx.serialization.Serializable
 
 @Serializable

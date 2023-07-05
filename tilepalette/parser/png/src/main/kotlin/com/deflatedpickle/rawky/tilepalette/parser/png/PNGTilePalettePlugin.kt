@@ -8,7 +8,6 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.rawky.api.palette.Palette
 import com.deflatedpickle.rawky.api.palette.PaletteParser
 import com.deflatedpickle.rawky.tilepalette.ImportTilePaletteDialog
-import com.deflatedpickle.rawky.tilepalette.TilePalettePanel
 import com.deflatedpickle.rawky.tilepalette.TilePalettePlugin
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.Image

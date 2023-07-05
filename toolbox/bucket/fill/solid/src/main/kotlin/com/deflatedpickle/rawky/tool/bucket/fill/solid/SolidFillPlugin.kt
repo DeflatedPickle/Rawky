@@ -10,7 +10,6 @@ import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.tool.bucket.api.Fill
 import com.deflatedpickle.rawky.tool.bucket.api.Fill.Companion.registry
-import java.awt.Color
 
 @Plugin(
     value = "solid",

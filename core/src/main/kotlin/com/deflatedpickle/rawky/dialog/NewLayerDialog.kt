@@ -3,7 +3,6 @@
 package com.deflatedpickle.rawky.dialog
 
 import com.deflatedpickle.haruhi.Haruhi
-import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.undulation.constraints.FillHorizontal
@@ -24,7 +23,8 @@ class NewLayerDialog(val index: Int = -1) : TaskDialog(Haruhi.window, "New Layer
         text = "Layer ${if (index == -1) {
             RawkyPlugin.document?.let { doc ->
                 val frame = doc.children[doc.selectedIndex]
-                frame.children.size}
+                frame.children.size
+            }
         } else index}"
     }
     /*val indexInput = JSpinner(SpinnerNumberModel(0, 0, null, 1)).apply {

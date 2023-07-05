@@ -5,7 +5,6 @@
 package com.deflatedpickle.rawky.dialog
 
 import com.deflatedpickle.haruhi.Haruhi
-import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.CellProvider
@@ -21,7 +20,13 @@ import org.oxbow.swingbits.dialog.task.TaskDialog
 import so.n0weak.ExtendedComboBox
 import java.awt.GridBagLayout
 import java.awt.event.ItemEvent
-import javax.swing.*
+import javax.swing.JButton
+import javax.swing.JComboBox
+import javax.swing.JLabel
+import javax.swing.JPanel
+import javax.swing.JSeparator
+import javax.swing.JSpinner
+import javax.swing.SpinnerNumberModel
 
 @OptIn(InternalSerializationApi::class)
 class NewFileDialog : TaskDialog(Haruhi.window, "New File") {

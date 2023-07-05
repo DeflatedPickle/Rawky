@@ -3,7 +3,6 @@
 package com.deflatedpickle.rawky.dialog
 
 import com.deflatedpickle.haruhi.Haruhi
-import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.constraints.StickEast

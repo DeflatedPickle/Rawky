@@ -7,7 +7,6 @@ package com.deflatedpickle.rawky.pixelgrid.layer.onionskin
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Layer
@@ -56,7 +55,7 @@ object PixelGridOnionSkinLayerPlugin : PaintLayer {
                     g2d.color = it.previousColour
                 }
 
-                for (i in 1 .. it.previousFrames) {
+                for (i in 1..it.previousFrames) {
                     if (doc.selectedIndex - i >= 0) {
                         g2d.composite = AlphaComposite.getInstance(
                             AlphaComposite.SRC_OVER,
@@ -70,7 +69,8 @@ object PixelGridOnionSkinLayerPlugin : PaintLayer {
                                 for (cell in grid.children) {
                                     if (cell.content != CellProvider.current.default) {
                                         if (it.skinStratergy == SkinStratergy.COLOUR &&
-                                            CellProvider.current.current is Color) {
+                                            CellProvider.current.current is Color
+                                        ) {
                                             g2d.color = cell.content as Color
                                         }
 
@@ -89,7 +89,7 @@ object PixelGridOnionSkinLayerPlugin : PaintLayer {
                     g2d.color = it.futureColour
                 }
 
-                for (i in 1 .. it.futureFrames) {
+                for (i in 1..it.futureFrames) {
                     if (doc.selectedIndex + i < doc.children.size) {
                         g2d.composite = AlphaComposite.getInstance(
                             AlphaComposite.SRC_OVER,
@@ -103,7 +103,8 @@ object PixelGridOnionSkinLayerPlugin : PaintLayer {
                                 for (cell in grid.children) {
                                     if (cell.content != CellProvider.current.default) {
                                         if (it.skinStratergy == SkinStratergy.COLOUR &&
-                                            CellProvider.current.current is Color) {
+                                            CellProvider.current.current is Color
+                                        ) {
                                             g2d.color = cell.content as Color
                                         }
 

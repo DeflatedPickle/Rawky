@@ -3,10 +3,8 @@
 package com.deflatedpickle.rawky.server.backend.request
 
 import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.ServerPlugin.server
-import com.deflatedpickle.rawky.server.backend.query.QueryUpdateCell
 import com.deflatedpickle.rawky.server.backend.response.ResponseActiveUsers
 import com.deflatedpickle.rawky.server.backend.response.ResponseUserJoin
 import com.deflatedpickle.rawky.server.backend.util.User

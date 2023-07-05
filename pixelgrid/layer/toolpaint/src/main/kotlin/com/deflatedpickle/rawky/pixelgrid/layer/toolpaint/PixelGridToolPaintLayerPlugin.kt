@@ -6,7 +6,6 @@ package com.deflatedpickle.rawky.pixelgrid.layer.toolpaint
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.Painter
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Frame
