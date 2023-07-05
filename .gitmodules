@@ -28,3 +28,6 @@
 [submodule "libs/ldtkudos"]
 	path = libs/ldtkudos
 	url = https://github.com/DeflatedPickle/ldtkudos
+[submodule "libs/FlatOpenDyslexicFont"]
+	path = libs/FlatOpenDyslexicFont
+	url = https://github.com/DeflatedPickle/FlatOpenDyslexicFont

@@ -14,7 +14,7 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
     version = "1.0.0",
     description = """
         <br>
-        Sets the default positions of the components to paint with friends
+        Sets the default positions of the components to make tile maps
     """,
     type = PluginType.OTHER,
     dependencies = [

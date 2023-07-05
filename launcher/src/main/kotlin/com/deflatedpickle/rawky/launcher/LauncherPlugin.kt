@@ -8,6 +8,7 @@ import ModernDocking.Docking
 import ModernDocking.DockingState
 import ModernDocking.internal.DockableWrapper
 import ModernDocking.internal.DockingInternal
+import ModernDocking.layouts.ApplicationLayoutXML
 import ModernDocking.layouts.DockingLayouts
 import ModernDocking.ui.ApplicationLayoutMenuItem
 import com.deflatedpickle.haruhi.Haruhi
@@ -17,10 +18,12 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventImportDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
+import com.deflatedpickle.haruhi.event.EventProgramShutdown
 import com.deflatedpickle.haruhi.event.EventSaveDocument
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
+import com.deflatedpickle.marvin.extensions.div
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.impex.Exporter
@@ -41,7 +44,6 @@ import javax.swing.Box
 import javax.swing.JComboBox
 import javax.swing.JFileChooser
 import javax.swing.JMenu
-import javax.swing.SwingUtilities
 import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.system.exitProcess
 
@@ -61,6 +63,8 @@ import kotlin.system.exitProcess
 )
 @Suppress("unused")
 object LauncherPlugin {
+    val folder = (File(".") / "layout").apply { mkdirs() }
+
     private val exporterChooser = JFileChooser(File(".")).apply {
         EventProgramFinishSetup.addListener {
             for ((k, v) in Exporter.registry) {
@@ -128,7 +132,14 @@ object LauncherPlugin {
     }
 
     init {
+        EventProgramShutdown.addListener {
+            saveLayouts()
+        }
+
         EventProgramFinishSetup.addListener {
+            saveLayouts()
+            loadUserLayouts()
+
             val menuBar = RegistryUtil.get(MenuCategory.MENU.name)?.apply {
                 (get(MenuCategory.FILE.name) as JMenu).apply {
                     add("New", MonoIcon.FOLDER_NEW) { ActionUtil.newFile() }
@@ -355,6 +366,25 @@ object LauncherPlugin {
             }
 
             export(file)
+        }
+    }
+
+    fun saveLayouts() {
+        for (l in DockingLayouts.getLayoutNames()) {
+            ApplicationLayoutXML.saveLayoutToFile(
+                folder / "${l}.xml",
+                DockingLayouts.getLayout(l)
+            )
+        }
+    }
+
+    fun loadUserLayouts() {
+        for (f in folder.walk()) {
+            if (f.isFile && f.extension == "xml" && DockingLayouts.getLayoutNames()
+                    .indexOf(f.nameWithoutExtension) == -1
+            ) {
+                DockingLayouts.addLayout(f.name, ApplicationLayoutXML.loadLayoutFromFile(f))
+            }
         }
     }
 }

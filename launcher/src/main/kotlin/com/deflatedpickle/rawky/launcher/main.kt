@@ -5,6 +5,7 @@ package com.deflatedpickle.rawky.launcher
 import ModernDocking.Dockable
 import ModernDocking.Docking
 import ModernDocking.RootDockingPanel
+import com.deflatedpickle.flatlaf.fonts.opendyslexic.FlatOpenDyslexicFont
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.DependencyComparator
 import com.deflatedpickle.haruhi.api.plugin.Plugin
@@ -17,6 +18,9 @@ import com.deflatedpickle.rawky.launcher.gui.Window
 import com.deflatedpickle.rawky.pixelcell.collection.PixelCell
 import com.deflatedpickle.rawky.tilecell.collection.TileCell
 import com.formdev.flatlaf.FlatDarkLaf
+import com.formdev.flatlaf.FlatLaf
+import com.formdev.flatlaf.IntelliJTheme
+import com.formdev.flatlaf.util.FontUtils
 import com.jidesoft.plaf.LookAndFeelFactory
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -31,10 +35,13 @@ import org.fusesource.jansi.AnsiConsole
 import org.oxbow.swingbits.dialog.task.TaskDialogs
 import org.oxbow.swingbits.util.Strings
 import java.awt.BorderLayout
+import java.awt.Color
 import java.awt.Dimension
 import java.io.File
 import javax.swing.SwingUtilities
+import javax.swing.UIManager
 import kotlin.system.exitProcess
+
 
 @InternalSerializationApi
 fun main(args: Array<String>) {
@@ -77,6 +84,21 @@ fun main(args: Array<String>) {
             }
         }
     }
+
+    FlatOpenDyslexicFont.install()
+    FlatLaf.setPreferredFontFamily(FlatOpenDyslexicFont.FAMILY)
+
+    IntelliJTheme.setup(
+        LauncherPlugin::class.java.getResourceAsStream(
+            "/macchiato.theme.json"
+        )
+    )
+
+    UIManager.put("ModernDocking.titlebar.background.color", UIManager.get("TabbedPane.focusColor"))
+
+    // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
+    // SwingUtilities.updateComponentTreeUI(Window)
+    LookAndFeelFactory.installJideExtension()
 
     Haruhi.window = Window
     Haruhi.toastWindow = Window.toastWindow
@@ -244,12 +266,8 @@ fun main(args: Array<String>) {
     logger.debug("Took ${((loadTime - startTime) / 1000) % 60} seconds to load")
 
     SwingUtilities.invokeLater {
-        Window.size = Dimension(800, 600)
+        Window.size = Dimension(1200, 800)
         Window.setLocationRelativeTo(null)
-
-        // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
-        // SwingUtilities.updateComponentTreeUI(Window)
-        LookAndFeelFactory.installJideExtension()
 
         // This is a catch-all event, used by plugins to run code that depends on setup
         // though the specific events could be used instead

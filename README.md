@@ -12,9 +12,12 @@
 	<a href="https://www.reddit.com/r/rawky/"><img alt="Subreddit subscribers" src="https://img.shields.io/reddit/subreddit-subscribers/rawky?style=social"></a>
 </p>
 
-<p align="center">
-	<img src="https://user-images.githubusercontent.com/24986480/229325800-7def73d1-03fd-491a-94cf-872169b6b49d.png" alt="Rawky">
-</p>
+<table align="center">
+	<tr>
+		<th><img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/.github/image/default.png?raw=true" alt="Default"></th>
+		<th><img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/.github/image/animation.png?raw=true" alt="Animation"></th>
+	</tr>
+</table>
 
 <p align="center">
  	<a href="https://github.com/DeflatedPickle/Rawky/commits/rewrite"><img src="https://img.shields.io/github/last-commit/DeflatedPickle/Rawky.svg"></a>
@@ -38,4 +41,14 @@
 <h3 align="center">Download</h3>
 <p align="center">
 	<a href="https://github.com/DeflatedPickle/Rawky/releases/tag/dist-latest"><img alt="Latest" src="https://img.shields.io/github/downloads/DeflatedPickle/Rawky/dist-latest/total.svg"></a>
+</p>
+
+---
+
+<p align="center">this project depends on the following other open-source projects</p>
+<p align="center">
+	<a href=""><img alt="Kotlin" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kotlin_Icon.svg/512px-Kotlin_Icon.svg.png?20171012085709" width="64"></a>
+	<a href=""><img alt="Catppuccin" src="https://avatars.githubusercontent.com/u/93489351?s=200&v=4" width="64"></a>
+	<a href=""><img alt="FlatLAF" src="https://raw.githubusercontent.com/JFormDesigner/FlatLaf/aa4c6ee9da21eceaebede8b3196ab0476c0abd07/flatlaf-demo/src/main/resources/com/formdev/flatlaf/demo/FlatLaf.svg" width="64"></a>
+	<a href="https://opendyslexic.org/"><img alt="OpenDyslexic" src="https://avatars.githubusercontent.com/u/39324024?s=200&v=4" width="64"></a>
 </p>

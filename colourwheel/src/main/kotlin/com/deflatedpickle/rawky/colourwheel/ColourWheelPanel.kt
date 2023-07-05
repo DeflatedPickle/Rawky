@@ -6,6 +6,7 @@ import com.bric.colorpicker.ColorPicker
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.rawky.event.EventChangeColour
 import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
+import java.awt.BorderLayout
 
 object ColourWheelPanel : PluginPanel() {
     val colourPicker = ColorPicker(true, true).apply {
@@ -18,6 +19,8 @@ object ColourWheelPanel : PluginPanel() {
     }
 
     init {
+        layout = BorderLayout()
+
         add(colourPicker)
     }
 }
