@@ -1,4 +1,4 @@
-name: Gradle Dist
+name: Gradle PackageAll
 
 on:
   push:
@@ -58,6 +58,6 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${GITHUB_SHA::7}
+          tag_name: "dist-latest"
           prerelease: true
           files: ./build/*
