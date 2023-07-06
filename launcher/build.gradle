@@ -8,7 +8,7 @@ dependencies {
 
 	// Default theme
 	implementation 'com.formdev:flatlaf:3.1.1'
-	implementation 'io.github.andrewauclair.ModernDocking:ModernDockingUI:0.6.0'
+	implementation 'io.github.andrewauclair.ModernDocking:docking-ui:'
 
 	implementation 'com.deflatedpickle:FlatOpenDyslexicFont:'
 
