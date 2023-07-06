@@ -30,8 +30,8 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 object TileMapLayoutPlugin {
     init {
         val layout = WindowLayoutBuilder("deflatedpickle@pixel_grid")
-            .dock("deflatedpickle@tile_palette", "deflatedpickle@pixel_grid", DockingRegion.WEST, 0.2)
-            .dock("deflatedpickle@layer_list", "deflatedpickle@pixel_grid", DockingRegion.EAST)
+            .dock("deflatedpickle@tile_palette", "deflatedpickle@pixel_grid", DockingRegion.WEST, 0.3)
+            .dock("deflatedpickle@layer_list", "deflatedpickle@pixel_grid", DockingRegion.EAST, 0.3)
             .buildApplicationLayout()
 
         DockingLayouts.addLayout("tilemap", layout)

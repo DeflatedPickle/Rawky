@@ -31,3 +31,9 @@
 [submodule "libs/FlatOpenDyslexicFont"]
 	path = libs/FlatOpenDyslexicFont
 	url = https://github.com/DeflatedPickle/FlatOpenDyslexicFont
+[submodule "libs/ModernDocking"]
+	path = libs/ModernDocking
+	url = https://github.com/DeflatedPickle/ModernDocking
+[submodule "libs/colorpicker"]
+	path = libs/colorpicker
+	url = https://github.com/DeflatedPickle/colorpicker

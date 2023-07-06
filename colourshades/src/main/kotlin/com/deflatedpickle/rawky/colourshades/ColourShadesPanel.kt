@@ -41,8 +41,8 @@ object ColourShadesPanel : PluginPanel() {
                                 settings.brightnessStep
                             )
                     ) {
-                        PixelCellPlugin.current = it.color
-                        EventChangeColour.trigger(it.color)
+                        PixelCellPlugin.current = (it.source as ColourButton).colour
+                        EventChangeColour.trigger(PixelCellPlugin.current)
                     }
                 )
             }
@@ -59,8 +59,8 @@ object ColourShadesPanel : PluginPanel() {
                                 settings.brightnessStep
                             )
                     ) {
-                        PixelCellPlugin.current = it.color
-                        EventChangeColour.trigger(it.color)
+                        PixelCellPlugin.current = (it.source as ColourButton).colour
+                        EventChangeColour.trigger(PixelCellPlugin.current)
                     }
                 )
             }

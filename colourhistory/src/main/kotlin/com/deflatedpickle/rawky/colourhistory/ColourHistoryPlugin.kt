@@ -27,8 +27,6 @@ import java.awt.Color
     """,
     type = PluginType.COMPONENT,
     component = ColourHistoryPanel::class,
-    componentVisible = false,
-    componentMinimizedPosition = ComponentPosition.WEST,
     settings = ColourHistorySettings::class,
 )
 @Suppress("unused")
@@ -47,7 +45,7 @@ object ColourHistoryPlugin {
         }
 
         EventChangeColour.addListener { c ->
-            if (ColourHistoryPanel.panel.components.none { b -> (b as ColourButton).color == c }) {
+            if (ColourHistoryPanel.panel.components.none { b -> (b as ColourButton).colour == c }) {
                 addButton(c)
 
                 ConfigUtil.getSettings<ColourHistorySettings>("deflatedpickle@colour_history#*")?.let {
@@ -67,7 +65,7 @@ object ColourHistoryPlugin {
         ColourHistoryPanel.panel.add(
             ColourButton(c).apply {
                 addActionListener {
-                    PixelCellPlugin.current = this.color
+                    PixelCellPlugin.current = this.colour
                 }
             }
         )

@@ -25,8 +25,6 @@ import java.io.File
     """,
     type = PluginType.COMPONENT,
     component = ColourPalettePanel::class,
-    componentVisible = false,
-    componentMinimizedPosition = ComponentPosition.WEST,
 )
 @Suppress("unused")
 object ColourPalettePlugin {

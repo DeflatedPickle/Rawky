@@ -22,8 +22,6 @@ import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
     """,
     type = PluginType.COMPONENT,
     component = TiledViewPanel::class,
-    componentVisible = false,
-    componentMinimizedPosition = ComponentPosition.WEST,
     settings = TiledViewSettings::class,
 )
 object TiledViewPlugin {

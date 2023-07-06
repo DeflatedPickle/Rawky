@@ -18,6 +18,8 @@ import com.deflatedpickle.rawky.event.EventNewLayer
 import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.event.packet.PacketChange
+import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
+import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.util.DrawUtil
 import com.deflatedpickle.undulation.functions.AbstractButton
 import com.deflatedpickle.undulation.functions.extensions.add
@@ -187,10 +189,14 @@ object TimelinePanel : PluginPanel() {
                     // TODO: Scale based on the grid size
                     g2D.scale(0.24, 0.24)
 
-                    RawkyPlugin.document?.let {
+                    RawkyPlugin.document?.let { doc ->
+                        val frame = doc.children[doc.selectedIndex]
+
                         for (layer in value.children.reversed()) {
                             if (layer.visible) {
-                                DrawUtil.paintGridFill(g, layer.child)
+                                for (v in PaintLayer.registry.getAll().values.filter { it.layer == LayerCategory.GRID || it.layer == LayerCategory.BACKGROUND }) {
+                                    v.paint(doc, frame, layer, g2D)
+                                }
                             }
                         }
                     }

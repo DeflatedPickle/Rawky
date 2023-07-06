@@ -29,9 +29,7 @@ import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
     component = LayerListPanel::class,
     dependencies = [
         "deflatedpickle@core#*",
-    ],
-    componentMinimizedPosition = WEST,
-    componentVisible = false,
+    ]
 )
 object LayerListPlugin {
     init {

@@ -16,6 +16,10 @@ abstract class CellProvider<T> : Provider<Cell<T>>, HasName {
     abstract var current: @UnsafeVariance T
     abstract var default: @UnsafeVariance T
 
+    fun current(value: Any) {
+        current = value as T
+    }
+
     abstract fun perform(
         cell: Cell<Any>,
         button: Int,

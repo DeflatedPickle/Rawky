@@ -21,8 +21,6 @@ import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
     """,
     type = PluginType.COMPONENT,
     component = ColourWheelPanel::class,
-    componentVisible = false,
-    componentMinimizedPosition = ComponentPosition.WEST,
 )
 @Suppress("unused")
 object ColourWheelPlugin {
@@ -33,6 +31,7 @@ object ColourWheelPlugin {
 
         EventChangeColour.addListener {
             ColourWheelPanel.colourPicker.color = it
+            ColourWheelPanel.colourSelector.primary = it
         }
     }
 }

@@ -34,8 +34,6 @@ import javax.swing.filechooser.FileNameExtensionFilter
     """,
     type = PluginType.COMPONENT,
     component = TilePalettePanel::class,
-    componentVisible = false,
-    componentMinimizedPosition = ComponentPosition.WEST,
 )
 object TilePalettePlugin {
     val folder = (File(".") / "tilemap").apply { mkdirs() }

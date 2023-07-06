@@ -7,8 +7,11 @@ package com.deflatedpickle.rawky.tool.dropper
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.monocons.MonoIcon
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
+import com.deflatedpickle.rawky.event.EventChangeColour
+import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.ActionStack.Action
 import java.awt.Graphics2D
@@ -35,14 +38,15 @@ object DropperPlugin : Tool(
     }
 
     override fun perform(
-        cell: Cell<out Any>,
+        cell: Cell<Any>,
         button: Int,
         dragged: Boolean,
         clickCount: Int,
     ) {
         val action = object : Action(name) {
             override fun perform() {
-                // CellProvider.current.current = cell.content
+                CellProvider.current.current(cell.content)
+                EventChangeColour.trigger(PixelCellPlugin.current)
             }
 
             override fun cleanup() {

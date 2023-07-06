@@ -12,12 +12,12 @@ import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
 import com.deflatedpickle.undulation.constraints.FillBothFinishLine
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.widget.ColourButton
-import org.jdesktop.swingx.JXPanel
 import so.n0weak.ExtendedComboBox
 import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.Color
 import java.awt.GridBagLayout
 import java.awt.event.ItemEvent
+import javax.swing.JPanel
 import javax.swing.JScrollPane
 
 object ColourPalettePanel : PluginPanel() {
@@ -42,14 +42,14 @@ object ColourPalettePanel : PluginPanel() {
                         }
                     }
 
-                    colourPanel.validate()
+                    colourPanel.revalidate()
                     colourPanel.repaint()
                 }
             }
         }
     }
 
-    private val colourPanel = JXPanel().apply {
+    private val colourPanel = JPanel().apply {
         layout = WrapLayout()
     }
 

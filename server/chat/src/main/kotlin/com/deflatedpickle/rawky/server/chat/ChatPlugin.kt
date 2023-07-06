@@ -27,8 +27,6 @@ import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
     """,
     type = PluginType.COMPONENT,
     component = ChatPanel::class,
-    componentMinimizedPosition = ComponentPosition.SOUTH,
-    componentVisible = false,
     dependencies = [
         "deflatedpickle@core#*",
         "deflatedpickle@server#*",

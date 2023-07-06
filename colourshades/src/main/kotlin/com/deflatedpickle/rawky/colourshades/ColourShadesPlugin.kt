@@ -22,8 +22,6 @@ import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
     """,
     type = PluginType.COMPONENT,
     component = ColourShadesPanel::class,
-    componentVisible = false,
-    componentMinimizedPosition = ComponentPosition.WEST,
     settings = ColourShadesSettings::class
 )
 @Suppress("unused")

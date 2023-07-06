@@ -6,8 +6,10 @@ package com.deflatedpickle.rawky.launcher
 
 import ModernDocking.Docking
 import ModernDocking.DockingState
+import ModernDocking.event.DockingListener
 import ModernDocking.internal.DockableWrapper
 import ModernDocking.internal.DockingInternal
+import ModernDocking.internal.DockingListeners
 import ModernDocking.layouts.ApplicationLayoutXML
 import ModernDocking.layouts.DockingLayouts
 import ModernDocking.ui.ApplicationLayoutMenuItem
@@ -44,6 +46,7 @@ import javax.swing.Box
 import javax.swing.JComboBox
 import javax.swing.JFileChooser
 import javax.swing.JMenu
+import javax.swing.SwingUtilities
 import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.system.exitProcess
 
@@ -127,6 +130,24 @@ object LauncherPlugin {
                 add("Open \"${i.absolutePath}\"") {
                     open(i)
                 }
+            }
+        }
+    }
+
+    val layoutComboBox = JComboBox(arrayOf<String>()).apply {
+        maximumSize = Dimension(200, preferredSize.height)
+
+        addItemListener {
+            when (it.stateChange) {
+                ItemEvent.SELECTED -> {
+                    DockingState.restoreApplicationLayout(DockingLayouts.getLayout((it.item as String).lowercase()))
+                }
+            }
+        }
+
+        EventProgramFinishSetup.addListener {
+            for (l in DockingLayouts.getLayoutNames()) {
+                addItem(l.capitalize())
             }
         }
     }
@@ -224,24 +245,7 @@ object LauncherPlugin {
 
                 add(Box.createHorizontalGlue())
 
-                add(
-                    JComboBox(arrayOf<String>()).apply {
-                        for (l in DockingLayouts.getLayoutNames()) {
-                            addItem(l.capitalize())
-                        }
-
-                        selectedItem = "Default"
-                        maximumSize = Dimension(200, preferredSize.height)
-
-                        addItemListener {
-                            when (it.stateChange) {
-                                ItemEvent.SELECTED -> {
-                                    DockingState.restoreApplicationLayout(DockingLayouts.getLayout((it.item as String).lowercase()))
-                                }
-                            }
-                        }
-                    }
-                )
+                add(layoutComboBox)
             }
         }
     }
@@ -387,7 +391,7 @@ object LauncherPlugin {
     fun loadUserLayouts() {
         for (f in folder.walk()) {
             if (f.isFile && f.extension == "xml" && DockingLayouts.getLayoutNames()
-                .indexOf(f.nameWithoutExtension) == -1
+                    .indexOf(f.nameWithoutExtension) == -1
             ) {
                 DockingLayouts.addLayout(f.name, ApplicationLayoutXML.loadLayoutFromFile(f))
             }

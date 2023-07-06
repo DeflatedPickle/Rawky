@@ -29,8 +29,6 @@ import javax.swing.Timer
     """,
     type = PluginType.COMPONENT,
     component = AnimationPreviewPanel::class,
-    componentVisible = false,
-    componentMinimizedPosition = ComponentPosition.WEST,
     settings = AnimationPreviewSettings::class,
 )
 @Suppress("unused")

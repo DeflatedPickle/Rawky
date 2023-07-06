@@ -91,7 +91,20 @@ object RawrPlugin : Exporter, Opener {
                     .load(file)
                     .get(String::class.java, "cellProvider")!!
             ]!!
-            Haruhi.json.decodeFromString(RawkyDocument::class.serializer(), file.readText())
+            val doc = Haruhi.json.decodeFromString(RawkyDocument::class.serializer(), file.readText())
+
+            for (frame in doc.children) {
+                for (layer in frame.children) {
+                    val grid = layer.child
+                    grid.layer = layer
+
+                    for (cell in grid.children) {
+                        cell.grid = grid
+                    }
+                }
+            }
+
+            doc
         }
 
         "rawrxd" ->

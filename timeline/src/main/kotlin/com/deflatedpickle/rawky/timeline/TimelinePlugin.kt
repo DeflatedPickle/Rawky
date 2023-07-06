@@ -27,9 +27,7 @@ import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
     component = TimelinePanel::class,
     dependencies = [
         "deflatedpickle@core#*",
-    ],
-    componentMinimizedPosition = SOUTH,
-    componentVisible = false,
+    ]
 )
 object TimelinePlugin {
     init {

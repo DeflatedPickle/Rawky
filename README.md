@@ -13,9 +13,10 @@
 </p>
 
 <table align="center">
+	<img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/.github/image/sprite.png?raw=true" alt="Sprite">
 	<tr>
-		<th><img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/.github/image/default.png?raw=true" alt="Default"></th>
 		<th><img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/.github/image/animation.png?raw=true" alt="Animation"></th>
+		<th><img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/.github/image/server.png?raw=true" alt="Server"></th>
 	</tr>
 </table>
 
@@ -48,6 +49,7 @@
 <p align="center">this project depends on the following other open-source projects</p>
 <p align="center">
 	<a href="https://kotlinlang.org/"><img alt="Kotlin" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kotlin_Icon.svg/512px-Kotlin_Icon.svg.png?20171012085709" width="64"></a>
+	<a href=""><img alt="Gradle" src="https://avatars.githubusercontent.com/u/124156?s=200&v=4" width="64"></a>
 	<a href="https://catppuccin.com/"><img alt="Catppuccin" src="https://avatars.githubusercontent.com/u/93489351?s=200&v=4" width="64"></a>
 	<a href="https://formdev.com/flatlaf/"><img alt="FlatLAF" src="https://raw.githubusercontent.com/JFormDesigner/FlatLaf/aa4c6ee9da21eceaebede8b3196ab0476c0abd07/flatlaf-demo/src/main/resources/com/formdev/flatlaf/demo/FlatLaf.svg" width="64"></a>
 	<a href="https://opendyslexic.org/"><img alt="OpenDyslexic" src="https://avatars.githubusercontent.com/u/39324024?s=200&v=4" width="64"></a>

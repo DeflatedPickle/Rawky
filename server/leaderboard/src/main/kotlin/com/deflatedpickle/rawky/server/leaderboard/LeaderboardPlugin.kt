@@ -30,8 +30,6 @@ import java.util.Vector
     """,
     type = PluginType.COMPONENT,
     component = LeaderboardPanel::class,
-    componentMinimizedPosition = ComponentPosition.EAST,
-    componentVisible = false,
     dependencies = [
         "deflatedpickle@core#*",
         "deflatedpickle@server#*",
