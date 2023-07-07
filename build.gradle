@@ -198,21 +198,10 @@ distZip {
 	}
 }
 
-distTar {
-	archiveName "$mostlyName-distTar.tar"
-}
-
-launch4j {
-	headerType = "gui"
-	outfile = "${mostlyName}.exe"
-	mainClassName = project.mainClassName
-	jarTask = project.tasks.shadowJar
-	bundledJrePath = "~/.jdks/jbr-11.0.14.1"
-}
-
 javapackager {
 	mainClass = "com.deflatedpickle.rawky.launcher.MainKt"
 	description = "A pixel art & tile map editor"
+	version = project.properties["pre"] ?: version
 
 	bundleJre = true
 	customizedJre = false
@@ -338,6 +327,7 @@ run {
 		runtimeOnly project(":toolbox")
 
 		runtimeOnly project(":toolbox.pencil")
+		runtimeOnly project(":toolbox.brush")
 		runtimeOnly project(":toolbox.eraser")
 		runtimeOnly project(":toolbox.dropper")
 		runtimeOnly project(":toolbox.line")

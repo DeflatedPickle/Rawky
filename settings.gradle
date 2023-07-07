@@ -83,6 +83,7 @@ include 'pixelgrid'
 include 'toolbox'
 [
 	'pencil',
+	'brush',
 	'eraser',
 	'dropper',
 	'line',
