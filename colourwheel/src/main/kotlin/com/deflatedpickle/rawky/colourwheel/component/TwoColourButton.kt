@@ -1,23 +1,17 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("MemberVisibilityCanBePrivate")
 
 package com.deflatedpickle.rawky.colourwheel.component
 
-import com.bric.colorpicker.ColorPickerDialog
-import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.event.EventChangeColour
 import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
-import com.deflatedpickle.undulation.functions.ColourButton
 import com.deflatedpickle.undulation.functions.JButton
-import com.deflatedpickle.undulation.widget.ColourButton
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Rectangle
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
 import javax.swing.JPanel
-import javax.swing.border.EmptyBorder
-import javax.swing.event.ChangeEvent
 
 class TwoColourButton(
     p: Color = Color.BLACK,
@@ -35,21 +29,18 @@ class TwoColourButton(
             secondaryButton.colour = value
         }
 
-    private val primaryButton = DoubleClickButton(primary) {
-        PixelCellPlugin.current = it.colour
-    }
-    private val secondaryButton = DoubleClickButton(secondary) {
-        PixelCellPlugin.current = it.colour
-    }
+    private val primaryButton = DoubleClickButton(primary) { PixelCellPlugin.current = it.colour }
+    private val secondaryButton = DoubleClickButton(secondary) { PixelCellPlugin.current = it.colour }
 
-    private val switchButton = JButton(icon = MonoIcon.SWAP) {
-        val c = secondaryButton.colour
+    private val switchButton =
+        JButton(icon = MonoIcon.SWAP) {
+            val c = secondaryButton.colour
 
-        secondaryButton.colour = primaryButton.colour
-        primaryButton.colour = c
+            secondaryButton.colour = primaryButton.colour
+            primaryButton.colour = c
 
-        EventChangeColour.trigger(c)
-    }
+            EventChangeColour.trigger(c)
+        }
 
     init {
         layout = null

@@ -1,3 +1,4 @@
+//file:noinspection GroovyAccessibility
 import io.github.fvarrui.javapackager.gradle.PackageTask
 
 buildscript {
@@ -19,11 +20,7 @@ plugins {
 
 	id 'com.diffplug.spotless'
 	id 'de.undercouch.download'
-	// id 'net.kyori.blossom'
-
-	id "com.github.johnrengelman.shadow" version "7.1.2"
-	id 'edu.sc.seis.launch4j' version '2.5.4'
-	id "org.gradlex.extra-java-module-info" version "1.4.1"
+	id 'net.kyori.blossom'
 }
 
 apply plugin: 'io.github.fvarrui.javapackager.plugin'
@@ -31,7 +28,6 @@ apply plugin: 'io.github.fvarrui.javapackager.plugin'
 group "$group"
 archivesBaseName = "$name"
 version "$version"
-sourceCompatibility = targetCompatibility = "$jvmTarget"
 
 project.ext {
 	ver = project.properties["pre"] ?: version
@@ -54,7 +50,6 @@ project.ext {
 }
 
 allprojects { p ->
-	apply plugin: 'java'
 	apply plugin: 'java-library'
 	apply plugin: 'distribution'
 
@@ -62,7 +57,7 @@ allprojects { p ->
 	apply plugin: 'org.jetbrains.kotlin.plugin.serialization'
 
 	apply plugin: 'com.diffplug.spotless'
-	// apply plugin: 'net.kyori.blossom'
+	apply plugin: 'net.kyori.blossom'
 
 	repositories {
 		mavenCentral()
@@ -77,13 +72,13 @@ allprojects { p ->
 		api "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 		api "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
 		api "org.jetbrains.kotlinx:kotlinx-serialization-json:${kotlinSerialization}"
-		api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4"
-		api 'org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.6.4'
-		api 'org.jetbrains.kotlinx:kotlinx-datetime:0.4.0'
+		api "org.jetbrains.kotlinx:kotlinx-coroutines-core:${kotlinCoroutines}"
+		api "org.jetbrains.kotlinx:kotlinx-coroutines-swing:${kotlinCoroutines}"
+		api "org.jetbrains.kotlinx:kotlinx-datetime:${kotlinDateTime}"
 	}
 
 	spotless {
-		// ratchetFrom 'origin/rewrite'
+		ratchetFrom 'origin/rewrite'
 
 		java {
 			importOrder()
@@ -99,36 +94,31 @@ allprojects { p ->
 		}
 
 		kotlin {
-			ktlint("$ktlintVersion")
+			ktlint()
 
 			licenseHeader "$licenseHeader\n\n"
 		}
 
-		format 'misc', {
-			target '*.md', '.gitignore'
+		freshmark {
+			target 'README.md'
+		}
 
-			trimTrailingWhitespace()
-			indentWithTabs()
-			endWithNewline()
+		json {
+			target 'src/**/*.json'
+			jackson()
 		}
 	}
 
-	compileKotlin {
-		kotlinOptions.jvmTarget = sourceCompatibility
-
-		kotlinOptions {
-			freeCompilerArgs = [
-				"-Xinline-classes",
-				"-opt-in=kotlin.RequiresOptIn",
-			]
-		}
+	kotlin {
+		jvmToolchain(11)
 	}
+	compileKotlin.dependsOn spotlessApply
 
-	/*blossom {
-	 replaceToken('$[name]', p.property('id'))
-	 replaceToken('$[author]', p.property('author'))
-	 replaceToken('$[version]', p.version)
-	 }*/
+	blossom {
+		replaceToken('$[name]', p.property('id'))
+		replaceToken('$[author]', p.property('author'))
+		replaceToken('$[version]', p.version)
+	}
 }
 
 startScripts {
@@ -178,8 +168,8 @@ distZip {
 		// We have to leave these out though
 		if (
 		!(p.name in ["master", "core", "launcher"]) &&
-		jar.size > 0
-		) {
+				jar.size > 0
+				) {
 			list.add(jar.first().getAsFile().get())
 		}
 	}
@@ -190,9 +180,9 @@ distZip {
 		if (file.path.contains('bin')) {
 			file.exclude()
 		} else if (file.path.contains('lib') &&
-		// Check if the current file is a submodule
-		file.getFile() in list
-		|| file.name =~ /Rawky-\d\.\d\.\d\.jar/) {
+				// Check if the current file is a submodule
+				file.getFile() in list
+				|| file.name =~ /Rawky-\d\.\d\.\d\.jar/) {
 			file.exclude()
 		}
 	}
@@ -236,10 +226,6 @@ configurations {
 	runtimeClasspath {
 		attributes { attribute(Attribute.of("javaModule", Boolean), false) }
 	}
-}
-
-extraJavaModuleInfo {
-	automaticModule("io.github.andrewauclair.ModernDocking:modern_docking", "ModernDocking")
 }
 
 run {

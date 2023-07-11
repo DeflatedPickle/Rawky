@@ -19,48 +19,55 @@ import javax.swing.JSpinner
 import javax.swing.SpinnerNumberModel
 
 class NewLayerDialog(val index: Int = -1) : TaskDialog(Haruhi.window, "New Layer") {
-    val nameInput = JXTextField("Name").apply {
-        text = "Layer ${if (index == -1) {
-            RawkyPlugin.document?.let { doc ->
-                val frame = doc.children[doc.selectedIndex]
-                frame.children.size
-            }
-        } else index}"
-    }
-    /*val indexInput = JSpinner(SpinnerNumberModel(0, 0, null, 1)).apply {
-        RawkyPlugin.document?.let { doc ->
-            val frame = doc.children[doc.selectedIndex]
-            value = frame.children.size
+    val nameInput =
+        JXTextField("Name").apply {
+            text =
+                "Layer ${if (index == -1) {
+                    RawkyPlugin.document?.let { doc ->
+                        val frame = doc.children[doc.selectedIndex]
+                        frame.children.size
+                    }
+                } else {
+                    index
+                }}"
         }
-    }*/
+
+  /*val indexInput = JSpinner(SpinnerNumberModel(0, 0, null, 1)).apply {
+      RawkyPlugin.document?.let { doc ->
+          val frame = doc.children[doc.selectedIndex]
+          value = frame.children.size
+      }
+  }*/
     val columnInput = JSpinner(SpinnerNumberModel(16, 1, null, 8))
     val rowInput = JSpinner(SpinnerNumberModel(16, 1, null, 8))
-    private val sizeSwapper = JButton(MonoIcon.SWAP).apply {
-        addActionListener {
-            val temp = columnInput.value
-            columnInput.value = rowInput.value
-            rowInput.value = temp
+    private val sizeSwapper =
+        JButton(MonoIcon.SWAP).apply {
+            addActionListener {
+                val temp = columnInput.value
+                columnInput.value = rowInput.value
+                rowInput.value = temp
+            }
         }
-    }
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
 
-        this.fixedComponent = JPanel().apply {
-            isOpaque = false
-            layout = GridBagLayout()
+        this.fixedComponent =
+            JPanel().apply {
+                isOpaque = false
+                layout = GridBagLayout()
 
-            add(JLabel("Name:"), StickEast)
-            add(nameInput, FillHorizontalFinishLine)
+                add(JLabel("Name:"), StickEast)
+                add(nameInput, FillHorizontalFinishLine)
 
-            /*add(JLabel("Index:"), StickEast)
-            add(indexInput, FillHorizontalFinishLine)*/
+          /*add(JLabel("Index:"), StickEast)
+          add(indexInput, FillHorizontalFinishLine)*/
 
-            add(JLabel("Size:"), StickEast)
-            add(columnInput, FillHorizontal)
-            add(JLabel("X"))
-            add(rowInput, FillHorizontal)
-            add(sizeSwapper, FinishLine)
-        }
+                add(JLabel("Size:"), StickEast)
+                add(columnInput, FillHorizontal)
+                add(JLabel("X"))
+                add(rowInput, FillHorizontal)
+                add(sizeSwapper, FinishLine)
+            }
     }
 }

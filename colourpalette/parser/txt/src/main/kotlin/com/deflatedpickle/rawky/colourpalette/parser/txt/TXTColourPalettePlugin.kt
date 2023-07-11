@@ -30,7 +30,7 @@ object TXTColourPalettePlugin : PaletteParser<Color> {
 
         FileUtils.copyResourcesRecursively(
             TXTColourPalettePlugin::class.java.getResource("/palette/community"),
-            ColourPalettePlugin.folder
+            ColourPalettePlugin.folder,
         )
     }
 
@@ -43,9 +43,6 @@ object TXTColourPalettePlugin : PaletteParser<Color> {
             }
         }
 
-        return Palette(
-            file.nameWithoutExtension,
-            colours
-        )
+        return Palette(file.nameWithoutExtension, colours)
     }
 }

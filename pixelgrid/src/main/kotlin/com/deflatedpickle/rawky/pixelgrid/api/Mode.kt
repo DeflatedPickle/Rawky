@@ -23,8 +23,9 @@ abstract class Mode(
                     if (it.mode == null) {
                         it.mode = registry.values.maxByOrNull { it.priority }!!
 
-                        PluginUtil.slugToPlugin("deflatedpickle@pixel_grid#*")
-                            ?.let { plug -> ConfigUtil.serializeConfig(plug) }
+                        PluginUtil.slugToPlugin("deflatedpickle@pixel_grid#*")?.let { plug ->
+                            ConfigUtil.serializeConfig(plug)
+                        }
                     }
 
                     it.mode?.apply()
@@ -34,6 +35,7 @@ abstract class Mode(
     }
 
     abstract fun apply()
+
     abstract fun remove()
 
     override fun toString() = name

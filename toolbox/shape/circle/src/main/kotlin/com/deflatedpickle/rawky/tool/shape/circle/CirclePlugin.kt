@@ -30,9 +30,7 @@ import kotlin.math.min
         A tool that draws circle
     """,
     type = PluginType.OTHER,
-    dependencies = [
-        "deflatedpickle@core#1.0.0"
-    ],
+    dependencies = ["deflatedpickle@core#1.0.0"],
 )
 object CirclePlugin :
     Shape(
@@ -61,31 +59,32 @@ object CirclePlugin :
         }
         // Second point
         else {
-            val action = object : Action(name) {
-                val colourCache = mutableMapOf<Cell<Any>, Color>()
+            val action =
+                object : Action(name) {
+                    val colourCache = mutableMapOf<Cell<Any>, Color>()
 
-                override fun perform() {
-                    colourCache.clear()
+                    override fun perform() {
+                        colourCache.clear()
 
-                    colourCache.putAll(
-                        process(
-                            cell.column, cell.row,
-                            other.column,
+                        colourCache.putAll(
+                            process(
+                                cell.column,
+                                cell.row,
+                                other.column,
+                            ),
                         )
-                    )
 
-                    firstCell = null
-                }
-
-                override fun cleanup() {
-                    for ((c, colour) in colourCache) {
-                        // c.colour = colour
+                        firstCell = null
                     }
-                }
 
-                override fun outline(g2D: Graphics2D) {
+                    override fun cleanup() {
+                        for ((c, colour) in colourCache) {
+                            // c.colour = colour
+                        }
+                    }
+
+                    override fun outline(g2D: Graphics2D) {}
                 }
-            }
 
             ActionStack.push(action)
         }
@@ -101,8 +100,10 @@ object CirclePlugin :
             }
 
             graphics.fillOval(
-                (cell.row * 16) + 8, (cell.column * 16) + 8,
-                (hoverCell.row * 16) + 8, (hoverCell.column * 16) + 8,
+                (cell.row * 16) + 8,
+                (cell.column * 16) + 8,
+                (hoverCell.row * 16) + 8,
+                (hoverCell.column * 16) + 8,
             )
         }
     }
@@ -133,32 +134,34 @@ object CirclePlugin :
             // grid[x + x0, y + y0].colour = RawkyPlugin.colour
 
             if (r > 0) {
-                /*grid[x + x0, -y + y0].colour = RawkyPlugin.colour
-                grid[y + x0, x + y0].colour = RawkyPlugin.colour
-                grid[-y + x0, x + y0].colour = RawkyPlugin.colour*/
+        /*grid[x + x0, -y + y0].colour = RawkyPlugin.colour
+        grid[y + x0, x + y0].colour = RawkyPlugin.colour
+        grid[-y + x0, x + y0].colour = RawkyPlugin.colour*/
             }
 
             var p: Int = 1 - r
             while (x > y) {
                 y++
 
-                if (p <= 0) p += (2 * y) + 1 else {
+                if (p <= 0) {
+                    p += (2 * y) + 1
+                } else {
                     x--
                     p = p + 2 * y - 2 * x + 1
                 }
 
                 if (x < y) break
 
-                /*grid[x + x0, y + y0].colour = RawkyPlugin.colour
-                grid[-x + x0, y + y0].colour = RawkyPlugin.colour
-                grid[x + x0, -y + y0].colour = RawkyPlugin.colour
-                grid[-x + x0, -y + y0].colour = RawkyPlugin.colour*/
+        /*grid[x + x0, y + y0].colour = RawkyPlugin.colour
+        grid[-x + x0, y + y0].colour = RawkyPlugin.colour
+        grid[x + x0, -y + y0].colour = RawkyPlugin.colour
+        grid[-x + x0, -y + y0].colour = RawkyPlugin.colour*/
 
                 if (x != y) {
-                    /*grid[y + x0, x + y0].colour = RawkyPlugin.colour
-                    grid[-y + x0, x + y0].colour = RawkyPlugin.colour
-                    grid[y + x0, -x + y0].colour = RawkyPlugin.colour
-                    grid[-y + x0, -x + y0].colour = RawkyPlugin.colour*/
+          /*grid[y + x0, x + y0].colour = RawkyPlugin.colour
+          grid[-y + x0, x + y0].colour = RawkyPlugin.colour
+          grid[y + x0, -x + y0].colour = RawkyPlugin.colour
+          grid[-y + x0, -x + y0].colour = RawkyPlugin.colour*/
                 }
             }
 

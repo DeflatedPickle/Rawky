@@ -30,7 +30,8 @@ import java.io.FileOutputStream
         Export Rawr files
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@pixel_grid#*",
     ],
 )
@@ -47,12 +48,7 @@ object RawrPlugin : Exporter, Opener {
         Opener.registry[name] = this
 
         for (i in listOf(exporterExtensions, openerExtensions)) {
-            i.putAll(
-                mapOf(
-                    "Rawky" to listOf("rawr"),
-                    "Rawky Binary" to listOf("rawrxd")
-                )
-            )
+            i.putAll(mapOf("Rawky" to listOf("rawr"), "Rawky Binary" to listOf("rawrxd")))
         }
     }
 
@@ -69,9 +65,8 @@ object RawrPlugin : Exporter, Opener {
 
                 out.write(U.formatJson(jsonData).toByteArray())
             }
-
             "rawrxd" -> {
-                // Doesn't support Cell polymorphism
+                // FIXME: doesn't support cell polymorphism
                 val cbor = Cbor.Default
                 val cborData = cbor.encodeToByteArray(serializer, doc)
 
@@ -84,33 +79,31 @@ object RawrPlugin : Exporter, Opener {
     }
 
     @OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
-    override fun open(file: File) = when (file.extension) {
-        "rawr" -> {
-            CellProvider.current = CellProvider.registry[
-                jankson
-                    .load(file)
-                    .get(String::class.java, "cellProvider")!!
-            ]!!
-            val doc = Haruhi.json.decodeFromString(RawkyDocument::class.serializer(), file.readText())
+    override fun open(file: File) =
+        when (file.extension) {
+            "rawr" -> {
+                // TODO: remove dependancy on jankson
+                CellProvider.current =
+                    CellProvider.registry[jankson.load(file).get(String::class.java, "cellProvider")!!]!!
+                val doc = Haruhi.json.decodeFromString(RawkyDocument::class.serializer(), file.readText())
 
-            for (frame in doc.children) {
-                for (layer in frame.children) {
-                    val grid = layer.child
-                    grid.layer = layer
+                for (frame in doc.children) {
+                    for (layer in frame.children) {
+                        val grid = layer.child
+                        grid.layer = layer
 
-                    for (cell in grid.children) {
-                        cell.grid = grid
+                        for (cell in grid.children) {
+                            cell.grid = grid
+                        }
                     }
                 }
+
+                doc
             }
-
-            doc
+            "rawrxd" ->
+                // Can't pre-parse to find a cell provider
+                Cbor.Default.decodeFromByteArray(RawkyDocument::class.serializer(), file.readBytes())
+            // Should never actually be anything else but necessary for the compiler
+            else -> RawkyDocument(children = mutableListOf())
         }
-
-        "rawrxd" ->
-            // Can't pre-parse to find a cell provider
-            Cbor.Default.decodeFromByteArray(RawkyDocument::class.serializer(), file.readBytes())
-        // Should never actually be anything else but necessary for the compiler
-        else -> RawkyDocument(children = mutableListOf())
-    }
 }

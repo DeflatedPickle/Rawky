@@ -8,7 +8,6 @@ import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.api.util.ComponentPosition
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.marvin.extensions.div
@@ -39,23 +38,17 @@ object TilePalettePlugin {
     val folder = (File(".") / "tilemap").apply { mkdirs() }
     val registry = Registry<String, PaletteParser<Image>>()
 
-    private val chooser = JFileChooser(File(".")).apply {
-        EventProgramFinishSetup.addListener {
-            for ((k, v) in registry) {
-                addChoosableFileFilter(
-                    FileNameExtensionFilter(
-                        "${v.name} (*.$k)",
-                        k
-                    )
-                )
+    private val chooser =
+        JFileChooser(File(".")).apply {
+            EventProgramFinishSetup.addListener {
+                for ((k, v) in registry) {
+                    addChoosableFileFilter(FileNameExtensionFilter("${v.name} (*.$k)", k))
+                }
             }
         }
-    }
 
     init {
-        EventChangeTheme.addListener {
-            TilePalettePanel.updateUIRecursively()
-        }
+        EventChangeTheme.addListener { TilePalettePanel.updateUIRecursively() }
 
         EventProgramFinishSetup.addListener {
             RegistryUtil.get(MenuCategory.MENU.name)?.apply {
@@ -71,9 +64,7 @@ object TilePalettePlugin {
             val i = chooser.selectedFile
 
             if (i.isFile) {
-                registry[i.extension]?.let { pp ->
-                    TilePalettePanel.combo.addItem(pp.parse(i))
-                }
+                registry[i.extension]?.let { pp -> TilePalettePanel.combo.addItem(pp.parse(i)) }
             }
         }
     }

@@ -22,7 +22,7 @@ data class QuerySendChat(
             Message(
                 id,
                 message,
-            )
+            ),
         )
     }
 }

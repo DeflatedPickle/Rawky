@@ -14,10 +14,11 @@ import kotlinx.serialization.encoding.Encoder
 @ExperimentalSerializationApi
 @Serializer(forClass = Mode::class)
 object ModeSerializer : KSerializer<Mode?> {
-    override val descriptor = PrimitiveSerialDescriptor(
-        serialName = "Mode",
-        kind = PrimitiveKind.STRING,
-    )
+    override val descriptor =
+        PrimitiveSerialDescriptor(
+            serialName = "Mode",
+            kind = PrimitiveKind.STRING,
+        )
 
     override fun serialize(encoder: Encoder, value: Mode?) =
         encoder.encodeString(value?.name ?: "null")

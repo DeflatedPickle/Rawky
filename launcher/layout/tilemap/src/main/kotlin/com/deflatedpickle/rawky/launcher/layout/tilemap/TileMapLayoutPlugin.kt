@@ -14,12 +14,14 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
     value = "tilemap_layout",
     author = "DeflatedPickle",
     version = "1.0.0",
-    description = """
+    description =
+    """
         <br>
         Sets the default positions of the components to make tile maps
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
         "deflatedpickle@launcher#*",
         "deflatedpickle@pixel_grid#*",
@@ -29,10 +31,16 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 )
 object TileMapLayoutPlugin {
     init {
-        val layout = WindowLayoutBuilder("deflatedpickle@pixel_grid")
-            .dock("deflatedpickle@tile_palette", "deflatedpickle@pixel_grid", DockingRegion.WEST, 0.3)
-            .dock("deflatedpickle@layer_list", "deflatedpickle@pixel_grid", DockingRegion.EAST, 0.3)
-            .buildApplicationLayout()
+        val layout =
+            WindowLayoutBuilder("deflatedpickle@pixel_grid")
+                .dock(
+                    "deflatedpickle@tile_palette",
+                    "deflatedpickle@pixel_grid",
+                    DockingRegion.WEST,
+                    0.3,
+                )
+                .dock("deflatedpickle@layer_list", "deflatedpickle@pixel_grid", DockingRegion.EAST, 0.3)
+                .buildApplicationLayout()
 
         DockingLayouts.addLayout("tilemap", layout)
     }

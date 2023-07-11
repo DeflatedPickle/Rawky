@@ -6,7 +6,6 @@ package com.deflatedpickle.rawky.tiledview
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.api.util.ComponentPosition
 import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
@@ -16,7 +15,8 @@ import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
     value = "tiled_view",
     author = "DeflatedPickle",
     version = "1.0.0",
-    description = """
+    description =
+    """
         <br>
         A component to show the current frame tiled in a 3x3 square
     """,
@@ -26,16 +26,10 @@ import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
 )
 object TiledViewPlugin {
     init {
-        EventChangeTheme.addListener {
-            TiledViewPanel.updateUIRecursively()
-        }
+        EventChangeTheme.addListener { TiledViewPanel.updateUIRecursively() }
 
-        EventUpdateGrid.addListener {
-            TiledViewPanel.tilePanel.repaint()
-        }
+        EventUpdateGrid.addListener { TiledViewPanel.tilePanel.repaint() }
 
-        EventUpdateCell.addListener {
-            TiledViewPanel.tilePanel.repaint()
-        }
+        EventUpdateCell.addListener { TiledViewPanel.tilePanel.repaint() }
     }
 }

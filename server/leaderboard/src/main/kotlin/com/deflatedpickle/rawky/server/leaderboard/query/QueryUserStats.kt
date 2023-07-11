@@ -24,7 +24,7 @@ class QueryUserStats(
                 QueryUserStats(id, LeaderboardPlugin.users[ServerPlugin.userMap[id]])
             } else {
                 this
-            }
+            },
         )
     }
 
@@ -46,7 +46,7 @@ class QueryUserStats(
             TableModelEvent(
                 LeaderboardPanel.model,
                 id - 1,
-            )
+            ),
         )
     }
 }

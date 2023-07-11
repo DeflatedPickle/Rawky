@@ -13,8 +13,13 @@ import java.awt.image.BufferedImage
 data class TileCell(
     override val row: Int = 0,
     override val column: Int = 0,
-    override var content: @Serializable(BufferedImageSerializer::class) BufferedImage = default,
-) : Cell<@Serializable(BufferedImageSerializer::class) BufferedImage>() {
+    override var content:
+    @Serializable(BufferedImageSerializer::class)
+    BufferedImage = default,
+) : Cell<
+    @Serializable(BufferedImageSerializer::class)
+    BufferedImage,
+    >() {
     companion object {
         val default = BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB)
     }

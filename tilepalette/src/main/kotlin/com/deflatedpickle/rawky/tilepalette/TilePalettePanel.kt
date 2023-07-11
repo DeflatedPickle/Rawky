@@ -1,70 +1,66 @@
 /* Copyright (c) 2022 DeflatedPickle under the MIT license */
 
+@file:Suppress("UsePropertyAccessSyntax")
+
 package com.deflatedpickle.rawky.tilepalette
 
 import com.deflatedpickle.haruhi.component.PluginPanel
+import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.rawky.api.palette.Palette
 import com.deflatedpickle.rawky.tilecell.TileCellPlugin
 import com.deflatedpickle.undulation.constraints.FillBothFinishLine
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.widget.ImageButton
-import org.jdesktop.swingx.JXPanel
 import so.n0weak.ExtendedComboBox
 import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.GridBagLayout
 import java.awt.event.ItemEvent
 import java.awt.image.BufferedImage
+import javax.swing.JPanel
 import javax.swing.JScrollPane
 
 object TilePalettePanel : PluginPanel() {
-    val combo = ExtendedComboBox().apply {
-        addItemListener {
-            when (it.stateChange) {
-                ItemEvent.SELECTED -> {
-                    tilePanel.removeAll()
+    val combo =
+        ExtendedComboBox().apply {
+            addItemListener {
+                when (it.stateChange) {
+                    ItemEvent.SELECTED -> {
+                        tilePanel.removeAll()
 
-                    if (this.selectedItem is Palette<*>) {
-                        val palette = this.selectedItem as Palette<BufferedImage>
+                        if (this.selectedItem is Palette<*>) {
+                            val palette = this.selectedItem as Palette<BufferedImage>
 
-                        for (i in palette.items) {
-                            tilePanel.add(
-                                ImageButton(i.key).apply {
-                                    toolTipText = i.value
+                            for (i in palette.items) {
+                                tilePanel.add(
+                                    ImageButton(i.key).apply {
+                                        toolTipText = i.value
 
-                                    addActionListener {
-                                        TileCellPlugin.current = i.key
-                                    }
-                                }
-                            )
+                                        addActionListener { TileCellPlugin.current = i.key }
+                                    },
+                                )
+                            }
                         }
-                    }
 
-                    tilePanel.validate()
-                    tilePanel.repaint()
+                        tilePanel.validate()
+                        tilePanel.repaint()
+                    }
                 }
             }
         }
-    }
 
-    private val tilePanel = JXPanel().apply {
-        layout = WrapLayout()
-    }
+    private val tilePanel = JPanel().apply { this.layout = WrapLayout() }
 
     init {
         layout = GridBagLayout()
         add(combo, FillHorizontalFinishLine)
         add(JScrollPane(tilePanel), FillBothFinishLine)
 
-        /*EventProgramFinishSetup.addListener {
+        EventProgramFinishSetup.addListener {
             for (i in TilePalettePlugin.folder.walk()) {
                 if (i.isFile) {
-                    TilePalettePlugin.registry[i.extension]?.let { pp ->
-                        combo.addItem(pp.parse(i))
-                    }
-                } else if (i.isDirectory && i.name != "palette") {
-                    combo.addDelimiter(i.name)
+                    TilePalettePlugin.registry[i.extension]?.let { pp -> combo.addItem(pp.parse(i)) }
                 }
             }
-        }*/
+        }
     }
 }

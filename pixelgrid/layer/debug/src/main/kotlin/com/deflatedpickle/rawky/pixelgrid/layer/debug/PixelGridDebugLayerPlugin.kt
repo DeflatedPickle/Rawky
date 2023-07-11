@@ -27,7 +27,8 @@ import java.awt.Graphics2D
         Paints a debug information on the pixel grid
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
         "deflatedpickle@pixelgrid#*",
     ],

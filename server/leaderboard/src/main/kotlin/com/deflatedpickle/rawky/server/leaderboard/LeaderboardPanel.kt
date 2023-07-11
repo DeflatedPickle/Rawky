@@ -20,65 +20,91 @@ import javax.swing.JTable
 import javax.swing.table.DefaultTableModel
 
 object LeaderboardPanel : PluginPanel() {
-    val model = object : DefaultTableModel(
-        LeaderboardPlugin.stats,
-        Vector(listOf("User", "Pixels", "Colours", "Playtime"))
-    ) {
-        override fun getColumnClass(columnIndex: Int): Class<*> =
-            when (columnIndex) {
-                0 -> User::class.java
-                1 -> Int::class.java
-                2 -> List::class.java
-                3 -> Instant::class.java
-                else -> Any::class.java
-            }
-    }
+    val model =
+        object :
+            DefaultTableModel(
+                LeaderboardPlugin.stats,
+                Vector(listOf("User", "Pixels", "Colours", "Playtime")),
+            ) {
+            override fun getColumnClass(columnIndex: Int): Class<*> =
+                when (columnIndex) {
+                    0 -> User::class.java
+                    1 -> Int::class.java
+                    2 -> List::class.java
+                    3 -> Instant::class.java
+                    else -> Any::class.java
+                }
+        }
 
-    private val table = JXTable(model).apply {
-        setDefaultRenderer(User::class.java) { _: JTable, value: Any?, _: Boolean, _: Boolean, _: Int, _: Int ->
-            if (value == null) {
-                JLabel(MonoIcon.ERROR)
-            } else {
-                with(value as User) {
-                    JLabel("${this.userName} (#${this.id})").apply {
-                        foreground = this@with.colour
+    private val table =
+        JXTable(model).apply {
+            setDefaultRenderer(User::class.java) {
+                    _: JTable,
+                    value: Any?,
+                    _: Boolean,
+                    _: Boolean,
+                    _: Int,
+                    _: Int,
+                ->
+                if (value == null) {
+                    JLabel(MonoIcon.ERROR)
+                } else {
+                    with(value as User) {
+                        JLabel("${this.userName} (#${this.id})").apply { foreground = this@with.colour }
                     }
                 }
             }
-        }
 
-        setDefaultRenderer(Int::class.java) { _: JTable, value: Any?, _: Boolean, _: Boolean, _: Int, _: Int ->
-            if (value == null) {
-                JLabel(MonoIcon.ERROR)
-            } else {
-                JLabel("${value as Number}")
+            setDefaultRenderer(Int::class.java) {
+                    _: JTable,
+                    value: Any?,
+                    _: Boolean,
+                    _: Boolean,
+                    _: Int,
+                    _: Int,
+                ->
+                if (value == null) {
+                    JLabel(MonoIcon.ERROR)
+                } else {
+                    JLabel("${value as Number}")
+                }
             }
-        }
 
-        setDefaultRenderer(List::class.java) { _: JTable, value: Any?, _: Boolean, _: Boolean, _: Int, _: Int ->
-            if (value == null) {
-                JLabel(MonoIcon.ERROR)
-            } else {
-                JLabel("${(value as List<Color>).size}")
+            setDefaultRenderer(List::class.java) {
+                    _: JTable,
+                    value: Any?,
+                    _: Boolean,
+                    _: Boolean,
+                    _: Int,
+                    _: Int,
+                ->
+                if (value == null) {
+                    JLabel(MonoIcon.ERROR)
+                } else {
+                    JLabel("${(value as List<Color>).size}")
+                }
             }
-        }
 
-        setDefaultRenderer(Instant::class.java) { _: JTable, value: Any?, _: Boolean, _: Boolean, _: Int, _: Int ->
-            if (value == null) {
-                JLabel(MonoIcon.ERROR)
-            } else {
-                JLabel(
-                    DurationFormatUtils.formatDuration(
-                        Duration.between(
-                            value as Instant,
-                            Instant.now()
-                        ).toMillis(),
-                        "HH:mm:ss"
+            setDefaultRenderer(Instant::class.java) {
+                    _: JTable,
+                    value: Any?,
+                    _: Boolean,
+                    _: Boolean,
+                    _: Int,
+                    _: Int,
+                ->
+                if (value == null) {
+                    JLabel(MonoIcon.ERROR)
+                } else {
+                    JLabel(
+                        DurationFormatUtils.formatDuration(
+                            Duration.between(value as Instant, Instant.now()).toMillis(),
+                            "HH:mm:ss",
+                        ),
                     )
-                )
+                }
             }
         }
-    }
 
     init {
         layout = BorderLayout()

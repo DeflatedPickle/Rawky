@@ -15,9 +15,19 @@ import java.awt.event.KeyEvent.VK_UP
 @Serializable
 data class KeyboardSettings(
     override val version: Int = 2,
-    var negativeY: @Serializable(KeySerializer::class) KeyCombo = KeyCombo(key = VK_UP),
-    var positiveY: @Serializable(KeySerializer::class) KeyCombo = KeyCombo(key = VK_DOWN),
-    var negativeX: @Serializable(KeySerializer::class) KeyCombo = KeyCombo(key = VK_LEFT),
-    var positiveX: @Serializable(KeySerializer::class) KeyCombo = KeyCombo(key = VK_RIGHT),
-    var useTool: @Serializable(KeySerializer::class) KeyCombo = KeyCombo(key = VK_ENTER),
+    var negativeY:
+    @Serializable(KeySerializer::class)
+    KeyCombo = KeyCombo(key = VK_UP),
+    var positiveY:
+    @Serializable(KeySerializer::class)
+    KeyCombo = KeyCombo(key = VK_DOWN),
+    var negativeX:
+    @Serializable(KeySerializer::class)
+    KeyCombo = KeyCombo(key = VK_LEFT),
+    var positiveX:
+    @Serializable(KeySerializer::class)
+    KeyCombo = KeyCombo(key = VK_RIGHT),
+    var useTool:
+    @Serializable(KeySerializer::class)
+    KeyCombo = KeyCombo(key = VK_ENTER),
 ) : Config

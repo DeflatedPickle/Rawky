@@ -9,9 +9,7 @@ import com.deflatedpickle.rawky.api.template.Guide
 import com.deflatedpickle.rawky.collection.Frame
 import kotlinx.serialization.Serializable
 
-/**
- * Settings for a file
- */
+/** Settings for a file */
 @Suppress("SpellCheckingInspection")
 @Serializable
 data class RawkyDocument(

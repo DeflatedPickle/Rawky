@@ -13,9 +13,11 @@ class ColorSerializer(kryo: Kryo) : FieldSerializer<Color>(kryo, Color::class.ja
         output.writeString(
             String.format(
                 "#%08x",
-                (`object`.alpha and 0xFF shl 24) or (`object`.red and 0xFF shl 16) or
-                    (`object`.green and 0xFF shl 8) or (`object`.blue and 0xFF shl 0)
-            )
+                (`object`.alpha and 0xFF shl 24) or
+                    (`object`.red and 0xFF shl 16) or
+                    (`object`.green and 0xFF shl 8) or
+                    (`object`.blue and 0xFF shl 0),
+            ),
         )
     }
 

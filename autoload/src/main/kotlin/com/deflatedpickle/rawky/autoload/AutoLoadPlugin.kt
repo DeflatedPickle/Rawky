@@ -17,11 +17,13 @@ import com.deflatedpickle.rawky.toolbox.event.EventToolboxFinish
     value = "auto_load",
     author = "DeflatedPickle",
     version = "1.0.0",
-    description = """
+    description =
+    """
         <br>
         Causes the last open or saved file to be loaded when the program is opened
     """,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
         "deflatedpickle@launcher#*",
         "deflatedpickle@toolbox#*",
@@ -36,8 +38,9 @@ object AutoLoadPlugin {
                 if (it.loadType == LAST_OPENED) {
                     it.lastFile = open.second
 
-                    PluginUtil.slugToPlugin("deflatedpickle@auto_load#*")
-                        ?.let { plug -> ConfigUtil.serializeConfig(plug) }
+                    PluginUtil.slugToPlugin("deflatedpickle@auto_load#*")?.let { plug ->
+                        ConfigUtil.serializeConfig(plug)
+                    }
                 }
             }
         }
@@ -47,8 +50,9 @@ object AutoLoadPlugin {
                 if (it.loadType == LAST_SAVED) {
                     it.lastFile = save.second
 
-                    PluginUtil.slugToPlugin("deflatedpickle@auto_load#*")
-                        ?.let { plug -> ConfigUtil.serializeConfig(plug) }
+                    PluginUtil.slugToPlugin("deflatedpickle@auto_load#*")?.let { plug ->
+                        ConfigUtil.serializeConfig(plug)
+                    }
                 }
             }
         }
@@ -58,8 +62,9 @@ object AutoLoadPlugin {
                 if (it.loadType == LAST_SAVED && it.includeAutoSaves) {
                     it.lastFile = save.second
 
-                    PluginUtil.slugToPlugin("deflatedpickle@auto_load#*")
-                        ?.let { plug -> ConfigUtil.serializeConfig(plug) }
+                    PluginUtil.slugToPlugin("deflatedpickle@auto_load#*")?.let { plug ->
+                        ConfigUtil.serializeConfig(plug)
+                    }
                 }
             }
         }
@@ -72,8 +77,9 @@ object AutoLoadPlugin {
                     } else {
                         it.lastFile = null
 
-                        PluginUtil.slugToPlugin("deflatedpickle@auto_load#*")
-                            ?.let { plug -> ConfigUtil.serializeConfig(plug) }
+                        PluginUtil.slugToPlugin("deflatedpickle@auto_load#*")?.let { plug ->
+                            ConfigUtil.serializeConfig(plug)
+                        }
                     }
                 }
             }

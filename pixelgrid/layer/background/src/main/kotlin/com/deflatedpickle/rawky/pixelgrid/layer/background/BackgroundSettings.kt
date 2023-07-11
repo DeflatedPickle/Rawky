@@ -15,6 +15,10 @@ data class BackgroundSettings(
     var enabled: Boolean = true,
     var fill: FillType = FillType.GRID,
     @IntRange(1, Grid.pixel) var size: Int = Grid.pixel / 3,
-    var even: @Serializable(ColorSerializer::class) Color = Color.LIGHT_GRAY,
-    var odd: @Serializable(ColorSerializer::class) Color = Color.WHITE,
+    var even:
+    @Serializable(ColorSerializer::class)
+    Color = Color.LIGHT_GRAY,
+    var odd:
+    @Serializable(ColorSerializer::class)
+    Color = Color.WHITE,
 ) : Config

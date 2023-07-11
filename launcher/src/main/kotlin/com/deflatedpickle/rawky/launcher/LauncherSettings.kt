@@ -12,6 +12,9 @@ import java.io.File
 @Serializable
 data class LauncherSettings(
     override val version: Int = 1,
-    val history: MutableList<@Serializable(FileSerializer::class) File> = mutableListOf(),
+    val history: MutableList<
+        @Serializable(FileSerializer::class)
+        File,
+        > = mutableListOf(),
     var historyLength: Int = 6,
 ) : Config

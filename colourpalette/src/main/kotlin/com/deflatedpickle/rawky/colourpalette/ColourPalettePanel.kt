@@ -21,37 +21,36 @@ import javax.swing.JPanel
 import javax.swing.JScrollPane
 
 object ColourPalettePanel : PluginPanel() {
-    val combo = ExtendedComboBox().apply {
-        addItemListener {
-            when (it.stateChange) {
-                ItemEvent.SELECTED -> {
-                    colourPanel.removeAll()
+    val combo =
+        ExtendedComboBox().apply {
+            addItemListener {
+                when (it.stateChange) {
+                    ItemEvent.SELECTED -> {
+                        colourPanel.removeAll()
 
-                    if (this.selectedItem is Palette<*>) {
-                        for (i in (this.selectedItem as Palette<Color>).items) {
-                            colourPanel.add(
-                                ColourButton(i.key).apply {
-                                    toolTipText = i.value
+                        if (this.selectedItem is Palette<*>) {
+                            for (i in (this.selectedItem as Palette<Color>).items) {
+                                colourPanel.add(
+                                    ColourButton(i.key).apply {
+                                        toolTipText = i.value
 
-                                    addActionListener {
-                                        PixelCellPlugin.current = i.key
-                                        EventChangeColour.trigger(i.key)
-                                    }
-                                }
-                            )
+                                        addActionListener {
+                                            PixelCellPlugin.current = i.key
+                                            EventChangeColour.trigger(i.key)
+                                        }
+                                    },
+                                )
+                            }
                         }
-                    }
 
-                    colourPanel.revalidate()
-                    colourPanel.repaint()
+                        colourPanel.revalidate()
+                        colourPanel.repaint()
+                    }
                 }
             }
         }
-    }
 
-    private val colourPanel = JPanel().apply {
-        layout = WrapLayout()
-    }
+    private val colourPanel = JPanel().apply { layout = WrapLayout() }
 
     init {
         layout = GridBagLayout()
@@ -61,9 +60,7 @@ object ColourPalettePanel : PluginPanel() {
         EventProgramFinishSetup.addListener {
             for (i in ColourPalettePlugin.folder.walk()) {
                 if (i.isFile) {
-                    ColourPalettePlugin.registry[i.extension]?.let { pp ->
-                        combo.addItem(pp.parse(i))
-                    }
+                    ColourPalettePlugin.registry[i.extension]?.let { pp -> combo.addItem(pp.parse(i)) }
                 } else if (i.isDirectory && i.name != "palette") {
                     combo.addDelimiter(i.name)
                 }

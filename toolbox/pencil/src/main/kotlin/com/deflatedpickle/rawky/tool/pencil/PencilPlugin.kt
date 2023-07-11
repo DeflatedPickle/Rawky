@@ -24,15 +24,14 @@ import java.awt.Graphics2D
         A pencil
     """,
     type = PluginType.OTHER,
-    dependencies = [
-        "deflatedpickle@core#1.0.0"
-    ],
+    dependencies = ["deflatedpickle@core#1.0.0"],
     settings = PencilSettings::class,
 )
-object PencilPlugin : Tool(
-    name = "Pencil",
-    icon = MonoIcon.PENCIL,
-) {
+object PencilPlugin :
+    Tool(
+        name = "Pencil",
+        icon = MonoIcon.PENCIL,
+    ) {
     init {
         registry["deflatedpickle@$name"] = this
     }
@@ -43,32 +42,34 @@ object PencilPlugin : Tool(
         dragged: Boolean,
         clickCount: Int,
     ) {
-        val action = object : Action(name) {
-            override fun perform() {
-                ConfigUtil.getSettings<PencilSettings>("deflatedpickle@pencil#")?.let {
-                    for (column in 0 downTo -it.size + 1) {
-                        for (row in 0 downTo -it.size + 1) {
-                            try {
-                                val x = if (it.size > 1) 1 else 0
-                                val y = if (it.size > 1) 0 else 1
+        val action =
+            object : Action(name) {
+                override fun perform() {
+                    ConfigUtil.getSettings<PencilSettings>("deflatedpickle@pencil#")?.let {
+                        for (column in 0 downTo -it.size + 1) {
+                            for (row in 0 downTo -it.size + 1) {
+                                try {
+                                    val x = if (it.size > 1) 1 else 0
+                                    val y = if (it.size > 1) 0 else 1
 
-                                CellProvider.current.perform(
-                                    cell.grid[cell.row + row + x, cell.column + column - y], button, dragged, clickCount
-                                )
-                            } catch (_: IndexOutOfBoundsException) {
+                                    CellProvider.current.perform(
+                                        cell.grid[cell.row + row + x, cell.column + column - y],
+                                        button,
+                                        dragged,
+                                        clickCount,
+                                    )
+                                } catch (_: IndexOutOfBoundsException) {}
                             }
                         }
                     }
                 }
-            }
 
-            override fun cleanup() {
-                // TODO
-            }
+                override fun cleanup() {
+                    // TODO
+                }
 
-            override fun outline(g2D: Graphics2D) {
+                override fun outline(g2D: Graphics2D) {}
             }
-        }
 
         ActionStack.push(action)
     }

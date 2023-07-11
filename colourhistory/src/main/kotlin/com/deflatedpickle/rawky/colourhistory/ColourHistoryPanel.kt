@@ -10,9 +10,7 @@ import javax.swing.JPanel
 import javax.swing.JScrollPane
 
 object ColourHistoryPanel : PluginPanel() {
-    val panel = JPanel().apply {
-        layout = WrapLayout()
-    }
+    val panel = JPanel().apply { layout = WrapLayout() }
 
     init {
         layout = GridBagLayout()

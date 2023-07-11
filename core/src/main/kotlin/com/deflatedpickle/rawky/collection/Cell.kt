@@ -13,9 +13,14 @@ import java.awt.Rectangle
 abstract class Cell<out T> {
     abstract val row: Int
     abstract val column: Int
+
     @Polymorphic abstract var content: @UnsafeVariance T
 
-    /*@Transient*/ lateinit var polygon: @Serializable(RectangleSerializer::class) Rectangle
+    /*@Transient*/
+    lateinit var polygon:
+        @Serializable(RectangleSerializer::class)
+        Rectangle
+
     @Transient lateinit var grid: Grid
 
     fun <S : @UnsafeVariance T> set(value: S) {

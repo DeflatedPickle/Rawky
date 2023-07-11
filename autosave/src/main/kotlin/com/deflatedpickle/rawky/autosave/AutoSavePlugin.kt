@@ -37,14 +37,16 @@ import javax.swing.Timer
     value = "auto_save",
     author = "DeflatedPickle",
     version = "1.2.0",
-    description = """
+    description =
+    """
         <br>
         Adds a timer to automatically save the current file
     """,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
     ],
-    settings = AutoSaveSettings::class
+    settings = AutoSaveSettings::class,
 )
 @Suppress("unused")
 object AutoSavePlugin {
@@ -69,13 +71,14 @@ object AutoSavePlugin {
                     }
                 }
             }
-        }.also {
-            with(Haruhi.window) {
-                addWindowListener(it)
-                addWindowFocusListener(it)
-                addWindowStateListener(it)
-            }
         }
+            .also {
+                with(Haruhi.window) {
+                    addWindowListener(it)
+                    addWindowFocusListener(it)
+                    addWindowStateListener(it)
+                }
+            }
 
         EventProgramFinishSetup.addListener {
             ConfigUtil.getSettings<AutoSaveSettings>("deflatedpickle@auto_save#*")?.let { config ->
@@ -83,82 +86,82 @@ object AutoSavePlugin {
                     val exporter = Exporter.registry.values.first()
                     config.fileType = FileType(exporter, exporter.exporterExtensions.values.first().first())
 
-                    PluginUtil.slugToPlugin("deflatedpickle@auto_save#*")
-                        ?.let { plug -> ConfigUtil.serializeConfig(plug) }
-                }
-            }
-
-            (RegistryUtil.get("setting_type") as Registry<String, (Plugin, String, Any) -> Component>?)?.let { registry ->
-                registry.register(FileType::class.qualifiedName!!) { plugin, name, instance ->
-                    Panel(GridBagLayout()).apply {
-                        val inst = instance.get<FileType>(name)
-
-                        val handler = JComboBox(Exporter.registry.values.toTypedArray()).apply {
-                            selectedItem = inst.handler
-
-                            setRenderer { _, value, _, _, _ ->
-                                JLabel((value as Exporter).name)
-                            }
-                        }
-                        val extension = JComboBox((handler.selectedItem as Exporter).exporterExtensions.flatMap { it.value }.toTypedArray()).apply {
-                            selectedItem = inst.extension
-                        }
-
-                        handler.addItemListener {
-                            (extension.model as DefaultComboBoxModel).apply {
-                                removeAllElements()
-                                addAll((handler.selectedItem as Exporter).exporterExtensions.flatMap { it.value })
-                            }
-                            extension.selectedIndex = 0
-
-                            instance.set(
-                                name,
-                                FileType(
-                                    handler.selectedItem as Exporter,
-                                    extension.selectedItem as String? ?: "null",
-                                )
-                            )
-                            ConfigUtil.serializeConfig(plugin)
-                        }
-
-                        extension.addItemListener {
-                            instance.set(
-                                name,
-                                FileType(
-                                    handler.selectedItem as Exporter,
-                                    extension.selectedItem as String? ?: "null",
-                                )
-                            )
-                            ConfigUtil.serializeConfig(plugin)
-                        }
-
-                        add(handler, FillHorizontal)
-                        add(extension, FillHorizontal)
+                    PluginUtil.slugToPlugin("deflatedpickle@auto_save#*")?.let { plug ->
+                        ConfigUtil.serializeConfig(plug)
                     }
                 }
             }
+
+            (RegistryUtil.get("setting_type") as Registry<String, (Plugin, String, Any) -> Component>?)
+                ?.let { registry ->
+                    registry.register(FileType::class.qualifiedName!!) { plugin, name, instance ->
+                        Panel(GridBagLayout()).apply {
+                            val inst = instance.get<FileType>(name)
+
+                            val handler =
+                                JComboBox(Exporter.registry.values.toTypedArray()).apply {
+                                    selectedItem = inst.handler
+
+                                    setRenderer { _, value, _, _, _ -> JLabel((value as Exporter).name) }
+                                }
+                            val extension =
+                                JComboBox(
+                                    (handler.selectedItem as Exporter)
+                                        .exporterExtensions
+                                        .flatMap { it.value }
+                                        .toTypedArray(),
+                                )
+                                    .apply { selectedItem = inst.extension }
+
+                            handler.addItemListener {
+                                (extension.model as DefaultComboBoxModel).apply {
+                                    removeAllElements()
+                                    addAll(
+                                        (handler.selectedItem as Exporter).exporterExtensions.flatMap { it.value },
+                                    )
+                                }
+                                extension.selectedIndex = 0
+
+                                instance.set(
+                                    name,
+                                    FileType(
+                                        handler.selectedItem as Exporter,
+                                        extension.selectedItem as String? ?: "null",
+                                    ),
+                                )
+                                ConfigUtil.serializeConfig(plugin)
+                            }
+
+                            extension.addItemListener {
+                                instance.set(
+                                    name,
+                                    FileType(
+                                        handler.selectedItem as Exporter,
+                                        extension.selectedItem as String? ?: "null",
+                                    ),
+                                )
+                                ConfigUtil.serializeConfig(plugin)
+                            }
+
+                            add(handler, FillHorizontal)
+                            add(extension, FillHorizontal)
+                        }
+                    }
+                }
         }
 
-        EventCreateDocument.addListener {
-            run()
-        }
+        EventCreateDocument.addListener { run() }
 
-        EventOpenDocument.addListener {
-            run()
-        }
+        EventOpenDocument.addListener { run() }
     }
 
     private fun run() {
         ConfigUtil.getSettings<AutoSaveSettings>("deflatedpickle@auto_save#*")?.let { config ->
             timer?.stop()
 
-            timer = Timer(config.delay * MINUTE) {
-                RawkyPlugin.document?.let { doc ->
-                    save(doc, config)
-                }
-            }.apply {
-                start()
-            }
+            timer =
+                Timer(config.delay * MINUTE) { RawkyPlugin.document?.let { doc -> save(doc, config) } }
+                    .apply { start() }
         }
     }
 
@@ -172,14 +175,18 @@ object AutoSavePlugin {
         if (!config.replace) {
             val count = config.path.list()?.count { it.startsWith(config.name) }
 
-            name = if (doc.name == null || doc.name!!.contains(config.name)) {
-                "${config.name}-$count"
-            } else {
-                "${doc.name}-$count"
-            }
+            name =
+                if (doc.name == null || doc.name!!.contains(config.name)) {
+                    "${config.name}-$count"
+                } else {
+                    "${doc.name}-$count"
+                }
         }
 
-        val file = File("${config.path.absolutePath}/$name.${config.fileType?.extension}").apply { createNewFile() }
+        val file =
+            File("${config.path.absolutePath}/$name.${config.fileType?.extension}").apply {
+                createNewFile()
+            }
         config.fileType?.handler?.export(doc, file)
 
         EventAutoSaveDocument.trigger(Pair(doc, file))
@@ -193,9 +200,9 @@ object AutoSavePlugin {
             for (l in f.children) {
                 for (c in l.child.children) {
                     // TODO
-                    /*if (c.colour != transparent) {
-                        colour = c.colour
-                    }*/
+          /*if (c.colour != transparent) {
+              colour = c.colour
+          }*/
                 }
             }
         }

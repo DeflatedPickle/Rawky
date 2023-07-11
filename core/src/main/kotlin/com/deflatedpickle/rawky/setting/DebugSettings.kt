@@ -12,6 +12,10 @@ import java.awt.Font
 @Serializable
 data class DebugSettings(
     var enabled: Boolean = false,
-    var colour: @Serializable(ColorSerializer::class) Color = Color.PINK,
-    var font: @Serializable(FontSerializer::class) Font = Font(Font.DIALOG, Font.PLAIN, 20)
+    var colour:
+    @Serializable(ColorSerializer::class)
+    Color = Color.PINK,
+    var font:
+    @Serializable(FontSerializer::class)
+    Font = Font(Font.DIALOG, Font.PLAIN, 20),
 ) : ConfigSection

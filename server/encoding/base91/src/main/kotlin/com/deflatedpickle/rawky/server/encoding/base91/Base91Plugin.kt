@@ -19,12 +19,14 @@ import de.bwaldvogel.base91.Base91
         An encoder for Base91
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@server#*",
     ],
 )
 object Base91Plugin : Encoder("Base91") {
     override fun encode(text: ByteArray): String = Base91.encode(text).decodeToString()
+
     override fun decode(text: String): ByteArray = Base91.decode(text.toByteArray())
 
     init {

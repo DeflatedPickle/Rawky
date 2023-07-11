@@ -30,11 +30,12 @@ import java.awt.Stroke
         Paints guides upon the pixel grid
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
         "deflatedpickle@pixelgrid#*",
     ],
-    settings = GuideSettings::class
+    settings = GuideSettings::class,
 )
 @Suppress("unused")
 object PixelGridGuideLayerPlugin : PaintLayer {
@@ -51,9 +52,7 @@ object PixelGridGuideLayerPlugin : PaintLayer {
         doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
 
-            settings?.let {
-                drawGuides(g2d, doc, it.colour, BasicStroke(it.thickness))
-            }
+            settings?.let { drawGuides(g2d, doc, it.colour, BasicStroke(it.thickness)) }
         }
     }
 

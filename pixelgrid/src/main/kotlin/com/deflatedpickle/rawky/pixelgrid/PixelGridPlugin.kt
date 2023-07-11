@@ -28,60 +28,57 @@ import javax.swing.SwingUtilities
     value = "pixel_grid",
     author = "DeflatedPickle",
     version = "1.0.0",
-    description = """
+    description =
+    """
         Provides a grid to draw upon
         <br>
         This plugin provides most of the basic user functionality of Rawky.
     """,
     type = PluginType.COMPONENT,
     component = PixelGridPanel::class,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
     ],
-    settings = PixelGridSettings::class
+    settings = PixelGridSettings::class,
 )
 @Suppress("unused")
 object PixelGridPlugin {
     init {
-        EventCreateDocument.addListener {
-            PixelGridPanel.repaint()
-        }
+        EventCreateDocument.addListener { PixelGridPanel.repaint() }
 
-        EventOpenDocument.addListener {
-            PixelGridPanel.repaint()
-        }
+        EventOpenDocument.addListener { PixelGridPanel.repaint() }
 
-        EventUpdateGrid.addListener {
-            PixelGridPanel.repaint()
-        }
+        EventUpdateGrid.addListener { PixelGridPanel.repaint() }
 
         EventProgramFinishSetup.addListener {
-            (RegistryUtil.get("setting_type") as Registry<String, (Plugin, String, Any) -> Component>?)?.let { registry ->
-                registry.register(Mode::class.qualifiedName!!) { plugin, name, instance ->
-                    JComboBox<Mode>().apply {
-                        SwingUtilities.invokeLater {
-                            for ((_, v) in Mode.registry) {
-                                addItem(v)
-                            }
+            (RegistryUtil.get("setting_type") as Registry<String, (Plugin, String, Any) -> Component>?)
+                ?.let { registry ->
+                    registry.register(Mode::class.qualifiedName!!) { plugin, name, instance ->
+                        JComboBox<Mode>().apply {
+                            SwingUtilities.invokeLater {
+                                for ((_, v) in Mode.registry) {
+                                    addItem(v)
+                                }
 
-                            selectedItem = instance.get<Mode>(name)
+                                selectedItem = instance.get<Mode>(name)
 
-                            addItemListener {
-                                when (it.stateChange) {
-                                    ItemEvent.DESELECTED -> {
-                                        (it.item as Mode).remove()
-                                    }
-                                    ItemEvent.SELECTED -> {
-                                        instance.set(name, it.item)
-                                        (it.item as Mode).apply()
-                                        ConfigUtil.serializeConfig(plugin)
+                                addItemListener {
+                                    when (it.stateChange) {
+                                        ItemEvent.DESELECTED -> {
+                                            (it.item as Mode).remove()
+                                        }
+                                        ItemEvent.SELECTED -> {
+                                            instance.set(name, it.item)
+                                            (it.item as Mode).apply()
+                                            ConfigUtil.serializeConfig(plugin)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
         }
     }
 }

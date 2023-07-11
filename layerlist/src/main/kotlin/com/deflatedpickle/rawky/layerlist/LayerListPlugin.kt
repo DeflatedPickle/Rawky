@@ -6,7 +6,6 @@ package com.deflatedpickle.rawky.layerlist
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.api.util.ComponentPosition.WEST
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.rawky.RawkyPlugin
@@ -27,15 +26,14 @@ import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
     """,
     type = PluginType.COMPONENT,
     component = LayerListPanel::class,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
-    ]
+    ],
 )
 object LayerListPlugin {
     init {
-        EventChangeTheme.addListener {
-            LayerListPanel.updateUIRecursively()
-        }
+        EventChangeTheme.addListener { LayerListPanel.updateUIRecursively() }
 
         EventCreateDocument.addListener {
             LayerListPanel.model.removeAll()
@@ -57,36 +55,18 @@ object LayerListPlugin {
             LayerListPanel.model.removeAll()
 
             for (i in it.new.children) {
-                LayerListPanel.model.insertRow(
-                    0,
-                    arrayOf(
-                        null,
-                        i.name,
-                        i.visible,
-                        i.lock
-                    )
-                )
+                LayerListPanel.model.insertRow(0, arrayOf(null, i.name, i.visible, i.lock))
             }
 
             triggerButtons()
         }
 
-        EventChangeLayer.addListener {
-            triggerButtons()
-        }
+        EventChangeLayer.addListener { triggerButtons() }
     }
 
     private fun createInitialLayers(it: RawkyDocument) {
         for (i in it.children[0].children) {
-            LayerListPanel.model.insertRow(
-                0,
-                arrayOf(
-                    null,
-                    i.name,
-                    i.visible,
-                    i.lock
-                )
-            )
+            LayerListPanel.model.insertRow(0, arrayOf(null, i.name, i.visible, i.lock))
         }
     }
 
@@ -97,8 +77,7 @@ object LayerListPlugin {
         RawkyPlugin.document?.let { doc ->
             val frame = doc.children[doc.selectedIndex]
 
-            LayerListPanel.deleteButton.isEnabled =
-                frame.children.size > 1
+            LayerListPanel.deleteButton.isEnabled = frame.children.size > 1
         }
 
         for (i in LayerListPanel.navbar.components) {

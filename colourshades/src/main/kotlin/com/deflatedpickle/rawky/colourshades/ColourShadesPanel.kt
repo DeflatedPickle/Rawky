@@ -17,9 +17,7 @@ import java.awt.GridBagLayout
 import javax.swing.JScrollPane
 
 object ColourShadesPanel : PluginPanel() {
-    private val colourPanel = JXPanel().apply {
-        layout = WrapLayout()
-    }
+    private val colourPanel = JXPanel().apply { layout = WrapLayout() }
 
     init {
         layout = GridBagLayout()
@@ -30,20 +28,19 @@ object ColourShadesPanel : PluginPanel() {
     fun createShades() {
         colourPanel.removeAll()
 
-        ConfigUtil.getSettings<ColourShadesSettings>("deflatedpickle@colour_shades#*")?.let { settings ->
+        ConfigUtil.getSettings<ColourShadesSettings>("deflatedpickle@colour_shades#*")?.let { settings,
+            ->
             for (i in (0 until settings.darkShades).reversed()) {
                 colourPanel.add(
                     ColourButton(
-                        PixelCellPlugin
-                            .current
-                            .darken(
-                                i / (settings.darkShades.toDouble() / 2) + 0.1,
-                                settings.brightnessStep
-                            )
+                        PixelCellPlugin.current.darken(
+                            i / (settings.darkShades.toDouble() / 2) + 0.1,
+                            settings.brightnessStep,
+                        ),
                     ) {
                         PixelCellPlugin.current = (it.source as ColourButton).colour
                         EventChangeColour.trigger(PixelCellPlugin.current)
-                    }
+                    },
                 )
             }
 
@@ -52,16 +49,14 @@ object ColourShadesPanel : PluginPanel() {
             for (i in 0 until settings.lightShades) {
                 colourPanel.add(
                     ColourButton(
-                        PixelCellPlugin
-                            .current
-                            .lighten(
-                                i / (settings.darkShades.toDouble() / 2) + 0.1,
-                                settings.brightnessStep
-                            )
+                        PixelCellPlugin.current.lighten(
+                            i / (settings.darkShades.toDouble() / 2) + 0.1,
+                            settings.brightnessStep,
+                        ),
                     ) {
                         PixelCellPlugin.current = (it.source as ColourButton).colour
                         EventChangeColour.trigger(PixelCellPlugin.current)
-                    }
+                    },
                 )
             }
         }

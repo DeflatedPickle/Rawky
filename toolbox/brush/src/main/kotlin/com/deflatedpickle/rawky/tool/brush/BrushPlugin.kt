@@ -17,7 +17,6 @@ import java.awt.Graphics2D
 import kotlin.math.cos
 import kotlin.math.sin
 
-
 @Plugin(
     value = "brush",
     author = "DeflatedPickle",
@@ -27,15 +26,14 @@ import kotlin.math.sin
         A circle brush
     """,
     type = PluginType.OTHER,
-    dependencies = [
-        "deflatedpickle@core#1.0.0"
-    ],
+    dependencies = ["deflatedpickle@core#1.0.0"],
     settings = BrushSettings::class,
 )
-object BrushPlugin : Tool(
-    name = "Brush",
-    icon = MonoIcon.BRUSH,
-) {
+object BrushPlugin :
+    Tool(
+        name = "Brush",
+        icon = MonoIcon.BRUSH,
+    ) {
     init {
         registry["deflatedpickle@$name"] = this
     }
@@ -46,37 +44,33 @@ object BrushPlugin : Tool(
         dragged: Boolean,
         clickCount: Int,
     ) {
-        val action = object : Action(name) {
-            override fun perform() {
-                ConfigUtil.getSettings<BrushSettings>("deflatedpickle@brush#")?.let {
-                    // FIXME: maybe just draw the biggest circle and flood fill it
-                    for (r in 0 .. it.size) {
-                        val increment = 2 * Math.PI / 50
+        val action =
+            object : Action(name) {
+                override fun perform() {
+                    ConfigUtil.getSettings<BrushSettings>("deflatedpickle@brush#")?.let {
+                        // FIXME: maybe just draw the biggest circle and flood fill it
+                        for (r in 0..it.size) {
+                            val increment = 2 * Math.PI / 50
 
-                        var angle = 0.0
-                        while (angle < 2 * Math.PI) {
-                            val x1 = (cell.row + cos(angle) * (r + 0.4)).toInt()
-                            val y1 = (cell.column + sin(angle) * (r + 0.4)).toInt()
+                            var angle = 0.0
+                            while (angle < 2 * Math.PI) {
+                                val x1 = (cell.row + cos(angle) * (r + 0.4)).toInt()
+                                val y1 = (cell.column + sin(angle) * (r + 0.4)).toInt()
 
-                            try {
-                                CellProvider.current.perform(
-                                    cell.grid[x1, y1], button, dragged, clickCount
-                                )
-                            } catch (_: IndexOutOfBoundsException) {
+                                try {
+                                    CellProvider.current.perform(cell.grid[x1, y1], button, dragged, clickCount)
+                                } catch (_: IndexOutOfBoundsException) {}
+
+                                angle += increment
                             }
-
-                            angle += increment
                         }
                     }
                 }
-            }
 
-            override fun cleanup() {
-            }
+                override fun cleanup() {}
 
-            override fun outline(g2D: Graphics2D) {
+                override fun outline(g2D: Graphics2D) {}
             }
-        }
 
         ActionStack.push(action)
     }

@@ -24,12 +24,14 @@ import java.awt.Graphics2D
     value = "pixel_grid_onion_skin_layer",
     author = "DeflatedPickle",
     version = "1.0.0",
-    description = """
+    description =
+    """
         <br>
         Paints the last and next frames in different colours
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
         "deflatedpickle@pixelgrid#*",
     ],
@@ -48,77 +50,84 @@ object PixelGridOnionSkinLayerPlugin : PaintLayer {
         doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
 
-            ConfigUtil.getSettings<OnionSkinSettings>("deflatedpickle@pixel_grid_onion_skin_layer#*")?.let {
-                if (!it.enabled) return
+            ConfigUtil.getSettings<OnionSkinSettings>("deflatedpickle@pixel_grid_onion_skin_layer#*")
+                ?.let {
+                    if (!it.enabled) return
 
-                if (it.skinStratergy == SkinStratergy.MONOTONE) {
-                    g2d.color = it.previousColour
-                }
+                    if (it.skinStratergy == SkinStratergy.MONOTONE) {
+                        g2d.color = it.previousColour
+                    }
 
-                for (i in 1..it.previousFrames) {
-                    if (doc.selectedIndex - i >= 0) {
-                        g2d.composite = AlphaComposite.getInstance(
-                            AlphaComposite.SRC_OVER,
-                            1f / ((i / it.previousFrames + 1) + 1f)
-                        )
+                    for (i in 1..it.previousFrames) {
+                        if (doc.selectedIndex - i >= 0) {
+                            g2d.composite =
+                                AlphaComposite.getInstance(
+                                    AlphaComposite.SRC_OVER,
+                                    1f / ((i / it.previousFrames + 1) + 1f),
+                                )
 
-                        for (layer in doc.children[doc.selectedIndex - i].children) {
-                            val grid = layer.child
+                            for (layer in doc.children[doc.selectedIndex - i].children) {
+                                val grid = layer.child
 
-                            if (layer.visible) {
-                                for (cell in grid.children) {
-                                    if (cell.content != CellProvider.current.default) {
-                                        if (it.skinStratergy == SkinStratergy.COLOUR &&
-                                            CellProvider.current.current is Color
-                                        ) {
-                                            g2d.color = cell.content as Color
+                                if (layer.visible) {
+                                    for (cell in grid.children) {
+                                        if (cell.content != CellProvider.current.default) {
+                                            if (it.skinStratergy == SkinStratergy.COLOUR &&
+                                                CellProvider.current.current is Color
+                                            ) {
+                                                g2d.color = cell.content as Color
+                                            }
+
+                                            g2d.fillRect(
+                                                cell.polygon.x,
+                                                cell.polygon.y,
+                                                cell.polygon.width,
+                                                cell.polygon.height,
+                                            )
                                         }
+                                    }
+                                }
+                            }
+                        }
+                    }
 
-                                        g2d.fillRect(
-                                            cell.polygon.x, cell.polygon.y,
-                                            cell.polygon.width, cell.polygon.height
-                                        )
+                    if (it.skinStratergy == SkinStratergy.MONOTONE) {
+                        g2d.color = it.futureColour
+                    }
+
+                    for (i in 1..it.futureFrames) {
+                        if (doc.selectedIndex + i < doc.children.size) {
+                            g2d.composite =
+                                AlphaComposite.getInstance(
+                                    AlphaComposite.SRC_OVER,
+                                    1f / ((i / it.futureFrames + 1) + 1f),
+                                )
+
+                            for (layer in doc.children[doc.selectedIndex + i].children) {
+                                val grid = layer.child
+
+                                if (layer.visible) {
+                                    for (cell in grid.children) {
+                                        if (cell.content != CellProvider.current.default) {
+                                            if (it.skinStratergy == SkinStratergy.COLOUR &&
+                                                CellProvider.current.current is Color
+                                            ) {
+                                                g2d.color = cell.content as Color
+                                            }
+
+                                            g2d.fillRect(
+                                                cell.polygon.x,
+                                                cell.polygon.y,
+                                                cell.polygon.width,
+                                                cell.polygon.height,
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-
-                if (it.skinStratergy == SkinStratergy.MONOTONE) {
-                    g2d.color = it.futureColour
-                }
-
-                for (i in 1..it.futureFrames) {
-                    if (doc.selectedIndex + i < doc.children.size) {
-                        g2d.composite = AlphaComposite.getInstance(
-                            AlphaComposite.SRC_OVER,
-                            1f / ((i / it.futureFrames + 1) + 1f)
-                        )
-
-                        for (layer in doc.children[doc.selectedIndex + i].children) {
-                            val grid = layer.child
-
-                            if (layer.visible) {
-                                for (cell in grid.children) {
-                                    if (cell.content != CellProvider.current.default) {
-                                        if (it.skinStratergy == SkinStratergy.COLOUR &&
-                                            CellProvider.current.current is Color
-                                        ) {
-                                            g2d.color = cell.content as Color
-                                        }
-
-                                        g2d.fillRect(
-                                            cell.polygon.x, cell.polygon.y,
-                                            cell.polygon.width, cell.polygon.height
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 }

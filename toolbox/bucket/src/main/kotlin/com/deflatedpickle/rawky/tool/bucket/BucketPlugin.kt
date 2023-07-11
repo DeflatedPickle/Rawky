@@ -36,66 +36,58 @@ import javax.swing.SwingUtilities
         A bucket
     """,
     type = PluginType.OTHER,
-    dependencies = [
-        "deflatedpickle@core#1.0.0"
-    ],
+    dependencies = ["deflatedpickle@core#1.0.0"],
     settings = BucketSettings::class,
 )
-object BucketPlugin : Tool(
-    name = "Bucket",
-    icon = MonoIcon.PAINT_BUCKET,
-) {
+object BucketPlugin :
+    Tool(
+        name = "Bucket",
+        icon = MonoIcon.PAINT_BUCKET,
+    ) {
     init {
         registry["deflatedpickle@$name"] = this
 
         EventProgramFinishSetup.addListener {
-            (RegistryUtil.get("setting_type") as Registry<String, (Plugin, String, Any) -> Component>?)?.let { registry ->
-                registry.register(Fill::class.qualifiedName!!) { plugin, name, instance ->
-                    JComboBox<Fill>().apply {
-                        setRenderer { _, value, _, _, _ ->
-                            JLabel(value?.name)
-                        }
+            (RegistryUtil.get("setting_type") as Registry<String, (Plugin, String, Any) -> Component>?)
+                ?.let { registry ->
+                    registry.register(Fill::class.qualifiedName!!) { plugin, name, instance ->
+                        JComboBox<Fill>().apply {
+                            setRenderer { _, value, _, _, _ -> JLabel(value?.name) }
 
-                        SwingUtilities.invokeLater {
-                            for ((_, v) in Fill.registry) {
-                                addItem(v)
-                            }
+                            SwingUtilities.invokeLater {
+                                for ((_, v) in Fill.registry) {
+                                    addItem(v)
+                                }
 
-                            selectedItem = instance.get<Fill>(name)
+                                selectedItem = instance.get<Fill>(name)
 
-                            addItemListener {
-                                when (it.stateChange) {
-                                    ItemEvent.SELECTED -> {
-                                        instance.set(name, it.item)
-                                        ConfigUtil.serializeConfig(plugin)
+                                addItemListener {
+                                    when (it.stateChange) {
+                                        ItemEvent.SELECTED -> {
+                                            instance.set(name, it.item)
+                                            ConfigUtil.serializeConfig(plugin)
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
         }
     }
 
-    override fun perform(
-        cell: Cell<Any>,
-        button: Int,
-        dragged: Boolean,
-        clickCount: Int
-    ) {
+    override fun perform(cell: Cell<Any>, button: Int, dragged: Boolean, clickCount: Int) {
         // TODO: Write undo code for the fill bucket
-        val action = object : Action(name) {
-            override fun perform() {
-                process(cell.row, cell.column, cell.content)
-            }
+        val action =
+            object : Action(name) {
+                override fun perform() {
+                    process(cell.row, cell.column, cell.content)
+                }
 
-            override fun cleanup() {
-            }
+                override fun cleanup() {}
 
-            override fun outline(g2D: Graphics2D) {
+                override fun outline(g2D: Graphics2D) {}
             }
-        }
 
         ActionStack.push(action)
     }
@@ -116,9 +108,7 @@ object BucketPlugin : Tool(
         // http://steve.hollasch.net/cgindex/polygons/floodfill.html
         while (cellList.isNotEmpty()) {
             with(cellList.poll()) {
-                if (this.first in 0 until grid.rows &&
-                    this.second in 0 until grid.columns
-                ) {
+                if (this.first in 0 until grid.rows && this.second in 0 until grid.columns) {
                     val cell = grid[this.first, this.second]
 
                     // TODO

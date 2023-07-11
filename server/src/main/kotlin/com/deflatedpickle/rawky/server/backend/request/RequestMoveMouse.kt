@@ -17,7 +17,7 @@ data class RequestMoveMouse(
             ResponseMoveMouse(
                 connection.id,
                 point,
-            )
+            ),
         )
     }
 }

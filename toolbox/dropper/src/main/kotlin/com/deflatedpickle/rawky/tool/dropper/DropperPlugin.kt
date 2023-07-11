@@ -25,14 +25,13 @@ import java.awt.Graphics2D
         A colour picker
     """,
     type = PluginType.OTHER,
-    dependencies = [
-        "deflatedpickle@core#1.0.0"
-    ]
+    dependencies = ["deflatedpickle@core#1.0.0"],
 )
-object DropperPlugin : Tool(
-    name = "Dropper",
-    icon = MonoIcon.COLOUR_PICKER,
-) {
+object DropperPlugin :
+    Tool(
+        name = "Dropper",
+        icon = MonoIcon.COLOUR_PICKER,
+    ) {
     init {
         registry["deflatedpickle@$name"] = this
     }
@@ -43,18 +42,17 @@ object DropperPlugin : Tool(
         dragged: Boolean,
         clickCount: Int,
     ) {
-        val action = object : Action(name) {
-            override fun perform() {
-                CellProvider.current.current(cell.content)
-                EventChangeColour.trigger(PixelCellPlugin.current)
-            }
+        val action =
+            object : Action(name) {
+                override fun perform() {
+                    CellProvider.current.current(cell.content)
+                    EventChangeColour.trigger(PixelCellPlugin.current)
+                }
 
-            override fun cleanup() {
-            }
+                override fun cleanup() {}
 
-            override fun outline(g2D: Graphics2D) {
+                override fun outline(g2D: Graphics2D) {}
             }
-        }
 
         ActionStack.push(action)
     }

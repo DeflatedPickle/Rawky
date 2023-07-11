@@ -22,14 +22,14 @@
 
 <p align="center">
 	<a href="https://github.com/DeflatedPickle/Rawky/commits/rewrite"><img src="https://img.shields.io/github/last-commit/DeflatedPickle/Rawky.svg"></a>
-	<img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/DeflatedPickle/Rawky/gradle-dist.yml">
+	<img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/DeflatedPickle/Rawky/gradle-packageAll.yml">
 	<a href="https://github.com/DeflatedPickle/Rawky/wiki"><img src="https://img.shields.io/badge/wiki-documentation-forestgreen"></a>
 </p>
 
 <p align="center">
 	<a href="https://www.codefactor.io/repository/github/deflatedpickle/rawky/overview/rewrite"><img src="https://www.codefactor.io/repository/github/deflatedpickle/rawky/badge/rewrite" alt="CodeFactor"/></a>
 	<a href="https://codeclimate.com/github/DeflatedPickle/Rawky/maintainability"><img src="https://api.codeclimate.com/v1/badges/b5f7de56e73e0c459a9e/maintainability"></a>
-	<a href="https://www.codacy.com/gh/DeflatedPickle/Rawky/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=DeflatedPickle/Rawky&amp;utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/55932982ea574f4d893dbcc838d43449"/></a>
+	<a href="https://www.codacy.com/gh/DeflatedPickle/Rawky/dashboard?utm_source=github.com&utm_medium=referral&utm_content=DeflatedPickle/Rawky&utm_campaign=Badge_Grade"><img src="https://app.codacy.com/project/badge/Grade/55932982ea574f4d893dbcc838d43449"/></a>
 </p>
 
 <p align="center">
@@ -46,15 +46,17 @@
 
 ---
 
-<p align="center">this project depends on the following other open-source projects</p>
+<p align="center">this project depends on the following external projects</p>
 <p align="center">
+	<a href="https://adoptium.net/"><img alt="Adoptium" src="https://projects.eclipse.org/sites/default/files/Logo_Adoptium_2021_03_08_JRR_RGB-V3C%20%281%29.png" width="64"></a>
 	<a href="https://kotlinlang.org/"><img alt="Kotlin" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/06/Kotlin_Icon.svg/512px-Kotlin_Icon.svg.png?20171012085709" width="64"></a>
-	<a href=""><img alt="Gradle" src="https://avatars.githubusercontent.com/u/124156?s=200&v=4" width="64"></a>
+	<a href="https://gradle.org/"><img alt="Gradle" src="https://avatars.githubusercontent.com/u/124156?s=200&v=4" width="64"></a>
+	<a href="https://github.com/diffplug/spotless/tree/main/plugin-gradle"><img alt="Spotless" src="https://github.com/diffplug/spotless/blob/main/_images/spotless_logo.png?raw=true" width="64"></a>
 	<a href="https://catppuccin.com/"><img alt="Catppuccin" src="https://avatars.githubusercontent.com/u/93489351?s=200&v=4" width="64"></a>
 	<a href="https://formdev.com/flatlaf/"><img alt="FlatLAF" src="https://raw.githubusercontent.com/JFormDesigner/FlatLaf/aa4c6ee9da21eceaebede8b3196ab0476c0abd07/flatlaf-demo/src/main/resources/com/formdev/flatlaf/demo/FlatLaf.svg" width="64"></a>
 	<a href="https://opendyslexic.org/"><img alt="OpenDyslexic" src="https://avatars.githubusercontent.com/u/39324024?s=200&v=4" width="64"></a>
+	<a href="https://github.com/fvarrui/JavaPackager"><img alt="JavaPackager" src="https://github.com/fvarrui/JavaPackager/blob/master/src/main/resources/linux/default-icon.png?raw=true" width="64"></a>
 	<br>
 	<a href="https://github.com/andrewauclair/ModernDocking">ModernDocking</a>
-	<a href="https://github.com/fvarrui/JavaPackager">JavaPackager</a>
 	<a href="https://github.com/dheid/colorpicker">ColorPicker</a>
 </p>

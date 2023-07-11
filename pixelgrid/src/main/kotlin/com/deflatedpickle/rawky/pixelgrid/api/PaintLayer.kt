@@ -16,10 +16,5 @@ interface PaintLayer {
     val name: String
     val layer: LayerCategory
 
-    fun paint(
-        doc: RawkyDocument?,
-        frame: Frame?,
-        layer: Layer?,
-        g2d: Graphics2D
-    )
+    fun paint(doc: RawkyDocument?, frame: Frame?, layer: Layer?, g2d: Graphics2D)
 }

@@ -31,7 +31,8 @@ import javax.swing.JMenu
     value = "core",
     author = "DeflatedPickle",
     version = "1.0.0",
-    description = """
+    description =
+    """
         The core program
         <br>
         This provides the main API for Rawky
@@ -59,13 +60,10 @@ object RawkyPlugin {
 
         FileUtils.copyResourcesRecursively(
             RawkyPlugin::class.java.getResource("/template"),
-            templateFolder
+            templateFolder,
         )
 
-        FileUtils.copyResourcesRecursively(
-            RawkyPlugin::class.java.getResource("/guide"),
-            guideFolder
-        )
+        FileUtils.copyResourcesRecursively(RawkyPlugin::class.java.getResource("/guide"), guideFolder)
 
         for (i in guideFolder.walk()) {
             if (i.isFile && i.extension == "json") {

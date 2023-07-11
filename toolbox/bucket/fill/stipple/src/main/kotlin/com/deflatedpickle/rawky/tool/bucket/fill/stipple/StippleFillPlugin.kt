@@ -21,7 +21,8 @@ import com.deflatedpickle.rawky.tool.bucket.api.Fill.Companion.registry
         Provides a stipple fill for the bucket
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@bucket#*",
     ],
     settings = StippleSettings::class,
@@ -36,9 +37,7 @@ object StippleFillPlugin : Fill {
     override fun perform(cell: Cell<Any>, row: Int, column: Int) {
         ConfigUtil.getSettings<StippleSettings>("deflatedpickle@stipple#*")?.let {
             if (row % it.modulusRow == column % it.modulusColumn) {
-                CellProvider.current.perform(
-                    cell, 0, false, 1
-                )
+                CellProvider.current.perform(cell, 0, false, 1)
             }
         }
     }

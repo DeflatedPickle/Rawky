@@ -18,7 +18,8 @@ import java.awt.Color
         Provides a palette for block characters
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@ascii#*",
     ],
 )
@@ -27,12 +28,13 @@ object BlockPlugin : Palette("Block") {
         registry[name] = this
     }
 
-    override fun char(x: Int, y: Int, colour: Color) = when (colour.alpha) {
-        0 -> " "
-        in 1..64 -> "░"
-        in 65..128 -> "▒"
-        in 129..192 -> "▓"
-        in 193..255 -> "█"
-        else -> "?"
-    }.repeat(2)
+    override fun char(x: Int, y: Int, colour: Color) =
+        when (colour.alpha) {
+            0 -> " "
+            in 1..64 -> "░"
+            in 65..128 -> "▒"
+            in 129..192 -> "▓"
+            in 193..255 -> "█"
+            else -> "?"
+        }.repeat(2)
 }

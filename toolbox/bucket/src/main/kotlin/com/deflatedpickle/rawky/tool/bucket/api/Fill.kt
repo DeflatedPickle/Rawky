@@ -19,8 +19,9 @@ interface Fill {
                     if (it.fill == null) {
                         it.fill = registry.values.first()
 
-                        PluginUtil.slugToPlugin("deflatedpickle@bucket#*")
-                            ?.let { plug -> ConfigUtil.serializeConfig(plug) }
+                        PluginUtil.slugToPlugin("deflatedpickle@bucket#*")?.let { plug ->
+                            ConfigUtil.serializeConfig(plug)
+                        }
                     }
                 }
             }

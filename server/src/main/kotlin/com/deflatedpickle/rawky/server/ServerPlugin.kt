@@ -78,10 +78,8 @@ import kotlin.collections.LinkedHashMap
         A basic server
     """,
     type = PluginType.OTHER,
-    dependencies = [
-        "deflatedpickle@core#*"
-    ],
-    settings = ServerSettings::class
+    dependencies = ["deflatedpickle@core#*"],
+    settings = ServerSettings::class,
 )
 @Suppress("unused")
 object ServerPlugin {
@@ -111,9 +109,7 @@ object ServerPlugin {
 
             toolMenu.add(MenuServer)
 
-            GlobalScope.launch {
-                UPnP.isUPnPAvailable()
-            }
+            GlobalScope.launch { UPnP.isUPnPAvailable() }
         }
 
         EventJoinServer.addListener {
@@ -124,13 +120,9 @@ object ServerPlugin {
             Haruhi.window.glassPane.isVisible = true
         }
 
-        EventDisconnect.addListener {
-            Haruhi.window.glassPane = oldPane
-        }
+        EventDisconnect.addListener { Haruhi.window.glassPane = oldPane }
 
-        EventChangeTool.addListener {
-            client.sendTCP(QueryChangeTool(id, Tool.current, it))
-        }
+        EventChangeTool.addListener { client.sendTCP(QueryChangeTool(id, Tool.current, it)) }
 
         EventChangeColour.addListener {
             // client.sendTCP(QueryChangeColour(id, RawkyPlugin.colour))
@@ -145,28 +137,31 @@ object ServerPlugin {
             }
         }
 
-        Runtime.getRuntime().addShutdownHook(object : Thread() {
-            override fun run() {
-                if (client.updateThread != null) {
-                    logger.info("Closing the client thread")
-                    client.stop()
-                }
+        Runtime.getRuntime()
+            .addShutdownHook(
+                object : Thread() {
+                    override fun run() {
+                        if (client.updateThread != null) {
+                            logger.info("Closing the client thread")
+                            client.stop()
+                        }
 
-                server?.let { server ->
-                    if (server.updateThread != null) {
-                        logger.info("Closing the server thread")
-                        server.close()
+                        server?.let { server ->
+                            if (server.updateThread != null) {
+                                logger.info("Closing the server thread")
+                                server.close()
+                            }
+                        }
+
+                        if (this@ServerPlugin::serverProperties.isInitialized) {
+                            logger.info("Closing the TCP port: ${serverProperties.tcpPort}")
+                            UPnP.closePortTCP(serverProperties.tcpPort)
+                            logger.info("Closing the UDP port: ${serverProperties.udpPort}")
+                            UPnP.closePortUDP(serverProperties.udpPort)
+                        }
                     }
-                }
-
-                if (this@ServerPlugin::serverProperties.isInitialized) {
-                    logger.info("Closing the TCP port: ${serverProperties.tcpPort}")
-                    UPnP.closePortTCP(serverProperties.tcpPort)
-                    logger.info("Closing the UDP port: ${serverProperties.udpPort}")
-                    UPnP.closePortUDP(serverProperties.udpPort)
-                }
-            }
-        })
+                },
+            )
     }
 
     private fun registerQueries(kryo: Kryo) {
@@ -231,9 +226,7 @@ object ServerPlugin {
         }
     }
 
-    /**
-     * Starts and connects to a server
-     */
+    /** Starts and connects to a server */
     @Throws(IOException::class)
     fun startServer(tcpPort: Int, udpPort: Int, progressMonitor: ProgressMonitorBuilder) {
         progressMonitor
@@ -261,21 +254,11 @@ object ServerPlugin {
             }
             .queue {
                 note = "Binding server to ports"
-                task = {
-                    server!!.bind(
-                        tcpPort,
-                        udpPort
-                    )
-                }
+                task = { server!!.bind(tcpPort, udpPort) }
             }
             .queue {
                 note = "Setting server properties"
-                task = {
-                    ServerProperties(
-                        tcpPort,
-                        udpPort
-                    ).let { serverProperties = it }
-                }
+                task = { ServerProperties(tcpPort, udpPort).let { serverProperties = it } }
             }
             .queue {
                 note = "Triggering the start server event"
@@ -288,11 +271,7 @@ object ServerPlugin {
         userMap.clear()
 
         server?.let { server ->
-            server.sendToAllTCP(
-                ResponseActiveUsers(
-                    userMap
-                )
-            )
+            server.sendToAllTCP(ResponseActiveUsers(userMap))
             server.close()
         }
 
@@ -301,25 +280,25 @@ object ServerPlugin {
 
     private fun addServerListener() {
         server?.let { server ->
-            server.addListener(object : Listener() {
-                override fun connected(connection: Connection) {
-                    logger.info("Connected to ${connection.remoteAddressTCP}")
-                }
-
-                override fun received(connection: Connection, any: Any) {
-                    logger.trace("Received $any from ${connection.remoteAddressTCP}")
-
-                    if (any is ServerPacket) {
-                        any.runServer(connection, server)
+            server.addListener(
+                object : Listener() {
+                    override fun connected(connection: Connection) {
+                        logger.info("Connected to ${connection.remoteAddressTCP}")
                     }
-                }
-            })
+
+                    override fun received(connection: Connection, any: Any) {
+                        logger.trace("Received $any from ${connection.remoteAddressTCP}")
+
+                        if (any is ServerPacket) {
+                            any.runServer(connection, server)
+                        }
+                    }
+                },
+            )
         }
     }
 
-    /**
-     * Connects to a server
-     */
+    /** Connects to a server */
     @Throws(IOException::class)
     fun connectServer(
         timeoutMilliseconds: Int,
@@ -353,12 +332,7 @@ object ServerPlugin {
                     // This sometimes fails so we may as well retry it
                     for (i in 0 until (retries ?: 1)) {
                         try {
-                            client.connect(
-                                timeoutMilliseconds,
-                                ipAddress,
-                                tcpPort,
-                                udpPort
-                            )
+                            client.connect(timeoutMilliseconds, ipAddress, tcpPort, udpPort)
                         } catch (e: Exception) {
                             continue
                         }
@@ -402,22 +376,24 @@ object ServerPlugin {
     }
 
     private fun addClientListener() {
-        client.addListener(object : Listener() {
-            override fun connected(connection: Connection) {
-                logger.info("Connected to ${connection.remoteAddressTCP}")
-                id = connection.id
-            }
-
-            override fun received(connection: Connection, any: Any) {
-                logger.trace("Received $any from ${connection.remoteAddressTCP}")
-
-                if (any is ClientPacket) {
-                    any.runClient(connection, client)
+        client.addListener(
+            object : Listener() {
+                override fun connected(connection: Connection) {
+                    logger.info("Connected to ${connection.remoteAddressTCP}")
+                    id = connection.id
                 }
 
-                ServerPanel.repaint()
-            }
-        })
+                override fun received(connection: Connection, any: Any) {
+                    logger.trace("Received $any from ${connection.remoteAddressTCP}")
+
+                    if (any is ClientPacket) {
+                        any.runClient(connection, client)
+                    }
+
+                    ServerPanel.repaint()
+                }
+            },
+        )
     }
 
     fun upnpStart(tcpPort: Int, udpPort: Int) {

@@ -23,61 +23,63 @@ import javax.swing.SwingUtilities
         Use a mouse to paint
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@pixel_grid#*",
     ],
 )
 object MousePlugin : Mode("Mouse", 1) {
-    private val adapter = object : MouseAdapter() {
-        fun click(e: MouseEvent, dragged: Boolean) {
-            RawkyPlugin.document?.let { doc ->
-                if (doc.selectedIndex >= doc.children.size) return
+    private val adapter =
+        object : MouseAdapter() {
+            fun click(e: MouseEvent, dragged: Boolean) {
+                RawkyPlugin.document?.let { doc ->
+                    if (doc.selectedIndex >= doc.children.size) return
 
-                PixelGridPanel.paint(
-                    e.button,
-                    dragged,
-                    e.clickCount,
-                )
+                    PixelGridPanel.paint(
+                        e.button,
+                        dragged,
+                        e.clickCount,
+                    )
+                }
             }
-        }
 
-        fun move(e: MouseEvent) {
-            RawkyPlugin.document?.let { doc ->
-                if (doc.selectedIndex >= doc.children.size) return
+            fun move(e: MouseEvent) {
+                RawkyPlugin.document?.let { doc ->
+                    if (doc.selectedIndex >= doc.children.size) return
 
-                val frame = doc.children[doc.selectedIndex]
-                val layer = frame.children[frame.selectedIndex]
-                val grid = layer.child
+                    val frame = doc.children[doc.selectedIndex]
+                    val layer = frame.children[frame.selectedIndex]
+                    val grid = layer.child
 
-                MouseInfo.getPointerInfo()?.let {
-                    val point = MouseInfo.getPointerInfo().location
-                    SwingUtilities.convertPointFromScreen(point, PixelGridPanel)
+                    MouseInfo.getPointerInfo()?.let {
+                        val point = MouseInfo.getPointerInfo().location
+                        SwingUtilities.convertPointFromScreen(point, PixelGridPanel)
 
-                    PixelGridPanel.selectedCells.clear()
+                        PixelGridPanel.selectedCells.clear()
 
-                    for (cell in grid.children) {
-                        if (cell.polygon.contains(point)) {
-                            PixelGridPanel.selectedCells.add(cell)
-                            break
+                        for (cell in grid.children) {
+                            if (cell.polygon.contains(point)) {
+                                PixelGridPanel.selectedCells.add(cell)
+                                break
+                            }
                         }
                     }
                 }
             }
-        }
 
-        override fun mouseClicked(e: MouseEvent) {
-            click(e, false)
-        }
+            override fun mouseClicked(e: MouseEvent) {
+                click(e, false)
+            }
 
-        override fun mouseDragged(e: MouseEvent) {
-            move(e)
-            click(e, true)
-        }
+            override fun mouseDragged(e: MouseEvent) {
+                move(e)
+                click(e, true)
+            }
 
-        override fun mouseMoved(e: MouseEvent) {
-            move(e)
+            override fun mouseMoved(e: MouseEvent) {
+                move(e)
+            }
         }
-    }
 
     override fun apply() {
         adapter.apply {

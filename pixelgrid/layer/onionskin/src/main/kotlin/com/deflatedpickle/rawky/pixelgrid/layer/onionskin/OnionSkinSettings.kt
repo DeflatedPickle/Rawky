@@ -15,6 +15,10 @@ data class OnionSkinSettings(
     @IntRange(1, 15) var previousFrames: Int = 4,
     @IntRange(1, 15) var futureFrames: Int = 4,
     var skinStratergy: SkinStratergy = SkinStratergy.MONOTONE,
-    var previousColour: @Serializable(ColorSerializer::class) Color = Color.YELLOW,
-    var futureColour: @Serializable(ColorSerializer::class) Color = Color.MAGENTA,
+    var previousColour:
+    @Serializable(ColorSerializer::class)
+    Color = Color.YELLOW,
+    var futureColour:
+    @Serializable(ColorSerializer::class)
+    Color = Color.MAGENTA,
 ) : Config

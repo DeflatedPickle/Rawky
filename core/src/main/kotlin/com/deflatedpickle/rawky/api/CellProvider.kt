@@ -42,15 +42,9 @@ abstract class CellProvider<T> : Provider<Cell<T>>, HasName {
         clickCount: Int,
     )
 
-    abstract fun paintGrid(
-        g: Graphics2D,
-        cell: Cell<@Contextual Any>
-    )
+    abstract fun paintGrid(g: Graphics2D, cell: Cell<@Contextual Any>)
 
-    abstract fun paintHover(
-        g: Graphics2D,
-        cell: Cell<Any>
-    )
+    abstract fun paintHover(g: Graphics2D, cell: Cell<Any>)
 
     override fun toString() = name
 }

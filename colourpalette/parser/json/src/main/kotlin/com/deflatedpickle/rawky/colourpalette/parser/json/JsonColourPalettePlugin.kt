@@ -22,7 +22,8 @@ import java.io.File
     value = "json_palette_parser",
     author = "DeflatedPickle",
     version = "1.0.0",
-    description = """
+    description =
+    """
         <br>
         Parses a few kinds of JSON formatted colour palettes
     """,
@@ -36,7 +37,7 @@ object JsonColourPalettePlugin : PaletteParser<Color> {
 
         FileUtils.copyResourcesRecursively(
             JsonColourPalettePlugin::class.java.getResource("/palette"),
-            ColourPalettePlugin.folder
+            ColourPalettePlugin.folder,
         )
     }
 
@@ -46,23 +47,17 @@ object JsonColourPalettePlugin : PaletteParser<Color> {
         when (val json = Json.Default.parseToJsonElement(file.readText())) {
             is JsonArray -> {
                 for (i in json) {
-                    getColour(i)?.let { p ->
-                        colours.put(p, null)
-                    }
+                    getColour(i)?.let { p -> colours.put(p, null) }
                 }
             }
             is JsonObject -> {
                 for ((k, v) in json) {
                     if (isColour(k)) {
-                        getColour(k)?.let { p ->
-                            colours.put(p, v.jsonPrimitive.content)
-                        }
+                        getColour(k)?.let { p -> colours.put(p, v.jsonPrimitive.content) }
                     } else {
                         if (v is JsonArray) {
                             for (i in v) {
-                                getColour(i)?.let { p ->
-                                    colours.put(p, null)
-                                }
+                                getColour(i)?.let { p -> colours.put(p, null) }
                             }
                         }
                     }
@@ -71,10 +66,7 @@ object JsonColourPalettePlugin : PaletteParser<Color> {
             else -> {}
         }
 
-        return Palette(
-            file.nameWithoutExtension,
-            colours
-        )
+        return Palette(file.nameWithoutExtension, colours)
     }
 
     private fun isColour(s: String) =

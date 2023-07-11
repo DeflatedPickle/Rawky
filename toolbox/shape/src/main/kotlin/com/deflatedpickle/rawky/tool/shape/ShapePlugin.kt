@@ -27,9 +27,7 @@ import javax.swing.JPopupMenu
         Adds a drop down for shapes
     """,
     type = PluginType.OTHER,
-    dependencies = [
-        "deflatedpickle@core#1.0.0"
-    ],
+    dependencies = ["deflatedpickle@core#1.0.0"],
 )
 object ShapePlugin {
     private val menu = JPopupMenu("Shape")
@@ -41,16 +39,17 @@ object ShapePlugin {
                     JMenuItem(
                         v.name,
                         v.icon,
-                    ).apply {
-                        isEnabled = false
+                    )
+                        .apply {
+                            isEnabled = false
 
-                        addActionListener {
-                            Tool.current = v
-                            EventChangeTool.trigger(v)
-                        }
+                            addActionListener {
+                                Tool.current = v
+                                EventChangeTool.trigger(v)
+                            }
 
-                        ToolboxPlugin.group.add(this)
-                    }
+                            ToolboxPlugin.group.add(this)
+                        },
                 )
             }
         }
@@ -60,7 +59,7 @@ object ShapePlugin {
                 JSplitButton(MonoIcon.SHAPES).apply {
                     popupMenu = menu
                     isAlwaysPopup = true
-                }
+                },
             )
         }
 

@@ -20,7 +20,8 @@ import com.deflatedpickle.rawky.tool.bucket.api.Fill.Companion.registry
         Provides a solid fill for the bucket
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@bucket#*",
     ],
 )
@@ -32,8 +33,6 @@ object SolidFillPlugin : Fill {
     }
 
     override fun perform(cell: Cell<Any>, row: Int, column: Int) {
-        CellProvider.current.perform(
-            cell, 0, false, 1
-        )
+        CellProvider.current.perform(cell, 0, false, 1)
     }
 }

@@ -31,7 +31,7 @@ object PNGColourPalettePlugin : PaletteParser<Color> {
 
         FileUtils.copyResourcesRecursively(
             PNGColourPalettePlugin::class.java.getResource("/palette/scheme"),
-            ColourPalettePlugin.folder
+            ColourPalettePlugin.folder,
         )
     }
 
@@ -48,9 +48,6 @@ object PNGColourPalettePlugin : PaletteParser<Color> {
             }
         }
 
-        return Palette(
-            file.nameWithoutExtension,
-            colours
-        )
+        return Palette(file.nameWithoutExtension, colours)
     }
 }

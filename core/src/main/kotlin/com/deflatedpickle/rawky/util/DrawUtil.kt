@@ -11,35 +11,38 @@ import java.awt.Graphics2D
 import java.awt.Stroke
 
 object DrawUtil {
-    fun paintGrid(g: Graphics2D, grid: Grid, outlineColour: Color = Color.BLACK, stroke: Stroke = BasicStroke(1f)) {
+    fun paintGrid(
+        g: Graphics2D,
+        grid: Grid,
+        outlineColour: Color = Color.BLACK,
+        stroke: Stroke = BasicStroke(1f),
+    ) {
         paintGridFill(g, grid)
         paintGridOutline(g, grid, outlineColour, stroke)
     }
 
-    fun paintGridOutline(g: Graphics2D, grid: Grid, outlineColour: Color = Color.BLACK, stroke: Stroke) {
+    fun paintGridOutline(
+        g: Graphics2D,
+        grid: Grid,
+        outlineColour: Color = Color.BLACK,
+        stroke: Stroke,
+    ) {
         for (cell in grid.children) {
             g.stroke = stroke
             g.color = outlineColour
-            g.drawRect(
-                cell.polygon.x, cell.polygon.y,
-                cell.polygon.width, cell.polygon.height
-            )
+            g.drawRect(cell.polygon.x, cell.polygon.y, cell.polygon.width, cell.polygon.height)
         }
     }
 
     fun paintGridFill(g: Graphics2D, grid: Grid) {
         for (cell in grid.children) {
-            CellProvider.current.paintGrid(
-                g, cell
-            )
+            CellProvider.current.paintGrid(g, cell)
         }
     }
 
     fun paintHoverCell(cells: MutableList<Cell<Any>>, g: Graphics2D) {
         for (cell in cells) {
-            CellProvider.current.paintHover(
-                g, cell
-            )
+            CellProvider.current.paintHover(g, cell)
         }
     }
 }

@@ -30,77 +30,81 @@ import javax.swing.SpinnerNumberModel
 
 @OptIn(InternalSerializationApi::class)
 class NewFileDialog : TaskDialog(Haruhi.window, "New File") {
-    val template = ExtendedComboBox().apply {
-        for (i in RawkyPlugin.templateFolder.walk()) {
-            if (i.isFile && i.extension == "json") {
-                val json = Json.Default.decodeFromString(Template::class.serializer(), i.readText())
-                Template.registry[json.name] = json
-                addItem(json)
-            } else if (i.isDirectory && i.name != "template") {
-                addDelimiter(i.name)
+    val template =
+        ExtendedComboBox().apply {
+            for (i in RawkyPlugin.templateFolder.walk()) {
+                if (i.isFile && i.extension == "json") {
+                    val json = Json.Default.decodeFromString(Template::class.serializer(), i.readText())
+                    Template.registry[json.name] = json
+                    addItem(json)
+                } else if (i.isDirectory && i.name != "template") {
+                    addDelimiter(i.name)
+                }
             }
-        }
 
-        selectedIndex = -1
+            selectedIndex = -1
 
-        addItemListener {
-            when (it.stateChange) {
-                ItemEvent.SELECTED -> {
-                    with(this.selectedItem as Template) {
-                        columnInput.value = this.width
-                        rowInput.value = this.height
+            addItemListener {
+                when (it.stateChange) {
+                    ItemEvent.SELECTED -> {
+                        with(this.selectedItem as Template) {
+                            columnInput.value = this.width
+                            rowInput.value = this.height
+                        }
                     }
                 }
             }
         }
-    }
 
     val columnInput = JSpinner(SpinnerNumberModel(16, 1, null, 8))
     val rowInput = JSpinner(SpinnerNumberModel(16, 1, null, 8))
-    private val sizeSwapper = JButton(MonoIcon.SWAP).apply {
-        addActionListener {
-            val temp = columnInput.value
-            columnInput.value = rowInput.value
-            rowInput.value = temp
+    private val sizeSwapper =
+        JButton(MonoIcon.SWAP).apply {
+            addActionListener {
+                val temp = columnInput.value
+                columnInput.value = rowInput.value
+                rowInput.value = temp
+            }
         }
-    }
 
     val framesInput = JSpinner(SpinnerNumberModel(1, 1, null, 1))
     val layersInput = JSpinner(SpinnerNumberModel(1, 1, null, 1))
 
-    val gridModeComboBox = JComboBox<CellProvider<*>>().apply {
-        for ((k, v) in CellProvider.registry) {
-            addItem(v)
+    val gridModeComboBox =
+        JComboBox<CellProvider<*>>().apply {
+            for ((k, v) in CellProvider.registry) {
+                addItem(v)
+            }
         }
-    }
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
 
-        this.fixedComponent = JPanel().apply {
-            isOpaque = false
-            layout = GridBagLayout()
+        this.fixedComponent =
+            JPanel().apply {
+                isOpaque = false
+                layout = GridBagLayout()
 
-            add(JLabel("Template:"), StickEast)
-            add(template, FillHorizontalFinishLine)
+                add(JLabel("Template:"), StickEast)
+                add(template, FillHorizontalFinishLine)
 
-            add(JLabel("Size:"), StickEast)
-            add(columnInput, FillHorizontal)
-            add(JLabel("X"))
-            add(rowInput, FillHorizontal)
-            add(sizeSwapper, FinishLine)
+                add(JLabel("Size:"), StickEast)
+                add(columnInput, FillHorizontal)
+                add(JLabel("X"))
+                add(rowInput, FillHorizontal)
+                add(sizeSwapper, FinishLine)
 
-            add(JSeparator(JSeparator.HORIZONTAL), FillHorizontalFinishLine)
+                add(JSeparator(JSeparator.HORIZONTAL), FillHorizontalFinishLine)
 
-            add(JLabel("Initial Frames:"), StickEast)
-            add(framesInput, FillHorizontalFinishLine)
-            add(JLabel("Initial Layers:"), StickEast)
-            add(layersInput, FillHorizontalFinishLine)
+                add(JLabel("Initial Frames:"), StickEast)
+                add(framesInput, FillHorizontalFinishLine)
+                add(JLabel("Initial Layers:"), StickEast)
+                add(layersInput, FillHorizontalFinishLine)
 
-            add(JSeparator(JSeparator.HORIZONTAL), FillHorizontalFinishLine)
+                add(JSeparator(JSeparator.HORIZONTAL), FillHorizontalFinishLine)
 
-            add(JLabel("Grid Mode:"), StickEast)
-            add(gridModeComboBox, FillHorizontalFinishLine)
-        }
+                add(JLabel("Grid Mode:"), StickEast)
+                add(gridModeComboBox, FillHorizontalFinishLine)
+            }
     }
 }

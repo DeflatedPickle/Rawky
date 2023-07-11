@@ -6,7 +6,6 @@ package com.deflatedpickle.rawky.animationpreview
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.api.util.ComponentPosition
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
@@ -40,45 +39,34 @@ object AnimationPreviewPlugin {
 
     init {
         val fps = 4
-        timer = Timer(1000 / fps) {
-            if (!playing) return@Timer
+        timer =
+            Timer(1000 / fps) {
+                if (!playing) return@Timer
 
-            RawkyPlugin.document?.let { doc ->
-                if (currentFrame + 1 < doc.children.size) {
-                    currentFrame++
-                } else {
-                    currentFrame = 0
+                RawkyPlugin.document?.let { doc ->
+                    if (currentFrame + 1 < doc.children.size) {
+                        currentFrame++
+                    } else {
+                        currentFrame = 0
+                    }
+
+                    triggerButtons()
                 }
 
-                triggerButtons()
+                AnimationPreviewPanel.animationPanel.repaint()
             }
 
-            AnimationPreviewPanel.animationPanel.repaint()
-        }
+        EventChangeTheme.addListener { AnimationPreviewPanel.updateUIRecursively() }
 
-        EventChangeTheme.addListener {
-            AnimationPreviewPanel.updateUIRecursively()
-        }
+        EventUpdateGrid.addListener { AnimationPreviewPanel.animationPanel.repaint() }
 
-        EventUpdateGrid.addListener {
-            AnimationPreviewPanel.animationPanel.repaint()
-        }
+        EventUpdateCell.addListener { AnimationPreviewPanel.animationPanel.repaint() }
 
-        EventUpdateCell.addListener {
-            AnimationPreviewPanel.animationPanel.repaint()
-        }
+        EventCreateDocument.addListener { triggerButtons() }
 
-        EventCreateDocument.addListener {
-            triggerButtons()
-        }
+        EventNewFrame.addListener { triggerButtons() }
 
-        EventNewFrame.addListener {
-            triggerButtons()
-        }
-
-        EventOpenDocument.addListener {
-            triggerButtons()
-        }
+        EventOpenDocument.addListener { triggerButtons() }
 
         EventProgramFinishSetup.addListener {
             ConfigUtil.getSettings<AnimationPreviewSettings>("deflatedpickle@animation_preview#*")?.let {

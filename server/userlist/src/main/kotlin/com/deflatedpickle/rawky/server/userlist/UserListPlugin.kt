@@ -6,7 +6,6 @@ package com.deflatedpickle.rawky.server.userlist
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.api.util.ComponentPosition
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.backend.event.EventCloseServer
 import com.deflatedpickle.rawky.server.backend.event.EventDisconnect
@@ -27,7 +26,8 @@ import javax.swing.DefaultListModel
     """,
     type = PluginType.COMPONENT,
     component = UserListPanel::class,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
         "deflatedpickle@server#*",
     ],
@@ -75,8 +75,6 @@ object UserListPlugin {
             (UserListPanel.list.model as DefaultListModel).removeAllElements()
         }
 
-        EventChangeTheme.addListener {
-            UserListPanel.updateUIRecursively()
-        }
+        EventChangeTheme.addListener { UserListPanel.updateUIRecursively() }
     }
 }

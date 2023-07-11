@@ -20,30 +20,25 @@ import javax.swing.SpinnerNumberModel
 class ExportDialog : TaskDialog(Haruhi.window, "Export") {
     val paletteCombo = JComboBox(Palette.registry.values.toTypedArray())
 
-    val frameSpinner = JSpinner(
-        SpinnerNumberModel(
-            0,
-            0,
-            RawkyPlugin.document?.children?.size?.minus(1),
-            1
-        )
-    )
+    val frameSpinner =
+        JSpinner(SpinnerNumberModel(0, 0, RawkyPlugin.document?.children?.size?.minus(1), 1))
     val openCheck = JCheckBox("Open?")
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
 
-        this.fixedComponent = JPanel().apply {
-            isOpaque = false
-            layout = GridBagLayout()
+        this.fixedComponent =
+            JPanel().apply {
+                isOpaque = false
+                layout = GridBagLayout()
 
-            add(JLabel("Palette:"), StickEast)
-            add(paletteCombo, FillHorizontalFinishLine)
+                add(JLabel("Palette:"), StickEast)
+                add(paletteCombo, FillHorizontalFinishLine)
 
-            add(JSeparator(JSeparator.HORIZONTAL), FillHorizontalFinishLine)
+                add(JSeparator(JSeparator.HORIZONTAL), FillHorizontalFinishLine)
 
-            add(frameSpinner, FillHorizontalFinishLine)
-            add(openCheck, StickEast)
-        }
+                add(frameSpinner, FillHorizontalFinishLine)
+                add(openCheck, StickEast)
+            }
     }
 }

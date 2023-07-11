@@ -24,11 +24,12 @@ class EncoderComboBox : JComboBox<Encoder>() {
 
     private fun checkDefault() {
         ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.let {
-            selectedItem = if (it.defaultConnectionEncoding.isNotEmpty()) {
-                Encoder.registry[it.defaultConnectionEncoding]
-            } else {
-                Encoder.registry.values.first()
-            }
+            selectedItem =
+                if (it.defaultConnectionEncoding.isNotEmpty()) {
+                    Encoder.registry[it.defaultConnectionEncoding]
+                } else {
+                    Encoder.registry.values.first()
+                }
         }
     }
 }

@@ -28,11 +28,12 @@ import java.awt.Graphics2D
         Paints a pseudo-transparent background
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
         "deflatedpickle@pixelgrid#*",
     ],
-    settings = BackgroundSettings::class
+    settings = BackgroundSettings::class,
 )
 @Suppress("unused")
 object PixelGridBackgroundLayerPlugin : PaintLayer {
@@ -43,13 +44,9 @@ object PixelGridBackgroundLayerPlugin : PaintLayer {
         registry["background"] = this
     }
 
-    override fun paint(
-        doc: RawkyDocument?,
-        frame: Frame?,
-        layer: Layer?,
-        g2d: Graphics2D
-    ) {
-        val settings = ConfigUtil.getSettings<BackgroundSettings>("deflatedpickle@pixel_grid_background_layer#*")
+    override fun paint(doc: RawkyDocument?, frame: Frame?, layer: Layer?, g2d: Graphics2D) {
+        val settings =
+            ConfigUtil.getSettings<BackgroundSettings>("deflatedpickle@pixel_grid_background_layer#*")
 
         doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
@@ -57,14 +54,7 @@ object PixelGridBackgroundLayerPlugin : PaintLayer {
             settings?.let {
                 if (it.enabled) {
                     frame?.children?.first()?.child?.let { grid ->
-                        drawBackground(
-                            g2d,
-                            grid,
-                            it.fill,
-                            it.size,
-                            it.even,
-                            it.odd
-                        )
+                        drawBackground(g2d, grid, it.fill, it.size, it.even, it.odd)
                     }
                 }
             }
@@ -77,21 +67,18 @@ object PixelGridBackgroundLayerPlugin : PaintLayer {
         fillType: FillType,
         size: Int,
         evenColour: Color,
-        oddColour: Color
+        oddColour: Color,
     ) {
-        val fill = when (fillType) {
-            FillType.ALL -> Pair(g.clipBounds.width, g.clipBounds.height)
-            FillType.GRID -> Pair(grid.rows, grid.columns)
-        }
+        val fill =
+            when (fillType) {
+                FillType.ALL -> Pair(g.clipBounds.width, g.clipBounds.height)
+                FillType.GRID -> Pair(grid.rows, grid.columns)
+            }
 
         for (r in 0 until fill.first * Grid.pixel / size) {
             for (c in 0 until fill.second * Grid.pixel / size) {
                 g.color = if (r % 2 == c % 2) evenColour else oddColour
-                g.fillRect(
-                    c * size,
-                    r * size,
-                    size, size
-                )
+                g.fillRect(c * size, r * size, size, size)
             }
         }
     }

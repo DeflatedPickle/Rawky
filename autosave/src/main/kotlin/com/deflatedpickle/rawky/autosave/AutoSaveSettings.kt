@@ -18,10 +18,14 @@ import java.io.File
 data class AutoSaveSettings(
     override val version: Int = 1,
     var name: String = "untitled",
-    var path: @Serializable(FileSerializer::class) File = File("."),
+    var path:
+    @Serializable(FileSerializer::class)
+    File = File("."),
     var replace: Boolean = false,
     @IntRange(0, 30) var delay: Int = 1,
-    var fileType: @Serializable(FileTypeSerializer::class) FileType? = null,
+    var fileType:
+    @Serializable(FileTypeSerializer::class)
+    FileType? = null,
     var saveOnFocusLost: Boolean = true,
     var ignoreEmpty: Boolean = true,
 ) : Config

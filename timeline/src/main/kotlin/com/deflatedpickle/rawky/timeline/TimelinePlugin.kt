@@ -6,7 +6,6 @@ package com.deflatedpickle.rawky.timeline
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.api.util.ComponentPosition.SOUTH
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.rawky.RawkyPlugin
@@ -25,15 +24,14 @@ import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
     """,
     type = PluginType.COMPONENT,
     component = TimelinePanel::class,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
-    ]
+    ],
 )
 object TimelinePlugin {
     init {
-        EventChangeTheme.addListener {
-            TimelinePanel.updateUIRecursively()
-        }
+        EventChangeTheme.addListener { TimelinePanel.updateUIRecursively() }
 
         EventCreateDocument.addListener {
             TimelinePanel.model.removeAllElements()
@@ -51,9 +49,7 @@ object TimelinePlugin {
             triggerButtons()
         }
 
-        EventChangeFrame.addListener {
-            triggerButtons()
-        }
+        EventChangeFrame.addListener { triggerButtons() }
     }
 
     private fun createInitialFrames(it: RawkyDocument) {
@@ -67,8 +63,7 @@ object TimelinePlugin {
         TimelinePanel.editButton.isEnabled = true
 
         RawkyPlugin.document?.let { doc ->
-            TimelinePanel.deleteButton.isEnabled =
-                doc.children.size > 1
+            TimelinePanel.deleteButton.isEnabled = doc.children.size > 1
         }
 
         for (i in TimelinePanel.navbar.components) {

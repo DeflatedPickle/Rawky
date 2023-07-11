@@ -31,7 +31,8 @@ import javax.imageio.ImageIO
         Export images supported by ImageIO
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@pixel_grid#*",
     ],
 )
@@ -58,15 +59,16 @@ object ImageIOPlugin : Exporter, Importer, Opener {
                     "MS Windows Icon Format" to listOf("ico"),
                     "Apple Icon Image" to listOf("icns"),
                     "Interchange File Format" to listOf("iff"),
-                    "Joint Photographic Experts Group" to listOf("jpg", "jpeg", "jpe", "jif", "jfif", "jfi"),
+                    "Joint Photographic Experts Group" to
+                        listOf("jpg", "jpeg", "jpe", "jif", "jfif", "jfi"),
                     "Apple QuickDraw" to listOf("pict", "pct", "pic"),
                     "Portable Any Map" to listOf("pnm", "ppm"),
                     "Adobe Photoshop Document" to listOf("psd"),
                     "Truevision TGA Image Format" to listOf("tga", "icb", "vda", "vst"),
                     "Tagged Image File Format" to listOf("tiff", "tif"),
                     "Google WebP Format" to listOf("webp"),
-                    "Quit Ok Image" to listOf("qoi")
-                )
+                    "Quit Ok Image" to listOf("qoi"),
+                ),
             )
         }
 
@@ -89,7 +91,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
                     "Silicon Graphics Image" to listOf("sgi", "bw", "rgb", "rgba"),
                     "Windows Thumbnail Cache" to listOf("db"),
                     "X Window Dump" to listOf("xwd", "xdm"),
-                )
+                ),
             )
         }
     }
@@ -99,18 +101,16 @@ object ImageIOPlugin : Exporter, Importer, Opener {
         val layers = frame.children
         val grid = frame.children[0].child
 
-        val image = BufferedImage(grid.columns, grid.rows, BufferedImage.TYPE_INT_ARGB).apply {
-            for (row in 0 until this.height) {
-                for (column in 0 until this.width) {
-                    for (layer in layers.reversed()) {
-                        setRGB(
-                            column, row,
-                            (layer.child[column, row].content as Color).rgb
-                        )
+        val image =
+            BufferedImage(grid.columns, grid.rows, BufferedImage.TYPE_INT_ARGB).apply {
+                for (row in 0 until this.height) {
+                    for (column in 0 until this.width) {
+                        for (layer in layers.reversed()) {
+                            setRGB(column, row, (layer.child[column, row].content as Color).rgb)
+                        }
                     }
                 }
             }
-        }
 
         ImageIO.write(image, file.extension, file)
     }
@@ -120,7 +120,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
             TaskDialogs.error(
                 Haruhi.window,
                 "Incompatible cell provider",
-                "This file uses a cell provider other than the one currently loaded"
+                "This file uses a cell provider other than the one currently loaded",
             )
 
             return
@@ -130,15 +130,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
             val frame = document.children[0]
             val layers = frame.children
 
-            layers.add(
-                0,
-                Layer(
-                    child = Grid(
-                        rows = this.height,
-                        columns = this.width
-                    )
-                )
-            )
+            layers.add(0, Layer(child = Grid(rows = this.height, columns = this.width)))
 
             for (row in 0 until this.height) {
                 for (column in 0 until this.width) {

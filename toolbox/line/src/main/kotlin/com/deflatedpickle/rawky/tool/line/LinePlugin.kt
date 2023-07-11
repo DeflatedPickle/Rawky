@@ -32,9 +32,7 @@ import kotlin.math.abs
         A tool that draws lines
     """,
     type = PluginType.OTHER,
-    dependencies = [
-        "deflatedpickle@core#1.0.0"
-    ],
+    dependencies = ["deflatedpickle@core#1.0.0"],
     settings = LineSettings::class,
 )
 object LinePlugin :
@@ -49,12 +47,7 @@ object LinePlugin :
         registry["deflatedpickle@$name"] = this
     }
 
-    override fun perform(
-        cell: Cell<out Any>,
-        button: Int,
-        dragged: Boolean,
-        clickCount: Int
-    ) {
+    override fun perform(cell: Cell<out Any>, button: Int, dragged: Boolean, clickCount: Int) {
         val other = firstCell
         // First point
         if (other == null) {
@@ -62,38 +55,39 @@ object LinePlugin :
         }
         // Second point
         else {
-            val action = object : Action(name) {
-                val colourCache = mutableMapOf<Cell<out Any>, Color>()
+            val action =
+                object : Action(name) {
+                    val colourCache = mutableMapOf<Cell<out Any>, Color>()
 
-                override fun perform() {
-                    colourCache.clear()
-                    colourCache.putAll(
-                        process(
-                            cell.column, cell.row,
-                            other.column, other.column,
-                        )
-                    )
-                }
-
-                override fun cleanup() {
-                    for ((c, colour) in colourCache) {
-                        CellProvider.current.perform(
-                            c, button, dragged, clickCount
+                    override fun perform() {
+                        colourCache.clear()
+                        colourCache.putAll(
+                            process(
+                                cell.column,
+                                cell.row,
+                                other.column,
+                                other.column,
+                            ),
                         )
                     }
-                }
 
-                override fun outline(g2D: Graphics2D) {
+                    override fun cleanup() {
+                        for ((c, colour) in colourCache) {
+                            CellProvider.current.perform(c, button, dragged, clickCount)
+                        }
+                    }
+
+                    override fun outline(g2D: Graphics2D) {}
                 }
-            }
 
             ActionStack.push(action)
 
             ConfigUtil.getSettings<LineSettings>("deflatedpickle@line#*")?.let {
-                firstCell = when (it.mode) {
-                    SINGLE -> null
-                    CONTINUOUS -> cell
-                }
+                firstCell =
+                    when (it.mode) {
+                        SINGLE -> null
+                        CONTINUOUS -> cell
+                    }
             }
         }
 
@@ -102,10 +96,7 @@ object LinePlugin :
         }
     }
 
-    override fun paint(
-        hoverCell: Cell<out Any>,
-        graphics: Graphics2D
-    ) {
+    override fun paint(hoverCell: Cell<out Any>, graphics: Graphics2D) {
         firstCell?.let { cell ->
             graphics.stroke = BasicStroke(4f)
 
@@ -115,8 +106,10 @@ object LinePlugin :
             }
 
             graphics.drawLine(
-                (cell.row * 16) + 8, (cell.column * 16) + 8,
-                (hoverCell.row * 16) + 8, (hoverCell.column * 16) + 8,
+                (cell.row * 16) + 8,
+                (cell.column * 16) + 8,
+                (hoverCell.row * 16) + 8,
+                (hoverCell.column * 16) + 8,
             )
         }
     }
@@ -149,8 +142,8 @@ object LinePlugin :
         while (true) {
             with(grid[tempY0, tempX0]) {
                 // TODO
-                /*cellMap[this] = colour
-                colour = RawkyPlugin.colour*/
+        /*cellMap[this] = colour
+        colour = RawkyPlugin.colour*/
             }
 
             if (tempX0 == x1 && tempY0 == y1) break

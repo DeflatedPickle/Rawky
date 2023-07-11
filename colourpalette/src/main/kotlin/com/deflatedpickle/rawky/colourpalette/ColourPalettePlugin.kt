@@ -6,7 +6,6 @@ package com.deflatedpickle.rawky.colourpalette
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.api.util.ComponentPosition
 import com.deflatedpickle.marvin.extensions.div
 import com.deflatedpickle.marvin.registry.Registry
 import com.deflatedpickle.rawky.api.palette.PaletteParser
@@ -32,8 +31,6 @@ object ColourPalettePlugin {
     val registry = Registry<String, PaletteParser<Color>>()
 
     init {
-        EventChangeTheme.addListener {
-            ColourPalettePanel.updateUIRecursively()
-        }
+        EventChangeTheme.addListener { ColourPalettePanel.updateUIRecursively() }
     }
 }

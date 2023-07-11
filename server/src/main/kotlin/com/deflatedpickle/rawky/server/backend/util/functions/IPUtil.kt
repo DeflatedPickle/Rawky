@@ -13,11 +13,7 @@ fun getInternalIP(): String = "127.0.0.1"
 
 fun getPublicIP(service: Service = AWS): String {
     val url = URL(service.address)
-    val bufferedReader = BufferedReader(
-        InputStreamReader(
-            url.openStream()
-        )
-    )
+    val bufferedReader = BufferedReader(InputStreamReader(url.openStream()))
 
     return bufferedReader.readLine()
 }
@@ -28,18 +24,21 @@ fun ipToByteArray(ip: String): ByteArray =
         acc
     }
 
-fun ipFromByteArray(byteArray: ByteArray): String = byteArray.joinToString(
-    separator = ".",
-    transform = {
-        val int = it.toInt()
-        if (int < 0) {
-            int + 256
-        } else {
-            int
-        }.toString()
-    }
-)
+fun ipFromByteArray(byteArray: ByteArray): String =
+    byteArray.joinToString(
+        separator = ".",
+        transform = {
+            val int = it.toInt()
+            if (int < 0) {
+                int + 256
+            } else {
+                int
+            }
+                .toString()
+        },
+    )
 
 // https://stackoverflow.com/a/7619315
 fun portToByteArray(port: Int): ByteArray = ByteBuffer.allocate(4).putInt(port).array()
+
 fun portFromByteArray(byteArray: ByteArray): Int = ByteBuffer.wrap(byteArray).int

@@ -21,7 +21,7 @@ data class RequestUserLeave(
         server.sendToAllTCP(
             ResponseUserLeave(
                 connection.id,
-            )
+            ),
         )
 
         ServerPanel.repaint()
@@ -30,7 +30,7 @@ data class RequestUserLeave(
             ResponseActiveUsers(
                 ServerPlugin.userMap,
                 LEAVE,
-            )
+            ),
         )
     }
 }

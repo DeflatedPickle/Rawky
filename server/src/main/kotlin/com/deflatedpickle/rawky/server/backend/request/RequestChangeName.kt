@@ -23,7 +23,7 @@ data class RequestChangeName(
                 ResponseActiveUsers(
                     ServerPlugin.userMap.also { it[id]!!.userName = realName },
                     RENAME,
-                )
+                ),
             )
 
             sendToAllTCP(
@@ -31,7 +31,7 @@ data class RequestChangeName(
                     connection.id,
                     deadName,
                     realName,
-                )
+                ),
             )
         }
     }

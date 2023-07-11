@@ -28,11 +28,12 @@ import java.awt.Graphics2D
         Paints the lines of a grid
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
         "deflatedpickle@pixelgrid#*",
     ],
-    settings = DivideSettings::class
+    settings = DivideSettings::class,
 )
 @Suppress("unused")
 object GridLinesPaintLayerPlugin : PaintLayer {
@@ -43,12 +44,7 @@ object GridLinesPaintLayerPlugin : PaintLayer {
         registry["grid_lines"] = this
     }
 
-    override fun paint(
-        doc: RawkyDocument?,
-        frame: Frame?,
-        layer: Layer?,
-        g2d: Graphics2D
-    ) {
+    override fun paint(doc: RawkyDocument?, frame: Frame?, layer: Layer?, g2d: Graphics2D) {
         val settings = ConfigUtil.getSettings<DivideSettings>("deflatedpickle@grid_lines_paint_layer#*")
 
         doc?.let {
@@ -57,7 +53,12 @@ object GridLinesPaintLayerPlugin : PaintLayer {
             frame?.let {
                 for (l in frame.children) {
                     settings?.let {
-                        DrawUtil.paintGridOutline(g2d, l.child, settings.colour, BasicStroke(settings.thickness))
+                        DrawUtil.paintGridOutline(
+                            g2d,
+                            l.child,
+                            settings.colour,
+                            BasicStroke(settings.thickness),
+                        )
                     }
                 }
             }

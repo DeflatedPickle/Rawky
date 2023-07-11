@@ -6,7 +6,6 @@ package com.deflatedpickle.rawky.server.leaderboard
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.api.util.ComponentPosition
 import com.deflatedpickle.rawky.server.ServerPlugin
 import com.deflatedpickle.rawky.server.backend.event.EventJoinServer
 import com.deflatedpickle.rawky.server.backend.event.EventRegisterPackets
@@ -30,7 +29,8 @@ import java.util.Vector
     """,
     type = PluginType.COMPONENT,
     component = LeaderboardPanel::class,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
         "deflatedpickle@server#*",
     ],
@@ -53,9 +53,7 @@ object LeaderboardPlugin {
         }
 
         EventUserJoinServer.addListener { u ->
-            ServerPlugin.server?.let {
-                users[u] = Stats()
-            }
+            ServerPlugin.server?.let { users[u] = Stats() }
 
             ServerPlugin.client.sendTCP(QueryUserStats(u.id))
         }
@@ -64,8 +62,6 @@ object LeaderboardPlugin {
             ServerPlugin.client.sendTCP(RequestSyncOldStats(ServerPlugin.id))
         }
 
-        EventChangeTheme.addListener {
-            LeaderboardPanel.updateUIRecursively()
-        }
+        EventChangeTheme.addListener { LeaderboardPanel.updateUIRecursively() }
     }
 }

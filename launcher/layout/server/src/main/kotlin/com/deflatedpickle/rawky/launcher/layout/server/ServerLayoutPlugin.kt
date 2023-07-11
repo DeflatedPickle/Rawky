@@ -14,12 +14,14 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
     value = "server_layout",
     author = "DeflatedPickle",
     version = "1.0.0",
-    description = """
+    description =
+    """
         <br>
         Sets the default positions of the components to paint with friends
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
         "deflatedpickle@launcher#*",
         "deflatedpickle@pixel_grid#*",
@@ -32,13 +34,19 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 )
 object ServerLayoutPlugin {
     init {
-        val layout = WindowLayoutBuilder("deflatedpickle@pixel_grid")
-            .dock("deflatedpickle@chat", "deflatedpickle@pixel_grid", DockingRegion.SOUTH, 0.4)
-            .dock("deflatedpickle@colour_wheel", "deflatedpickle@pixel_grid", DockingRegion.WEST, 0.2)
-            .dock("deflatedpickle@layer_list", "deflatedpickle@pixel_grid", DockingRegion.EAST)
-            .dock("deflatedpickle@userlist", "deflatedpickle@layer_list", DockingRegion.EAST, 0.8)
-            .dock("deflatedpickle@leaderboard", "deflatedpickle@userlist")
-            .buildApplicationLayout()
+        val layout =
+            WindowLayoutBuilder("deflatedpickle@pixel_grid")
+                .dock("deflatedpickle@chat", "deflatedpickle@pixel_grid", DockingRegion.SOUTH, 0.4)
+                .dock(
+                    "deflatedpickle@colour_wheel",
+                    "deflatedpickle@pixel_grid",
+                    DockingRegion.WEST,
+                    0.2,
+                )
+                .dock("deflatedpickle@layer_list", "deflatedpickle@pixel_grid", DockingRegion.EAST)
+                .dock("deflatedpickle@userlist", "deflatedpickle@layer_list", DockingRegion.EAST, 0.8)
+                .dock("deflatedpickle@leaderboard", "deflatedpickle@userlist")
+                .buildApplicationLayout()
 
         DockingLayouts.addLayout("server", layout)
     }

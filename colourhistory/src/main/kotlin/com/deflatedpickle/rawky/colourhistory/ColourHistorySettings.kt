@@ -13,6 +13,9 @@ import java.awt.Color
 @Serializable
 data class ColourHistorySettings(
     override val version: Int = 1,
-    val history: MutableList<@Serializable(ColorSerializer::class) Color> = mutableListOf(),
+    val history: MutableList<
+        @Serializable(ColorSerializer::class)
+        Color,
+        > = mutableListOf(),
     @IntRange(1, 100) var historyLength: Int = 24,
 ) : Config

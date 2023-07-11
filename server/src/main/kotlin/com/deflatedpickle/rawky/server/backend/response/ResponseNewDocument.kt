@@ -18,12 +18,13 @@ data class ResponseNewDocument(
     override fun runClient(connection: Connection, client: Client) {
         if (ServerPlugin.server == null) {
             ServerPlugin.logger.debug("Creating a new document from server info")
-            RawkyPlugin.document = ActionUtil.newDocument(
-                rows,
-                columns,
-                frames,
-                layers,
-            )
+            RawkyPlugin.document =
+                ActionUtil.newDocument(
+                    rows,
+                    columns,
+                    frames,
+                    layers,
+                )
             EventCreateDocument.trigger(RawkyPlugin.document!!)
         }
     }

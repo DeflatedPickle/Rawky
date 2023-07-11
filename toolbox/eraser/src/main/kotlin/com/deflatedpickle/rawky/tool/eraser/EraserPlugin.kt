@@ -23,14 +23,13 @@ import java.awt.Graphics2D
         An eraser
     """,
     type = PluginType.OTHER,
-    dependencies = [
-        "deflatedpickle@core#1.0.0"
-    ]
+    dependencies = ["deflatedpickle@core#1.0.0"],
 )
-object EraserPlugin : Tool(
-    name = "Eraser",
-    icon = MonoIcon.ERASER,
-) {
+object EraserPlugin :
+    Tool(
+        name = "Eraser",
+        icon = MonoIcon.ERASER,
+    ) {
     init {
         registry["deflatedpickle@$name"] = this
     }
@@ -41,24 +40,20 @@ object EraserPlugin : Tool(
         dragged: Boolean,
         clickCount: Int,
     ) {
-        val action = object : Action(name) {
-            val old = cell.content
+        val action =
+            object : Action(name) {
+                val old = cell.content
 
-            override fun perform() {
-                CellProvider.current.redact(
-                    cell, button, dragged, clickCount
-                )
-            }
+                override fun perform() {
+                    CellProvider.current.redact(cell, button, dragged, clickCount)
+                }
 
-            override fun cleanup() {
-                CellProvider.current.cleanup(
-                    old, cell, button, dragged, clickCount
-                )
-            }
+                override fun cleanup() {
+                    CellProvider.current.cleanup(old, cell, button, dragged, clickCount)
+                }
 
-            override fun outline(g2D: Graphics2D) {
+                override fun outline(g2D: Graphics2D) {}
             }
-        }
 
         ActionStack.push(action)
     }

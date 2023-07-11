@@ -19,12 +19,15 @@ import io.seruco.encoding.base62.Base62
         An encoder for Base62
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@server#*",
     ],
 )
 object Base62Plugin : Encoder("Base62") {
-    override fun encode(text: ByteArray): String = Base62.createInstance().encode(text).decodeToString()
+    override fun encode(text: ByteArray): String =
+        Base62.createInstance().encode(text).decodeToString()
+
     override fun decode(text: String): ByteArray = Base62.createInstance().decode(text.toByteArray())
 
     init {

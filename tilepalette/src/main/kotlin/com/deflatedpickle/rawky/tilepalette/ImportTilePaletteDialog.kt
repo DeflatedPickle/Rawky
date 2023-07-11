@@ -18,26 +18,28 @@ import javax.swing.SpinnerNumberModel
 class ImportTilePaletteDialog : TaskDialog(Haruhi.window, "Import Tile Palette") {
     val tileWidthInput = JSpinner(SpinnerNumberModel(16, 1, null, 8))
     val tileHeightInput = JSpinner(SpinnerNumberModel(16, 1, null, 8))
-    private val sizeSwapper = JButton(MonoIcon.SWAP).apply {
-        addActionListener {
-            val temp = tileWidthInput.value
-            tileWidthInput.value = tileHeightInput.value
-            tileHeightInput.value = temp
+    private val sizeSwapper =
+        JButton(MonoIcon.SWAP).apply {
+            addActionListener {
+                val temp = tileWidthInput.value
+                tileWidthInput.value = tileHeightInput.value
+                tileHeightInput.value = temp
+            }
         }
-    }
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
 
-        this.fixedComponent = JPanel().apply {
-            isOpaque = false
-            layout = GridBagLayout()
+        this.fixedComponent =
+            JPanel().apply {
+                isOpaque = false
+                layout = GridBagLayout()
 
-            add(JLabel("Tile Size:"), StickEast)
-            add(tileWidthInput, FillHorizontal)
-            add(JLabel("X"))
-            add(tileHeightInput, FillHorizontal)
-            add(sizeSwapper, FinishLine)
-        }
+                add(JLabel("Tile Size:"), StickEast)
+                add(tileWidthInput, FillHorizontal)
+                add(JLabel("X"))
+                add(tileHeightInput, FillHorizontal)
+                add(sizeSwapper, FinishLine)
+            }
     }
 }

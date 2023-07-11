@@ -18,9 +18,7 @@ object PixelGridPanel : PluginPanel() {
     val selectedCells = mutableListOf<Cell<Any>>()
 
     init {
-        EventUpdateCell.addListener {
-            repaint()
-        }
+        EventUpdateCell.addListener { repaint() }
     }
 
     fun paint(
@@ -30,9 +28,7 @@ object PixelGridPanel : PluginPanel() {
         cells: List<Cell<Any>> = selectedCells,
         tool: Tool = Tool.current,
     ) {
-        RawkyPlugin.document?.let { doc ->
-            if (doc.selectedIndex >= doc.children.size) return
-        }
+        RawkyPlugin.document?.let { doc -> if (doc.selectedIndex >= doc.children.size) return }
 
         for (cell in cells) {
             if (cell.grid.layer.lock) continue
@@ -55,11 +51,12 @@ object PixelGridPanel : PluginPanel() {
             doc.children.getOrNull(doc.selectedIndex)?.let { frame ->
                 frame.children.getOrNull(frame.selectedIndex).let { layer ->
                     val g2d = g as Graphics2D
-                    val bufferedImage = BufferedImage(
-                        visibleRect.x + visibleRect.width,
-                        visibleRect.y + visibleRect.height,
-                        BufferedImage.TYPE_INT_ARGB
-                    )
+                    val bufferedImage =
+                        BufferedImage(
+                            visibleRect.x + visibleRect.width,
+                            visibleRect.y + visibleRect.height,
+                            BufferedImage.TYPE_INT_ARGB,
+                        )
 
                     for (v in PaintLayer.registry.getAll().values.sortedBy { it.layer }) {
                         val temp = bufferedImage.createGraphics()

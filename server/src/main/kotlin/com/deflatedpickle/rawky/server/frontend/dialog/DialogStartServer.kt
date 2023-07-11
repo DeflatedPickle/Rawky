@@ -77,7 +77,8 @@ class DialogStartServer : TaskDialog(Haruhi.window, "Start a Server") {
                                 val tcpPortByteArray = portToByteArray(tcpPort)
                                 val udpPortByteArray = portToByteArray(udpPort)
 
-                                // println("IP: ${getPublicIP()}\nTCP: ${dialog.tcpPortField.value}\nUDP: ${dialog.udpPortField.value}")
+                                // println("IP: ${getPublicIP()}\nTCP: ${dialog.tcpPortField.value}\nUDP:
+                                // ${dialog.udpPortField.value}")
 
                                 Triple(ipByteArray, tcpPortByteArray, udpPortByteArray)
                             }
@@ -87,25 +88,23 @@ class DialogStartServer : TaskDialog(Haruhi.window, "Start a Server") {
                             task = {
                                 val triple = it as Triple<ByteArray, ByteArray, ByteArray>
 
-                                val securityCodeByteArray = byteArrayOf(
-                                    *Random.nextBytes(2),
-                                    *triple.first,
-                                    *Random.nextBytes(2),
-                                    *triple.second,
-                                    *Random.nextBytes(2),
-                                    *triple.third,
-                                    *Random.nextBytes(2)
-                                )
+                                val securityCodeByteArray =
+                                    byteArrayOf(
+                                        *Random.nextBytes(2),
+                                        *triple.first,
+                                        *Random.nextBytes(2),
+                                        *triple.second,
+                                        *Random.nextBytes(2),
+                                        *triple.third,
+                                        *Random.nextBytes(2),
+                                    )
 
                                 securityCodeByteArray
                             }
                         }
                         .queue {
                             note = "Encoding security code"
-                            task = {
-                                (dialog.encodingComboBox.selectedItem as Encoder)
-                                    .encode(it as ByteArray)
-                            }
+                            task = { (dialog.encodingComboBox.selectedItem as Encoder).encode(it as ByteArray) }
                         }
                         .queue {
                             note = "Making toast"
@@ -116,21 +115,18 @@ class DialogStartServer : TaskDialog(Haruhi.window, "Start a Server") {
                                     ToastItem(
                                         title = "Session Code",
                                         content = securityCode,
-                                        actions = listOf(
+                                        actions =
+                                        listOf(
                                             ToastSingleAction(
                                                 text = "Copy",
                                                 command = { _, _ ->
-                                                    Toolkit
-                                                        .getDefaultToolkit()
+                                                    Toolkit.getDefaultToolkit()
                                                         .systemClipboard
-                                                        .setContents(
-                                                            StringSelection(securityCode),
-                                                            null
-                                                        )
-                                                }
-                                            )
-                                        )
-                                    )
+                                                        .setContents(StringSelection(securityCode), null)
+                                                },
+                                            ),
+                                        ),
+                                    ),
                                 )
                             }
                         }
@@ -155,60 +151,62 @@ class DialogStartServer : TaskDialog(Haruhi.window, "Start a Server") {
                         }
                         .build()
                 }
-                else -> {
-                }
+                else -> {}
             }
         }
     }
 
-    private fun validationCheck(): Boolean =
-        userNameField.text.isNotBlank()
+    private fun validationCheck(): Boolean = userNameField.text.isNotBlank()
 
     private fun serverCheck(): Boolean =
         ServerPlugin.client.discoverHost(udpPortField.value as Int, 5000) != null
 
     // Details
-    private val userNameField = JXTextField("Username").apply {
-        ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.let {
-            text = it.defaultHostName
-        }
-
-        this.document.addDocumentListener(
-            DocumentAdapter {
-                fireValidationFinished(validationCheck())
+    private val userNameField =
+        JXTextField("Username").apply {
+            ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.let {
+                text = it.defaultHostName
             }
-        )
-    }
+
+            this.document.addDocumentListener(
+                DocumentAdapter { fireValidationFinished(validationCheck()) },
+            )
+        }
 
     // Connection
     private val timeoutField = JSpinner(SpinnerNumberModel(5000, 0, 5000 * 5, 5))
-    private val tcpPortField = JSpinner(
-        SpinnerNumberModel(
-            ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.defaultTCPPort ?: 50_000,
-            portMin, portMax,
-            1
+    private val tcpPortField =
+        JSpinner(
+            SpinnerNumberModel(
+                ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.defaultTCPPort
+                    ?: 50_000,
+                portMin,
+                portMax,
+                1,
+            ),
         )
-    )
-    private val udpPortField = JSpinner(
-        SpinnerNumberModel(
-            ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.defaultUDPPort ?: 50_000,
-            portMin, portMax,
-            1
+    private val udpPortField =
+        JSpinner(
+            SpinnerNumberModel(
+                ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.defaultUDPPort
+                    ?: 50_000,
+                portMin,
+                portMax,
+                1,
+            ),
         )
-    )
     private val encodingComboBox = EncoderComboBox()
-    private val uPnPCheckBox = JCheckBox("UPnP", UPnP.isUPnPAvailable()).apply {
-        isOpaque = false
-        isEnabled = UPnP.isUPnPAvailable()
-    }
+    private val uPnPCheckBox =
+        JCheckBox("UPnP", UPnP.isUPnPAvailable()).apply {
+            isOpaque = false
+            isEnabled = UPnP.isUPnPAvailable()
+        }
     private val connectCheckbox = JCheckBox("Connect", true).apply { isOpaque = false }
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
 
-        SwingUtilities.invokeLater {
-            fireValidationFinished(validationCheck())
-        }
+        SwingUtilities.invokeLater { fireValidationFinished(validationCheck()) }
 
         this.fixedComponent = form {
             category("Details")
@@ -225,11 +223,7 @@ class DialogStartServer : TaskDialog(Haruhi.window, "Start a Server") {
 
         for (i in listOf(tcpPortField, udpPortField)) {
             i.apply {
-                addChangeListener {
-                    SwingUtilities.invokeLater {
-                        fireValidationFinished(serverCheck())
-                    }
-                }
+                addChangeListener { SwingUtilities.invokeLater { fireValidationFinished(serverCheck()) } }
             }
         }
     }

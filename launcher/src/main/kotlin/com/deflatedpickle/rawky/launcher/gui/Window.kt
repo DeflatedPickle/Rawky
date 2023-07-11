@@ -10,17 +10,15 @@ import javax.swing.JFrame
 object Window : JFrame("Rawky") {
     lateinit var root: RootDockingPanel
 
-    val toastWindow = ToastWindow(
-        parent = this,
-        toastWidth = 160
-    )
+    val toastWindow = ToastWindow(parent = this, toastWidth = 160)
 
     init {
         this.defaultCloseOperation = EXIT_ON_CLOSE
 
         jMenuBar = MenuBar
 
-        add(Toolbar, BorderLayout.PAGE_START)
+        add(ToolBar, BorderLayout.NORTH)
+        add(StatusBar, BorderLayout.SOUTH)
 
         pack()
     }

@@ -6,7 +6,6 @@ package com.deflatedpickle.rawky.colourhistory
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.api.util.ComponentPosition
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
@@ -32,9 +31,7 @@ import java.awt.Color
 @Suppress("unused")
 object ColourHistoryPlugin {
     init {
-        EventChangeTheme.addListener {
-            ColourHistoryPanel.updateUIRecursively()
-        }
+        EventChangeTheme.addListener { ColourHistoryPanel.updateUIRecursively() }
 
         EventProgramFinishSetup.addListener {
             ConfigUtil.getSettings<ColourHistorySettings>("deflatedpickle@colour_history#*")?.let {
@@ -52,8 +49,9 @@ object ColourHistoryPlugin {
                     updateHistory(it, c)
                 }
 
-                PluginUtil.slugToPlugin("deflatedpickle@colour_history#*")
-                    ?.let { plug -> ConfigUtil.serializeConfig(plug) }
+                PluginUtil.slugToPlugin("deflatedpickle@colour_history#*")?.let { plug ->
+                    ConfigUtil.serializeConfig(plug)
+                }
             }
 
             ColourHistoryPanel.panel.revalidate()
@@ -63,11 +61,7 @@ object ColourHistoryPlugin {
 
     private fun addButton(c: Color) {
         ColourHistoryPanel.panel.add(
-            ColourButton(c).apply {
-                addActionListener {
-                    PixelCellPlugin.current = this.colour
-                }
-            }
+            ColourButton(c).apply { addActionListener { PixelCellPlugin.current = this.colour } },
         )
     }
 

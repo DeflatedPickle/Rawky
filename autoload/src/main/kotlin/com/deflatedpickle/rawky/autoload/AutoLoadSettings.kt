@@ -14,7 +14,9 @@ import java.io.File
 @Serializable
 data class AutoLoadSettings(
     override val version: Int = 1,
-    var lastFile: @Serializable(NullableFileSerializer::class) File? = null,
+    var lastFile:
+    @Serializable(NullableFileSerializer::class)
+    File? = null,
     var loadType: LoadType = LAST_SAVED,
     var includeAutoSaves: Boolean = true,
 ) : Config

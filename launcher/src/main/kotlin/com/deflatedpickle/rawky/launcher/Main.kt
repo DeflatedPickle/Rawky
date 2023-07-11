@@ -49,21 +49,16 @@ import kotlin.system.exitProcess
 
 @InternalSerializationApi
 fun main(args: Array<String>) {
-    // We'll count the startup time
+    // count the startup time
     val startTime = System.nanoTime()
 
-    // We set the LaF now so any error pop-ups use the use it
-    // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
-
-    // Setting this property gives us terminal colours
+    // enable terminal colours
     System.setProperty("log4j.skipJansi", "false")
     val logger = LogManager.getLogger()
 
     logger.debug("Installed JANSI for this terminal session")
     AnsiConsole.systemInstall()
 
-    // The gradle tasks pass in "indev" argument
-    // if it doesn't exist it's not indev
     Haruhi.isInDev = args.contains("indev")
 
     logger.info(
@@ -73,7 +68,8 @@ fun main(args: Array<String>) {
         |Java: ${System.getProperty("java.version")} (${System.getProperty("java.vm.name")})
         |Dir : ${System.getProperty("user.dir")}
         |Dev?: ${Haruhi.isInDev}
-    """.trimMargin()
+    """
+            .trimMargin(),
     )
 
     Haruhi.json = Json {
@@ -92,11 +88,7 @@ fun main(args: Array<String>) {
     FlatOpenDyslexicFont.install()
     FlatLaf.setPreferredFontFamily(FlatOpenDyslexicFont.FAMILY)
 
-    IntelliJTheme.setup(
-        LauncherPlugin::class.java.getResourceAsStream(
-            "/macchiato.theme.json"
-        )
-    )
+    IntelliJTheme.setup(LauncherPlugin::class.java.getResourceAsStream("/macchiato.theme.json"))
 
     UIManager.put("ModernDocking.titlebar.background.color", UIManager.get("TabbedPane.focusColor"))
 
@@ -114,19 +106,22 @@ fun main(args: Array<String>) {
 
     // Adds a single shutdown thread with an event
     // to reduce the instance count
-    Runtime.getRuntime().addShutdownHook(object : Thread() {
-        override fun run() {
-            logger.debug("Uninstalled JANSI for this terminal session")
-            AnsiConsole.systemUninstall()
+    Runtime.getRuntime()
+        .addShutdownHook(
+            object : Thread() {
+                override fun run() {
+                    logger.debug("Uninstalled JANSI for this terminal session")
+                    AnsiConsole.systemUninstall()
 
-            logger.debug("The JVM instance running Quiver was shutdown")
-            EventProgramShutdown.trigger(true)
+                    logger.debug("The JVM instance running Quiver was shutdown")
+                    EventProgramShutdown.trigger(true)
 
-            // Changes were probably made, let's serialize the configs again
-            ConfigUtil.serializeAllConfigs()
-            logger.info("Serialized all the configs")
-        }
-    })
+                    // Changes were probably made, let's serialize the configs again
+                    ConfigUtil.serializeAllConfigs()
+                    logger.info("Serialized all the configs")
+                }
+            },
+        )
 
     // Handle all uncaught exceptions to open a pop-up
     Thread.setDefaultUncaughtExceptionHandler { t, e ->
@@ -139,9 +134,7 @@ fun main(args: Array<String>) {
 
             e::class.simpleName?.let { name ->
                 val currentMoment = Clock.System.now()
-                val systemZone = currentMoment.toLocalDateTime(
-                    TimeZone.currentSystemDefault()
-                )
+                val systemZone = currentMoment.toLocalDateTime(TimeZone.currentSystemDefault())
 
                 File("error/$name-$systemZone.log").apply {
                     createNewFile()
@@ -154,10 +147,7 @@ fun main(args: Array<String>) {
         // This will wait at least for the window to open first
         SwingUtilities.invokeLater {
             // Open a dialog to report the error to the user
-            TaskDialogs
-                .build()
-                .parent(Window)
-                .showException(e)
+            TaskDialogs.build().parent(Window).showException(e)
             // If the window isn't open and an error pops up
             // it's probably not going to open
             if (!Window.isVisible) {
@@ -198,11 +188,11 @@ fun main(args: Array<String>) {
 
     // Organise plugins by their dependencies
     PluginUtil.discoveredPlugins.sortWith(
-        DependencyComparator
-            .thenComparing(Plugin::type)
-            .thenComparing(Plugin::value)
+        DependencyComparator.thenComparing(Plugin::type).thenComparing(Plugin::value),
     )
-    logger.debug("Sorted out the load order: ${PluginUtil.discoveredPlugins.map { PluginUtil.pluginToSlug(it) }}")
+    logger.debug(
+        "Sorted out the load order: ${PluginUtil.discoveredPlugins.map { PluginUtil.pluginToSlug(it) }}",
+    )
     // EventSortedPluginLoadOrder.trigger(PluginUtil.discoveredPlugins)
 
     // Loads all classes with a Plugin annotation
@@ -262,7 +252,9 @@ fun main(args: Array<String>) {
             val file = File("config/$id.json")
 
             ConfigUtil.serializeConfig(id, file)
-            logger.info("Serialized the config for ${PluginUtil.pluginToSlug(plugin)} to ${file.absolutePath}")
+            logger.info(
+                "Serialized the config for ${PluginUtil.pluginToSlug(plugin)} to ${file.absolutePath}",
+            )
         }
     }
 

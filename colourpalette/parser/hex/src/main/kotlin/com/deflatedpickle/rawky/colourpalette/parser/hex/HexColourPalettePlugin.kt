@@ -30,20 +30,15 @@ object HexColourPalettePlugin : PaletteParser<Color> {
 
         FileUtils.copyResourcesRecursively(
             HexColourPalettePlugin::class.java.getResource("/palette/community"),
-            ColourPalettePlugin.folder
+            ColourPalettePlugin.folder,
         )
     }
 
     override fun parse(file: File): Palette<Color> {
         val colours = mutableMapOf<Color, String?>()
 
-        file.readLines().drop(1).forEach { line ->
-            colours[Color.decode("#$line")] = null
-        }
+        file.readLines().drop(1).forEach { line -> colours[Color.decode("#$line")] = null }
 
-        return Palette(
-            file.nameWithoutExtension,
-            colours
-        )
+        return Palette(file.nameWithoutExtension, colours)
     }
 }

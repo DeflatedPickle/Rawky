@@ -33,36 +33,32 @@ object ServerPanel : BetterGlassPane() {
 
         var lastTime = Clock.System.now()
 
-        this.addMouseMotionListener(object : MouseMotionAdapter() {
-            fun mouse(drag: Boolean) {
-                mousePosition?.let {
-                    ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.let { s ->
-                        if (Clock.System.now().toEpochMilliseconds() - lastTime.toEpochMilliseconds() > s.mouseSyncDelay) {
-                            client.sendTCP(
-                                RequestMoveMouse(
-                                    ServerPanel.mousePosition,
-                                    drag
-                                )
-                            )
+        this.addMouseMotionListener(
+            object : MouseMotionAdapter() {
+                fun mouse(drag: Boolean) {
+                    mousePosition?.let {
+                        ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.let { s ->
+                            if (Clock.System.now().toEpochMilliseconds() - lastTime.toEpochMilliseconds() >
+                                s.mouseSyncDelay
+                            ) {
+                                client.sendTCP(RequestMoveMouse(ServerPanel.mousePosition, drag))
 
-                            lastTime = Clock.System.now()
+                                lastTime = Clock.System.now()
+                            }
                         }
                     }
                 }
-            }
 
-            override fun mouseMoved(e: MouseEvent): Unit = mouse(false)
-            override fun mouseDragged(e: MouseEvent): Unit = mouse(true)
-        })
+                override fun mouseMoved(e: MouseEvent): Unit = mouse(false)
+
+                override fun mouseDragged(e: MouseEvent): Unit = mouse(true)
+            },
+        )
 
         EventStartServer.addListener {
-            EventCreateDocument.addListener {
-                sendGrid(it as RawkyDocument)
-            }
+            EventCreateDocument.addListener { sendGrid(it as RawkyDocument) }
 
-            EventOpenDocument.addListener {
-                sendGrid(it as RawkyDocument)
-            }
+            EventOpenDocument.addListener { sendGrid(it as RawkyDocument) }
         }
 
         EventUpdateCell.addListener {
@@ -91,7 +87,7 @@ object ServerPanel : BetterGlassPane() {
                 grid.columns,
                 doc.children.size,
                 frame.children.size,
-            )
+            ),
         )
     }
 
@@ -125,7 +121,7 @@ object ServerPanel : BetterGlassPane() {
             g2D.drawString(
                 user.userName,
                 x + 8 - g2D.fontMetrics.stringWidth(user.userName) / 2,
-                y - g2D.fontMetrics.height / 2
+                y - g2D.fontMetrics.height / 2,
             )
 
             user.tool.icon.paintIcon(this, g2D, x, y)

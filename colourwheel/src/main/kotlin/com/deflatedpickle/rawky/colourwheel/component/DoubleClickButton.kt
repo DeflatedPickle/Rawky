@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.colourwheel.component
 
 import com.bric.colorpicker.ColorPickerDialog
@@ -22,9 +24,7 @@ class DoubleClickButton(colour: Color, action: (DoubleClickButton) -> Unit) : Co
     init {
         isBorderPainted = true
 
-        addActionListener {
-            action(this)
-        }
+        addActionListener { action(this) }
 
         addMouseListener(Adapter(this))
     }

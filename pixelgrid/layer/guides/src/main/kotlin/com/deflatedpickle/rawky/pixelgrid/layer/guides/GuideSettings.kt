@@ -11,6 +11,8 @@ import java.awt.Color
 @Serializable
 data class GuideSettings(
     override val version: Int = 1,
-    var colour: @Serializable(ColorSerializer::class) Color = Color.PINK,
+    var colour:
+    @Serializable(ColorSerializer::class)
+    Color = Color.PINK,
     @FloatRange(0.1f, 8.0f) var thickness: Float = 0.5f,
 ) : Config

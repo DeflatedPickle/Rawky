@@ -11,18 +11,20 @@ import ModernDocking.persist.AppState
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
-import com.deflatedpickle.rawky.launcher.LauncherPlugin
+import com.deflatedpickle.rawky.launcher.gui.ToolBar
 
 @Plugin(
     value = "sprite_layout",
     author = "DeflatedPickle",
     version = "1.0.0",
-    description = """
+    description =
+    """
         <br>
         Sets the default positions of the default components
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
         "deflatedpickle@launcher#*",
         "deflatedpickle@pixel_grid#*",
@@ -34,19 +36,35 @@ import com.deflatedpickle.rawky.launcher.LauncherPlugin
 )
 object SpriteLayoutPlugin {
     init {
-        val layout = WindowLayoutBuilder("deflatedpickle@pixel_grid")
-            .dock("deflatedpickle@colour_wheel", "deflatedpickle@pixel_grid", DockingRegion.WEST, 0.3)
-            .dock("deflatedpickle@colour_palette", "deflatedpickle@colour_wheel", DockingRegion.SOUTH, 0.5)
-            .dock("deflatedpickle@colour_shades", "deflatedpickle@colour_palette", DockingRegion.SOUTH, 0.0)
-            .dock("deflatedpickle@layer_list", "deflatedpickle@pixel_grid", DockingRegion.EAST, 0.2)
-            .buildApplicationLayout()
+        val layout =
+            WindowLayoutBuilder("deflatedpickle@pixel_grid")
+                .dock(
+                    "deflatedpickle@colour_wheel",
+                    "deflatedpickle@pixel_grid",
+                    DockingRegion.WEST,
+                    0.3,
+                )
+                .dock(
+                    "deflatedpickle@colour_palette",
+                    "deflatedpickle@colour_wheel",
+                    DockingRegion.SOUTH,
+                    0.5,
+                )
+                .dock(
+                    "deflatedpickle@colour_shades",
+                    "deflatedpickle@colour_palette",
+                    DockingRegion.SOUTH,
+                    0.0,
+                )
+                .dock("deflatedpickle@layer_list", "deflatedpickle@pixel_grid", DockingRegion.EAST, 0.2)
+                .buildApplicationLayout()
 
         DockingLayouts.addLayout("sprite", layout)
         AppState.setDefaultApplicationLayout(layout)
 
         EventProgramFinishSetup.addListener {
             AppState.restore()
-            LauncherPlugin.layoutComboBox.selectedItem = "Sprite"
+            ToolBar.layoutComboBox.selectedItem = "Sprite"
         }
     }
 }

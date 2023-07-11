@@ -15,7 +15,9 @@ data class QueryDeleteChat(
     val messages: List<Message> = listOf(),
 ) : Query() {
     override fun runServer(connection: Connection, server: Server) {
-        if (ChatPanel.list.selectedValuesList.all { it.id == ServerPlugin.id } || ServerPlugin.server != null) {
+        if (ChatPanel.list.selectedValuesList.all { it.id == ServerPlugin.id } ||
+            ServerPlugin.server != null
+        ) {
             server.sendToAllTCP(this)
         }
     }

@@ -23,7 +23,8 @@ import java.awt.Graphics2D
         Provides a cell that holds a colour
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@pixel_grid#*",
     ],
 )
@@ -43,23 +44,13 @@ object PixelCellPlugin : CellProvider<Color>() {
         column: Int,
     ): PixelCell = PixelCell(row, column, PixelCell.default)
 
-    override fun perform(
-        cell: Cell<Any>,
-        button: Int,
-        dragged: Boolean,
-        clickCount: Int
-    ) {
+    override fun perform(cell: Cell<Any>, button: Int, dragged: Boolean, clickCount: Int) {
         when (button) {
             0 -> cell.content = current
         }
     }
 
-    override fun redact(
-        cell: Cell<Any>,
-        button: Int,
-        dragged: Boolean,
-        clickCount: Int
-    ) {
+    override fun redact(cell: Cell<Any>, button: Int, dragged: Boolean, clickCount: Int) {
         when (button) {
             0 -> cell.content = PixelCell.default
         }
@@ -70,31 +61,19 @@ object PixelCellPlugin : CellProvider<Color>() {
         cell: Cell<Any>,
         button: Int,
         dragged: Boolean,
-        clickCount: Int
+        clickCount: Int,
     ) {
         cell.content = cache
     }
 
-    override fun paintGrid(
-        g: Graphics2D,
-        cell: Cell<@Contextual Any>
-    ) {
+    override fun paintGrid(g: Graphics2D, cell: Cell<@Contextual Any>) {
         g.color = cell.content as Color
-        g.fillRect(
-            cell.polygon.x, cell.polygon.y,
-            cell.polygon.width, cell.polygon.height
-        )
+        g.fillRect(cell.polygon.x, cell.polygon.y, cell.polygon.width, cell.polygon.height)
     }
 
-    override fun paintHover(
-        g: Graphics2D,
-        cell: Cell<@Contextual Any>
-    ) {
+    override fun paintHover(g: Graphics2D, cell: Cell<@Contextual Any>) {
         g.stroke = BasicStroke(4f)
         g.color = Color.BLACK
-        g.drawRect(
-            cell.polygon.x, cell.polygon.y,
-            cell.polygon.width, cell.polygon.height
-        )
+        g.drawRect(cell.polygon.x, cell.polygon.y, cell.polygon.width, cell.polygon.height)
     }
 }

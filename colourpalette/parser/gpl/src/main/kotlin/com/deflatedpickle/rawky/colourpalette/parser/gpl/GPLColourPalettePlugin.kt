@@ -30,7 +30,7 @@ object GPLColourPalettePlugin : PaletteParser<Color> {
 
         FileUtils.copyResourcesRecursively(
             GPLColourPalettePlugin::class.java.getResource("/palette/community"),
-            ColourPalettePlugin.folder
+            ColourPalettePlugin.folder,
         )
     }
 
@@ -55,9 +55,6 @@ object GPLColourPalettePlugin : PaletteParser<Color> {
             }
         }
 
-        return Palette(
-            file.nameWithoutExtension,
-            colours
-        )
+        return Palette(file.nameWithoutExtension, colours)
     }
 }

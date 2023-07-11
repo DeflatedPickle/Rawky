@@ -12,5 +12,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PixelGridSettings(
     override val version: Int = 1,
-    var mode: @Serializable(ModeSerializer::class) Mode? = null,
+    var mode:
+    @Serializable(ModeSerializer::class)
+    Mode? = null,
 ) : Config

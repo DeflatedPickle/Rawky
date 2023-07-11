@@ -29,9 +29,10 @@ import javax.swing.SwingConstants
         Provides a panel to select tools from
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
-    ]
+    ],
 )
 @Suppress("unused")
 object ToolboxPlugin {
@@ -41,15 +42,17 @@ object ToolboxPlugin {
     init {
         EventProgramFinishSetup.addListener {
             for (v in Tool.registry.values.sortedBy { it.name }) {
-                toolbar.add(
-                    icon = v.icon,
-                    tooltip = v.name,
-                    enabled = false,
-                    type = ButtonType.TOGGLE,
-                ) {
-                    Tool.current = v
-                    EventChangeTool.trigger(v)
-                }.also { group.add(it) }
+                toolbar
+                    .add(
+                        icon = v.icon,
+                        tooltip = v.name,
+                        enabled = false,
+                        type = ButtonType.TOGGLE,
+                    ) {
+                        Tool.current = v
+                        EventChangeTool.trigger(v)
+                    }
+                    .also { group.add(it) }
             }
 
             Haruhi.window.add(toolbar, BorderLayout.LINE_START)

@@ -34,8 +34,9 @@ class DialogConnectServer : TaskDialog(Haruhi.window, "Connect to Server") {
                         .queue {
                             note = "Decoding security code"
                             task = {
-                                (dialog.encodingComboBox.selectedItem as Encoder)
-                                    .decode(dialog.securityCodeField.text)
+                                (dialog.encodingComboBox.selectedItem as Encoder).decode(
+                                    dialog.securityCodeField.text,
+                                )
                             }
                         }
                         .queue {
@@ -68,13 +69,10 @@ class DialogConnectServer : TaskDialog(Haruhi.window, "Connect to Server") {
                                 )
                             }
                         }
-                        .queue {
-                            note = "Finished connecting to server"
-                        }
+                        .queue { note = "Finished connecting to server" }
                         .build()
                 }
-                else -> {
-                }
+                else -> {}
             }
         }
     }
@@ -83,26 +81,24 @@ class DialogConnectServer : TaskDialog(Haruhi.window, "Connect to Server") {
         userNameField.text.isNotBlank() && securityCodeField.text.isNotBlank()
 
     // Details
-    private val userNameField = JXTextField("Username").apply {
-        ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.let {
-            text = it.defaultUserName
+    private val userNameField =
+        JXTextField("Username").apply {
+            ConfigUtil.getSettings<ServerSettings>("deflatedpickle@server#*")?.let {
+                text = it.defaultUserName
+            }
+
+            this.document.addDocumentListener(
+                DocumentAdapter { fireValidationFinished(validationCheck()) },
+            )
         }
 
-        this.document.addDocumentListener(
-            DocumentAdapter {
-                fireValidationFinished(validationCheck())
-            }
-        )
-    }
-
     // Connection
-    private val securityCodeField = JXTextField("Session Code").apply {
-        this.document.addDocumentListener(
-            DocumentAdapter {
-                fireValidationFinished(validationCheck())
-            }
-        )
-    }
+    private val securityCodeField =
+        JXTextField("Session Code").apply {
+            this.document.addDocumentListener(
+                DocumentAdapter { fireValidationFinished(validationCheck()) },
+            )
+        }
     private val encodingComboBox = EncoderComboBox()
     private val timeoutField = JSpinner(SpinnerNumberModel(5000, 0, 5000 * 5, 5))
     private val retriesFiled = JSpinner(SpinnerNumberModel(10, 0, 100, 1))

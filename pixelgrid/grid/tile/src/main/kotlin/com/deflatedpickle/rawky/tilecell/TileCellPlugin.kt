@@ -23,7 +23,8 @@ import java.awt.image.BufferedImage
         Provides a cell that holds an image
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@pixel_grid#*",
     ],
 )
@@ -41,23 +42,16 @@ object TileCellPlugin : CellProvider<BufferedImage>() {
         column: Int,
     ) = TileCell(row, column, TileCell.default)
 
-    override fun perform(
-        cell: Cell<Any>,
-        button: Int,
-        dragged: Boolean,
-        clickCount: Int
-    ) {
+    override fun perform(cell: Cell<Any>, button: Int, dragged: Boolean, clickCount: Int) {
         when (button) {
             0 -> cell.content = current
         }
     }
 
-    override fun redact(
-        cell: Cell<Any>,
-        button: Int,
-        dragged: Boolean,
-        clickCount: Int
-    ) {
+    override fun redact(cell: Cell<Any>, button: Int, dragged: Boolean, clickCount: Int) {
+        when (button) {
+            0 -> cell.content = TileCell.default
+        }
     }
 
     override fun cleanup(
@@ -65,30 +59,17 @@ object TileCellPlugin : CellProvider<BufferedImage>() {
         cell: Cell<Any>,
         button: Int,
         dragged: Boolean,
-        clickCount: Int
+        clickCount: Int,
     ) {
+        cell.content = cache
     }
 
-    override fun paintGrid(
-        g: Graphics2D,
-        cell: Cell<@Contextual Any>
-    ) {
-        g.drawImage(
-            (cell as TileCell).content,
-            cell.polygon.x, cell.polygon.y,
-            null
-        )
+    override fun paintGrid(g: Graphics2D, cell: Cell<@Contextual Any>) {
+        g.drawImage((cell as TileCell).content, cell.polygon.x, cell.polygon.y, null)
     }
 
-    override fun paintHover(
-        g: Graphics2D,
-        cell: Cell<@Contextual Any>
-    ) {
+    override fun paintHover(g: Graphics2D, cell: Cell<@Contextual Any>) {
         g.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f)
-        g.drawImage(
-            (cell as TileCell).content,
-            cell.polygon.x, cell.polygon.y,
-            null
-        )
+        g.drawImage((cell as TileCell).content, cell.polygon.x, cell.polygon.y, null)
     }
 }

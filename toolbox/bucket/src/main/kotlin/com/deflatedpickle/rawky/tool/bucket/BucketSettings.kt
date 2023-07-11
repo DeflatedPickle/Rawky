@@ -10,5 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BucketSettings(
     override val version: Int = 1,
-    var fill: @Serializable(FillSerializer::class) Fill? = null
+    var fill:
+    @Serializable(FillSerializer::class)
+    Fill? = null,
 ) : Config

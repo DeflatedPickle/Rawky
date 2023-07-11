@@ -15,8 +15,6 @@ interface Opener : HasName {
 
     val openerExtensions: MutableMap<String, List<String>>
 
-    /**
-     * Replaces the current document
-     */
+    /** Replaces the current document */
     fun open(file: File): RawkyDocument
 }

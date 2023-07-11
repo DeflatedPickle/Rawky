@@ -15,29 +15,28 @@ import javax.swing.JSpinner
 import javax.swing.SpinnerNumberModel
 
 class NewFrameDialog : TaskDialog(Haruhi.window, "New Frame") {
-    val nameInput = JXTextField("Name").apply {
-        RawkyPlugin.document?.let { doc ->
-            text = "Frame ${doc.children.size}"
+    val nameInput =
+        JXTextField("Name").apply {
+            RawkyPlugin.document?.let { doc -> text = "Frame ${doc.children.size}" }
         }
-    }
-    val indexInput = JSpinner(SpinnerNumberModel(0, 0, null, 1)).apply {
-        RawkyPlugin.document?.let { doc ->
-            value = doc.children.size
+    val indexInput =
+        JSpinner(SpinnerNumberModel(0, 0, null, 1)).apply {
+            RawkyPlugin.document?.let { doc -> value = doc.children.size }
         }
-    }
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
 
-        this.fixedComponent = JPanel().apply {
-            isOpaque = false
-            layout = GridBagLayout()
+        this.fixedComponent =
+            JPanel().apply {
+                isOpaque = false
+                layout = GridBagLayout()
 
-            add(JLabel("Name:"), StickEast)
-            add(nameInput, FillHorizontalFinishLine)
+                add(JLabel("Name:"), StickEast)
+                add(nameInput, FillHorizontalFinishLine)
 
-            add(JLabel("Index:"), StickEast)
-            add(indexInput, FillHorizontalFinishLine)
-        }
+                add(JLabel("Index:"), StickEast)
+                add(indexInput, FillHorizontalFinishLine)
+            }
     }
 }

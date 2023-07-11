@@ -23,7 +23,10 @@ object ActionStack {
         it.perform()
         EventPushAction.trigger(it)
 
-        if (undoQueue.isNotEmpty() && undoQueue.last() is MultiAction && (undoQueue.last() as MultiAction).active) {
+        if (undoQueue.isNotEmpty() &&
+            undoQueue.last() is MultiAction &&
+            (undoQueue.last() as MultiAction).active
+        ) {
             (undoQueue.last() as MultiAction).stack.add(it)
         } else {
             undoQueue.add(it)
@@ -37,7 +40,7 @@ object ActionStack {
                     undoQueue.remove(this)
                     cleanup()
                     EventUndoAction.trigger(this)
-                }
+                },
             )
         }
 
@@ -51,7 +54,7 @@ object ActionStack {
                     redoQueue.remove(this)
                     perform()
                     EventRedoAction.trigger(this)
-                }
+                },
             )
         }
 
@@ -69,28 +72,20 @@ object ActionStack {
     abstract class Action(val name: String, var canMerge: Boolean = true) {
         override fun toString() = name.capitalize()
 
-        /**
-         * A check to see if the action should happen
-         */
+        /** A check to see if the action should happen */
         open fun check(): Boolean {
             return true
         }
 
         open fun mouseDown() {}
 
-        /**
-         * Performed on redo
-         */
+        /** Performed on redo */
         abstract fun perform()
 
-        /**
-         * Performed on undo
-         */
+        /** Performed on undo */
         abstract fun cleanup()
 
-        /**
-         * Draws an outline around this action
-         */
+        /** Draws an outline around this action */
         abstract fun outline(g2D: Graphics2D)
     }
 

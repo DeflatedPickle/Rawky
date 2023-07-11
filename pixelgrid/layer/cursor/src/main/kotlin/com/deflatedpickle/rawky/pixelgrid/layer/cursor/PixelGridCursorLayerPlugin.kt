@@ -33,7 +33,8 @@ import javax.swing.SwingUtilities
         Paints a tool cursors
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
         "deflatedpickle@pixelgrid#*",
     ],
@@ -61,11 +62,7 @@ object PixelGridCursorLayerPlugin : PaintLayer {
             SwingUtilities.convertPointFromScreen(point, PixelGridPanel)
 
             g.drawImage(
-                Tool.current.icon.image.getScaledInstance(
-                    width,
-                    height,
-                    Image.SCALE_AREA_AVERAGING
-                ),
+                Tool.current.icon.image.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING),
                 point.x,
                 point.y,
                 null,

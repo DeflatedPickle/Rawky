@@ -6,7 +6,6 @@ package com.deflatedpickle.rawky.colourwheel
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.haruhi.api.util.ComponentPosition
 import com.deflatedpickle.rawky.event.EventChangeColour
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
 import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
@@ -25,9 +24,7 @@ import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
 @Suppress("unused")
 object ColourWheelPlugin {
     init {
-        EventChangeTheme.addListener {
-            ColourWheelPanel.updateUIRecursively()
-        }
+        EventChangeTheme.addListener { ColourWheelPanel.updateUIRecursively() }
 
         EventChangeColour.addListener {
             ColourWheelPanel.colourPicker.color = it

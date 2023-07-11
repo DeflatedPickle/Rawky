@@ -18,12 +18,14 @@ import java.util.Base64
         An encoder for Base64
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@server#*",
     ],
 )
 object Base64Plugin : Encoder("Base64") {
     override fun encode(text: ByteArray): String = Base64.getEncoder().encodeToString(text)
+
     override fun decode(text: String): ByteArray = Base64.getDecoder().decode(text)
 
     init {

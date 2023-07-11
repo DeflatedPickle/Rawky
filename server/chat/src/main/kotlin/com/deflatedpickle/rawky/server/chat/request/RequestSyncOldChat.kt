@@ -16,11 +16,6 @@ data class RequestSyncOldChat(
     override fun runServer(connection: Connection, server: Server) {
         ServerPlugin.logger.info("Sending previous messages to $id")
 
-        server.sendToTCP(
-            id,
-            ResponseSyncOldChat(
-                ChatPanel.model.elements().toList()
-            )
-        )
+        server.sendToTCP(id, ResponseSyncOldChat(ChatPanel.model.elements().toList()))
     }
 }

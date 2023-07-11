@@ -11,6 +11,8 @@ import java.awt.Color
 @Serializable
 data class DivideSettings(
     override val version: Int = 1,
-    var colour: @Serializable(ColorSerializer::class) Color = Color.BLACK,
+    var colour:
+    @Serializable(ColorSerializer::class)
+    Color = Color.BLACK,
     @FloatRange(0.1f, 8.0f) var thickness: Float = 1f,
 ) : Config

@@ -19,12 +19,14 @@ import com.github.fzakaria.ascii85.Ascii85
         An encoder for Ascii85
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@server#*",
     ],
 )
 object Ascii85Plugin : Encoder("Ascii85") {
     override fun encode(text: ByteArray): String = Ascii85.encode(text)
+
     override fun decode(text: String): ByteArray = Ascii85.decode(text)
 
     init {

@@ -30,7 +30,7 @@ object PALColourPalettePlugin : PaletteParser<Color> {
 
         FileUtils.copyResourcesRecursively(
             PALColourPalettePlugin::class.java.getResource("/palette/community"),
-            ColourPalettePlugin.folder
+            ColourPalettePlugin.folder,
         )
     }
 
@@ -38,15 +38,10 @@ object PALColourPalettePlugin : PaletteParser<Color> {
         val colours = mutableMapOf<Color, String?>()
 
         file.readLines().drop(3).forEach { line ->
-            val (r, g, b) =
-                line.split(" ")
-                    .map { it.toInt() }
+            val (r, g, b) = line.split(" ").map { it.toInt() }
             colours[Color(r, g, b)] = null
         }
 
-        return Palette(
-            file.nameWithoutExtension,
-            colours
-        )
+        return Palette(file.nameWithoutExtension, colours)
     }
 }

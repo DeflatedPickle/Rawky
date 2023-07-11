@@ -19,12 +19,14 @@ import io.github.novacrypto.base58.Base58
         An encoder for Base58
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@server#*",
     ],
 )
 object Base58Plugin : Encoder("Base58") {
     override fun encode(text: ByteArray): String = Base58.base58Encode(text)
+
     override fun decode(text: String): ByteArray = Base58.base58Decode(text)
 
     init {

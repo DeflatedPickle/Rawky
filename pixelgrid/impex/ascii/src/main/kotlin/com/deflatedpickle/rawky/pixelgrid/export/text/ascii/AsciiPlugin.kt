@@ -26,15 +26,14 @@ import java.io.FileOutputStream
         Export ASCII files
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@pixel_grid#*",
     ],
 )
 object AsciiPlugin : Exporter {
     override val name = "ASCII"
-    override val exporterExtensions = mutableMapOf(
-        "Text" to listOf("txt")
-    )
+    override val exporterExtensions = mutableMapOf("Text" to listOf("txt"))
 
     init {
         registry[name] = this
@@ -50,22 +49,27 @@ object AsciiPlugin : Exporter {
             val grid = frame.children[0].child
 
             val out = FileOutputStream(file, false)
-            out.writer().apply {
-                for (row in 0 until grid.rows) {
-                    for (column in 0 until grid.columns) {
-                        for (layer in layers.reversed()) {
-                            write(
-                                (dialog.paletteCombo.selectedItem as Palette)
-                                    .char(column, row, layer.child[column, row].content as Color)
-                            )
+            out.writer()
+                .apply {
+                    for (row in 0 until grid.rows) {
+                        for (column in 0 until grid.columns) {
+                            for (layer in layers.reversed()) {
+                                write(
+                                    (dialog.paletteCombo.selectedItem as Palette).char(
+                                        column,
+                                        row,
+                                        layer.child[column, row].content as Color,
+                                    ),
+                                )
+                            }
                         }
+                        write("\n")
                     }
-                    write("\n")
                 }
-            }.apply {
-                flush()
-                close()
-            }
+                .apply {
+                    flush()
+                    close()
+                }
 
             if (dialog.openCheck.isSelected) {
                 Desktop.getDesktop().open(file)

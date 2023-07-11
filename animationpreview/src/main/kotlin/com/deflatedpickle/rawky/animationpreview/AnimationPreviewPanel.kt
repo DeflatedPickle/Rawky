@@ -17,92 +17,111 @@ import java.awt.image.BufferedImage
 import javax.swing.JToolBar
 
 object AnimationPreviewPanel : PluginPanel() {
-    val animationPanel = object : JXPanel() {
-        override fun paintComponent(g: Graphics) {
-            super.paintComponent(g)
+    val animationPanel =
+        object : JXPanel() {
+            override fun paintComponent(g: Graphics) {
+                super.paintComponent(g)
 
-            val g2d = g as Graphics2D
-            val bufferedImage = BufferedImage(
-                visibleRect.x + visibleRect.width,
-                visibleRect.y + visibleRect.height,
-                BufferedImage.TYPE_INT_ARGB
-            )
+                val g2d = g as Graphics2D
+                val bufferedImage =
+                    BufferedImage(
+                        visibleRect.x + visibleRect.width,
+                        visibleRect.y + visibleRect.height,
+                        BufferedImage.TYPE_INT_ARGB,
+                    )
 
-            for (v in PaintLayer.registry.getAll().values.filter { it.layer == LayerCategory.GRID || it.layer == LayerCategory.BACKGROUND }) {
-                val temp = bufferedImage.createGraphics()
+                for (
+                v in
+                PaintLayer.registry.getAll().values.filter {
+                    it.layer == LayerCategory.GRID || it.layer == LayerCategory.BACKGROUND
+                }
+                ) {
+                    val temp = bufferedImage.createGraphics()
 
-                RawkyPlugin.document?.let { doc ->
-                    doc.children[AnimationPreviewPlugin.currentFrame].let { frame ->
-                        for (layer in frame.children) {
-                            v.paint(doc, frame, layer, temp)
-                            temp.dispose()
+                    RawkyPlugin.document?.let { doc ->
+                        doc.children[AnimationPreviewPlugin.currentFrame].let { frame ->
+                            for (layer in frame.children) {
+                                v.paint(doc, frame, layer, temp)
+                                temp.dispose()
+                            }
                         }
                     }
                 }
+
+                g2d.drawRenderedImage(bufferedImage, null)
             }
-
-            g2d.drawRenderedImage(bufferedImage, null)
         }
-    }
 
-    val rewindButton = AbstractButton(icon = MonoIcon.REWIND, tooltip = "Rewind", enabled = false) {
-        RawkyPlugin.document?.let {
-            AnimationPreviewPlugin.currentFrame = 0
+    val rewindButton =
+        AbstractButton(icon = MonoIcon.REWIND, tooltip = "Rewind", enabled = false) {
+            RawkyPlugin.document?.let {
+                AnimationPreviewPlugin.currentFrame = 0
+                animationPanel.repaint()
+
+                AnimationPreviewPlugin.triggerButtons()
+            }
+        }
+
+    val backButton =
+        AbstractButton(icon = MonoIcon.ARROW_LEFT, tooltip = "Back", enabled = false) {
+            RawkyPlugin.document?.let {
+                if (AnimationPreviewPlugin.currentFrame - 1 >= 0) {
+                    AnimationPreviewPlugin.currentFrame--
+                    animationPanel.repaint()
+                }
+
+                AnimationPreviewPlugin.triggerButtons()
+            }
+        }
+
+    val forwardButton =
+        AbstractButton(icon = MonoIcon.ARROW_RIGHT, tooltip = "Forward", enabled = false) {
+            RawkyPlugin.document?.let { doc ->
+                if (AnimationPreviewPlugin.currentFrame + 1 < doc.children.size) {
+                    AnimationPreviewPlugin.currentFrame++
+                    animationPanel.repaint()
+                }
+
+                AnimationPreviewPlugin.triggerButtons()
+            }
+        }
+
+    val playButton =
+        AbstractButton(
+            icon = MonoIcon.RUN,
+            tooltip = "Play",
+            enabled = false,
+            type = ButtonType.TOGGLE,
+        ) {
+            AnimationPreviewPlugin.playing = it.isSelected
             animationPanel.repaint()
 
-            AnimationPreviewPlugin.triggerButtons()
+            it.icon =
+                if (!it.isSelected) {
+                    MonoIcon.RUN
+                } else {
+                    MonoIcon.PAUSE
+                }
         }
-    }
 
-    val backButton = AbstractButton(icon = MonoIcon.ARROW_LEFT, tooltip = "Back", enabled = false) {
-        RawkyPlugin.document?.let {
-            if (AnimationPreviewPlugin.currentFrame - 1 >= 0) {
-                AnimationPreviewPlugin.currentFrame--
+    val fastforwardButton =
+        AbstractButton(icon = MonoIcon.FAST_FORWARD, tooltip = "Fast Forward", enabled = false) {
+            RawkyPlugin.document?.let { doc ->
+                AnimationPreviewPlugin.currentFrame = doc.children.size - 1
                 animationPanel.repaint()
+
+                AnimationPreviewPlugin.triggerButtons()
             }
-
-            AnimationPreviewPlugin.triggerButtons()
         }
-    }
 
-    val forwardButton = AbstractButton(icon = MonoIcon.ARROW_RIGHT, tooltip = "Forward", enabled = false) {
-        RawkyPlugin.document?.let { doc ->
-            if (AnimationPreviewPlugin.currentFrame + 1 < doc.children.size) {
-                AnimationPreviewPlugin.currentFrame++
-                animationPanel.repaint()
-            }
-
-            AnimationPreviewPlugin.triggerButtons()
+    private val navbar =
+        JToolBar("Navbar").apply {
+            add(rewindButton)
+            add(backButton)
+            add(playButton)
+            add(forwardButton)
+            add(fastforwardButton)
         }
-    }
-
-    val playButton = AbstractButton(icon = MonoIcon.RUN, tooltip = "Play", enabled = false, type = ButtonType.TOGGLE) {
-        AnimationPreviewPlugin.playing = it.isSelected
-        animationPanel.repaint()
-
-        it.icon = if (!it.isSelected) {
-            MonoIcon.RUN
-        } else {
-            MonoIcon.PAUSE
-        }
-    }
-
-    val fastforwardButton = AbstractButton(icon = MonoIcon.FAST_FORWARD, tooltip = "Fast Forward", enabled = false) {
-        RawkyPlugin.document?.let { doc ->
-            AnimationPreviewPlugin.currentFrame = doc.children.size - 1
-            animationPanel.repaint()
-
-            AnimationPreviewPlugin.triggerButtons()
-        }
-    }
-
-    private val navbar = JToolBar("Navbar").apply {
-        add(rewindButton)
-        add(backButton)
-        add(playButton)
-        add(forwardButton)
-        add(fastforwardButton)
-    }
 
     init {
         layout = BorderLayout()

@@ -13,30 +13,25 @@ import com.deflatedpickle.rawky.server.frontend.widget.ServerPanel
 import com.esotericsoftware.kryonet.Connection
 import com.esotericsoftware.kryonet.Server
 
-data class RequestUserJoin(
-    val userName: String = ""
-) : Request() {
+data class RequestUserJoin(val userName: String = "") : Request() {
     override fun runServer(connection: Connection, server: Server) {
         ServerPlugin.logger.info("$userName joined")
 
-        ServerPlugin.userMap[connection.id] = User(
-            id = connection.id,
-            userName = userName
-        )
+        ServerPlugin.userMap[connection.id] = User(id = connection.id, userName = userName)
 
         server.apply {
             sendToAllTCP(
                 ResponseActiveUsers(
                     ServerPlugin.userMap,
                     JOIN,
-                )
+                ),
             )
 
             sendToAllTCP(
                 ResponseUserJoin(
                     connection.id,
                     userName,
-                )
+                ),
             )
         }
 
@@ -49,9 +44,9 @@ data class RequestUserJoin(
 
             for (i in grid.children) {
                 // TODO
-                /*if (i.colour != Cell.defaultColour) {
-                    server.sendToAllExceptTCP(ServerPlugin.id, QueryUpdateCell(i))
-                }*/
+        /*if (i.colour != Cell.defaultColour) {
+            server.sendToAllExceptTCP(ServerPlugin.id, QueryUpdateCell(i))
+        }*/
             }
         }
     }

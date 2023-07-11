@@ -29,7 +29,8 @@ import java.awt.Graphics2D
         Paints tool's paint method to the pixel grid
     """,
     type = PluginType.OTHER,
-    dependencies = [
+    dependencies =
+    [
         "deflatedpickle@core#*",
         "deflatedpickle@pixelgrid#*",
     ],

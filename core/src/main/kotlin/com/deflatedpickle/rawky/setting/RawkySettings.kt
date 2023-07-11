@@ -13,5 +13,7 @@ import java.awt.Point
 data class RawkySettings(
     override val version: Int = 1,
     var debug: DebugSettings = DebugSettings(),
-    val cursorSize: @Serializable(PointSerializer::class) Point = Point(32, 32),
+    val cursorSize:
+    @Serializable(PointSerializer::class)
+    Point = Point(32, 32),
 ) : Config

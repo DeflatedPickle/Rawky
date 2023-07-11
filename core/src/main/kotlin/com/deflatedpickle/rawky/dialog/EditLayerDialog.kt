@@ -13,22 +13,25 @@ import javax.swing.JLabel
 import javax.swing.JPanel
 
 class EditLayerDialog(val index: Int = -1) : TaskDialog(Haruhi.window, "Edit Layer") {
-    val nameInput = JXTextField("Name").apply {
-        text = RawkyPlugin.document?.let { doc ->
-            val frame = doc.children[doc.selectedIndex]
-            frame.children[frame.selectedIndex].name
+    val nameInput =
+        JXTextField("Name").apply {
+            text =
+                RawkyPlugin.document?.let { doc ->
+                    val frame = doc.children[doc.selectedIndex]
+                    frame.children[frame.selectedIndex].name
+                }
         }
-    }
 
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
 
-        this.fixedComponent = JPanel().apply {
-            isOpaque = false
-            layout = GridBagLayout()
+        this.fixedComponent =
+            JPanel().apply {
+                isOpaque = false
+                layout = GridBagLayout()
 
-            add(JLabel("Name:"), StickEast)
-            add(nameInput, FillHorizontalFinishLine)
-        }
+                add(JLabel("Name:"), StickEast)
+                add(nameInput, FillHorizontalFinishLine)
+            }
     }
 }

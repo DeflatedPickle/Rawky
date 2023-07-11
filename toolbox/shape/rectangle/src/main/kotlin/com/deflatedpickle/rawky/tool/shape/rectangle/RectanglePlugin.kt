@@ -30,9 +30,7 @@ import kotlin.math.min
         A tool that draws lines
     """,
     type = PluginType.OTHER,
-    dependencies = [
-        "deflatedpickle@core#1.0.0"
-    ],
+    dependencies = ["deflatedpickle@core#1.0.0"],
 )
 object RectanglePlugin :
     Shape(
@@ -61,37 +59,38 @@ object RectanglePlugin :
         }
         // Second point
         else {
-            val action = object : Action(name) {
-                val colourCache = mutableMapOf<Cell<Any>, Color>()
+            val action =
+                object : Action(name) {
+                    val colourCache = mutableMapOf<Cell<Any>, Color>()
 
-                override fun perform() {
-                    colourCache.clear()
+                    override fun perform() {
+                        colourCache.clear()
 
-                    for (
-                        (k, v) in process(
-                            cell.column, cell.row,
-                            other.column, other.column,
+                        for (
+                        (k, v) in
+                        process(
+                            cell.column,
+                            cell.row,
+                            other.column,
+                            other.column,
                         )
-                    ) {
-                        colourCache[k] = v
+                        ) {
+                            colourCache[k] = v
 
-                        CellProvider.current.perform(
-                            k, button, dragged, clickCount
-                        )
+                            CellProvider.current.perform(k, button, dragged, clickCount)
+                        }
+
+                        firstCell = null
                     }
 
-                    firstCell = null
-                }
-
-                override fun cleanup() {
-                    for ((c, colour) in colourCache) {
-                        // c.colour = colour
+                    override fun cleanup() {
+                        for ((c, colour) in colourCache) {
+                            // c.colour = colour
+                        }
                     }
-                }
 
-                override fun outline(g2D: Graphics2D) {
+                    override fun outline(g2D: Graphics2D) {}
                 }
-            }
 
             ActionStack.push(action)
         }
@@ -107,8 +106,10 @@ object RectanglePlugin :
             }
 
             graphics.fillRect(
-                (cell.row * 16) + 8, (cell.column * 16) + 8,
-                (hoverCell.row * 16) + 8, (hoverCell.column * 16) + 8,
+                (cell.row * 16) + 8,
+                (cell.column * 16) + 8,
+                (hoverCell.row * 16) + 8,
+                (hoverCell.column * 16) + 8,
             )
         }
     }

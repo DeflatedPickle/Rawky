@@ -15,8 +15,6 @@ interface Exporter : HasName {
 
     val exporterExtensions: MutableMap<String, List<String>>
 
-    /**
-     * Writes the current document to a file
-     */
+    /** Writes the current document to a file */
     fun export(doc: RawkyDocument, file: File)
 }

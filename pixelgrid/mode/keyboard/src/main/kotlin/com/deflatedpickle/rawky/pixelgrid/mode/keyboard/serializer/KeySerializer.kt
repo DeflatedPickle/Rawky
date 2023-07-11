@@ -13,12 +13,12 @@ import kotlinx.serialization.encoding.Encoder
 import java.awt.event.KeyEvent
 
 @OptIn(ExperimentalSerializationApi::class)
-@Serializer(forClass = KeyCombo::class)
 object KeySerializer : KSerializer<KeyCombo> {
-    override val descriptor = PrimitiveSerialDescriptor(
-        serialName = "Key",
-        kind = PrimitiveKind.INT,
-    )
+    override val descriptor =
+        PrimitiveSerialDescriptor(
+            serialName = "Key",
+            kind = PrimitiveKind.INT,
+        )
 
     override fun serialize(encoder: Encoder, value: KeyCombo) {
         val code = mutableListOf<Int>()
@@ -30,17 +30,20 @@ object KeySerializer : KSerializer<KeyCombo> {
 
         encoder.encodeString(
             code.joinToString("+") { k ->
-                KeyEvent::class.java.declaredFields.first {
-                    it.name.startsWith("VK_") && it.get(null) == k
-                }.name
-            }
+                KeyEvent::class
+                    .java
+                    .declaredFields
+                    .first { it.name.startsWith("VK_") && it.get(null) == k }
+                    .name
+            },
         )
     }
 
     override fun deserialize(decoder: Decoder): KeyCombo {
-        val decode = decoder.decodeString().split("+").map {
-            KeyEvent::class.java.getDeclaredField(it).get(null) as Int
-        }
+        val decode =
+            decoder.decodeString().split("+").map {
+                KeyEvent::class.java.getDeclaredField(it).get(null) as Int
+            }
 
         return if (decode.size == 1) {
             KeyCombo(decode.first())

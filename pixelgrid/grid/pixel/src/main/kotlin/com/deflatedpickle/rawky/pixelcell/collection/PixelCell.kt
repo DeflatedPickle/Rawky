@@ -13,8 +13,13 @@ import java.awt.Color
 data class PixelCell(
     override val row: Int = 0,
     override val column: Int = 0,
-    override var content: @Serializable(ColorSerializer::class) Color = default,
-) : Cell<@Serializable(ColorSerializer::class) Color>() {
+    override var content:
+    @Serializable(ColorSerializer::class)
+    Color = default,
+) : Cell<
+    @Serializable(ColorSerializer::class)
+    Color,
+    >() {
     companion object {
         val default = Color(0, 0, 0, 0)
     }
