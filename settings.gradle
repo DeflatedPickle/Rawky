@@ -46,7 +46,7 @@ include 'server'
 }
 
 include 'pixelgrid'
-['mouse', 'keyboard',].each {
+['mouse', 'keyboard', 'gamepad'].each {
 	include "pixelgrid.mode.$it"
 	project(":pixelgrid.mode.$it").projectDir = new File(settingsDir, "pixelgrid/mode/$it")
 }
@@ -153,6 +153,8 @@ includeBuild 'libs/icupnp'
 // includeBuild 'libs/ogmowo'
 // includeBuild 'libs/ldtkudos'
 includeBuild 'libs/FlatOpenDyslexicFont'
+includeBuild 'libs/FlatCatppuccinIJTheme'
 includeBuild 'libs/ModernDocking/docking'
 includeBuild 'libs/ModernDocking/docking-ui'
 includeBuild 'libs/colorpicker'
+includeBuild 'libs/owlgotrhythm'

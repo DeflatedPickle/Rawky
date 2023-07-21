@@ -253,6 +253,7 @@ run {
 
 		runtimeOnly project(":pixelgrid.mode.mouse")
 		runtimeOnly project(":pixelgrid.mode.keyboard")
+		runtimeOnly project(":pixelgrid.mode.gamepad")
 
 		runtimeOnly project(":pixelgrid.impex.imageio")
 		runtimeOnly project(":pixelgrid.impex.ascii")

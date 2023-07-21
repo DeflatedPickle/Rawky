@@ -1,0 +1,19 @@
+plugins {
+	id 'org.jetbrains.kotlin.jvm'
+}
+
+dependencies {
+	implementation 'net.java.jinput:jinput:2.0.9'
+
+	implementation 'net.java.jinput:coreapi:2.0.9'
+	implementation 'net.java.jinput:jinput-platform:2.0.7'
+
+	implementation 'net.java.jinput:linux-plugin:2.0.9'
+	implementation 'net.java.jinput:windows-plugin:2.0.9'
+	implementation 'net.java.jinput:osx-plugin:2.0.9'
+
+	implementation project(":core")
+	implementation project(":pixelgrid")
+	implementation project(":toolbox")
+	implementation project(":sniffle.settingsgui")
+}
