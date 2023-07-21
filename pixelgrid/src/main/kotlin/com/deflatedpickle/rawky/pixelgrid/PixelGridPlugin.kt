@@ -14,6 +14,7 @@ import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.marvin.extensions.get
 import com.deflatedpickle.marvin.extensions.set
+import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.pixelgrid.api.Mode
 import com.deflatedpickle.rawky.pixelgrid.setting.PixelGridSettings
@@ -50,6 +51,8 @@ object PixelGridPlugin {
         EventOpenDocument.addListener { PixelGridPanel.repaint() }
 
         EventUpdateGrid.addListener { PixelGridPanel.repaint() }
+
+        EventChangeTool.addListener { PixelGridPanel.repaint() }
 
         EventProgramFinishSetup.addListener {
             (RegistryUtil.get("setting_type") as Registry<String, (Plugin, String, Any) -> Component>?)

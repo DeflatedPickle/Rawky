@@ -35,7 +35,7 @@ abstract class Tool(
     }
 
     abstract fun perform(
-        cell: Cell<out Any>,
+        cell: Cell<Any>,
         button: Int,
         dragged: Boolean,
         clickCount: Int,

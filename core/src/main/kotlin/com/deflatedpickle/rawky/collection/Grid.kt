@@ -27,23 +27,25 @@ data class Grid(
     init {
         val width = pixel
         val height = pixel
-        var row = 0
         var column = 0
+        var row = 0
 
         this.children.addAll(
             Array(this.columns * this.rows) {
-                if (column + 1 == this.columns) {
-                    if (row + 1 == this.rows) row = 0 else row++
-
-                    column = 0
-                } else {
-                    column++
-                }
-
-                CellProvider.current.provide(row, column).apply {
+                val cell = CellProvider.current.provide(column, row).apply {
                     grid = this@Grid
-                    polygon = Rectangle(row * pixel, column * pixel, width, height)
+                    polygon = Rectangle(column * pixel, row * pixel, width, height)
                 }
+
+                if (row + 1 == this.columns) {
+                    if (column + 1 == this.rows) column = 0 else column++
+
+                    row = 0
+                } else {
+                    row++
+                }
+
+                cell
             },
         )
     }

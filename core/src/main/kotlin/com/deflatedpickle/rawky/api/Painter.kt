@@ -7,7 +7,7 @@ import java.awt.Graphics2D
 
 interface Painter<out T> {
     fun paint(
-        hoverCell: Cell<out @UnsafeVariance T>,
+        hoverCell: Cell<@UnsafeVariance T>,
         graphics: Graphics2D,
     )
 }

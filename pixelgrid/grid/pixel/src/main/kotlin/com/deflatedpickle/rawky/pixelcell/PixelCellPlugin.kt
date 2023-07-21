@@ -13,6 +13,8 @@ import kotlinx.serialization.Contextual
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics2D
+import java.awt.event.MouseEvent.BUTTON1
+import java.awt.event.MouseEvent.NOBUTTON
 
 @Plugin(
     value = "pixel_cell",
@@ -46,13 +48,13 @@ object PixelCellPlugin : CellProvider<Color>() {
 
     override fun perform(cell: Cell<Any>, button: Int, dragged: Boolean, clickCount: Int) {
         when (button) {
-            0 -> cell.content = current
+            NOBUTTON, BUTTON1 -> cell.content = current
         }
     }
 
     override fun redact(cell: Cell<Any>, button: Int, dragged: Boolean, clickCount: Int) {
         when (button) {
-            0 -> cell.content = PixelCell.default
+            NOBUTTON, BUTTON1 -> cell.content = PixelCell.default
         }
     }
 

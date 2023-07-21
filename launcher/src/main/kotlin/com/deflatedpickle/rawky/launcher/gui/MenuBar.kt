@@ -11,7 +11,6 @@ import ModernDocking.internal.DockingInternal
 import ModernDocking.internal.DockingListeners
 import ModernDocking.layouts.ApplicationLayout
 import ModernDocking.layouts.DockingLayouts
-import ModernDocking.ui.ApplicationLayoutMenuItem
 import com.deflatedpickle.haruhi.api.Registry
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
@@ -114,6 +113,9 @@ object MenuBar : JMenuBar() {
 
             addSeparator()
 
+            // TODO: add an item to print the file
+            // TODO: add an item to send the file by email
+
             add(
                 "Exit",
                 MonoIcon.EXIT,
@@ -129,7 +131,7 @@ object MenuBar : JMenuBar() {
 
     private fun populateViewMenu() {
         viewMenu.apply {
-            add("Fullscreen", message = "Toggle fullscreen view", type = MenuButtonType.CHECK) {
+            add("Fullscreen", accelerator = KeyStroke.getKeyStroke("F11"), message = "Toggle fullscreen view", type = MenuButtonType.CHECK) {
                 if ((it.source as AbstractButton).isSelected) {
                     Window.getScreenDevice()?.fullScreenWindow = Window
                 } else {
@@ -143,21 +145,25 @@ object MenuBar : JMenuBar() {
         windowMenu.apply {
             add(
                 JMenu("Dock").apply {
-                    DockingListeners.addLayoutListener(
-                        object : LayoutAdapter() {
-                            override fun layoutDeployed(layout: ApplicationLayout) {
-                                removeAll()
-                                for (v in DockingInternal.getAllDockables()) {
-                                    add(v.tabText, message = "Toggle ${v.tabText}", type = MenuButtonType.CHECK) {
-                                        if ((it.source as AbstractButton).isSelected) {
-                                            Docking.dock(v, Window)
-                                        } else {
-                                            Docking.undock(v)
+                    add(
+                        JMenu("Dockables").apply {
+                            DockingListeners.addLayoutListener(
+                                object : LayoutAdapter() {
+                                    override fun layoutDeployed(layout: ApplicationLayout) {
+                                        removeAll()
+                                        for (v in DockingInternal.getAllDockables()) {
+                                            add(v.tabText, message = "Toggle ${v.tabText}", type = MenuButtonType.CHECK) {
+                                                if ((it.source as AbstractButton).isSelected) {
+                                                    Docking.dock(v, Window)
+                                                } else {
+                                                    Docking.undock(v)
+                                                }
+                                            }
+                                                .apply { isSelected = Docking.isDocked(v) }
                                         }
                                     }
-                                        .apply { isSelected = Docking.isDocked(v) }
-                                }
-                            }
+                                },
+                            )
                         },
                     )
 
@@ -166,7 +172,7 @@ object MenuBar : JMenuBar() {
                     add(
                         JMenu("Load").apply {
                             for (l in DockingLayouts.getLayoutNames()) {
-                                add(l.capitalize(), message = "") {
+                                add(l.capitalize()) {
                                     DockingState.restoreApplicationLayout(DockingLayouts.getLayout(l))
                                 }
                             }
@@ -175,7 +181,10 @@ object MenuBar : JMenuBar() {
 
                     addSeparator()
 
-                    add(ApplicationLayoutMenuItem("default", "Restore Default Layout"))
+                    add("Restore Default Layout", accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_F12, KeyEvent.SHIFT_DOWN_MASK)) {
+                        // TODO: cache a layout when it's selected, restore to that one
+                        DockingState.restoreApplicationLayout(DockingLayouts.getLayout("sprite"))
+                    }
                 },
             )
         }
