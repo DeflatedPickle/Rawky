@@ -40,3 +40,6 @@
 [submodule "libs/owlgotrhythm "]
 	path = libs/owlgotrhythm
 	url = https://github.com/DeflatedPickle/owlgotrhythm
+[submodule "libs/FlatCatppuccinIJTheme"]
+	path = libs/FlatCatppuccinIJTheme
+	url = https://github.com/DeflatedPickle/FlatCatppuccinIJTheme

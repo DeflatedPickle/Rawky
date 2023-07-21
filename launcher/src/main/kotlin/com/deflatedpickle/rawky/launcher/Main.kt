@@ -6,6 +6,7 @@ import ModernDocking.Dockable
 import ModernDocking.Docking
 import ModernDocking.RootDockingPanel
 import com.deflatedpickle.flatlaf.fonts.opendyslexic.FlatOpenDyslexicFont
+import com.deflatedpickle.flatlaf.intellijthemes.FlatCatppuccinMacchiatoIJTheme
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.DependencyComparator
 import com.deflatedpickle.haruhi.api.plugin.Plugin
@@ -26,7 +27,6 @@ import com.deflatedpickle.rawky.launcher.gui.Window
 import com.deflatedpickle.rawky.pixelcell.collection.PixelCell
 import com.deflatedpickle.rawky.tilecell.collection.TileCell
 import com.formdev.flatlaf.FlatLaf
-import com.formdev.flatlaf.IntelliJTheme
 import com.jidesoft.plaf.LookAndFeelFactory
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -88,7 +88,7 @@ fun main(args: Array<String>) {
     FlatOpenDyslexicFont.install()
     FlatLaf.setPreferredFontFamily(FlatOpenDyslexicFont.FAMILY)
 
-    IntelliJTheme.setup(LauncherPlugin::class.java.getResourceAsStream("/macchiato.theme.json"))
+    FlatCatppuccinMacchiatoIJTheme.setup()
 
     UIManager.put("ModernDocking.titlebar.background.color", UIManager.get("TabbedPane.focusColor"))
 

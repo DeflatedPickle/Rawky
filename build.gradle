@@ -49,6 +49,10 @@ project.ext {
 	toolDir = new File(buildDir, 'tools')
 }
 
+spotless {
+	ratchetFrom 'origin/rewrite'
+}
+
 allprojects { p ->
 	apply plugin: 'java-library'
 	apply plugin: 'distribution'
@@ -78,8 +82,6 @@ allprojects { p ->
 	}
 
 	spotless {
-		ratchetFrom 'origin/rewrite'
-
 		java {
 			importOrder()
 			removeUnusedImports()
@@ -90,7 +92,7 @@ allprojects { p ->
 
 		groovyGradle {
 			target '*.gradle'
-			greclipse()
+			// greclipse()
 		}
 
 		kotlin {
@@ -112,7 +114,7 @@ allprojects { p ->
 	kotlin {
 		jvmToolchain(11)
 	}
-	compileKotlin.dependsOn spotlessApply
+	// compileKotlin.dependsOn spotlessApply
 
 	blossom {
 		replaceToken('$[name]', p.property('id'))

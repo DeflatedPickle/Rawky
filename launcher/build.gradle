@@ -11,6 +11,7 @@ dependencies {
 	implementation 'io.github.andrewauclair.ModernDocking:docking-ui:'
 
 	implementation 'com.deflatedpickle:FlatOpenDyslexicFont:'
+	implementation 'com.deflatedpickle:FlatCatppuccinIJTheme:'
 
 	implementation project(':core')
 
