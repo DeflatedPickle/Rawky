@@ -44,23 +44,22 @@ object GridLinesPaintLayerPlugin : PaintLayer {
         registry["grid_lines"] = this
     }
 
-    override fun paint(doc: RawkyDocument?, frame: Frame?, layer: Layer?, g2d: Graphics2D) {
-        val settings = ConfigUtil.getSettings<DivideSettings>("deflatedpickle@grid_lines_paint_layer#*")
-
+    override fun paint(doc: RawkyDocument?, frame: Int, layer: Int, g2d: Graphics2D) {
         doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
 
-            frame?.let {
-                for (l in frame.children) {
-                    settings?.let {
-                        DrawUtil.paintGridOutline(
-                            g2d,
-                            l.child,
-                            settings.colour,
-                            BasicStroke(settings.thickness),
-                        )
-                    }
-                }
+            ConfigUtil.getSettings<DivideSettings>("deflatedpickle@grid_lines_paint_layer#*")?.let { settings ->
+                if (!settings.enabled) return
+
+                val f = doc.children[frame]
+                val l = f.children[layer]
+
+                DrawUtil.paintGridOutline(
+                    g2d,
+                    l.child,
+                    settings.colour,
+                    BasicStroke(settings.thickness),
+                )
             }
         }
     }

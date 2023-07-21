@@ -9,6 +9,7 @@ import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Stroke
+import javax.swing.JComponent
 
 object DrawUtil {
     fun paintGrid(
@@ -44,5 +45,11 @@ object DrawUtil {
         for (cell in cells) {
             CellProvider.current.paintHover(g, cell)
         }
+    }
+
+    fun getScaleFactor(minX: Double, minY: Double, maxX: Double, maxY: Double): Double {
+        val factorX = minX / maxX
+        val factorY = minY / maxY
+        return if (factorX < factorY) factorX else factorY
     }
 }

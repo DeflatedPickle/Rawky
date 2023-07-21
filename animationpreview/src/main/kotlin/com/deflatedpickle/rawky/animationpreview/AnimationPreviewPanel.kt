@@ -5,8 +5,10 @@ package com.deflatedpickle.rawky.animationpreview
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
+import com.deflatedpickle.rawky.util.DrawUtil
 import com.deflatedpickle.undulation.api.ButtonType
 import com.deflatedpickle.undulation.functions.AbstractButton
 import org.jdesktop.swingx.JXPanel
@@ -22,7 +24,7 @@ object AnimationPreviewPanel : PluginPanel() {
             override fun paintComponent(g: Graphics) {
                 super.paintComponent(g)
 
-                val g2d = g as Graphics2D
+                val g2D = g as Graphics2D
                 val bufferedImage =
                     BufferedImage(
                         visibleRect.x + visibleRect.width,
@@ -30,25 +32,31 @@ object AnimationPreviewPanel : PluginPanel() {
                         BufferedImage.TYPE_INT_ARGB,
                     )
 
-                for (
-                v in
-                PaintLayer.registry.getAll().values.filter {
-                    it.layer == LayerCategory.GRID || it.layer == LayerCategory.BACKGROUND
-                }
-                ) {
-                    val temp = bufferedImage.createGraphics()
+                RawkyPlugin.document?.let { doc ->
+                    for (
+                    v in
+                    PaintLayer.registry.getAll().values.filter {
+                        it.layer == LayerCategory.GRID || it.layer == LayerCategory.BACKGROUND
+                    }
+                    ) {
+                        val temp = bufferedImage.createGraphics()
 
-                    RawkyPlugin.document?.let { doc ->
+                        val factor = DrawUtil.getScaleFactor(
+                            width.toDouble() / Grid.pixel, height.toDouble() / Grid.pixel,
+                            doc.columns.toDouble(), doc.rows.toDouble()
+                        )
+                        temp.scale(factor, factor)
+
                         doc.children[AnimationPreviewPlugin.currentFrame].let { frame ->
-                            for (layer in frame.children) {
-                                v.paint(doc, frame, layer, temp)
+                            for (layer in frame.children.indices) {
+                                v.paint(doc, doc.selectedIndex, layer, temp)
                                 temp.dispose()
                             }
                         }
                     }
                 }
 
-                g2d.drawRenderedImage(bufferedImage, null)
+                g2D.drawRenderedImage(bufferedImage, null)
             }
         }
 

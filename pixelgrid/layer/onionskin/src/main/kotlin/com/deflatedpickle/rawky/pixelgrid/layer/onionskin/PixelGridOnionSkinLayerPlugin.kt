@@ -46,7 +46,7 @@ object PixelGridOnionSkinLayerPlugin : PaintLayer {
         registry["onionskin"] = this
     }
 
-    override fun paint(doc: RawkyDocument?, frame: Frame?, layer: Layer?, g2d: Graphics2D) {
+    override fun paint(doc: RawkyDocument?, frame: Int, layer: Int, g2d: Graphics2D) {
         doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
 
@@ -66,25 +66,23 @@ object PixelGridOnionSkinLayerPlugin : PaintLayer {
                                     1f / ((i / it.previousFrames + 1) + 1f),
                                 )
 
-                            for (layer in doc.children[doc.selectedIndex - i].children) {
-                                val grid = layer.child
+                            for (l in doc.children[frame - i].children) {
+                                val grid = l.child
 
-                                if (layer.visible) {
-                                    for (cell in grid.children) {
-                                        if (cell.content != CellProvider.current.default) {
-                                            if (it.skinStratergy == SkinStratergy.COLOUR &&
-                                                CellProvider.current.current is Color
-                                            ) {
-                                                g2d.color = cell.content as Color
-                                            }
-
-                                            g2d.fillRect(
-                                                cell.polygon.x,
-                                                cell.polygon.y,
-                                                cell.polygon.width,
-                                                cell.polygon.height,
-                                            )
+                                for (cell in grid.children) {
+                                    if (cell.content != CellProvider.current.default) {
+                                        if (it.skinStratergy == SkinStratergy.COLOUR &&
+                                            CellProvider.current.current is Color
+                                        ) {
+                                            g2d.color = cell.content as Color
                                         }
+
+                                        g2d.fillRect(
+                                            cell.polygon.x,
+                                            cell.polygon.y,
+                                            cell.polygon.width,
+                                            cell.polygon.height,
+                                        )
                                     }
                                 }
                             }
@@ -103,25 +101,23 @@ object PixelGridOnionSkinLayerPlugin : PaintLayer {
                                     1f / ((i / it.futureFrames + 1) + 1f),
                                 )
 
-                            for (layer in doc.children[doc.selectedIndex + i].children) {
-                                val grid = layer.child
+                            for (l in doc.children[frame + i].children) {
+                                val grid = l.child
 
-                                if (layer.visible) {
-                                    for (cell in grid.children) {
-                                        if (cell.content != CellProvider.current.default) {
-                                            if (it.skinStratergy == SkinStratergy.COLOUR &&
-                                                CellProvider.current.current is Color
-                                            ) {
-                                                g2d.color = cell.content as Color
-                                            }
-
-                                            g2d.fillRect(
-                                                cell.polygon.x,
-                                                cell.polygon.y,
-                                                cell.polygon.width,
-                                                cell.polygon.height,
-                                            )
+                                for (cell in grid.children) {
+                                    if (cell.content != CellProvider.current.default) {
+                                        if (it.skinStratergy == SkinStratergy.COLOUR &&
+                                            CellProvider.current.current is Color
+                                        ) {
+                                            g2d.color = cell.content as Color
                                         }
+
+                                        g2d.fillRect(
+                                            cell.polygon.x,
+                                            cell.polygon.y,
+                                            cell.polygon.width,
+                                            cell.polygon.height,
+                                        )
                                     }
                                 }
                             }

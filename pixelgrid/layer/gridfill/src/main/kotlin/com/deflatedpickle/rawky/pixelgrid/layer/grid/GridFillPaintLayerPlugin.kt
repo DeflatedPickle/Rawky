@@ -41,17 +41,14 @@ object GridFillPaintLayerPlugin : PaintLayer {
         registry["grid_fill"] = this
     }
 
-    override fun paint(doc: RawkyDocument?, frame: Frame?, layer: Layer?, g2d: Graphics2D) {
+    override fun paint(doc: RawkyDocument?, frame: Int, layer: Int, g2d: Graphics2D) {
         doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
 
-            frame?.let {
-                for (l in frame.children) {
-                    if (l.visible) {
-                        DrawUtil.paintGridFill(g2d, l.child)
-                    }
-                }
-            }
+            val f = doc.children[frame]
+            val l = f.children[layer]
+
+            DrawUtil.paintGridFill(g2d, l.child)
         }
     }
 }

@@ -6,8 +6,10 @@ package com.deflatedpickle.rawky.layerlist
 
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.util.PluginUtil
+import com.deflatedpickle.marvin.function.println
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.dialog.EditLayerDialog
 import com.deflatedpickle.rawky.dialog.NewLayerDialog
 import com.deflatedpickle.rawky.event.EventChangeLayer
@@ -17,6 +19,7 @@ import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.event.packet.PacketChange
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
+import com.deflatedpickle.rawky.util.DrawUtil
 import com.deflatedpickle.undulation.functions.AbstractButton
 import com.deflatedpickle.undulation.functions.extensions.add
 import org.oxbow.swingbits.dialog.task.TaskDialog
@@ -181,12 +184,12 @@ object LayerListPanel : PluginPanel() {
 
                     val g2D = g as Graphics2D
 
-                    // TODO: Scale based on the grid size
-                    g2D.scale(0.14, 0.14)
-
                     RawkyPlugin.document?.let { doc ->
-                        val frame = doc.children[doc.selectedIndex]
-                        val layer = frame.children[row]
+                        val factor = DrawUtil.getScaleFactor(
+                            width.toDouble() / Grid.pixel, height.toDouble() / Grid.pixel,
+                            doc.columns.toDouble(), doc.rows.toDouble()
+                        )
+                        g2D.scale(factor, factor)
 
                         for (
                         v in
@@ -194,13 +197,13 @@ object LayerListPanel : PluginPanel() {
                             it.layer == LayerCategory.GRID || it.layer == LayerCategory.BACKGROUND
                         }
                         ) {
-                            v.paint(doc, frame, layer, g2D)
+                            v.paint(doc, doc.selectedIndex, row, g2D)
                         }
                     }
                 }
             }
         }
-    private val columnOneEditor: TableCellEditor =
+    private val panelEditor: TableCellEditor =
         object : AbstractCellEditor(), TableCellEditor {
             override fun isCellEditable(e: EventObject) = false
 
@@ -262,10 +265,11 @@ object LayerListPanel : PluginPanel() {
                 getColumn(0).apply {
                     maxWidth = 40
 
+                    cellEditor = panelEditor
                     cellRenderer = columnZeroRenderer
                 }
 
-                getColumn(1).apply { cellEditor = columnOneEditor }
+                getColumn(1).apply { cellEditor = panelEditor }
 
                 getColumn(2).apply {
                     maxWidth = 30

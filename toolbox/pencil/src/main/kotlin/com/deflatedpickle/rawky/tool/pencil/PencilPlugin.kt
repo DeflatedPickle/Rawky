@@ -46,14 +46,14 @@ object PencilPlugin :
             object : Action(name) {
                 override fun perform() {
                     ConfigUtil.getSettings<PencilSettings>("deflatedpickle@pencil#")?.let {
+
                         for (column in 0 downTo -it.size + 1) {
                             for (row in 0 downTo -it.size + 1) {
                                 try {
                                     val x = if (it.size > 1) 1 else 0
-                                    val y = if (it.size > 1) 0 else 1
 
                                     CellProvider.current.perform(
-                                        cell.grid[cell.row + row + x, cell.column + column - y],
+                                        cell.grid[cell.row + row + x, cell.column + column],
                                         button,
                                         dragged,
                                         clickCount,

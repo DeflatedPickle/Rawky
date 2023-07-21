@@ -7,6 +7,7 @@ dependencies {
 	implementation project(":pixelgrid")
 	implementation project(":tilepalette")
 	implementation project(":layerlist")
+	implementation project(":tiledview")
 
 	implementation project(":sniffle.settingsgui")
 }

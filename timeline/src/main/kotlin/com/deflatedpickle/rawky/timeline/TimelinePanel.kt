@@ -9,6 +9,7 @@ import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.collection.Frame
+import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.dialog.EditFrameDialog
 import com.deflatedpickle.rawky.dialog.NewFrameDialog
 import com.deflatedpickle.rawky.dialog.NewLayerDialog
@@ -20,6 +21,7 @@ import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.event.packet.PacketChange
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
+import com.deflatedpickle.rawky.util.DrawUtil
 import com.deflatedpickle.undulation.functions.AbstractButton
 import com.deflatedpickle.undulation.functions.extensions.add
 import org.jdesktop.swingx.JXList
@@ -168,7 +170,7 @@ object TimelinePanel : PluginPanel() {
         }
 
     private val listCellRenderer =
-        ListCellRenderer<Frame> { _, value, _, isSelected, _ ->
+        ListCellRenderer<Frame> { _, value, index, isSelected, _ ->
             JPanel().apply {
                 layout = BoxLayout(this, BoxLayout.Y_AXIS)
 
@@ -191,13 +193,14 @@ object TimelinePanel : PluginPanel() {
 
                             val g2D = g as Graphics2D
 
-                            // TODO: Scale based on the grid size
-                            g2D.scale(0.24, 0.24)
-
                             RawkyPlugin.document?.let { doc ->
-                                val frame = doc.children[doc.selectedIndex]
+                                val factor = DrawUtil.getScaleFactor(
+                                    width.toDouble() / Grid.pixel, height.toDouble() / Grid.pixel,
+                                    doc.columns.toDouble(), doc.rows.toDouble()
+                                )
+                                g2D.scale(factor, factor)
 
-                                for (layer in value.children.reversed()) {
+                                for ((l, layer) in value.children.reversed().withIndex()) {
                                     if (layer.visible) {
                                         for (
                                         v in
@@ -205,7 +208,7 @@ object TimelinePanel : PluginPanel() {
                                             it.layer == LayerCategory.GRID || it.layer == LayerCategory.BACKGROUND
                                         }
                                         ) {
-                                            v.paint(doc, frame, layer, g2D)
+                                            v.paint(doc, index, l, g2D)
                                         }
                                     }
                                 }

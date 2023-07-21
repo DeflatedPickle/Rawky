@@ -44,7 +44,7 @@ object PixelGridToolPaintLayerPlugin : PaintLayer {
         registry["toolpaint"] = this
     }
 
-    override fun paint(doc: RawkyDocument?, frame: Frame?, layer: Layer?, g2d: Graphics2D) {
+    override fun paint(doc: RawkyDocument?, frame: Int, layer: Int, g2d: Graphics2D) {
         doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
 

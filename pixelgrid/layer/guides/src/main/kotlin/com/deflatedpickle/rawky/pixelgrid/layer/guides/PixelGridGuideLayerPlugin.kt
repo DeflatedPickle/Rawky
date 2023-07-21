@@ -46,13 +46,15 @@ object PixelGridGuideLayerPlugin : PaintLayer {
         registry["guide"] = this
     }
 
-    override fun paint(doc: RawkyDocument?, frame: Frame?, layer: Layer?, g2d: Graphics2D) {
-        val settings = ConfigUtil.getSettings<GuideSettings>("deflatedpickle@pixel_grid_guide_layer#*")
-
+    override fun paint(doc: RawkyDocument?, frame: Int, layer: Int, g2d: Graphics2D) {
         doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
 
-            settings?.let { drawGuides(g2d, doc, it.colour, BasicStroke(it.thickness)) }
+            ConfigUtil.getSettings<GuideSettings>("deflatedpickle@pixel_grid_guide_layer#*")?.let { settings ->
+                if (!settings.enabled) return
+
+                drawGuides(g2d, doc, settings.colour, BasicStroke(settings.thickness))
+            }
         }
     }
 

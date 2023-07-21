@@ -11,6 +11,7 @@ import java.awt.Color
 @Serializable
 data class GuideSettings(
     override val version: Int = 1,
+    var enabled: Boolean = true,
     var colour:
     @Serializable(ColorSerializer::class)
     Color = Color.PINK,

@@ -8,6 +8,7 @@ import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
+import com.deflatedpickle.rawky.util.DrawUtil
 import org.jdesktop.swingx.JXPanel
 import java.awt.BorderLayout
 import java.awt.Graphics
@@ -24,51 +25,42 @@ object TiledViewPanel : PluginPanel() {
                 var columns = 3
                 var xpad = 0.0
                 var ypad = 0.0
-                var scale = 0.2
 
                 ConfigUtil.getSettings<TiledViewSettings>("deflatedpickle@tiled_view#*")?.let {
                     rows = it.rows
                     columns = it.columns
                     xpad = it.xPadding
                     ypad = it.yPadding
-                    scale = it.scale
                 }
 
-                val g2d = g as Graphics2D
-                val bufferedImage =
-                    BufferedImage(
-                        visibleRect.x + visibleRect.width,
-                        visibleRect.y + visibleRect.height,
-                        BufferedImage.TYPE_INT_ARGB,
-                    )
-
-                g2d.scale(scale, scale)
+                val g2D = g as Graphics2D
 
                 RawkyPlugin.document?.let { doc ->
+                    val factor = DrawUtil.getScaleFactor(
+                        width.toDouble() / Grid.pixel, height.toDouble() / Grid.pixel,
+                        doc.columns.toDouble() * columns, doc.rows.toDouble() * columns
+                    )
+                    g2D.scale(factor, factor)
+
                     for (
                     v in
                     PaintLayer.registry.getAll().values.filter { it.layer == LayerCategory.GRID }
                     ) {
                         for (row in 0 until rows) {
                             for (column in 0 until columns) {
-                                val temp = bufferedImage.createGraphics()
-
                                 doc.children[doc.selectedIndex].let { frame ->
-                                    for (layer in frame.children) {
-                                        v.paint(doc, frame, layer, temp)
-                                        temp.dispose()
+                                    for (layer in frame.children.indices) {
+                                        v.paint(doc, doc.selectedIndex, layer, g2D)
                                     }
                                 }
 
-                                g2d.drawRenderedImage(bufferedImage, null)
-
-                                g2d.translate((Grid.pixel + xpad) * doc.rows, 0.0)
+                                g2D.translate((Grid.pixel + xpad) * doc.rows, 0.0)
                             }
 
-                            g2d.translate(0.0, (Grid.pixel + ypad) * doc.columns)
+                            g2D.translate(0.0, (Grid.pixel + ypad) * doc.columns)
 
                             // Move back to start
-                            g2d.translate(((Grid.pixel + xpad) * doc.columns * columns) * -1.0, 0.0)
+                            g2D.translate(((Grid.pixel + xpad) * doc.columns * columns) * -1.0, 0.0)
                         }
                     }
                 }

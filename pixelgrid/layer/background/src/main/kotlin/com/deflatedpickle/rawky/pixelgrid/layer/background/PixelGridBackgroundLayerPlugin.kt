@@ -44,20 +44,21 @@ object PixelGridBackgroundLayerPlugin : PaintLayer {
         registry["background"] = this
     }
 
-    override fun paint(doc: RawkyDocument?, frame: Frame?, layer: Layer?, g2d: Graphics2D) {
-        val settings =
-            ConfigUtil.getSettings<BackgroundSettings>("deflatedpickle@pixel_grid_background_layer#*")
-
+    override fun paint(doc: RawkyDocument?, frame: Int, layer: Int, g2d: Graphics2D) {
         doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
 
-            settings?.let {
-                if (it.enabled) {
-                    frame?.children?.first()?.child?.let { grid ->
-                        drawBackground(g2d, grid, it.fill, it.size, it.even, it.odd)
+            ConfigUtil.getSettings<BackgroundSettings>("deflatedpickle@pixel_grid_background_layer#*")
+                ?.let { settings ->
+                    if (!settings.enabled) return
+
+                    val f = doc.children.first()
+
+                    // we just need a grid for width and height
+                    f.children.first().child.let { grid ->
+                        drawBackground(g2d, grid, settings.fill, settings.size, settings.even, settings.odd)
                     }
                 }
-            }
         }
     }
 

@@ -40,11 +40,13 @@ object PNGColourPalettePlugin : PaletteParser<Color> {
 
         val img = ImageIO.read(file)
 
-        for (col in 0 until img.width) {
-            for (row in 0 until img.height) {
-                val c = Color(img.getRGB(col, row))
-                if (c == Color.WHITE) continue
-                colours[c] = null
+        if (img != null) {
+            for (col in 0 until img.width) {
+                for (row in 0 until img.height) {
+                    val c = Color(img.getRGB(col, row))
+                    if (c == Color.WHITE) continue
+                    colours[c] = null
+                }
             }
         }
 

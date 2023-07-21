@@ -27,6 +27,7 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
         "deflatedpickle@pixel_grid#*",
         "deflatedpickle@layer_list#*",
         "deflatedpickle@tile_palette#*",
+        "deflatedpickle@tiled_view#*",
     ],
 )
 object TileMapLayoutPlugin {
@@ -39,7 +40,16 @@ object TileMapLayoutPlugin {
                     DockingRegion.WEST,
                     0.3,
                 )
-                .dock("deflatedpickle@layer_list", "deflatedpickle@pixel_grid", DockingRegion.EAST, 0.3)
+                .dock("deflatedpickle@layer_list",
+                    "deflatedpickle@pixel_grid",
+                    DockingRegion.EAST,
+                    0.3
+                )
+                .dock("deflatedpickle@tiled_view",
+                    "deflatedpickle@layer_list",
+                    DockingRegion.SOUTH,
+                    0.5
+                )
                 .buildApplicationLayout()
 
         DockingLayouts.addLayout("tilemap", layout)
