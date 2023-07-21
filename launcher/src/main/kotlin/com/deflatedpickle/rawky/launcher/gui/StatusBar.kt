@@ -28,8 +28,9 @@ object StatusBar : JToolBar() {
 
         SwingUtilities.invokeLater {
             for (m in 0 until Window.jMenuBar.menuCount) {
-                val menu = Window.jMenuBar.getMenu(m)
-                recurseMenu(menu)
+                Window.jMenuBar.getMenu(m)?.let { menu ->
+                    recurseMenu(menu)
+                }
             }
         }
     }

@@ -13,9 +13,7 @@ import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.marvin.extensions.get
 import com.deflatedpickle.marvin.extensions.set
 import com.deflatedpickle.monocons.MonoIcon
-import com.deflatedpickle.owlgotrhythm.impl.fill.FourWayFloodFill
 import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.collection.Grid
@@ -83,12 +81,7 @@ object BucketPlugin :
         val action =
             object : Action(name) {
                 override fun perform() {
-                    action(
-                        cell,
-                        button,
-                        dragged,
-                        clickCount,
-                    )
+                    process(cell.row, cell.column, cell.content)
                 }
 
                 override fun cleanup() {}
@@ -99,12 +92,7 @@ object BucketPlugin :
         ActionStack.push(action)
     }
 
-    private fun action(
-        cell: Cell<Any>,
-        button: Int,
-        dragged: Boolean,
-        clickCount: Int,
-    ): MutableMap<Cell<Any>, Any> {
+    fun process(row: Int, column: Int, any: Any) {
         val grid: Grid
         RawkyPlugin.document!!.let { doc ->
             val frame = doc.children[doc.selectedIndex]
@@ -112,20 +100,36 @@ object BucketPlugin :
             grid = layer.child
         }
 
-        return FourWayFloodFill.process(
-            cell.column,
-            cell.row,
-        ) { cache, x, y ->
-            if (x > -1 && x < grid.rows && y > -1 && y < grid.columns) {
-                val c = grid[y, x]
-                if (c.content == cell.content) {
-                    cache[c] = c.content
-                    CellProvider.current.perform(c, button, dragged, clickCount)
-                    return@process true
+        // TODO: move this to owlgotrythm
+
+        // Kotlin's ArrayDeque doesn't have a poll equivalent as far as I know
+        val cellList = java.util.ArrayDeque<Pair<Int, Int>>()
+
+        cellList.add(Pair(row, column))
+
+        // http://steve.hollasch.net/cgindex/polygons/floodfill.html
+        while (cellList.isNotEmpty()) {
+            with(cellList.poll()) {
+                if (this.first in 0 until grid.rows && this.second in 0 until grid.columns) {
+                    val cell = grid[this.first, this.second]
+
+                    // TODO
+                    val cellColour = cell.content
+                    // val rgb = cellColour.rgb
+                    // val hsb = Color.RGBtoHSB(cellColour.red, cellColour.green, cellColour.blue, null)
+
+                    if (cellColour == any) {
+                        ConfigUtil.getSettings<BucketSettings>("deflatedpickle@bucket#*")?.let {
+                            it.fill?.perform(cell, this.first, this.second)
+                        }
+
+                        cellList.add(Pair(this.first, this.second + 1))
+                        cellList.add(Pair(this.first, this.second - 1))
+                        cellList.add(Pair(this.first + 1, this.second))
+                        cellList.add(Pair(this.first - 1, this.second))
+                    }
                 }
             }
-
-            return@process false
         }
     }
 }
