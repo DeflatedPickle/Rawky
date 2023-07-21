@@ -4,6 +4,9 @@
 # Log file
 *.log
 
+# Profiling trash
+*.hprof
+
 # BlueJ files
 *.ctxt
 

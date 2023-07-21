@@ -8,6 +8,7 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.monocons.MonoIcon
+import com.deflatedpickle.owlgotrhythm.impl.line.BresenhamLine
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.Painter
@@ -21,7 +22,6 @@ import com.deflatedpickle.rawky.util.ActionStack.Action
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics2D
-import kotlin.math.abs
 
 @Plugin(
     value = "line",
@@ -41,13 +41,13 @@ object LinePlugin :
         icon = MonoIcon.LINE,
     ),
     Painter<Any> {
-    private var firstCell: Cell<out Any>? = null
+    private var firstCell: Cell<Any>? = null
 
     init {
         registry["deflatedpickle@$name"] = this
     }
 
-    override fun perform(cell: Cell<out Any>, button: Int, dragged: Boolean, clickCount: Int) {
+    override fun perform(cell: Cell<Any>, button: Int, dragged: Boolean, clickCount: Int) {
         val other = firstCell
         // First point
         if (other == null) {
@@ -57,24 +57,26 @@ object LinePlugin :
         else {
             val action =
                 object : Action(name) {
-                    val colourCache = mutableMapOf<Cell<out Any>, Color>()
+                    val cache = mutableMapOf<Cell<Any>, Any>()
 
                     override fun perform() {
-                        colourCache.clear()
-                        colourCache.putAll(
-                            process(
-                                cell.column,
-                                cell.row,
-                                other.column,
-                                other.column,
+                        cache.clear()
+                        cache.putAll(
+                            action(
+                                cell,
+                                other,
+                                button,
+                                dragged,
+                                clickCount,
                             ),
                         )
                     }
 
                     override fun cleanup() {
-                        for ((c, colour) in colourCache) {
-                            CellProvider.current.perform(c, button, dragged, clickCount)
+                        for ((c, content) in cache) {
+                            CellProvider.current.cleanup(content, c, button, dragged, clickCount)
                         }
+                        cache.clear()
                     }
 
                     override fun outline(g2D: Graphics2D) {}
@@ -96,7 +98,7 @@ object LinePlugin :
         }
     }
 
-    override fun paint(hoverCell: Cell<out Any>, graphics: Graphics2D) {
+    override fun paint(hoverCell: Cell<Any>, graphics: Graphics2D) {
         firstCell?.let { cell ->
             graphics.stroke = BasicStroke(4f)
 
@@ -114,12 +116,13 @@ object LinePlugin :
         }
     }
 
-    private fun <T> process(
-        x0: Int,
-        y0: Int,
-        x1: Int?,
-        y1: Int?,
-    ): MutableMap<Cell<out Any>, T> {
+    private fun action(
+        cell: Cell<Any>,
+        other: Cell<Any>,
+        button: Int,
+        dragged: Boolean,
+        clickCount: Int,
+    ): MutableMap<Cell<Any>, Any> {
         val grid: Grid
         RawkyPlugin.document!!.let { doc ->
             val frame = doc.children[doc.selectedIndex]
@@ -127,40 +130,16 @@ object LinePlugin :
             grid = layer.child
         }
 
-        // https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm#External_links
-        var tempX0 = x0
-        var tempY0 = y0
-
-        val dx = abs(x1!! - tempX0)
-        val sx = if (tempX0 < x1) 1 else -1
-        val dy = -abs(y1!! - tempY0)
-        val sy = if (tempY0 < y1) 1 else -1
-        var err = dx + dy
-
-        val cellMap = mutableMapOf<Cell<out Any>, Color>()
-
-        while (true) {
-            with(grid[tempY0, tempX0]) {
-                // TODO
-        /*cellMap[this] = colour
-        colour = RawkyPlugin.colour*/
-            }
-
-            if (tempX0 == x1 && tempY0 == y1) break
-
-            val e2 = 2 * err
-
-            if (e2 >= dy) {
-                err += dy
-                tempX0 += sx
-            }
-
-            if (e2 <= dx) {
-                err += dx
-                tempY0 += sy
+        return BresenhamLine.process(
+            cell.column,
+            cell.row,
+            other.column,
+            other.row,
+        ) { cache, x, y ->
+            grid[y, x].apply {
+                cache[this] = this.content
+                CellProvider.current.perform(this, button, dragged, clickCount)
             }
         }
-
-        return cellMap as MutableMap<Cell<out Any>, T>
     }
 }

@@ -35,7 +35,7 @@ object EraserPlugin :
     }
 
     override fun perform(
-        cell: Cell<out Any>,
+        cell: Cell<Any>,
         button: Int,
         dragged: Boolean,
         clickCount: Int,

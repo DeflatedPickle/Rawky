@@ -50,7 +50,7 @@ object ToolboxPlugin {
                         type = ButtonType.TOGGLE,
                     ) {
                         Tool.current = v
-                        EventChangeTool.trigger(v)
+                        // EventChangeTool.trigger(v)
                     }
                     .also { group.add(it) }
             }
@@ -73,7 +73,7 @@ object ToolboxPlugin {
         }
 
         EventChangeTool.addListener {
-            if (group.elements.toList().any { it.isSelected }) return@addListener
+            // if (group.elements.toList().any { it.isSelected }) return@addListener
 
             for (i in group.elements) {
                 if (i.icon == Tool.current.icon) {

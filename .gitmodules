@@ -37,3 +37,6 @@
 [submodule "libs/colorpicker"]
 	path = libs/colorpicker
 	url = https://github.com/DeflatedPickle/colorpicker
+[submodule "libs/owlgotrhythm "]
+	path = libs/owlgotrhythm
+	url = https://github.com/DeflatedPickle/owlgotrhythm

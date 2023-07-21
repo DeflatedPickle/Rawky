@@ -55,20 +55,12 @@ dependencies {
 	// Layouts
 	api 'com.github.DeflatedPickle:WrapLayout:9ae792ee13'
 
-	// Java util
 	api 'com.deflatedpickle:marvin:'
-
-	// Swing util
 	api 'com.deflatedpickle:undulation:'
-
-	// Plugin framework
 	api 'com.deflatedpickle:haruhi:'
-
-	// Toasts
 	api 'com.deflatedpickle:tosuto:'
-
-	// Icons
 	api 'com.deflatedpickle:monocons:'
+	api "com.deflatedpickle:owlgotrhythm:"
 
 	// Plugins
 	implementation project(":sniffle.settingsgui")
