@@ -16,7 +16,15 @@ import so.n0weak.ExtendedComboBox
 import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.Color
 import java.awt.GridBagLayout
+import java.awt.datatransfer.DataFlavor
+import java.awt.dnd.DnDConstants
+import java.awt.dnd.DropTarget
+import java.awt.dnd.DropTargetAdapter
+import java.awt.dnd.DropTargetDragEvent
+import java.awt.dnd.DropTargetDropEvent
 import java.awt.event.ItemEvent
+import java.io.File
+import java.io.IOException
 import javax.swing.JPanel
 import javax.swing.JScrollPane
 
@@ -26,11 +34,11 @@ object ColourPalettePanel : PluginPanel() {
             addItemListener {
                 when (it.stateChange) {
                     ItemEvent.SELECTED -> {
-                        colourPanel.removeAll()
+                        panel.removeAll()
 
                         if (this.selectedItem is Palette<*>) {
                             for (i in (this.selectedItem as Palette<Color>).items) {
-                                colourPanel.add(
+                                panel.add(
                                     ColourButton(i.key).apply {
                                         toolTipText = i.value
 
@@ -43,19 +51,66 @@ object ColourPalettePanel : PluginPanel() {
                             }
                         }
 
-                        colourPanel.revalidate()
-                        colourPanel.repaint()
+                        panel.revalidate()
+                        panel.repaint()
                     }
                 }
             }
         }
 
-    private val colourPanel = JPanel().apply { layout = WrapLayout() }
+    private val panel = JPanel().apply { layout = WrapLayout() }
+
+    private val dropTargetAdapter = object : DropTargetAdapter() {
+        override fun dragOver(dtde: DropTargetDragEvent) {
+            try {
+                if (dtde.transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                    val fileList = (dtde.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<File>)
+
+                    // TODO: could accept multiple files?
+                    if (fileList.size > 1) dtde.rejectDrag()
+
+                    val file = fileList.first()
+
+                    // TODO: could support folders?
+                    if (!file.isFile) dtde.rejectDrag()
+
+                    if (file.extension in ColourPalettePlugin.registry.keys) {
+                        dtde.acceptDrag(DnDConstants.ACTION_COPY)
+                    }
+                }
+            } catch (_: IOException) {
+            }
+        }
+
+        override fun drop(dtde: DropTargetDropEvent) {
+            when {
+                dtde.transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor) -> {
+                    dtde.acceptDrop(DnDConstants.ACTION_COPY)
+
+                    val transferable = (dtde.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<File>)
+                        .first()
+
+                    ColourPalettePlugin.registry[transferable.extension]?.let { pp ->
+                        val pallet = pp.parse(transferable)
+                        combo.addItem(pallet)
+                        combo.selectedItem = pallet
+                    }
+
+                    dtde.dropComplete(true)
+                }
+            }
+
+            dtde.rejectDrop()
+        }
+    }
 
     init {
         layout = GridBagLayout()
+
+        DropTarget(panel, DnDConstants.ACTION_COPY, dropTargetAdapter, true)
+
         add(combo, FillHorizontalFinishLine)
-        add(JScrollPane(colourPanel), FillBothFinishLine)
+        add(JScrollPane(panel), FillBothFinishLine)
 
         EventProgramFinishSetup.addListener {
             for (i in ColourPalettePlugin.folder.walk()) {

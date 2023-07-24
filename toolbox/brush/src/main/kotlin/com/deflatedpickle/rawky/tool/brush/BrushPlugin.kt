@@ -7,6 +7,7 @@ package com.deflatedpickle.rawky.tool.brush
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
+import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.Tool
@@ -30,7 +31,7 @@ import kotlin.math.sin
     settings = BrushSettings::class,
 )
 object BrushPlugin :
-    Tool(
+    Tool<BrushSettings>(
         name = "Brush",
         icon = MonoIcon.BRUSH,
     ) {
@@ -74,4 +75,7 @@ object BrushPlugin :
 
         ActionStack.push(action)
     }
+
+    override fun getSettings(): BrushSettings? = ConfigUtil.getSettings("deflatedpickle@brush#*")
+    override fun getQuickSettings() = listOf("size")
 }

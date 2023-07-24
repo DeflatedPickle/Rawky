@@ -16,14 +16,15 @@
 	<img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/.github/image/sprite.png?raw=true" alt="Sprite">
 	<tr>
 		<th><img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/.github/image/animation.png?raw=true" alt="Animation"></th>
+		<th><img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/.github/image/tilemap.png?raw=true" alt="Tilemap"></th>
 		<th><img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/.github/image/server.png?raw=true" alt="Server"></th>
 	</tr>
 </table>
 
 <p align="center">
-	<a href="https://github.com/DeflatedPickle/Rawky/commits/rewrite"><img src="https://img.shields.io/github/last-commit/DeflatedPickle/Rawky.svg"></a>
+	<a href="https://github.com/DeflatedPickle/Rawky/commits/rewrite"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/DeflatedPickle/Rawky.svg"></a>
 	<img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/DeflatedPickle/Rawky/gradle-packageAll.yml">
-	<a href="https://github.com/DeflatedPickle/Rawky/wiki"><img src="https://img.shields.io/badge/wiki-documentation-forestgreen"></a>
+	<a href="https://github.com/DeflatedPickle/Rawky/wiki"><img alt="Wiki" src="https://img.shields.io/badge/wiki-documentation-forestgreen"></a>
 </p>
 
 <p align="center">

@@ -14,5 +14,4 @@ data class TiledViewSettings(
     @IntRange(0, 16) var columns: Int = 3,
     @DoubleRange(0.0, 16.0) var xPadding: Double = 0.0,
     @DoubleRange(0.0, 16.0) var yPadding: Double = 0.0,
-    @DoubleRange(0.1, 16.0) var scale: Double = 0.4,
 ) : Config

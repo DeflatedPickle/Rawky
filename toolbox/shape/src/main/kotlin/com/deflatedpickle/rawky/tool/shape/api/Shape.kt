@@ -10,8 +10,10 @@ import javax.swing.ImageIcon
 abstract class Shape(
     name: String,
     icon: ImageIcon,
-) : Tool(name, icon) {
+) : Tool<Nothing>(name, icon) {
     companion object : HasRegistry<String, Shape> {
         override val registry = Registry<String, Shape>()
     }
+
+    override fun getSettings() = null
 }

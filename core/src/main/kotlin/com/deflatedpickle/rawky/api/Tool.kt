@@ -9,15 +9,15 @@ import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.event.EventChangeTool
 import javax.swing.ImageIcon
 
-abstract class Tool(
+abstract class Tool<T>(
     override val name: String,
     val icon: ImageIcon,
 ) : HasName {
-    companion object : HasRegistry<String, Tool>, HasCurrent<Tool> {
-        override val registry = Registry<String, Tool>()
+    companion object : HasRegistry<String, Tool<*>>, HasCurrent<Tool<*>> {
+        override val registry = Registry<String, Tool<*>>()
 
         const val defaultSize = 32
-        override lateinit var current: Tool
+        override lateinit var current: Tool<*>
 
         init {
             EventCreateDocument.addListener {
@@ -40,6 +40,9 @@ abstract class Tool(
         dragged: Boolean,
         clickCount: Int,
     )
+
+    abstract fun getSettings(): T?
+    open fun getQuickSettings(): List<String> = listOf()
 
     override fun toString() = name
 }

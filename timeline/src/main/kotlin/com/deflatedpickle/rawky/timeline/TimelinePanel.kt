@@ -5,9 +5,13 @@
 package com.deflatedpickle.rawky.timeline
 
 import com.deflatedpickle.haruhi.component.PluginPanel
+import com.deflatedpickle.haruhi.event.EventImportDocument
+import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.impex.Importer
+import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.dialog.EditFrameDialog
@@ -21,6 +25,7 @@ import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.event.packet.PacketChange
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
+import com.deflatedpickle.rawky.util.DnDUtil
 import com.deflatedpickle.rawky.util.DrawUtil
 import com.deflatedpickle.undulation.functions.AbstractButton
 import com.deflatedpickle.undulation.functions.extensions.add
@@ -31,6 +36,13 @@ import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
+import java.awt.datatransfer.DataFlavor
+import java.awt.dnd.DnDConstants
+import java.awt.dnd.DropTargetAdapter
+import java.awt.dnd.DropTargetDragEvent
+import java.awt.dnd.DropTargetDropEvent
+import java.io.File
+import java.io.IOException
 import javax.swing.BoxLayout
 import javax.swing.DefaultListModel
 import javax.swing.JLabel
@@ -256,6 +268,55 @@ object TimelinePanel : PluginPanel() {
 
             cellRenderer = listCellRenderer
         }
+
+    private val dropTargetAdapter = object : DropTargetAdapter() {
+        override fun dragOver(dtde: DropTargetDragEvent) {
+            try {
+                when {
+                    DnDUtil.isDnDAnImage(dtde.transferable) -> dtde.acceptDrag(DnDConstants.ACTION_COPY)
+                    else -> dtde.rejectDrag()
+                }
+            } catch (_: IOException) {
+            }
+        }
+
+        override fun drop(dtde: DropTargetDropEvent) {
+            when {
+                dtde.transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor) -> {
+                    dtde.acceptDrop(DnDConstants.ACTION_COPY)
+
+                    if (DnDUtil.isDnDAnImage(dtde.transferable)) {
+                        val transferable = (dtde.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<File>)
+                            .first()
+
+                        if (RawkyPlugin.document == null) {
+                            for ((_, v) in Opener.registry) {
+                                if (transferable.extension in v.openerExtensions.flatMap { it.value }) {
+                                    RawkyPlugin.document = v.open(transferable).apply { this.name = transferable.nameWithoutExtension }
+                                    EventOpenDocument.trigger(Pair(RawkyPlugin.document!!, transferable))
+
+                                    break
+                                }
+                            }
+                        } else {
+                            for ((_, v) in Importer.registry) {
+                                if (transferable.extension in v.importerExtensions.flatMap { it.value }) {
+                                    v.import(RawkyPlugin.document!!, transferable,)
+                                    EventImportDocument.trigger(Pair(RawkyPlugin.document!!, transferable))
+
+                                    break
+                                }
+                            }
+                        }
+
+                        dtde.dropComplete(true)
+                    }
+                }
+            }
+
+            dtde.rejectDrop()
+        }
+    }
 
     init {
         layout = BorderLayout()

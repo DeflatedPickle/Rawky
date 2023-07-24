@@ -40,7 +40,7 @@ import javax.swing.SwingUtilities
     settings = BucketSettings::class,
 )
 object BucketPlugin :
-    Tool(
+    Tool<BucketSettings>(
         name = "Bucket",
         icon = MonoIcon.PAINT_BUCKET,
     ) {
@@ -132,4 +132,7 @@ object BucketPlugin :
             }
         }
     }
+
+    override fun getSettings(): BucketSettings? = ConfigUtil.getSettings("deflatedpickle@bucket#*")
+    override fun getQuickSettings() = listOf("fill")
 }

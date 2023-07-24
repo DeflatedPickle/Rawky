@@ -59,7 +59,7 @@ object PixelGridCursorLayerPlugin : PaintLayer {
 
         if (Tool.isToolValid() && MouseInfo.getPointerInfo() != null) {
             val point = MouseInfo.getPointerInfo().location
-            SwingUtilities.convertPointFromScreen(point, PixelGridPanel)
+            SwingUtilities.convertPointFromScreen(point, PixelGridPanel.panel)
 
             g.drawImage(
                 Tool.current.icon.image.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING),

@@ -36,7 +36,7 @@ import java.awt.Graphics2D
     settings = LineSettings::class,
 )
 object LinePlugin :
-    Tool(
+    Tool<LineSettings>(
         name = "Line",
         icon = MonoIcon.LINE,
     ),
@@ -142,4 +142,7 @@ object LinePlugin :
             }
         }
     }
+
+    override fun getSettings(): LineSettings? = ConfigUtil.getSettings("deflatedpickle@line#*")
+    override fun getQuickSettings() = listOf("mode")
 }

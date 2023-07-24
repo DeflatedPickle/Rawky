@@ -28,7 +28,7 @@ import java.awt.Graphics2D
     settings = PencilSettings::class,
 )
 object PencilPlugin :
-    Tool(
+    Tool<PencilSettings>(
         name = "Pencil",
         icon = MonoIcon.PENCIL,
     ) {
@@ -50,10 +50,8 @@ object PencilPlugin :
                         for (column in 0 downTo -it.size + 1) {
                             for (row in 0 downTo -it.size + 1) {
                                 try {
-                                    val x = if (it.size > 1) 1 else 0
-
                                     CellProvider.current.perform(
-                                        cell.grid[cell.row + row + x, cell.column + column],
+                                        cell.grid[cell.row + row, cell.column + column],
                                         button,
                                         dragged,
                                         clickCount,
@@ -73,4 +71,7 @@ object PencilPlugin :
 
         ActionStack.push(action)
     }
+
+    override fun getSettings(): PencilSettings? = ConfigUtil.getSettings("deflatedpickle@pencil#*")
+    override fun getQuickSettings() = listOf("size")
 }

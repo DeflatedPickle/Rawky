@@ -50,7 +50,7 @@ object ToolboxPlugin {
                         type = ButtonType.TOGGLE,
                     ) {
                         Tool.current = v
-                        // EventChangeTool.trigger(v)
+                        EventChangeTool.trigger(v)
                     }
                     .also { group.add(it) }
             }

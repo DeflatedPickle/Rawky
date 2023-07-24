@@ -53,7 +53,7 @@ object MousePlugin : Mode("Mouse", 1) {
 
                     MouseInfo.getPointerInfo()?.let {
                         val point = MouseInfo.getPointerInfo().location
-                        SwingUtilities.convertPointFromScreen(point, PixelGridPanel)
+                        SwingUtilities.convertPointFromScreen(point, PixelGridPanel.panel)
 
                         PixelGridPanel.selectedCells.clear()
 

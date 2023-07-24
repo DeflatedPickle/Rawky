@@ -6,7 +6,6 @@ package com.deflatedpickle.rawky.layerlist
 
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.util.PluginUtil
-import com.deflatedpickle.marvin.function.println
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.collection.Grid

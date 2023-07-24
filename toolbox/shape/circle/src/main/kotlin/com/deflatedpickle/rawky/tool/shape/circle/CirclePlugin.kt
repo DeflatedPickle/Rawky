@@ -38,14 +38,14 @@ object CirclePlugin :
         icon = MonoIcon.SHAPE_OVAL,
     ),
     Painter<Any> {
-    private var firstCell: Cell<out Any>? = null
+    private var firstCell: Cell<Any>? = null
 
     init {
         registry["deflatedpickle@$name"] = this
     }
 
     override fun perform(
-        cell: Cell<out Any>,
+        cell: Cell<Any>,
         button: Int,
         dragged: Boolean,
         clickCount: Int,
@@ -90,7 +90,7 @@ object CirclePlugin :
         }
     }
 
-    override fun paint(hoverCell: Cell<out Any>, graphics: Graphics2D) {
+    override fun paint(hoverCell: Cell<Any>, graphics: Graphics2D) {
         firstCell?.let { cell ->
             graphics.stroke = BasicStroke(4f)
 

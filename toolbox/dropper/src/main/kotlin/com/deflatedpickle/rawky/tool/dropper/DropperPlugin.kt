@@ -28,7 +28,7 @@ import java.awt.Graphics2D
     dependencies = ["deflatedpickle@core#1.0.0"],
 )
 object DropperPlugin :
-    Tool(
+    Tool<Nothing>(
         name = "Dropper",
         icon = MonoIcon.COLOUR_PICKER,
     ) {
@@ -56,4 +56,6 @@ object DropperPlugin :
 
         ActionStack.push(action)
     }
+
+    override fun getSettings() = null
 }

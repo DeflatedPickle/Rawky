@@ -13,7 +13,7 @@ data class User(
     var role: Role = Role.USER,
     val mousePosition: Point = originPoint,
     var colour: Color = Cell.defaultColour,
-    var tool: Tool = Tool.registry.values.first(),
+    var tool: Tool<*> = Tool.registry.values.first(),
 ) {
     companion object {
         val originPoint = Point(0, 0)

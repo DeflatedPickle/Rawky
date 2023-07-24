@@ -10,8 +10,8 @@ import com.esotericsoftware.kryonet.Server
 
 data class QueryChangeTool(
     val id: Int = -1,
-    val oldTool: Tool? = null,
-    val newTool: Tool? = null,
+    val oldTool: Tool<*>? = null,
+    val newTool: Tool<*>? = null,
 ) : Query() {
     override fun runServer(connection: Connection, server: Server) {
         server.sendToAllTCP(this)

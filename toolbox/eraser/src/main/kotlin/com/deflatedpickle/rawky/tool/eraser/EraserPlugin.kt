@@ -26,7 +26,7 @@ import java.awt.Graphics2D
     dependencies = ["deflatedpickle@core#1.0.0"],
 )
 object EraserPlugin :
-    Tool(
+    Tool<Nothing>(
         name = "Eraser",
         icon = MonoIcon.ERASER,
     ) {
@@ -57,4 +57,6 @@ object EraserPlugin :
 
         ActionStack.push(action)
     }
+
+    override fun getSettings() = null
 }
