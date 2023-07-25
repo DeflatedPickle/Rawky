@@ -9,6 +9,7 @@ import ModernDocking.layouts.DockingLayouts
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventImportDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
@@ -21,11 +22,19 @@ import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.api.impex.Importer
 import com.deflatedpickle.rawky.api.impex.Opener
+import com.deflatedpickle.rawky.event.EventUpdateCell
+import com.deflatedpickle.rawky.launcher.gui.Window
+import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.util.ActionUtil
 import com.deflatedpickle.undulation.functions.extensions.add
 import com.deflatedpickle.undulation.widget.LimitedMenu
 import org.oxbow.swingbits.dialog.task.TaskDialogs
 import java.io.File
+import java.time.ZoneId
+import java.time.chrono.Chronology
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
+import java.util.Locale
 import javax.swing.JFileChooser
 import javax.swing.JMenu
 import javax.swing.filechooser.FileNameExtensionFilter
@@ -45,6 +54,11 @@ import javax.swing.filechooser.FileNameExtensionFilter
 @Suppress("unused")
 object LauncherPlugin {
     val folder = (File(".") / "layout").apply { mkdirs() }
+
+    val dateTimeFormatter: DateTimeFormatter = DateTimeFormatter
+        .ofLocalizedDateTime(FormatStyle.SHORT)
+        .withLocale(Locale.getDefault())
+        .withZone(ZoneId.systemDefault())
 
     private val exporterChooser =
         JFileChooser(File(".")).apply {
@@ -118,6 +132,48 @@ object LauncherPlugin {
             saveLayouts()
             loadUserLayouts()
         }
+
+        EventCreateDocument.addListener {
+            RawkyPlugin.document?.let { doc ->
+                doc.dirty = false
+
+                Window.title = "untitled - Rawky"
+            }
+        }
+
+        EventOpenDocument.addListener {
+            RawkyPlugin.document?.let { doc ->
+                doc.dirty = false
+
+                doc.path?.let { path ->
+                    Window.title = "${path.name} - Rawky"
+                }
+            }
+        }
+
+        EventSaveDocument.addListener {
+            RawkyPlugin.document?.let { doc ->
+                doc.dirty = false
+
+                doc.path?.let { path ->
+                    Window.title = "${path.name} - Rawky"
+                }
+            }
+        }
+
+        EventUpdateCell.addListener {
+            RawkyPlugin.document?.let { doc ->
+                doc.dirty = true
+
+                val path = doc.path
+
+                if (path != null) {
+                    Window.title = "${path.name}* - Rawky"
+                } else {
+                    Window.title = "untitled* - Rawky"
+                }
+            }
+        }
     }
 
     fun open(file: File) {
@@ -127,7 +183,8 @@ object LauncherPlugin {
             if (file.extension in v.openerExtensions.flatMap { it.value }) {
                 none = false
 
-                RawkyPlugin.document = v.open(file).apply { this.name = file.nameWithoutExtension }
+                RawkyPlugin.document = v.open(file)
+                    .apply { this.path = file.absoluteFile }
                 EventOpenDocument.trigger(Pair(RawkyPlugin.document!!, file))
 
                 break
@@ -180,8 +237,8 @@ object LauncherPlugin {
 
                 if (doc != null) {
                     v.export(doc, file)
+                    doc.path = file.absoluteFile
                     EventSaveDocument.trigger(Pair(doc, file))
-                    doc.name = file.nameWithoutExtension
                 } else {
                     TaskDialogs.error(Haruhi.window, "Invalid Document", "No document exists to export")
                 }

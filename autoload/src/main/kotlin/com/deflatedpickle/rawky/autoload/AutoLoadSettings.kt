@@ -10,7 +10,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import java.io.File
 
-@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class AutoLoadSettings(
     override val version: Int = 1,

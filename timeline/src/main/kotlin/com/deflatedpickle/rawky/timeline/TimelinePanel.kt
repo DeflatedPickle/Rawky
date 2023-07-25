@@ -292,7 +292,8 @@ object TimelinePanel : PluginPanel() {
                         if (RawkyPlugin.document == null) {
                             for ((_, v) in Opener.registry) {
                                 if (transferable.extension in v.openerExtensions.flatMap { it.value }) {
-                                    RawkyPlugin.document = v.open(transferable).apply { this.name = transferable.nameWithoutExtension }
+                                    RawkyPlugin.document = v.open(transferable)
+                                        .apply { this.path = transferable.absoluteFile }
                                     EventOpenDocument.trigger(Pair(RawkyPlugin.document!!, transferable))
 
                                     break

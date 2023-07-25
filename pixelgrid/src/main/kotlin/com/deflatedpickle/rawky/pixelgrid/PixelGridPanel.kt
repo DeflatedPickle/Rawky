@@ -23,7 +23,6 @@ import java.awt.Component
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.datatransfer.DataFlavor
-import java.awt.datatransfer.Transferable
 import java.awt.dnd.DnDConstants
 import java.awt.dnd.DropTarget
 import java.awt.dnd.DropTargetAdapter
@@ -128,7 +127,8 @@ object PixelGridPanel : PluginPanel() {
                         if (RawkyPlugin.document == null) {
                             for ((_, v) in Opener.registry) {
                                 if (transferable.extension in v.openerExtensions.flatMap { it.value }) {
-                                    RawkyPlugin.document = v.open(transferable).apply { this.name = transferable.nameWithoutExtension }
+                                    RawkyPlugin.document = v.open(transferable)
+                                        .apply { this.path = transferable.absoluteFile }
                                     EventOpenDocument.trigger(Pair(RawkyPlugin.document!!, transferable))
 
                                     break
@@ -137,7 +137,7 @@ object PixelGridPanel : PluginPanel() {
                         } else {
                             for ((_, v) in Importer.registry) {
                                 if (transferable.extension in v.importerExtensions.flatMap { it.value }) {
-                                    v.import(RawkyPlugin.document!!, transferable,)
+                                    v.import(RawkyPlugin.document!!, transferable)
                                     EventImportDocument.trigger(Pair(RawkyPlugin.document!!, transferable))
 
                                     break
