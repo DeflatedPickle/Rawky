@@ -14,7 +14,7 @@ import com.deflatedpickle.marvin.extensions.get
 import com.deflatedpickle.marvin.extensions.set
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
-import com.deflatedpickle.rawky.pixelgrid.api.Mode
+import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.pixelgrid.mode.keyboard.dialog.KeyboardDialog
 import com.deflatedpickle.rawky.pixelgrid.mode.keyboard.util.KeyCombo
 import org.jdesktop.swingx.JXButton
@@ -40,7 +40,8 @@ import java.awt.event.MouseEvent
     ],
     settings = KeyboardSettings::class,
 )
-object KeyboardPlugin : Mode("Keyboard") {
+object KeyboardPlugin : ControlMode() {
+    override val name = "Keyboard"
     val point = Point(0, 0)
 
     private val adapter =

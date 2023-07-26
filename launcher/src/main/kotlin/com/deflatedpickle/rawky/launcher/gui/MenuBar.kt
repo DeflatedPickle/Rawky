@@ -131,7 +131,12 @@ object MenuBar : JMenuBar() {
 
     private fun populateViewMenu() {
         viewMenu.apply {
-            add("Fullscreen", accelerator = KeyStroke.getKeyStroke("F11"), message = "Toggle fullscreen view", type = MenuButtonType.CHECK) {
+            add(
+                "Fullscreen",
+                accelerator = KeyStroke.getKeyStroke("F11"),
+                message = "Toggle fullscreen view",
+                type = MenuButtonType.CHECK
+            ) {
                 if ((it.source as AbstractButton).isSelected) {
                     Window.getScreenDevice()?.fullScreenWindow = Window
                 } else {

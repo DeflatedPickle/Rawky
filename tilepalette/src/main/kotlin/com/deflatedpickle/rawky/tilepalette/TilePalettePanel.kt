@@ -11,6 +11,7 @@ import com.deflatedpickle.rawky.tilecell.TileCellPlugin
 import com.deflatedpickle.undulation.constraints.FillBothFinishLine
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.widget.ImageButton
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator
 import so.n0weak.ExtendedComboBox
 import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.GridBagLayout
@@ -30,6 +31,8 @@ import javax.swing.JScrollPane
 object TilePalettePanel : PluginPanel() {
     val combo =
         ExtendedComboBox().apply {
+            AutoCompleteDecorator.decorate(this)
+
             addItemListener {
                 when (it.stateChange) {
                     ItemEvent.SELECTED -> {

@@ -11,7 +11,7 @@ import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
-import com.deflatedpickle.rawky.pixelgrid.api.Mode
+import com.deflatedpickle.rawky.api.ControlMode
 import net.java.games.input.Component.Identifier.Axis
 import net.java.games.input.Component.Identifier.Button
 import net.java.games.input.Component.POV
@@ -32,7 +32,8 @@ import java.awt.event.MouseEvent
         "deflatedpickle@pixel_grid#*",
     ],
 )
-object GamepadPlugin : Mode("Gamepad") {
+object GamepadPlugin : ControlMode() {
+    override val name = "Gamepad"
     val point = Point(0, 0)
 
     override fun apply() {

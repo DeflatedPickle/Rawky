@@ -16,6 +16,7 @@ import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateCell
+import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.util.DnDUtil
 import java.awt.BorderLayout
@@ -90,9 +91,9 @@ object PixelGridPanel : PluginPanel() {
                         val temp = bufferedImage.createGraphics()
 
                         for ((i, layer) in frame.children.withIndex()) {
-                            if (layer.visible) {
-                                v.paint(doc, doc.selectedIndex, i, temp)
-                            }
+                            if (v.layer == LayerCategory.GRID && !layer.visible) continue
+
+                            v.paint(doc, doc.selectedIndex, i, temp)
                         }
 
                         temp.dispose()

@@ -212,12 +212,21 @@ object TimelinePanel : PluginPanel() {
                                 )
                                 g2D.scale(factor, factor)
 
+                                for (
+                                v in
+                                PaintLayer.registry.getAll().values.filter {
+                                    it.layer == LayerCategory.BACKGROUND
+                                }
+                                ) {
+                                    v.paint(doc, index, -1, g2D)
+                                }
+
                                 for ((l, layer) in value.children.reversed().withIndex()) {
                                     if (layer.visible) {
                                         for (
                                         v in
                                         PaintLayer.registry.getAll().values.filter {
-                                            it.layer == LayerCategory.GRID || it.layer == LayerCategory.BACKGROUND
+                                            it.layer == LayerCategory.GRID
                                         }
                                         ) {
                                             v.paint(doc, index, l, g2D)

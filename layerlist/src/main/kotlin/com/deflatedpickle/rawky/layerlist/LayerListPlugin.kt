@@ -55,7 +55,7 @@ object LayerListPlugin {
             LayerListPanel.model.removeAll()
 
             for (i in it.new.children) {
-                LayerListPanel.model.insertRow(0, arrayOf(null, i.name, i.visible, i.lock))
+                LayerListPanel.model.insertRow(0, arrayOf(i, i.name, i.visible, i.lock))
             }
 
             triggerButtons()
@@ -66,7 +66,7 @@ object LayerListPlugin {
 
     private fun createInitialLayers(it: RawkyDocument) {
         for (i in it.children[0].children) {
-            LayerListPanel.model.insertRow(0, arrayOf(null, i.name, i.visible, i.lock))
+            LayerListPanel.model.insertRow(0, arrayOf(i, i.name, i.visible, i.lock))
         }
     }
 

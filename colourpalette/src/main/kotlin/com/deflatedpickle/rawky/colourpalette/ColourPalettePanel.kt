@@ -12,6 +12,7 @@ import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
 import com.deflatedpickle.undulation.constraints.FillBothFinishLine
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.widget.ColourButton
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator
 import so.n0weak.ExtendedComboBox
 import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.Color
@@ -31,6 +32,8 @@ import javax.swing.JScrollPane
 object ColourPalettePanel : PluginPanel() {
     val combo =
         ExtendedComboBox().apply {
+            AutoCompleteDecorator.decorate(this)
+
             addItemListener {
                 when (it.stateChange) {
                     ItemEvent.SELECTED -> {

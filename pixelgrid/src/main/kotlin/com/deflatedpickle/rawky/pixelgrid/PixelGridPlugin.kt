@@ -14,10 +14,9 @@ import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.marvin.extensions.get
 import com.deflatedpickle.marvin.extensions.set
+import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateGrid
-import com.deflatedpickle.rawky.pixelgrid.api.Mode
-import com.deflatedpickle.rawky.pixelgrid.setting.PixelGridSettings
 import kotlinx.serialization.ExperimentalSerializationApi
 import java.awt.Component
 import java.awt.event.ItemEvent
@@ -40,8 +39,7 @@ import javax.swing.SwingUtilities
     dependencies =
     [
         "deflatedpickle@core#*",
-    ],
-    settings = PixelGridSettings::class,
+    ]
 )
 @Suppress("unused")
 object PixelGridPlugin {
@@ -57,23 +55,23 @@ object PixelGridPlugin {
         EventProgramFinishSetup.addListener {
             (RegistryUtil.get("setting_type") as Registry<String, (Plugin, String, Any) -> Component>?)
                 ?.let { registry ->
-                    registry.register(Mode::class.qualifiedName!!) { plugin, name, instance ->
-                        JComboBox<Mode>().apply {
+                    registry.register(ControlMode::class.qualifiedName!!) { plugin, name, instance ->
+                        JComboBox<ControlMode>().apply {
                             SwingUtilities.invokeLater {
-                                for ((_, v) in Mode.registry) {
+                                for ((_, v) in ControlMode.registry) {
                                     addItem(v)
                                 }
 
-                                selectedItem = instance.get<Mode>(name)
+                                selectedItem = instance.get<ControlMode>(name)
 
                                 addItemListener {
                                     when (it.stateChange) {
                                         ItemEvent.DESELECTED -> {
-                                            (it.item as Mode).remove()
+                                            (it.item as ControlMode).remove()
                                         }
                                         ItemEvent.SELECTED -> {
                                             instance.set(name, it.item)
-                                            (it.item as Mode).apply()
+                                            (it.item as ControlMode).apply()
                                             ConfigUtil.serializeConfig(plugin)
                                         }
                                     }

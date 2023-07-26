@@ -9,6 +9,7 @@ import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.collection.Grid
+import com.deflatedpickle.rawky.collection.Layer
 import com.deflatedpickle.rawky.dialog.EditLayerDialog
 import com.deflatedpickle.rawky.dialog.NewLayerDialog
 import com.deflatedpickle.rawky.event.EventChangeLayer
@@ -58,7 +59,7 @@ object LayerListPanel : PluginPanel() {
                             // layerDialog.indexInput.value as Int
                         )
 
-                    model.insertRow(0, arrayOf(null, layerDialog.nameInput.text, true, false))
+                    model.insertRow(0, arrayOf(layer, layerDialog.nameInput.text, true, false))
                     table.setRowSelectionInterval(0, 0)
 
                     EventNewLayer.trigger(layer)
@@ -176,28 +177,27 @@ object LayerListPanel : PluginPanel() {
         }
 
     private val columnZeroRenderer =
-        TableCellRenderer { _: JTable, _: Any?, _: Boolean, _: Boolean, row: Int, _: Int ->
+        TableCellRenderer { _: JTable, value: Any?, _: Boolean, _: Boolean, row: Int, _: Int ->
             object : JPanel() {
                 override fun paintComponent(g: Graphics) {
-                    if (RawkyPlugin.document == null) return
+                    val doc = RawkyPlugin.document ?: return
+                    val l = value as Layer
 
                     val g2D = g as Graphics2D
 
-                    RawkyPlugin.document?.let { doc ->
-                        val factor = DrawUtil.getScaleFactor(
-                            width.toDouble() / Grid.pixel, height.toDouble() / Grid.pixel,
-                            doc.columns.toDouble(), doc.rows.toDouble()
-                        )
-                        g2D.scale(factor, factor)
+                    val factor = DrawUtil.getScaleFactor(
+                        width.toDouble() / Grid.pixel, height.toDouble() / Grid.pixel,
+                        doc.columns.toDouble(), doc.rows.toDouble()
+                    )
+                    g2D.scale(factor, factor)
 
-                        for (
-                        v in
-                        PaintLayer.registry.getAll().values.filter {
-                            it.layer == LayerCategory.GRID || it.layer == LayerCategory.BACKGROUND
-                        }
-                        ) {
-                            v.paint(doc, doc.selectedIndex, row, g2D)
-                        }
+                    for (
+                    v in
+                    PaintLayer.registry.getAll().values.filter {
+                        it.layer == LayerCategory.GRID || it.layer == LayerCategory.BACKGROUND
+                    }
+                    ) {
+                        v.paint(doc, doc.selectedIndex, doc.children[doc.selectedIndex].children.indexOf(l), g2D)
                     }
                 }
             }
@@ -242,7 +242,7 @@ object LayerListPanel : PluginPanel() {
 
                         val oldLayer = frame.children[frame.selectedIndex]
                         frame.selectedIndex =
-                            min(frame.children.size - 1, selectionModel.anchorSelectionIndex)
+                            min(frame.children.lastIndex, selectionModel.anchorSelectionIndex)
 
                         val newLayer = frame.children[frame.selectedIndex]
                         val grid = newLayer.child

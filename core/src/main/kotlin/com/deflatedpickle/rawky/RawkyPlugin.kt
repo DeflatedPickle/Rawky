@@ -4,6 +4,7 @@
 
 package com.deflatedpickle.rawky
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
@@ -21,9 +22,11 @@ import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.setting.RawkySettings
 import com.deflatedpickle.undulation.api.MenuButtonType.CHECK
 import com.deflatedpickle.undulation.functions.extensions.add
+import com.deflatedpickle.undulation.functions.extensions.getScreenDevice
 import kotlinx.serialization.json.Json
 import so.jabber.FileUtils
 import java.io.File
+import javax.swing.AbstractButton
 import javax.swing.JCheckBoxMenuItem
 import javax.swing.JMenu
 
@@ -75,20 +78,18 @@ object RawkyPlugin {
         EventProgramFinishSetup.addListener {
             RegistryUtil.get(MenuCategory.MENU.name)?.apply {
                 (get(MenuCategory.TOOLS.name) as JMenu).apply {
-                    ConfigUtil.getSettings<RawkySettings>("deflatedpickle@core#*")?.let {
-                        add("Debug", type = CHECK) { a ->
-                            it.debug.enabled = !(a.source as JCheckBoxMenuItem).state
+                    add("Debug", type = CHECK) { a ->
+                        Haruhi.isInDev = (a.source as JCheckBoxMenuItem).isSelected
 
-                            document?.let { doc ->
-                                val frame = doc.children[doc.selectedIndex]
-                                val layer = frame.children[frame.selectedIndex]
-                                val grid = layer.child
+                        document?.let { doc ->
+                            val frame = doc.children[doc.selectedIndex]
+                            val layer = frame.children[frame.selectedIndex]
+                            val grid = layer.child
 
-                                EventUpdateGrid.trigger(grid)
-                            }
-
-                            ConfigUtil.serializeConfig(PluginUtil.slugToPlugin("deflatedpickle@core#*")!!)
+                            EventUpdateGrid.trigger(grid)
                         }
+                    }.apply {
+                        isSelected = Haruhi.isInDev
                     }
                 }
             }

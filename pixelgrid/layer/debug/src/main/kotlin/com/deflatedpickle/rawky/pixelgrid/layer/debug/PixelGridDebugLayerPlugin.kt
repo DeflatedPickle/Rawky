@@ -4,6 +4,7 @@
 
 package com.deflatedpickle.rawky.pixelgrid.layer.debug
 
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
@@ -46,10 +47,8 @@ object PixelGridDebugLayerPlugin : PaintLayer {
         doc?.let {
             if (doc.selectedIndex >= doc.children.size) return
 
-            ConfigUtil.getSettings<RawkySettings>("deflatedpickle@core#*")?.let {
-                if (it.debug.enabled) {
-                    drawDebug(g2d, doc)
-                }
+            if (Haruhi.isInDev) {
+                drawDebug(g2d, doc)
             }
         }
     }
@@ -61,7 +60,7 @@ object PixelGridDebugLayerPlugin : PaintLayer {
 
         ConfigUtil.getSettings<RawkySettings>("deflatedpickle@core#*")?.let {
             g.color = it.debug.colour
-            g.font = it.debug.font
+            // g.font = it.debug.font
         }
 
         g.drawString("grid: ${grid.rows}x${grid.columns}", 5, g.fontMetrics.height + 5)

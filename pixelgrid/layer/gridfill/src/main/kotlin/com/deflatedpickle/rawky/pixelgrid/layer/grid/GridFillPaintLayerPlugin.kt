@@ -15,6 +15,7 @@ import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.util.DrawUtil
 import kotlinx.serialization.ExperimentalSerializationApi
 import java.awt.Graphics2D
+import kotlin.math.min
 
 @ExperimentalSerializationApi
 @Plugin(
@@ -46,7 +47,7 @@ object GridFillPaintLayerPlugin : PaintLayer {
             if (doc.selectedIndex >= doc.children.size) return
 
             val f = doc.children[frame]
-            val l = f.children[layer]
+            val l = f.children[min(layer, f.children.lastIndex)]
 
             DrawUtil.paintGridFill(g2d, l.child)
         }

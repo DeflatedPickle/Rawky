@@ -19,6 +19,7 @@ import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.marvin.extensions.div
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.api.impex.Importer
 import com.deflatedpickle.rawky.api.impex.Opener
@@ -185,6 +186,17 @@ object LauncherPlugin {
 
                 RawkyPlugin.document = v.open(file)
                     .apply { this.path = file.absoluteFile }
+
+                val mode = RawkyPlugin.document!!.controlMode
+                if (mode != null) {
+                    ControlMode.current = mode
+                } else {
+                    ControlMode.current = ControlMode.default
+                    RawkyPlugin.document!!.controlMode = ControlMode.current
+                }
+
+                ControlMode.current.apply()
+
                 EventOpenDocument.trigger(Pair(RawkyPlugin.document!!, file))
 
                 break
@@ -207,6 +219,7 @@ object LauncherPlugin {
             if (file.extension in v.importerExtensions.flatMap { it.value }) {
                 none = false
 
+                // FIXME: the menu item should be disabled when there is no document
                 v.import(
                     RawkyPlugin.document
                         ?: ActionUtil.newDocument(16, 16, 1, 1).apply { RawkyPlugin.document = this },

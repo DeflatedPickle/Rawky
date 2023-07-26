@@ -6,10 +6,15 @@ package com.deflatedpickle.rawky.setting
 
 import com.deflatedpickle.haruhi.api.util.Document
 import com.deflatedpickle.marvin.serializer.NullableFileSerializer
+import com.deflatedpickle.rawky.api.CellProvider
+import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.api.relation.ChildSelector
 import com.deflatedpickle.rawky.api.relation.MultiParent
 import com.deflatedpickle.rawky.api.template.Guide
 import com.deflatedpickle.rawky.collection.Frame
+import com.deflatedpickle.rawky.serializer.CellProviderSerializer
+import com.deflatedpickle.rawky.serializer.ControlModeSerializer
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.io.File
@@ -22,7 +27,12 @@ data class RawkyDocument(
     File? = null,
     var rows: Int = -1,
     var columns: Int = -1,
-    var cellProvider: String = "",
+    var cellProvider:
+    @Serializable(CellProviderSerializer::class)
+    CellProvider<out @Contextual Any>? = null,
+    var controlMode:
+    @Serializable(ControlModeSerializer::class)
+    ControlMode? = null,
     override var selectedIndex: Int = 0,
     override val children: MutableList<Frame>,
     var guides: List<Guide> = listOf(),

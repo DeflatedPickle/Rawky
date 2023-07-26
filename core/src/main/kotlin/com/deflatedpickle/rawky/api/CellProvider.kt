@@ -8,9 +8,13 @@ import kotlinx.serialization.Contextual
 import java.awt.Graphics2D
 
 abstract class CellProvider<T> : Provider<Cell<T>>, HasName {
-    companion object : HasRegistry<String, CellProvider<out Any>>, HasCurrent<CellProvider<out Any>> {
+    companion object :
+        HasRegistry<String, CellProvider<out Any>>,
+        HasCurrent<CellProvider<out Any>>,
+        HasDefault<CellProvider<out Any>> {
         override val registry = Registry<String, CellProvider<out Any>>()
         override lateinit var current: CellProvider<out Any>
+        override lateinit var default: CellProvider<out Any>
     }
 
     abstract var current: @UnsafeVariance T

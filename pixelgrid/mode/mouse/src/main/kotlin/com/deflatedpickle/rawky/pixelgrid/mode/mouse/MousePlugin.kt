@@ -8,7 +8,7 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
-import com.deflatedpickle.rawky.pixelgrid.api.Mode
+import com.deflatedpickle.rawky.api.ControlMode
 import java.awt.MouseInfo
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
@@ -28,7 +28,9 @@ import javax.swing.SwingUtilities
         "deflatedpickle@pixel_grid#*",
     ],
 )
-object MousePlugin : Mode("Mouse", 1) {
+object MousePlugin : ControlMode() {
+    override val name = "Mouse"
+
     private val adapter =
         object : MouseAdapter() {
             fun click(e: MouseEvent, dragged: Boolean) {
@@ -97,5 +99,7 @@ object MousePlugin : Mode("Mouse", 1) {
 
     init {
         registry[name] = this
+
+        default = this
     }
 }
