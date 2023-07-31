@@ -7,6 +7,7 @@ package com.deflatedpickle.rawky.setting
 import com.deflatedpickle.haruhi.api.util.Document
 import com.deflatedpickle.marvin.serializer.NullableFileSerializer
 import com.deflatedpickle.rawky.api.CellProvider
+import com.deflatedpickle.rawky.api.ColourChannel
 import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.api.relation.ChildSelector
 import com.deflatedpickle.rawky.api.relation.MultiParent
@@ -27,6 +28,7 @@ data class RawkyDocument(
     File? = null,
     var rows: Int = -1,
     var columns: Int = -1,
+    var colourChannel: ColourChannel = ColourChannel.ARGB,
     var cellProvider:
     @Serializable(CellProviderSerializer::class)
     CellProvider<out @Contextual Any>? = null,

@@ -14,13 +14,19 @@ import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
 import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
+import com.deflatedpickle.rawky.pixelgrid.export.image.imageio.dialog.ExportImageDialog
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.util.ActionUtil
+import org.oxbow.swingbits.dialog.task.TaskDialog
 import org.oxbow.swingbits.dialog.task.TaskDialogs
 import java.awt.Color
 import java.awt.image.BufferedImage
 import java.io.File
+import javax.imageio.IIOImage
 import javax.imageio.ImageIO
+import javax.imageio.ImageTypeSpecifier
+import javax.imageio.ImageWriteParam
+import javax.imageio.stream.FileImageOutputStream
 
 @Plugin(
     value = "imageio",
@@ -82,7 +88,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
                     "HDRsoft High Dynamic Range" to listOf("hdr"),
                     "Lossless JPEG" to listOf("jpg", "ljpg", "ljpeg"),
                     "ZSoft Paintbrush" to listOf("pcx"),
-                    "Zsoft Multi-Page Paintbrush" to listOf("dcx"),
+                    "ZSoft Multi-Page Paintbrush" to listOf("dcx"),
                     "MacPaint Graphic" to listOf("pntg"),
                     "NetPBM Portable Bit Map" to listOf("pbm"),
                     "NetPBM Portable Grey Map" to listOf("pgm"),
@@ -97,12 +103,32 @@ object ImageIOPlugin : Exporter, Importer, Opener {
     }
 
     override fun export(doc: RawkyDocument, file: File) {
+        val writer = ImageIO.getImageWritersByFormatName(file.extension).next()
+        val parameters = writer.defaultWriteParam.apply {
+            if (canWriteCompressed()) compressionMode = ImageWriteParam.MODE_EXPLICIT
+            if (canWriteProgressive()) progressiveMode = ImageWriteParam.MODE_DEFAULT
+        }
+        val type = ImageTypeSpecifier.createFromBufferedImageType(doc.colourChannel.code)
+        val metadata = writer.getDefaultImageMetadata(type, parameters)
+
+        if (parameters.canWriteCompressed() || metadata != null) {
+            val dialog = ExportImageDialog(parameters, metadata)
+            dialog.isVisible = true
+
+            if (dialog.result == TaskDialog.StandardCommand.OK) {
+                parameters.compressionType = dialog.compressionType.selectedItem as String
+                parameters.compressionQuality = dialog.compressionQualitySlider.value
+            } else {
+                return
+            }
+        }
+
         val frame = doc.children[0]
         val layers = frame.children
         val grid = frame.children[0].child
 
         val image =
-            BufferedImage(grid.columns, grid.rows, BufferedImage.TYPE_INT_ARGB).apply {
+            BufferedImage(grid.columns, grid.rows, doc.colourChannel.code).apply {
                 for (row in 0 until this.height) {
                     for (column in 0 until this.width) {
                         for (layer in layers.reversed()) {
@@ -112,7 +138,8 @@ object ImageIOPlugin : Exporter, Importer, Opener {
                 }
             }
 
-        ImageIO.write(image, file.extension, file)
+        writer.output = FileImageOutputStream(file)
+        writer.write(null, IIOImage(image, listOf(image), metadata), parameters)
     }
 
     override fun import(document: RawkyDocument, file: File) {

@@ -36,6 +36,7 @@ import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
+import java.awt.RenderingHints
 import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.DnDConstants
 import java.awt.dnd.DropTargetAdapter
@@ -204,6 +205,7 @@ object TimelinePanel : PluginPanel() {
                             if (RawkyPlugin.document!!.children.size <= 0) return
 
                             val g2D = g as Graphics2D
+                            g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR)
 
                             RawkyPlugin.document?.let { doc ->
                                 val factor = DrawUtil.getScaleFactor(

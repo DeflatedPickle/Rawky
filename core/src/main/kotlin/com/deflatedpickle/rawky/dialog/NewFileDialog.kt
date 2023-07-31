@@ -8,18 +8,21 @@ import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.CellProvider
+import com.deflatedpickle.rawky.api.ColourChannel
 import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.api.template.Template
 import com.deflatedpickle.undulation.constraints.FillHorizontal
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.constraints.FinishLine
 import com.deflatedpickle.undulation.constraints.StickEast
+import com.deflatedpickle.undulation.widget.ColourSelectButton
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import so.n0weak.ExtendedComboBox
+import java.awt.Color
 import java.awt.GridBagLayout
 import java.awt.event.ItemEvent
 import javax.swing.JButton
@@ -96,6 +99,15 @@ class NewFileDialog : TaskDialog(Haruhi.window, "New File") {
             selectedItem = CellProvider.default
         }
 
+    val colourSpaceComboBox =
+        JComboBox(ColourChannel.values()).apply {
+            AutoCompleteDecorator.decorate(this)
+
+            selectedItem = ColourChannel.ARGB
+        }
+
+    val colourFillButton = ColourSelectButton(Color.WHITE)
+
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
 
@@ -126,6 +138,11 @@ class NewFileDialog : TaskDialog(Haruhi.window, "New File") {
                 add(controlModeComboBox, FillHorizontalFinishLine)
                 add(JLabel("Grid Mode:"), StickEast)
                 add(cellProviderComboBox, FillHorizontalFinishLine)
+
+                add(JSeparator(JSeparator.HORIZONTAL), FillHorizontalFinishLine)
+
+                add(JLabel("Colour Space:"), StickEast)
+                add(colourSpaceComboBox, FillHorizontalFinishLine)
             }
     }
 }

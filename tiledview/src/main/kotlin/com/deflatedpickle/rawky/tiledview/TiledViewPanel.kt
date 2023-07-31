@@ -13,6 +13,7 @@ import org.jdesktop.swingx.JXPanel
 import java.awt.BorderLayout
 import java.awt.Graphics
 import java.awt.Graphics2D
+import java.awt.RenderingHints
 import java.awt.image.BufferedImage
 
 object TiledViewPanel : PluginPanel() {
@@ -34,6 +35,7 @@ object TiledViewPanel : PluginPanel() {
                 }
 
                 val g2D = g as Graphics2D
+                g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR)
 
                 RawkyPlugin.document?.let { doc ->
                     val factor = DrawUtil.getScaleFactor(

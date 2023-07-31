@@ -14,6 +14,7 @@ import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.marvin.extensions.div
+import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.api.template.Guide
 import com.deflatedpickle.rawky.event.EventChangeTool
@@ -25,10 +26,12 @@ import com.deflatedpickle.undulation.functions.extensions.add
 import com.deflatedpickle.undulation.functions.extensions.getScreenDevice
 import kotlinx.serialization.json.Json
 import so.jabber.FileUtils
+import java.awt.event.KeyEvent
 import java.io.File
 import javax.swing.AbstractButton
 import javax.swing.JCheckBoxMenuItem
 import javax.swing.JMenu
+import javax.swing.KeyStroke
 
 @Plugin(
     value = "core",
@@ -50,6 +53,7 @@ object RawkyPlugin {
     var rows = -1
     var columns = -1
 
+    // TODO: support multiple documents
     var document: RawkyDocument? = null
 
     init {
@@ -78,7 +82,13 @@ object RawkyPlugin {
         EventProgramFinishSetup.addListener {
             RegistryUtil.get(MenuCategory.MENU.name)?.apply {
                 (get(MenuCategory.TOOLS.name) as JMenu).apply {
-                    add("Debug", type = CHECK) { a ->
+                    add(
+                        "Debug",
+                        MonoIcon.SETTINGS,
+                        KeyStroke.getKeyStroke("F3"),
+                        "Toggle debugging hints",
+                        type = CHECK
+                    ) { a ->
                         Haruhi.isInDev = (a.source as JCheckBoxMenuItem).isSelected
 
                         document?.let { doc ->

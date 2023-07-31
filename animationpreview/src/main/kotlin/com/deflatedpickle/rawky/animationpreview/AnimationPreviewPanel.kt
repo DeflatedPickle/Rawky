@@ -15,6 +15,7 @@ import org.jdesktop.swingx.JXPanel
 import java.awt.BorderLayout
 import java.awt.Graphics
 import java.awt.Graphics2D
+import java.awt.RenderingHints
 import java.awt.image.BufferedImage
 import javax.swing.JToolBar
 
@@ -25,6 +26,8 @@ object AnimationPreviewPanel : PluginPanel() {
                 super.paintComponent(g)
 
                 val g2D = g as Graphics2D
+                g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR)
+
                 val bufferedImage =
                     BufferedImage(
                         visibleRect.x + visibleRect.width,
@@ -40,6 +43,7 @@ object AnimationPreviewPanel : PluginPanel() {
                     }
                     ) {
                         val temp = bufferedImage.createGraphics()
+                        temp.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR)
 
                         val factor = DrawUtil.getScaleFactor(
                             width.toDouble() / Grid.pixel, height.toDouble() / Grid.pixel,

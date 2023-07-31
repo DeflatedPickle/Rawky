@@ -1,0 +1,10 @@
+plugins {
+	id 'org.jetbrains.kotlin.jvm'
+}
+
+dependencies {
+	implementation project(":core")
+	implementation project(":pixelgrid")
+
+	implementation 'com.twelvemonkeys.imageio:imageio:3.9.4'
+}

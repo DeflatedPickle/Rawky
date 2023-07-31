@@ -14,6 +14,7 @@ import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.api.impex.Importer
 import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.collection.Cell
+import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
@@ -23,6 +24,7 @@ import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Graphics
 import java.awt.Graphics2D
+import java.awt.RenderingHints
 import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.DnDConstants
 import java.awt.dnd.DropTarget
@@ -37,7 +39,6 @@ import javax.swing.JToolBar
 import kotlin.reflect.KClass
 import kotlin.reflect.full.declaredMemberProperties
 
-// TODO: add d&d of images
 @RedrawActive
 object PixelGridPanel : PluginPanel() {
     val selectedCells = mutableListOf<Cell<Any>>()
@@ -80,6 +81,8 @@ object PixelGridPanel : PluginPanel() {
             RawkyPlugin.document?.let { doc ->
                 doc.children.getOrNull(doc.selectedIndex)?.let { frame ->
                     val g2d = g as Graphics2D
+                    g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR)
+
                     val bufferedImage =
                         BufferedImage(
                             visibleRect.x + visibleRect.width,
@@ -89,6 +92,7 @@ object PixelGridPanel : PluginPanel() {
 
                     for (v in PaintLayer.registry.getAll().values.sortedBy { it.layer }) {
                         val temp = bufferedImage.createGraphics()
+                        temp.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR)
 
                         for ((i, layer) in frame.children.withIndex()) {
                             if (v.layer == LayerCategory.GRID && !layer.visible) continue

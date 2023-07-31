@@ -51,35 +51,5 @@ object PixelGridPlugin {
         EventUpdateGrid.addListener { PixelGridPanel.repaint() }
 
         EventChangeTool.addListener { PixelGridPanel.repaint() }
-
-        EventProgramFinishSetup.addListener {
-            (RegistryUtil.get("setting_type") as Registry<String, (Plugin, String, Any) -> Component>?)
-                ?.let { registry ->
-                    registry.register(ControlMode::class.qualifiedName!!) { plugin, name, instance ->
-                        JComboBox<ControlMode>().apply {
-                            SwingUtilities.invokeLater {
-                                for ((_, v) in ControlMode.registry) {
-                                    addItem(v)
-                                }
-
-                                selectedItem = instance.get<ControlMode>(name)
-
-                                addItemListener {
-                                    when (it.stateChange) {
-                                        ItemEvent.DESELECTED -> {
-                                            (it.item as ControlMode).remove()
-                                        }
-                                        ItemEvent.SELECTED -> {
-                                            instance.set(name, it.item)
-                                            (it.item as ControlMode).apply()
-                                            ConfigUtil.serializeConfig(plugin)
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-        }
     }
 }

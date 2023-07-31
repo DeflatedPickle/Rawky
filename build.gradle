@@ -275,6 +275,10 @@ run {
 		runtimeOnly project(":pixelgrid.layer.cursor")
 		runtimeOnly project(":pixelgrid.layer.debug")
 
+		runtimeOnly project(":pixelgrid.resample.twelvemonkeys")
+
+		runtimeOnly project(":pixelgrid.filter.jhlabs")
+
 		runtimeOnly project(":colourwheel")
 		runtimeOnly project(":colourpalette")
 		runtimeOnly project(":colourhistory")

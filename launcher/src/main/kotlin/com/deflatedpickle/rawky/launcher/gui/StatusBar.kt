@@ -7,13 +7,16 @@ package com.deflatedpickle.rawky.launcher.gui
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
+import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.event.EventChangeFrame
 import com.deflatedpickle.rawky.event.EventChangeLayer
 import org.jdesktop.swingx.JXStatusBar
+import java.awt.event.ItemEvent
 import javax.swing.AbstractButton
+import javax.swing.JComboBox
 import javax.swing.JLabel
 import javax.swing.JPopupMenu
 import javax.swing.MenuElement
@@ -35,8 +38,30 @@ object StatusBar : JXStatusBar() {
     private val sizeLabel = JLabel()
     private val frameLabel = JLabel()
     private val layerLabel = JLabel()
+
     private val cellProviderLabel = JLabel()
-    private val controlModeLabel = JLabel()
+    private val controlModeLabel = JComboBox<ControlMode>().apply {
+        isEnabled = false
+
+        EventProgramFinishSetup.addListener {
+            for ((_, v) in ControlMode.registry) {
+                addItem(v)
+            }
+
+            selectedItem = ControlMode.default
+
+            addItemListener {
+                when (it.stateChange) {
+                    ItemEvent.SELECTED -> {
+                        ControlMode.current = it.item as ControlMode
+                        RawkyPlugin.document?.controlMode = ControlMode.current
+                        ControlMode.current.apply()
+                    }
+                    ItemEvent.DESELECTED -> (it.item as ControlMode).remove()
+                }
+            }
+        }
+    }
 
 
     init {
@@ -53,12 +78,16 @@ object StatusBar : JXStatusBar() {
             addLabels()
             setStaticLabels()
             setDynamicLabels()
+
+            controlModeLabel.isEnabled = true
         }
 
         EventOpenDocument.addListener {
             addLabels()
             setStaticLabels()
             setDynamicLabels()
+
+            controlModeLabel.isEnabled = true
         }
 
         EventChangeFrame.addListener {
@@ -89,8 +118,7 @@ object StatusBar : JXStatusBar() {
     private fun setStaticLabels() {
         RawkyPlugin.document?.let {
             sizeLabel.text = "${it.rows}x${it.columns}"
-            cellProviderLabel.text = CellProvider.current.name
-            controlModeLabel.text = ControlMode.current.name
+            cellProviderLabel.text = "Cell Mode: ${CellProvider.current.name}"
         }
     }
 

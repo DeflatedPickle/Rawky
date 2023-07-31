@@ -61,7 +61,7 @@ object RectanglePlugin :
         else {
             val action =
                 object : Action(name) {
-                    val colourCache = mutableMapOf<Cell<Any>, Color>()
+                    val colourCache = mutableMapOf<Cell<Any>, Any>()
 
                     override fun perform() {
                         colourCache.clear()
@@ -119,7 +119,7 @@ object RectanglePlugin :
         y0: Int,
         x1: Int?,
         y1: Int?,
-    ): MutableMap<Cell<Any>, Color> {
+    ): MutableMap<Cell<Any>, Any> {
         val grid: Grid
         RawkyPlugin.document!!.let { doc ->
             val frame = doc.children[doc.selectedIndex]
@@ -127,7 +127,7 @@ object RectanglePlugin :
             grid = layer.child
         }
 
-        val cellMap = mutableMapOf<Cell<Any>, Color>()
+        val cellMap = mutableMapOf<Cell<Any>, Any>()
 
         y1?.let { y1NonNull ->
             x1?.let { x1NonNull ->
@@ -139,8 +139,8 @@ object RectanglePlugin :
                     val x1Temp = max(x0, x1NonNull)
 
                     for (column in x0Temp..x1Temp) {
-                        with(grid[row, column]) {
-                            // cellMap[this] = colour
+                        with(grid[column, row]) {
+                            cellMap[this] = CellProvider.current.current
                         }
                     }
                 }

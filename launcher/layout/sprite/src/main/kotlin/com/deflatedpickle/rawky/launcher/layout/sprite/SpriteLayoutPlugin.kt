@@ -31,6 +31,7 @@ import com.deflatedpickle.rawky.launcher.gui.ToolBar
         "deflatedpickle@colour_palette#*",
         "deflatedpickle@colour_wheel#*",
         "deflatedpickle@colour_shades#*",
+        "deflatedpickle@colour_history#*",
         "deflatedpickle@layer_list#*",
     ],
 )
@@ -55,6 +56,12 @@ object SpriteLayoutPlugin {
                     "deflatedpickle@colour_palette",
                     DockingRegion.SOUTH,
                     0.0,
+                )
+                .dock(
+                    "deflatedpickle@colour_history",
+                    "deflatedpickle@colour_shades",
+                    DockingRegion.EAST,
+                    0.7,
                 )
                 .dock("deflatedpickle@layer_list", "deflatedpickle@pixel_grid", DockingRegion.EAST, 0.2)
                 .buildApplicationLayout()

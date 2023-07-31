@@ -79,6 +79,14 @@ include 'pixelgrid'
 	include "pixelgrid.layer.$it"
 	project(":pixelgrid.layer.$it").projectDir = new File(settingsDir, "pixelgrid/layer/$it")
 }
+['twelvemonkeys',].each {
+	include "pixelgrid.resample.$it"
+	project(":pixelgrid.resample.$it").projectDir = new File(settingsDir, "pixelgrid/resample/$it")
+}
+['jhlabs',].each {
+	include "pixelgrid.filter.$it"
+	project(":pixelgrid.filter.$it").projectDir = new File(settingsDir, "pixelgrid/filter/$it")
+}
 
 include 'toolbox'
 [

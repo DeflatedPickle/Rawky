@@ -77,7 +77,7 @@ object PixelCellPlugin : CellProvider<Color>() {
 
     override fun paintHover(g: Graphics2D, cell: Cell<@Contextual Any>) {
         g.stroke = BasicStroke(4f)
-        g.color = Color.BLACK
+        g.color = current
         g.drawRect(cell.polygon.x, cell.polygon.y, cell.polygon.width, cell.polygon.height)
     }
 }

@@ -27,6 +27,7 @@ import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Graphics
 import java.awt.Graphics2D
+import java.awt.RenderingHints
 import java.util.EventObject
 import javax.swing.AbstractCellEditor
 import javax.swing.DefaultCellEditor
@@ -41,7 +42,8 @@ import javax.swing.table.TableCellEditor
 import javax.swing.table.TableCellRenderer
 import kotlin.math.min
 
-// TODO add reordering of layers
+// TODO: add reordering of layers
+// FIXME: all of it
 object LayerListPanel : PluginPanel() {
     val addButton =
         AbstractButton(icon = MonoIcon.ADD_ELEMENT, tooltip = "Add element", enabled = false) {
@@ -129,8 +131,7 @@ object LayerListPanel : PluginPanel() {
             add(addButton)
             add(editButton)
             add(deleteButton)
-            // add(icon = MonoIcon.DELETE_ALL_ELEMENTS, tooltip = "Delete all elements", enabled =
-            // false) {}
+            // TODO: add a delete all button
         }
 
     val navbar =
@@ -184,6 +185,7 @@ object LayerListPanel : PluginPanel() {
                     val l = value as Layer
 
                     val g2D = g as Graphics2D
+                    g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR)
 
                     val factor = DrawUtil.getScaleFactor(
                         width.toDouble() / Grid.pixel, height.toDouble() / Grid.pixel,
