@@ -14,10 +14,11 @@ import com.deflatedpickle.undulation.widget.ColourButton
 import org.jdesktop.swingx.JXPanel
 import uk.co.timwise.wraplayout.WrapLayout
 import java.awt.GridBagLayout
+import javax.swing.JPanel
 import javax.swing.JScrollPane
 
 object ColourShadesPanel : PluginPanel() {
-    private val colourPanel = JXPanel().apply { layout = WrapLayout() }
+    private val colourPanel = JPanel().apply { layout = WrapLayout() }
 
     init {
         layout = GridBagLayout()

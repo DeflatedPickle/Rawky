@@ -40,6 +40,11 @@
 	<img src="https://sloc.xyz/github/DeflatedPickle/Rawky/?category=lines">
 </p>
 
+<p align="center">
+    <img alt="Bytes" src="https://img.shields.io/github/languages/code-size/DeflatedPickle/Rawky">
+    <img alt="Size" src="https://img.shields.io/github/repo-size/DeflatedPickle/Rawky">
+</p>
+
 <h3 align="center">Download</h3>
 <p align="center">
 	<a href="https://github.com/DeflatedPickle/Rawky/releases/tag/dist-latest"><img alt="Latest" src="https://img.shields.io/github/downloads/DeflatedPickle/Rawky/dist-latest/total.svg"></a>

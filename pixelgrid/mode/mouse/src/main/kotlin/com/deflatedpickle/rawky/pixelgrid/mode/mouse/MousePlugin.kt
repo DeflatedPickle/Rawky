@@ -9,6 +9,7 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
 import com.deflatedpickle.rawky.api.ControlMode
+import com.deflatedpickle.rawky.event.EventUpdateCell
 import java.awt.MouseInfo
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
@@ -62,6 +63,7 @@ object MousePlugin : ControlMode() {
                         for (cell in grid.children) {
                             if (cell.polygon.contains(point)) {
                                 PixelGridPanel.selectedCells.add(cell)
+                                EventUpdateCell.trigger(cell)
                                 break
                             }
                         }
@@ -85,15 +87,15 @@ object MousePlugin : ControlMode() {
 
     override fun apply() {
         adapter.apply {
-            PixelGridPanel.addMouseListener(this)
-            PixelGridPanel.addMouseMotionListener(this)
+            PixelGridPanel.panel.addMouseListener(this)
+            PixelGridPanel.panel.addMouseMotionListener(this)
         }
     }
 
     override fun remove() {
         adapter.apply {
-            PixelGridPanel.removeMouseListener(this)
-            PixelGridPanel.removeMouseMotionListener(this)
+            PixelGridPanel.panel.removeMouseListener(this)
+            PixelGridPanel.panel.removeMouseMotionListener(this)
         }
     }
 

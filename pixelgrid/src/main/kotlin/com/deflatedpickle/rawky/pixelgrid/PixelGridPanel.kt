@@ -6,6 +6,7 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.redraw.RedrawActive
 import com.deflatedpickle.haruhi.api.registry.Registry
 import com.deflatedpickle.haruhi.component.PluginPanel
+import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventImportDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.util.RegistryUtil
@@ -20,10 +21,13 @@ import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.util.DnDUtil
+import com.deflatedpickle.undulation.constraints.StickCenter
 import java.awt.BorderLayout
 import java.awt.Component
+import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
+import java.awt.GridBagLayout
 import java.awt.RenderingHints
 import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.DnDConstants
@@ -31,10 +35,13 @@ import java.awt.dnd.DropTarget
 import java.awt.dnd.DropTargetAdapter
 import java.awt.dnd.DropTargetDragEvent
 import java.awt.dnd.DropTargetDropEvent
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
 import javax.swing.JPanel
+import javax.swing.JScrollPane
 import javax.swing.JToolBar
 import kotlin.reflect.KClass
 import kotlin.reflect.full.declaredMemberProperties
@@ -74,14 +81,29 @@ object PixelGridPanel : PluginPanel() {
             }
         }
     }
+
     val panel = object : JPanel() {
+        override fun getPreferredSize(): Dimension {
+            RawkyPlugin.document?.let { doc ->
+                return Dimension(
+                    doc.columns * Grid.pixel,
+                    doc.rows * Grid.pixel
+                )
+            }
+
+            return Dimension(0, 0)
+        }
+
         override fun paintComponent(g: Graphics) {
             super.paintComponent(g)
 
             RawkyPlugin.document?.let { doc ->
                 doc.children.getOrNull(doc.selectedIndex)?.let { frame ->
                     val g2d = g as Graphics2D
-                    g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR)
+                    g2d.setRenderingHint(
+                        RenderingHints.KEY_INTERPOLATION,
+                        RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
+                    )
 
                     val bufferedImage =
                         BufferedImage(
@@ -92,7 +114,10 @@ object PixelGridPanel : PluginPanel() {
 
                     for (v in PaintLayer.registry.getAll().values.sortedBy { it.layer }) {
                         val temp = bufferedImage.createGraphics()
-                        temp.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR)
+                        temp.setRenderingHint(
+                            RenderingHints.KEY_INTERPOLATION,
+                            RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
+                        )
 
                         for ((i, layer) in frame.children.withIndex()) {
                             if (v.layer == LayerCategory.GRID && !layer.visible) continue
@@ -108,6 +133,21 @@ object PixelGridPanel : PluginPanel() {
             }
         }
     }
+
+    private val wrapper = object : JPanel() {
+            init {
+                layout = GridBagLayout()
+                add(panel, StickCenter)
+
+                EventCreateDocument.addListener {
+                    doLayout()
+                }
+
+                EventOpenDocument.addListener {
+                    doLayout()
+                }
+            }
+        }
 
     private val dropTargetAdapter = object : DropTargetAdapter() {
         override fun dragOver(dtde: DropTargetDragEvent) {
@@ -126,8 +166,9 @@ object PixelGridPanel : PluginPanel() {
                     dtde.acceptDrop(DnDConstants.ACTION_COPY)
 
                     if (DnDUtil.isDnDAnImage(dtde.transferable)) {
-                        val transferable = (dtde.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<File>)
-                            .first()
+                        val transferable =
+                            (dtde.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<File>)
+                                .first()
 
                         if (RawkyPlugin.document == null) {
                             for ((_, v) in Opener.registry) {
@@ -165,7 +206,7 @@ object PixelGridPanel : PluginPanel() {
         DropTarget(panel, DnDConstants.ACTION_COPY, dropTargetAdapter, true)
 
         add(quickBar, BorderLayout.NORTH)
-        add(panel, BorderLayout.CENTER)
+        add(JScrollPane(wrapper), BorderLayout.CENTER)
 
         EventUpdateCell.addListener { repaint() }
     }
