@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.blur
@@ -12,6 +14,6 @@ object Blur : FilterCollection.Filter() {
     override val comment = "Simple blur"
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = BlurFilter().filter(source, null)
 }

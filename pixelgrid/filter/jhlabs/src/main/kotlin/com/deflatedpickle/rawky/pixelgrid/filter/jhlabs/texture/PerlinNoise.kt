@@ -1,19 +1,13 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.texture
 
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.api.PaintMode
-import com.jhlabs.image.BrushedMetalFilter
-import com.jhlabs.image.CausticsFilter
-import com.jhlabs.image.CellularFilter
-import com.jhlabs.image.CheckFilter
-import com.jhlabs.image.FBMFilter
-import com.jhlabs.image.FlareFilter
-import com.jhlabs.image.PlasmaFilter
 import com.jhlabs.image.TextureFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object PerlinNoise : FilterCollection.ArgumentFilter<PerlinNoise.PerlinNoisePacket>() {
     override val name = "Perlin Noise"
@@ -27,18 +21,18 @@ object PerlinNoise : FilterCollection.ArgumentFilter<PerlinNoise.PerlinNoisePack
         var turbulence: Float = 1f,
         var gain: Float = 0.5f,
         var bias: Float = 0.5f,
-        var paintMode: PaintMode = PaintMode.REPLACE
+        var paintMode: PaintMode = PaintMode.REPLACE,
     ) : Packet
 
     override val packetClass = PerlinNoisePacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = TextureFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = TextureFilter().apply {
         if (packet !is PerlinNoisePacket) return@apply
         scale = packet.scale

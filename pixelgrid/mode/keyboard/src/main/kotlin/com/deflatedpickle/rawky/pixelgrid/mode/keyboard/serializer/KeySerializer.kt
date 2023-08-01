@@ -5,7 +5,6 @@ package com.deflatedpickle.rawky.pixelgrid.mode.keyboard.serializer
 import com.deflatedpickle.rawky.pixelgrid.mode.keyboard.util.KeyCombo
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
 import kotlinx.serialization.encoding.Decoder

@@ -40,15 +40,17 @@ object TileMapLayoutPlugin {
                     DockingRegion.WEST,
                     0.3,
                 )
-                .dock("deflatedpickle@layer_list",
+                .dock(
+                    "deflatedpickle@layer_list",
                     "deflatedpickle@pixel_grid",
                     DockingRegion.EAST,
-                    0.3
+                    0.3,
                 )
-                .dock("deflatedpickle@tiled_view",
+                .dock(
+                    "deflatedpickle@tiled_view",
                     "deflatedpickle@layer_list",
                     DockingRegion.SOUTH,
-                    0.5
+                    0.5,
                 )
                 .buildApplicationLayout()
 

@@ -11,8 +11,6 @@ import java.awt.BorderLayout
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoUnit
 import javax.swing.JFrame
 import javax.swing.JOptionPane
 import kotlin.system.exitProcess
@@ -22,7 +20,7 @@ object Window : JFrame("Rawky") {
 
     val toastWindow = ToastWindow(
         parent = this,
-        toastWidth = 160
+        toastWidth = 160,
     )
 
     init {
@@ -48,8 +46,9 @@ object Window : JFrame("Rawky") {
                                     "'${path.name}' has unsaved changes. Last saved at '${LauncherPlugin.dateTimeFormatter.format(modifiedTime)}'",
                                     "Close Without Saving?",
                                     JOptionPane.OK_CANCEL_OPTION,
-                                    JOptionPane.WARNING_MESSAGE
-                                ) == JOptionPane.YES_OPTION) {
+                                    JOptionPane.WARNING_MESSAGE,
+                                ) == JOptionPane.YES_OPTION
+                            ) {
                                 exitProcess(0)
                             }
                         } else {
@@ -63,8 +62,9 @@ object Window : JFrame("Rawky") {
                                 "The current document has unsaved changes",
                                 "Close Without Saving?",
                                 JOptionPane.OK_CANCEL_OPTION,
-                                JOptionPane.WARNING_MESSAGE
-                        ) == JOptionPane.YES_OPTION) {
+                                JOptionPane.WARNING_MESSAGE,
+                            ) == JOptionPane.YES_OPTION
+                        ) {
                             exitProcess(0)
                         }
                     }

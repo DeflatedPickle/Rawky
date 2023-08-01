@@ -1,14 +1,16 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.api
 
 import com.deflatedpickle.marvin.registry.Registry
 import java.awt.image.BufferedImage
 
-abstract class ResampleCollection: HasName {
+abstract class ResampleCollection : HasName {
     abstract class Resampler : HasName {
         abstract fun resample(
             width: Int,
             height: Int,
-            source: BufferedImage
+            source: BufferedImage,
         ): BufferedImage
 
         override fun toString() = name

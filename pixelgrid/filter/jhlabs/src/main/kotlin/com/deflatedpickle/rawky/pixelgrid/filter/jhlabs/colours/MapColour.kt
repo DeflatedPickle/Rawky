@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.colours
 
 import com.deflatedpickle.rawky.api.FilterCollection
@@ -10,6 +12,6 @@ object MapColour : FilterCollection.Filter() {
     override val comment = "Replace a color"
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = MapColorsFilter().filter(source, null)
 }

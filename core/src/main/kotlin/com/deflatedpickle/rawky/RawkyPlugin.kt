@@ -10,8 +10,6 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.event.EventSerializeConfig
-import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.marvin.extensions.div
 import com.deflatedpickle.monocons.MonoIcon
@@ -23,12 +21,9 @@ import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.setting.RawkySettings
 import com.deflatedpickle.undulation.api.MenuButtonType.CHECK
 import com.deflatedpickle.undulation.functions.extensions.add
-import com.deflatedpickle.undulation.functions.extensions.getScreenDevice
 import kotlinx.serialization.json.Json
 import so.jabber.FileUtils
-import java.awt.event.KeyEvent
 import java.io.File
-import javax.swing.AbstractButton
 import javax.swing.JCheckBoxMenuItem
 import javax.swing.JMenu
 import javax.swing.KeyStroke
@@ -87,7 +82,7 @@ object RawkyPlugin {
                         MonoIcon.SETTINGS,
                         KeyStroke.getKeyStroke("F3"),
                         "Toggle debugging hints",
-                        type = CHECK
+                        type = CHECK,
                     ) { a ->
                         Haruhi.isInDev = (a.source as JCheckBoxMenuItem).isSelected
 

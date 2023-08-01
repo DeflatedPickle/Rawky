@@ -1,16 +1,12 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection", "unused")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.ChromeFilter
-import com.jhlabs.image.ColorHalftoneFilter
-import com.jhlabs.image.CrystallizeFilter
-import com.jhlabs.image.PointillizeFilter
-import com.jhlabs.image.ShadowFilter
 import com.jhlabs.image.ShapeFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Shape : FilterCollection.ArgumentFilter<Shape.ShapePacket>() {
     override val name = "Shape"
@@ -36,12 +32,12 @@ object Shape : FilterCollection.ArgumentFilter<Shape.ShapePacket>() {
     override val packetClass = ShapePacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = ShapeFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = ShapeFilter().apply {
         if (packet !is ShapePacket) return@apply
         factor = packet.factor

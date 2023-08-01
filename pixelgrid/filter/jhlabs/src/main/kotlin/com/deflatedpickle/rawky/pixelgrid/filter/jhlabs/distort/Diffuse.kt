@@ -1,9 +1,10 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.distort
 
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.jhlabs.image.DiffuseFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Diffuse : FilterCollection.ArgumentFilter<Diffuse.DiffusePacket>() {
     override val name = "Diffuse"
@@ -17,12 +18,12 @@ object Diffuse : FilterCollection.ArgumentFilter<Diffuse.DiffusePacket>() {
     override val packetClass = DiffusePacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = DiffuseFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = DiffuseFilter().apply {
         if (packet !is DiffusePacket) return@apply
         scale = packet.scale

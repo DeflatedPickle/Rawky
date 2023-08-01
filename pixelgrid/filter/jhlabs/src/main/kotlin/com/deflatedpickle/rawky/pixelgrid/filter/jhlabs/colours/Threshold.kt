@@ -1,18 +1,13 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.colours
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.MapColorsFilter
-import com.jhlabs.image.MaskFilter
-import com.jhlabs.image.PosterizeFilter
-import com.jhlabs.image.QuantizeFilter
-import com.jhlabs.image.RescaleFilter
-import com.jhlabs.image.SolarizeFilter
 import com.jhlabs.image.ThresholdFilter
 import java.awt.Color
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Threshold : FilterCollection.ArgumentFilter<Threshold.ThresholdPacket>() {
     override val name = "Threshold"
@@ -29,12 +24,12 @@ object Threshold : FilterCollection.ArgumentFilter<Threshold.ThresholdPacket>() 
     override val packetClass = ThresholdPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = ThresholdFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = ThresholdFilter().apply {
         if (packet !is ThresholdPacket) return@apply
         lowerThreshold = packet.lowerBound

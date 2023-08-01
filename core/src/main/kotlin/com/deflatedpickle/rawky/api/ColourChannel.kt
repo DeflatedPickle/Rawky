@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused", "SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.api
@@ -5,7 +7,7 @@ package com.deflatedpickle.rawky.api
 import java.awt.image.BufferedImage
 
 enum class ColourChannel(
-    val code: Int
+    val code: Int,
 ) {
     RGB(BufferedImage.TYPE_INT_RGB),
     ARGB(BufferedImage.TYPE_INT_ARGB),

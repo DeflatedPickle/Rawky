@@ -1,17 +1,12 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.texture
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.BrushedMetalFilter
-import com.jhlabs.image.CausticsFilter
-import com.jhlabs.image.CellularFilter
-import com.jhlabs.image.CheckFilter
-import com.jhlabs.image.FBMFilter
-import com.jhlabs.image.FlareFilter
 import com.jhlabs.image.PlasmaFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Plasma : FilterCollection.ArgumentFilter<Plasma.PlasmaPacket>() {
     override val name = "Plasma"
@@ -29,12 +24,12 @@ object Plasma : FilterCollection.ArgumentFilter<Plasma.PlasmaPacket>() {
     override val packetClass = PlasmaPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = PlasmaFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = PlasmaFilter().apply {
         if (packet !is PlasmaPacket) return@apply
         turbulence = packet.turbulence

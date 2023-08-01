@@ -1,15 +1,13 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection", "unused")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.texture
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.BrushedMetalFilter
-import com.jhlabs.image.CausticsFilter
 import com.jhlabs.image.CellularFilter
-import com.jhlabs.image.Colormap
 import java.awt.geom.Rectangle2D
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Cellular : FilterCollection.ArgumentFilter<Cellular.CellularPacket>() {
     override val name = "Cellular"
@@ -39,17 +37,17 @@ object Cellular : FilterCollection.ArgumentFilter<Cellular.CellularPacket>() {
         // TODO: support colormap argument
         var randomness: Float = 0f,
         var gridType: GridType = GridType.HEXAGONAL,
-        ) : Packet
+    ) : Packet
 
     override val packetClass = CellularPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = CellularFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = CellularFilter().apply {
         if (packet !is CellularPacket) return@apply
         scale = packet.scale

@@ -1,19 +1,12 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.distort
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.DisplaceFilter
-import com.jhlabs.image.DissolveFilter
-import com.jhlabs.image.FieldWarpFilter
-import com.jhlabs.image.KaleidoscopeFilter
-import com.jhlabs.image.MarbleFilter
-import com.jhlabs.image.MirrorFilter
-import com.jhlabs.image.PerspectiveFilter
-import com.jhlabs.image.PinchFilter
 import com.jhlabs.image.PolarFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Polar : FilterCollection.ArgumentFilter<Polar.PolarPacket>() {
     override val name = "Pinch"
@@ -33,12 +26,12 @@ object Polar : FilterCollection.ArgumentFilter<Polar.PolarPacket>() {
     override val packetClass = PolarPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = PolarFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = PolarFilter().apply {
         if (packet !is PolarPacket) return@apply
         type = packet.type.ordinal

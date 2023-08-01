@@ -1,9 +1,11 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused", "SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.api
 
 enum class ImageMetadata(
-    val format: String
+    val format: String,
 ) {
     BMP("javax_imageio_bmp_1.0"),
     GIF("javax_imageio_gif_image_1.0"),

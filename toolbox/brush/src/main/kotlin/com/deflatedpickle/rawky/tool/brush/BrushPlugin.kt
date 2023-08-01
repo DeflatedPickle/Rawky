@@ -7,7 +7,6 @@ package com.deflatedpickle.rawky.tool.brush
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.Tool

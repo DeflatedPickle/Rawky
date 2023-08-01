@@ -1,14 +1,12 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.blur
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.BlurFilter
-import com.jhlabs.image.DespeckleFilter
-import com.jhlabs.image.GaussianFilter
 import com.jhlabs.image.GlowFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Glow : FilterCollection.ArgumentFilter<Glow.GlowPacket>() {
     override val name = "Glow"
@@ -22,12 +20,12 @@ object Glow : FilterCollection.ArgumentFilter<Glow.GlowPacket>() {
     override val packetClass = GlowPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = GlowFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = GlowFilter().apply {
         if (packet !is GlowPacket) return@apply
         amount = packet.amount

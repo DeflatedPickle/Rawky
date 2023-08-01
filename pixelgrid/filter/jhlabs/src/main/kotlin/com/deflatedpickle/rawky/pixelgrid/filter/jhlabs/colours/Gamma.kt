@@ -1,9 +1,10 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.colours
 
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.jhlabs.image.GammaFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Gamma : FilterCollection.ArgumentFilter<Gamma.GammaPacket>() {
     override val name = "Gamma"
@@ -19,12 +20,12 @@ object Gamma : FilterCollection.ArgumentFilter<Gamma.GammaPacket>() {
     override val packetClass = GammaPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = GammaFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = GammaFilter().apply {
         if (packet !is GammaPacket) return@apply
         setGamma(packet.red, packet.green, packet.blue)

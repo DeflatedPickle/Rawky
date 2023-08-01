@@ -13,8 +13,8 @@ import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.marvin.extensions.get
 import com.deflatedpickle.marvin.extensions.set
 import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
 import com.deflatedpickle.rawky.api.ControlMode
+import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
 import com.deflatedpickle.rawky.pixelgrid.mode.keyboard.dialog.KeyboardDialog
 import com.deflatedpickle.rawky.pixelgrid.mode.keyboard.util.KeyCombo
 import org.jdesktop.swingx.JXButton

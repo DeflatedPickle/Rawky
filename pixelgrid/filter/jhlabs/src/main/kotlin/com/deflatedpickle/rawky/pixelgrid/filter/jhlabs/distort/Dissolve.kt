@@ -1,7 +1,8 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.distort
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.DisplaceFilter
 import com.jhlabs.image.DissolveFilter
 import java.awt.image.BufferedImage
 
@@ -11,6 +12,6 @@ object Dissolve : FilterCollection.Filter() {
     override val comment = "Dissolves an image by turning random pixels transparent"
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = DissolveFilter().filter(source, null)
 }

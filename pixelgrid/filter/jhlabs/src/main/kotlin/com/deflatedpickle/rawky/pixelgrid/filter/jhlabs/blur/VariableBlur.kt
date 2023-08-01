@@ -1,17 +1,12 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.blur
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.MotionBlurFilter
-import com.jhlabs.image.OilFilter
-import com.jhlabs.image.ReduceNoiseFilter
-import com.jhlabs.image.SharpenFilter
-import com.jhlabs.image.SmartBlurFilter
-import com.jhlabs.image.UnsharpFilter
 import com.jhlabs.image.VariableBlurFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object VariableBlur : FilterCollection.ArgumentFilter<VariableBlur.VariableBlurPacket>() {
     override val name = "Variable Blur"
@@ -30,12 +25,12 @@ object VariableBlur : FilterCollection.ArgumentFilter<VariableBlur.VariableBlurP
     override val packetClass = VariableBlurPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = VariableBlurFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = VariableBlurFilter().apply {
         if (packet !is VariableBlurPacket) return@apply
         hRadius = packet.hRadius

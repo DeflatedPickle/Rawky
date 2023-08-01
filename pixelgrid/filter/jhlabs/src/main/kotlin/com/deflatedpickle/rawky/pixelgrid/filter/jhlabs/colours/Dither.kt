@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.colours
@@ -5,7 +7,6 @@ package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.colours
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.jhlabs.image.DitherFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Dither : FilterCollection.ArgumentFilter<Dither.DitherPacket>() {
     override val name = "Dither"
@@ -15,17 +16,19 @@ object Dither : FilterCollection.ArgumentFilter<Dither.DitherPacket>() {
     enum class DitherMatrix(val matrix: IntArray) {
         MAGIC2X2(
             intArrayOf(
-                0, 2,
-                3, 1
-            )
+                0,
+                2,
+                3,
+                1,
+            ),
         ),
         MAGIC4X4(
             intArrayOf(
                 14, 3, 13,
                 11, 5, 8, 6,
                 12, 2, 15, 1,
-                7, 9, 4, 10
-            )
+                7, 9, 4, 10,
+            ),
         ),
         ORDERED4X4(DitherFilter.ditherOrdered4x4Matrix),
         LINE4X4(DitherFilter.ditherLines4x4Matrix),
@@ -47,12 +50,12 @@ object Dither : FilterCollection.ArgumentFilter<Dither.DitherPacket>() {
     override val packetClass = DitherPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = DitherFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = DitherFilter().apply {
         if (packet !is DitherPacket) return@apply
         matrix = packet.matrix.matrix

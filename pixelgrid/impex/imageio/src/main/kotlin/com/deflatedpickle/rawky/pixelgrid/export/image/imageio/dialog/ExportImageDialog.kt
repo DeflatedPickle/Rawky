@@ -38,7 +38,7 @@ class ExportImageDialog(
     val compressionQualitySlider = SliderSpinner(
         0f,
         0f,
-        1f
+        1f,
     ).apply {
         addChangeListener {
             compressionQualityCombo.selectedItem = null
@@ -46,8 +46,9 @@ class ExportImageDialog(
     }
 
     val metadataTableModel = DefaultTableModel(
-            arrayOf(), arrayOf("Key", "Value")
-        )
+        arrayOf(),
+        arrayOf("Key", "Value"),
+    )
 
     val metadataTable = JXTable(metadataTableModel).apply {
         showVerticalLines = false

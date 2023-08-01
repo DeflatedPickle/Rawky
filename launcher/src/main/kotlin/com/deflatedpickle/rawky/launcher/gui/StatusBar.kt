@@ -7,7 +7,6 @@ package com.deflatedpickle.rawky.launcher.gui
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
-import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.ControlMode
@@ -62,7 +61,6 @@ object StatusBar : JXStatusBar() {
             }
         }
     }
-
 
     init {
         isResizeHandleEnabled = true

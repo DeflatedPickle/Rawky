@@ -7,9 +7,9 @@ package com.deflatedpickle.rawky.pixelgrid.mode.mouse
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
 import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.event.EventUpdateCell
+import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
 import java.awt.MouseInfo
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent

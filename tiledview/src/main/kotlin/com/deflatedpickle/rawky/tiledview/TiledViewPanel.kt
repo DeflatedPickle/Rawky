@@ -14,7 +14,6 @@ import java.awt.BorderLayout
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.RenderingHints
-import java.awt.image.BufferedImage
 
 object TiledViewPanel : PluginPanel() {
     val tilePanel =
@@ -39,8 +38,10 @@ object TiledViewPanel : PluginPanel() {
 
                 RawkyPlugin.document?.let { doc ->
                     val factor = DrawUtil.getScaleFactor(
-                        width.toDouble() / Grid.pixel, height.toDouble() / Grid.pixel,
-                        doc.columns.toDouble() * columns, doc.rows.toDouble() * columns
+                        width.toDouble() / Grid.pixel,
+                        height.toDouble() / Grid.pixel,
+                        doc.columns.toDouble() * columns,
+                        doc.rows.toDouble() * columns,
                     )
                     g2D.scale(factor, factor)
 

@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.launcher.gui.dialog
 
 import com.deflatedpickle.haruhi.Haruhi
@@ -18,16 +20,12 @@ import javax.swing.JComponent
 import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JSpinner
-import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
-import kotlin.reflect.KTypeParameter
-import kotlin.reflect.full.allSupertypes
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.memberProperties
-import kotlin.reflect.full.superclasses
 
 class ApplyFilterDialog(
-    private val packet: FilterCollection.ArgumentFilter.Packet
+    private val packet: FilterCollection.ArgumentFilter.Packet,
 ) : TaskDialog(Haruhi.window, "Apply Filter") {
     init {
         this.fixedComponent = JPanel().apply {
@@ -83,11 +81,10 @@ class ApplyFilterDialog(
                 addChangeListener {
                     packet.set(
                         p.name,
-                        (it.source as JCheckBox).isSelected
+                        (it.source as JCheckBox).isSelected,
                     )
                 }
             }
-
 
     // TODO: use intWidget
     private fun pointWidget(p: KProperty<*>) =
@@ -99,11 +96,12 @@ class ApplyFilterDialog(
                             when (val src = it.source) {
                                 is JSpinner -> packet.get<Point>(p.name).setLocation(
                                     src.value as Int,
-                                    packet.get<Point>(p.name).y
+                                    packet.get<Point>(p.name).y,
                                 )
                             }
                         }
-                    })
+                    },
+            )
 
             add(
                 SliderSpinner(packet.get<Point>(p.name).y, 0, 100)
@@ -112,11 +110,12 @@ class ApplyFilterDialog(
                             when (val src = it.source) {
                                 is JSpinner -> packet.get<Point>(p.name).setLocation(
                                     packet.get<Point>(p.name).x,
-                                    src.value as Int
+                                    src.value as Int,
                                 )
                             }
                         }
-                    })
+                    },
+            )
         }
 
     // TODO: use floatWidget
@@ -129,11 +128,12 @@ class ApplyFilterDialog(
                             when (val src = it.source) {
                                 is JSpinner -> packet.get<Point2D>(p.name).setLocation(
                                     src.value as Double,
-                                    packet.get<Point2D>(p.name).y
+                                    packet.get<Point2D>(p.name).y,
                                 )
                             }
                         }
-                    })
+                    },
+            )
 
             add(
                 SliderSpinner(packet.get<Point2D>(p.name).y, 0.0, 100.0)
@@ -142,11 +142,12 @@ class ApplyFilterDialog(
                             when (val src = it.source) {
                                 is JSpinner -> packet.get<Point2D>(p.name).setLocation(
                                     packet.get<Point2D>(p.name).x,
-                                    src.value as Double
+                                    src.value as Double,
                                 )
                             }
                         }
-                    })
+                    },
+            )
         }
 
     private fun colourWidget(p: KProperty<*>) =
@@ -154,7 +155,7 @@ class ApplyFilterDialog(
             addChangeListener {
                 packet.set(
                     p.name,
-                    (it.source as ColourSelectButton).colour
+                    (it.source as ColourSelectButton).colour,
                 )
             }
         }

@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.blur
@@ -5,7 +7,6 @@ package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.blur
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.jhlabs.image.LensBlurFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object LensBlur : FilterCollection.ArgumentFilter<LensBlur.LensBlurPacket>() {
     override val name = "Lens Blur"
@@ -22,18 +23,17 @@ object LensBlur : FilterCollection.ArgumentFilter<LensBlur.LensBlurPacket>() {
     override val packetClass = LensBlurPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = LensBlurFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = LensBlurFilter().apply {
         if (packet !is LensBlurPacket) return@apply
         radius = packet.radius
         bloom = packet.bloom
         bloomThreshold = packet.bloomThreshold
         sides = packet.sides
-
     }.filter(source, null)
 }

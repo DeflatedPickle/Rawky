@@ -1,9 +1,10 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.distort
 
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.jhlabs.image.CurlFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Curl : FilterCollection.ArgumentFilter<Curl.CurlPacket>() {
     override val name = "Curl"
@@ -19,12 +20,12 @@ object Curl : FilterCollection.ArgumentFilter<Curl.CurlPacket>() {
     override val packetClass = CurlPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = CurlFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = CurlFilter().apply {
         if (packet !is CurlPacket) return@apply
         angle = packet.angle

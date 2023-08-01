@@ -4,24 +4,15 @@
 
 package com.deflatedpickle.rawky.pixelgrid
 
-import com.deflatedpickle.haruhi.api.Registry
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
-import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
-import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.marvin.extensions.get
 import com.deflatedpickle.marvin.extensions.set
-import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import kotlinx.serialization.ExperimentalSerializationApi
-import java.awt.Component
-import java.awt.event.ItemEvent
-import javax.swing.JComboBox
-import javax.swing.SwingUtilities
 
 @ExperimentalSerializationApi
 @Plugin(
@@ -39,7 +30,7 @@ import javax.swing.SwingUtilities
     dependencies =
     [
         "deflatedpickle@core#*",
-    ]
+    ],
 )
 @Suppress("unused")
 object PixelGridPlugin {

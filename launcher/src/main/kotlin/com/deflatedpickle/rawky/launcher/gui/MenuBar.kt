@@ -11,7 +11,6 @@ import ModernDocking.internal.DockingInternal
 import ModernDocking.internal.DockingListeners
 import ModernDocking.layouts.ApplicationLayout
 import ModernDocking.layouts.DockingLayouts
-import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.Registry
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
@@ -35,44 +34,20 @@ import com.deflatedpickle.rawky.launcher.gui.dialog.ApplyFilterDialog
 import com.deflatedpickle.rawky.launcher.gui.dialog.ScaleImageDialog
 import com.deflatedpickle.rawky.util.ActionUtil
 import com.deflatedpickle.undulation.api.MenuButtonType
-import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
-import com.deflatedpickle.undulation.constraints.StickEast
 import com.deflatedpickle.undulation.functions.JMenu
 import com.deflatedpickle.undulation.functions.extensions.add
 import com.deflatedpickle.undulation.functions.extensions.getScreenDevice
-import com.deflatedpickle.undulation.widget.ActualSliderSpinner
-import com.deflatedpickle.undulation.widget.ColourSelectButton
-import com.deflatedpickle.undulation.widget.DoubleSlider
-import com.deflatedpickle.undulation.widget.SliderSpinner
-import com.jhlabs.image.BoxBlurFilter
-import org.oxbow.swingbits.dialog.task.TaskDialog
 import org.oxbow.swingbits.dialog.task.TaskDialog.StandardCommand
-import org.oxbow.swingbits.dialog.task.TaskDialogs.TaskDialogBuilder
 import java.awt.Color
-import java.awt.GridBagLayout
-import java.awt.Point
 import java.awt.event.KeyEvent
-import java.awt.geom.Point2D
 import java.awt.image.BufferedImage
 import java.util.logging.Filter
 import javax.swing.AbstractButton
 import javax.swing.Box
-import javax.swing.JCheckBox
-import javax.swing.JLabel
 import javax.swing.JMenu
 import javax.swing.JMenuBar
-import javax.swing.JPanel
-import javax.swing.JSlider
-import javax.swing.JSpinner
-import javax.swing.JTextField
 import javax.swing.KeyStroke
-import kotlin.reflect.KClass
 import kotlin.reflect.full.createInstance
-import kotlin.reflect.full.createType
-import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.full.defaultType
-import kotlin.reflect.full.memberProperties
-import kotlin.reflect.full.starProjectedType
 import kotlin.system.exitProcess
 
 object MenuBar : JMenuBar() {
@@ -188,7 +163,7 @@ object MenuBar : JMenuBar() {
                 "Fullscreen",
                 accelerator = KeyStroke.getKeyStroke("F11"),
                 message = "Toggle fullscreen view",
-                type = MenuButtonType.CHECK
+                type = MenuButtonType.CHECK,
             ) {
                 if ((it.source as AbstractButton).isSelected) {
                     Window.getScreenDevice()?.fullScreenWindow = Window
@@ -207,7 +182,7 @@ object MenuBar : JMenuBar() {
         layerMenu.apply {
             add(
                 "Scale...",
-                message = "Resize the image using a given algorithm"
+                message = "Resize the image using a given algorithm",
             ) {
                 scaleLayer()
             }
@@ -232,7 +207,7 @@ object MenuBar : JMenuBar() {
                                             add(
                                                 v.tabText,
                                                 message = "Toggle ${v.tabText}",
-                                                type = MenuButtonType.CHECK
+                                                type = MenuButtonType.CHECK,
                                             ) {
                                                 if ((it.source as AbstractButton).isSelected) {
                                                     Docking.dock(v, Window)
@@ -264,7 +239,7 @@ object MenuBar : JMenuBar() {
 
                     add(
                         "Restore Default Layout",
-                        accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_F12, KeyEvent.SHIFT_DOWN_MASK)
+                        accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_F12, KeyEvent.SHIFT_DOWN_MASK),
                     ) {
                         // TODO: cache a layout when it's selected, restore to that one
                         DockingState.restoreApplicationLayout(DockingLayouts.getLayout("sprite"))
@@ -294,7 +269,7 @@ object MenuBar : JMenuBar() {
                                 setRGB(column, row, (layer.child[column, row].content as Color).rgb)
                             }
                         }
-                    }
+                    },
                 ).apply {
                     val newLayer =
                         Layer(name = layer.name, child = Grid(rows = this.height, columns = this.width))
@@ -314,8 +289,8 @@ object MenuBar : JMenuBar() {
                         PacketChange(
                             new = newLayer,
                             old = layer,
-                            source = PluginUtil.slugToPlugin("deflatedpickle@launcher#*")!!
-                        )
+                            source = PluginUtil.slugToPlugin("deflatedpickle@launcher#*")!!,
+                        ),
                     )
                 }
             }
@@ -323,23 +298,25 @@ object MenuBar : JMenuBar() {
     }
 
     fun makeFilterMenu(menu: JMenu, action: (FilterCollection.Filter) -> Unit) {
-        menu.add(JMenu("Filter").apply {
-            for (i in FilterCollection.current.filters) {
-                if (i.category != null) {
-                    this.menuComponents.filterIsInstance<JMenu>().firstOrNull { it.text == i.category }
-                        ?: JMenu(i.category).also {
-                            add(it)
-                        }
-                } else {
-                    this
-                }.add(
-                    i.name + if (i is FilterCollection.ArgumentFilter<*>) "..." else "",
-                    message = i.comment
-                ) {
-                    action(i)
+        menu.add(
+            JMenu("Filter").apply {
+                for (i in FilterCollection.current.filters) {
+                    if (i.category != null) {
+                        this.menuComponents.filterIsInstance<JMenu>().firstOrNull { it.text == i.category }
+                            ?: JMenu(i.category).also {
+                                add(it)
+                            }
+                    } else {
+                        this
+                    }.add(
+                        i.name + if (i is FilterCollection.ArgumentFilter<*>) "..." else "",
+                        message = i.comment,
+                    ) {
+                        action(i)
+                    }
                 }
-            }
-        })
+            },
+        )
     }
 
     private fun filterLayer(i: FilterCollection.Filter) {
@@ -371,7 +348,7 @@ object MenuBar : JMenuBar() {
             when {
                 packet != null && i is FilterCollection.ArgumentFilter<*> -> i.filter(
                     packet,
-                    tempImage
+                    tempImage,
                 )
 
                 else -> i.filter(tempImage)
@@ -391,8 +368,8 @@ object MenuBar : JMenuBar() {
                     PacketChange(
                         new = newLayer,
                         old = layer,
-                        source = PluginUtil.slugToPlugin("deflatedpickle@launcher#*")!!
-                    )
+                        source = PluginUtil.slugToPlugin("deflatedpickle@launcher#*")!!,
+                    ),
                 )
             }
         }

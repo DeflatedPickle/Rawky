@@ -1,14 +1,11 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.distort
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.DisplaceFilter
-import com.jhlabs.image.DissolveFilter
-import com.jhlabs.image.FieldWarpFilter
-import com.jhlabs.image.KaleidoscopeFilter
 import com.jhlabs.image.MarbleFilter
 import java.awt.geom.Point2D
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Marble : FilterCollection.ArgumentFilter<Marble.MarblePacket>() {
     override val name = "Marble"
@@ -24,12 +21,12 @@ object Marble : FilterCollection.ArgumentFilter<Marble.MarblePacket>() {
     override val packetClass = MarblePacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = MarbleFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = MarbleFilter().apply {
         if (packet !is MarblePacket) return@apply
         xScale = packet.scale.x

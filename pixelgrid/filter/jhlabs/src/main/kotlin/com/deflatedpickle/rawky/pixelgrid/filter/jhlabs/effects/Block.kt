@@ -1,10 +1,10 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects
 
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.jhlabs.image.BlockFilter
-import com.jhlabs.image.ChromeFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Block : FilterCollection.ArgumentFilter<Block.BlockPacket>() {
     override val name = "Chrome"
@@ -18,12 +18,12 @@ object Block : FilterCollection.ArgumentFilter<Block.BlockPacket>() {
     override val packetClass = BlockPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = BlockFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = BlockFilter().apply {
         if (packet !is BlockPacket) return@apply
         blockSize = packet.blockSize

@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects
@@ -6,7 +8,6 @@ import com.deflatedpickle.rawky.api.FilterCollection
 import com.jhlabs.image.ShadowFilter
 import java.awt.Color
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Shadow : FilterCollection.ArgumentFilter<Shadow.ShadowPacket>() {
     override val name = "Shadow"
@@ -26,12 +27,12 @@ object Shadow : FilterCollection.ArgumentFilter<Shadow.ShadowPacket>() {
     override val packetClass = ShadowPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = ShadowFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = ShadowFilter().apply {
         if (packet !is ShadowPacket) return@apply
         radius = packet.radius

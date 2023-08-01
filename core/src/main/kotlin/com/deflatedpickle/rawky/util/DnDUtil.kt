@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.util
 
 import com.deflatedpickle.rawky.RawkyPlugin

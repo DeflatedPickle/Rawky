@@ -26,7 +26,10 @@ object AnimationPreviewPanel : PluginPanel() {
                 super.paintComponent(g)
 
                 val g2D = g as Graphics2D
-                g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR)
+                g2D.setRenderingHint(
+                    RenderingHints.KEY_INTERPOLATION,
+                    RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
+                )
 
                 val bufferedImage =
                     BufferedImage(
@@ -46,8 +49,10 @@ object AnimationPreviewPanel : PluginPanel() {
                         temp.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR)
 
                         val factor = DrawUtil.getScaleFactor(
-                            width.toDouble() / Grid.pixel, height.toDouble() / Grid.pixel,
-                            doc.columns.toDouble(), doc.rows.toDouble()
+                            width.toDouble() / Grid.pixel,
+                            height.toDouble() / Grid.pixel,
+                            doc.columns.toDouble(),
+                            doc.rows.toDouble(),
                         )
                         temp.scale(factor, factor)
 

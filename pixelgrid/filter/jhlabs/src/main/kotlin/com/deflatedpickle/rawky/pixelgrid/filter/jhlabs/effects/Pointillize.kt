@@ -1,15 +1,13 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.ChromeFilter
-import com.jhlabs.image.ColorHalftoneFilter
-import com.jhlabs.image.CrystallizeFilter
 import com.jhlabs.image.PointillizeFilter
 import java.awt.Color
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Pointillize : FilterCollection.ArgumentFilter<Pointillize.PointillizePacket>() {
     override val name = "Pointillize"
@@ -26,12 +24,12 @@ object Pointillize : FilterCollection.ArgumentFilter<Pointillize.PointillizePack
     override val packetClass = PointillizePacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = PointillizeFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = PointillizeFilter().apply {
         if (packet !is PointillizePacket) return@apply
         edgeThickness = packet.edgeThickness

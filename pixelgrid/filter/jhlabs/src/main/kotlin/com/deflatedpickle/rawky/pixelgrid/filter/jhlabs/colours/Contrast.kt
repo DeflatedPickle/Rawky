@@ -1,9 +1,10 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.colours
 
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.jhlabs.image.ContrastFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Contrast : FilterCollection.ArgumentFilter<Contrast.ContrastPacket>() {
     override val name = "Contrast"
@@ -18,12 +19,12 @@ object Contrast : FilterCollection.ArgumentFilter<Contrast.ContrastPacket>() {
     override val packetClass = ContrastPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = ContrastFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = ContrastFilter().apply {
         if (packet !is ContrastPacket) return@apply
         brightness = packet.brightness

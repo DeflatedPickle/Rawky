@@ -1,12 +1,12 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.blur
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.BlurFilter
 import com.jhlabs.image.BoxBlurFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object BoxBlur : FilterCollection.ArgumentFilter<BoxBlur.BoxBlurPacket>() {
     override val name = "Box Blur"
@@ -23,12 +23,12 @@ object BoxBlur : FilterCollection.ArgumentFilter<BoxBlur.BoxBlurPacket>() {
     override val packetClass = BoxBlurPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = BoxBlurFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = BoxBlurFilter().apply {
         if (packet !is BoxBlurPacket) return@apply
         hRadius = packet.horizontalRadius

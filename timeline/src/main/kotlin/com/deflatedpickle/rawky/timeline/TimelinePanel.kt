@@ -209,8 +209,10 @@ object TimelinePanel : PluginPanel() {
 
                             RawkyPlugin.document?.let { doc ->
                                 val factor = DrawUtil.getScaleFactor(
-                                    width.toDouble() / Grid.pixel, height.toDouble() / Grid.pixel,
-                                    doc.columns.toDouble(), doc.rows.toDouble()
+                                    width.toDouble() / Grid.pixel,
+                                    height.toDouble() / Grid.pixel,
+                                    doc.columns.toDouble(),
+                                    doc.rows.toDouble(),
                                 )
                                 g2D.scale(factor, factor)
 
@@ -313,7 +315,7 @@ object TimelinePanel : PluginPanel() {
                         } else {
                             for ((_, v) in Importer.registry) {
                                 if (transferable.extension in v.importerExtensions.flatMap { it.value }) {
-                                    v.import(RawkyPlugin.document!!, transferable,)
+                                    v.import(RawkyPlugin.document!!, transferable)
                                     EventImportDocument.trigger(Pair(RawkyPlugin.document!!, transferable))
 
                                     break

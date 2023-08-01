@@ -1,11 +1,10 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.distort
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.DisplaceFilter
-import com.jhlabs.image.DissolveFilter
 import com.jhlabs.image.FieldWarpFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object FieldWarp : FilterCollection.ArgumentFilter<FieldWarp.FieldWarpPacket>() {
     override val name = "Field Warp"
@@ -21,12 +20,12 @@ object FieldWarp : FilterCollection.ArgumentFilter<FieldWarp.FieldWarpPacket>() 
     override val packetClass = FieldWarpPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = FieldWarpFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = FieldWarpFilter().apply {
         if (packet !is FieldWarpPacket) return@apply
         amount = packet.amount

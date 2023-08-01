@@ -7,11 +7,11 @@ package com.deflatedpickle.rawky.pixelgrid.mode.gamepad
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
-import com.deflatedpickle.rawky.api.ControlMode
 import net.java.games.input.Component.Identifier.Axis
 import net.java.games.input.Component.Identifier.Button
 import net.java.games.input.Component.POV

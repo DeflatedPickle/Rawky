@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection", "unused")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.texture
@@ -37,12 +39,12 @@ object FractalBrownianMotion : FilterCollection.ArgumentFilter<FractalBrownianMo
     override val packetClass = FractalBrownianMotionPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = FBMFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = FBMFilter().apply {
         if (packet !is FractalBrownianMotionPacket) return@apply
         scale = packet.scale

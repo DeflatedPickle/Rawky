@@ -43,7 +43,7 @@ data class RawkyDocument(
 
     fun addFrame(
         name: String? = null,
-        index: Int = -1
+        index: Int = -1,
     ): Frame {
         val frame = Frame(name = name ?: "Frame ${children.size}")
 

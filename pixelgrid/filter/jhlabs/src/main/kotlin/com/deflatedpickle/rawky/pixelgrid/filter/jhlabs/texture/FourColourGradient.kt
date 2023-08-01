@@ -1,18 +1,13 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.texture
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.BrushedMetalFilter
-import com.jhlabs.image.CausticsFilter
-import com.jhlabs.image.CellularFilter
-import com.jhlabs.image.CheckFilter
-import com.jhlabs.image.FBMFilter
-import com.jhlabs.image.FlareFilter
 import com.jhlabs.image.FourColorFilter
 import java.awt.Color
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object FourColourGradient : FilterCollection.ArgumentFilter<FourColourGradient.FourColourGradientPacket>() {
     override val name = "Four Colour Gradient"
@@ -29,12 +24,12 @@ object FourColourGradient : FilterCollection.ArgumentFilter<FourColourGradient.F
     override val packetClass = FourColourGradientPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = FourColorFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = FourColorFilter().apply {
         if (packet !is FourColourGradientPacket) return@apply
         colorNW = packet.northWestColour.rgb

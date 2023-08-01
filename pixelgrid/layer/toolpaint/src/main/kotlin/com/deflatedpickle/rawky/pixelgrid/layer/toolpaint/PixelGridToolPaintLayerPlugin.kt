@@ -8,8 +8,6 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.rawky.api.Painter
 import com.deflatedpickle.rawky.api.Tool
-import com.deflatedpickle.rawky.collection.Frame
-import com.deflatedpickle.rawky.collection.Layer
 import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer

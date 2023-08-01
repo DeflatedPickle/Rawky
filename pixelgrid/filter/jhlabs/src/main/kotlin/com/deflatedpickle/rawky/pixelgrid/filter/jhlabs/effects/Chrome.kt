@@ -1,9 +1,10 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects
 
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.jhlabs.image.ChromeFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Chrome : FilterCollection.ArgumentFilter<Chrome.ChromePacket>() {
     override val name = "Chrome"
@@ -18,12 +19,12 @@ object Chrome : FilterCollection.ArgumentFilter<Chrome.ChromePacket>() {
     override val packetClass = ChromePacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = ChromeFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = ChromeFilter().apply {
         if (packet !is ChromePacket) return@apply
         amount = packet.amount

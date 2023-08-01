@@ -1,21 +1,11 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.distort
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.DisplaceFilter
-import com.jhlabs.image.DissolveFilter
-import com.jhlabs.image.FieldWarpFilter
-import com.jhlabs.image.KaleidoscopeFilter
-import com.jhlabs.image.MarbleFilter
-import com.jhlabs.image.MirrorFilter
-import com.jhlabs.image.PerspectiveFilter
-import com.jhlabs.image.PinchFilter
-import com.jhlabs.image.PolarFilter
-import com.jhlabs.image.RippleFilter
-import com.jhlabs.image.ShearFilter
 import com.jhlabs.image.SphereFilter
 import java.awt.geom.Point2D
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Sphere : FilterCollection.ArgumentFilter<Sphere.SpherePacket>() {
     override val name = "Sphere"
@@ -31,12 +21,12 @@ object Sphere : FilterCollection.ArgumentFilter<Sphere.SpherePacket>() {
     override val packetClass = SpherePacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = SphereFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = SphereFilter().apply {
         if (packet !is SpherePacket) return@apply
         refractionIndex = packet.refraction

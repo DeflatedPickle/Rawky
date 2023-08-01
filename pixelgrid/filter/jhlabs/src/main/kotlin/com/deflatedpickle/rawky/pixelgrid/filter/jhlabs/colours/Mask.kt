@@ -1,7 +1,8 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.colours
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.MapColorsFilter
 import com.jhlabs.image.MaskFilter
 import java.awt.image.BufferedImage
 
@@ -11,6 +12,6 @@ object Mask : FilterCollection.Filter() {
     override val comment = "Channel masking"
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = MaskFilter().filter(source, null)
 }

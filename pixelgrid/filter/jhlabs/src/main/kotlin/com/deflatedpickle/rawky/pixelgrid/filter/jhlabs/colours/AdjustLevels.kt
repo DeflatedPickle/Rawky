@@ -1,10 +1,10 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.colours
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.InvertFilter
 import com.jhlabs.image.LevelsFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object AdjustLevels : FilterCollection.ArgumentFilter<AdjustLevels.AdjustLevelsPacket>() {
     override val name = "Adjust Levels"
@@ -21,12 +21,12 @@ object AdjustLevels : FilterCollection.ArgumentFilter<AdjustLevels.AdjustLevelsP
     override val packetClass = AdjustLevelsPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = LevelsFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = LevelsFilter().apply {
         if (packet !is AdjustLevelsPacket) return@apply
         lowLevel = packet.lowLevel

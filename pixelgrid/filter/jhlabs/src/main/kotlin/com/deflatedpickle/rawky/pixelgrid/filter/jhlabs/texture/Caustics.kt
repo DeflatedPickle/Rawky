@@ -1,13 +1,13 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.texture
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.BrushedMetalFilter
 import com.jhlabs.image.CausticsFilter
 import java.awt.Color
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Caustics : FilterCollection.ArgumentFilter<Caustics.CausticsPacket>() {
     override val name = "Caustics"
@@ -21,18 +21,18 @@ object Caustics : FilterCollection.ArgumentFilter<Caustics.CausticsPacket>() {
         var turbulence: Float = 1f,
         var dispersion: Float = 0f,
         var samples: Int = 2,
-        var backgroundColour: Color = Color.decode("0xff799fff")
+        var backgroundColour: Color = Color.decode("0xff799fff"),
     ) : Packet
 
     override val packetClass = CausticsPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = CausticsFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = CausticsFilter().apply {
         if (packet !is CausticsPacket) return@apply
         scale = packet.scale

@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.texture
@@ -5,7 +7,6 @@ package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.texture
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.jhlabs.image.SmearFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Smear : FilterCollection.ArgumentFilter<Smear.SmearPacket>() {
     override val name = "Smear"
@@ -33,12 +34,12 @@ object Smear : FilterCollection.ArgumentFilter<Smear.SmearPacket>() {
     override val packetClass = SmearPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = SmearFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = SmearFilter().apply {
         if (packet !is SmearPacket) return@apply
         angle = packet.angle

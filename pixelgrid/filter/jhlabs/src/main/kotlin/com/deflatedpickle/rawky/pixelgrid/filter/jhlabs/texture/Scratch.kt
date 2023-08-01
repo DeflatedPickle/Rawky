@@ -1,19 +1,13 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.texture
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.BrushedMetalFilter
-import com.jhlabs.image.CausticsFilter
-import com.jhlabs.image.CellularFilter
-import com.jhlabs.image.CheckFilter
-import com.jhlabs.image.FBMFilter
-import com.jhlabs.image.FlareFilter
-import com.jhlabs.image.PlasmaFilter
 import com.jhlabs.image.ScratchFilter
 import java.awt.Color
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Scratch : FilterCollection.ArgumentFilter<Scratch.ScratchPacket>() {
     override val name = "Scratch"
@@ -33,12 +27,12 @@ object Scratch : FilterCollection.ArgumentFilter<Scratch.ScratchPacket>() {
     override val packetClass = ScratchPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = ScratchFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = ScratchFilter().apply {
         if (packet !is ScratchPacket) return@apply
         density = packet.density

@@ -46,7 +46,6 @@ object PencilPlugin :
             object : Action(name) {
                 override fun perform() {
                     ConfigUtil.getSettings<PencilSettings>("deflatedpickle@pencil#")?.let {
-
                         for (column in 0 downTo -it.size + 1) {
                             for (row in 0 downTo -it.size + 1) {
                                 try {

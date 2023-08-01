@@ -1,12 +1,11 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.ChromeFilter
-import com.jhlabs.image.ColorHalftoneFilter
 import com.jhlabs.image.FeedbackFilter
 import java.awt.geom.Point2D
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Feedback : FilterCollection.ArgumentFilter<Feedback.FeedbackPacket>() {
     override val name = "Feedback"
@@ -27,12 +26,12 @@ object Feedback : FilterCollection.ArgumentFilter<Feedback.FeedbackPacket>() {
     override val packetClass = FeedbackPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = FeedbackFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = FeedbackFilter().apply {
         if (packet !is FeedbackPacket) return@apply
         centre = packet.center

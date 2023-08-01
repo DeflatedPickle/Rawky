@@ -72,9 +72,9 @@ import com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects.Block
 import com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects.Border
 import com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects.Chrome
 import com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects.Crystallize
+import com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects.DottedHalftone
 import com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects.Emboss
 import com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects.Feedback
-import com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects.DottedHalftone
 import com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects.Light
 import com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects.MaskedHalftone
 import com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects.Noise

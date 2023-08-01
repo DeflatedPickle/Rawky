@@ -1,10 +1,11 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.distort
 
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.jhlabs.image.CircleFilter
 import java.awt.geom.Point2D
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Circle : FilterCollection.ArgumentFilter<Circle.CirclePacket>() {
     override val name = "Circle"
@@ -17,18 +18,18 @@ object Circle : FilterCollection.ArgumentFilter<Circle.CirclePacket>() {
         var angle: Float = 0f,
         var spreadAngle: Float = Math.PI.toFloat(),
         // TODO: add a component for this
-        var centre: Point2D.Float = Point2D.Float(0.5f, 0.5f)
+        var centre: Point2D.Float = Point2D.Float(0.5f, 0.5f),
     ) : Packet
 
     override val packetClass = CirclePacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = CircleFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = CircleFilter().apply {
         if (packet !is CirclePacket) return@apply
         radius = packet.radius

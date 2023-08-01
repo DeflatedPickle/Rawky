@@ -176,9 +176,10 @@ object AutoSavePlugin {
             val count = config.path.list()?.count { it.startsWith(config.name) }
 
             name =
-                if (doc.path == null
-                    || doc.path!!.nameWithoutExtension
-                        .contains(config.name)) {
+                if (doc.path == null ||
+                    doc.path!!.nameWithoutExtension
+                        .contains(config.name)
+                ) {
                     "${config.name}-$count"
                 } else {
                     "${doc.path}-$count"

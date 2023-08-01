@@ -2,5 +2,5 @@
   "name": "3DS",
   "width": 400,
   "height": 480,
-  "guides": ["3DS"]
+  "guides": [ "3DS" ]
 }

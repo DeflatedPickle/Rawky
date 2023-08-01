@@ -1,14 +1,10 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.distort
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.DisplaceFilter
-import com.jhlabs.image.DissolveFilter
-import com.jhlabs.image.FieldWarpFilter
-import com.jhlabs.image.KaleidoscopeFilter
-import com.jhlabs.image.MarbleFilter
 import com.jhlabs.image.MirrorFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Mirror : FilterCollection.ArgumentFilter<Mirror.MirrorPacket>() {
     override val name = "Mirror"
@@ -27,12 +23,12 @@ object Mirror : FilterCollection.ArgumentFilter<Mirror.MirrorPacket>() {
     override val packetClass = MirrorPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = MirrorFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = MirrorFilter().apply {
         if (packet !is MirrorPacket) return@apply
         opacity = packet.opacity

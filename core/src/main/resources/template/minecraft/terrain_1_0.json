@@ -2,5 +2,5 @@
   "name": "Terrain (1.0)",
   "width": 256,
   "height": 256,
-  "guides": ["terrain_1_0"]
+  "guides": [ "terrain_1_0" ]
 }

@@ -3,9 +3,6 @@
 package com.deflatedpickle.rawky.pixelgrid.api
 
 import com.deflatedpickle.marvin.registry.Registry
-import com.deflatedpickle.rawky.collection.Frame
-import com.deflatedpickle.rawky.collection.Grid
-import com.deflatedpickle.rawky.collection.Layer
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import java.awt.Graphics2D
 

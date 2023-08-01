@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.distort
@@ -28,12 +30,12 @@ object Ripple : FilterCollection.ArgumentFilter<Ripple.RipplePacket>() {
     override val packetClass = RipplePacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = RippleFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = RippleFilter().apply {
         if (packet !is RipplePacket) return@apply
         xAmplitude = packet.amplitude.x

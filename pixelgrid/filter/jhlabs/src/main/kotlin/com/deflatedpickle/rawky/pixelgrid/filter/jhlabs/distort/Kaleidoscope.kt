@@ -1,13 +1,11 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.distort
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.DisplaceFilter
-import com.jhlabs.image.DissolveFilter
-import com.jhlabs.image.FieldWarpFilter
 import com.jhlabs.image.KaleidoscopeFilter
 import java.awt.geom.Point2D
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Kaleidoscope : FilterCollection.ArgumentFilter<Kaleidoscope.KaleidoscopePacket>() {
     override val name = "Kaleidoscope"
@@ -24,12 +22,12 @@ object Kaleidoscope : FilterCollection.ArgumentFilter<Kaleidoscope.KaleidoscopeP
     override val packetClass = KaleidoscopePacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = KaleidoscopeFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = KaleidoscopeFilter().apply {
         if (packet !is KaleidoscopePacket) return@apply
         angle = packet.angle

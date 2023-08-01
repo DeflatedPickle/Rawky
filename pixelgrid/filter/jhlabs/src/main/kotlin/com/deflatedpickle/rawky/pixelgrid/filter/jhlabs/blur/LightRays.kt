@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.blur
@@ -5,7 +7,6 @@ package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.blur
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.jhlabs.image.RaysFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object LightRays : FilterCollection.ArgumentFilter<LightRays.LightRaysPacket>() {
     override val name = "Light Rays"
@@ -16,18 +17,18 @@ object LightRays : FilterCollection.ArgumentFilter<LightRays.LightRaysPacket>() 
         var opacity: Float = 1.0f,
         var threshold: Float = 0.0f,
         var strength: Float = 0.5f,
-        var raysOnly: Boolean = false
+        var raysOnly: Boolean = false,
     ) : Packet
 
     override val packetClass = LightRaysPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = RaysFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = RaysFilter().apply {
         if (packet !is LightRaysPacket) return@apply
         opacity = packet.opacity

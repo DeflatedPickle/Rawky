@@ -1,13 +1,12 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("unused")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects
 
 import com.deflatedpickle.rawky.api.FilterCollection
-import com.jhlabs.image.ColorHalftoneFilter
-import com.jhlabs.image.LightFilter
 import com.jhlabs.image.NoiseFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Noise : FilterCollection.ArgumentFilter<Noise.NoisePacket>() {
     override val name = "Noise"
@@ -29,12 +28,12 @@ object Noise : FilterCollection.ArgumentFilter<Noise.NoisePacket>() {
     override val packetClass = NoisePacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = NoiseFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = NoiseFilter().apply {
         if (packet !is NoisePacket) return@apply
         amount = packet.amount

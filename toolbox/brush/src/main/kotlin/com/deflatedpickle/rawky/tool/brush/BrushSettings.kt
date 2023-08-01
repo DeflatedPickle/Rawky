@@ -10,5 +10,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BrushSettings(
     override val version: Int = 1,
-    @IntRange(1, 256) @SliderSpinner()  var size: Int = 1,
+    @IntRange(1, 256) @SliderSpinner() var size: Int = 1,
 ) : Config

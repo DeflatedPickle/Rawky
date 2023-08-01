@@ -1,10 +1,11 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.effects
 
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.jhlabs.image.EmbossFilter
 import com.jhlabs.image.ImageMath
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Emboss : FilterCollection.ArgumentFilter<Emboss.EmbossPacket>() {
     override val name = "Emboss"
@@ -21,12 +22,12 @@ object Emboss : FilterCollection.ArgumentFilter<Emboss.EmbossPacket>() {
     override val packetClass = EmbossPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = EmbossFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = EmbossFilter().apply {
         if (packet !is EmbossPacket) return@apply
         azimuth = packet.azimuth

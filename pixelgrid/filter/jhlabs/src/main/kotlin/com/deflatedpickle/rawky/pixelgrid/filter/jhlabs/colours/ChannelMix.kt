@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.colours
 
 import com.deflatedpickle.rawky.api.FilterCollection
@@ -10,6 +12,6 @@ object ChannelMix : FilterCollection.Filter() {
     override val comment = "Mixes the RGB channels"
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = ChannelMixFilter().filter(source, null)
 }

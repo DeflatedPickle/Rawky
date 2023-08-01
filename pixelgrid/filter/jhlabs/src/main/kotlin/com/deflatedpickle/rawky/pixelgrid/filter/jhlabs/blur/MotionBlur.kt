@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.blur
@@ -5,7 +7,6 @@ package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.blur
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.jhlabs.image.MotionBlurFilter
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object MotionBlur : FilterCollection.ArgumentFilter<MotionBlur.MotionBlurPacket>() {
     override val name = "Motion Blur"
@@ -24,12 +25,12 @@ object MotionBlur : FilterCollection.ArgumentFilter<MotionBlur.MotionBlurPacket>
     override val packetClass = MotionBlurPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = MotionBlurFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = MotionBlurFilter().apply {
         if (packet !is MotionBlurPacket) return@apply
         angle = packet.angle

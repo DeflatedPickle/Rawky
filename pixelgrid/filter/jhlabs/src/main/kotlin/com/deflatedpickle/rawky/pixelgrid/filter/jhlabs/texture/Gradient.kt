@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 @file:Suppress("SpellCheckingInspection", "unused")
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.texture
@@ -9,7 +11,6 @@ import com.jhlabs.image.GradientFilter
 import java.awt.Color
 import java.awt.Point
 import java.awt.image.BufferedImage
-import kotlin.reflect.KClass
 
 object Gradient : FilterCollection.ArgumentFilter<Gradient.GradientPacket>() {
     override val name = "Gradient"
@@ -46,12 +47,12 @@ object Gradient : FilterCollection.ArgumentFilter<Gradient.GradientPacket>() {
     override val packetClass = GradientPacket::class
 
     override fun filter(
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = GradientFilter().filter(source, null)
 
     override fun filter(
         packet: Packet,
-        source: BufferedImage
+        source: BufferedImage,
     ): BufferedImage = GradientFilter().apply {
         if (packet !is GradientPacket) return@apply
         point1 = packet.firstPoint

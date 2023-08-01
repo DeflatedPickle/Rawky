@@ -188,8 +188,10 @@ object LayerListPanel : PluginPanel() {
                     g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR)
 
                     val factor = DrawUtil.getScaleFactor(
-                        width.toDouble() / Grid.pixel, height.toDouble() / Grid.pixel,
-                        doc.columns.toDouble(), doc.rows.toDouble()
+                        width.toDouble() / Grid.pixel,
+                        height.toDouble() / Grid.pixel,
+                        doc.columns.toDouble(),
+                        doc.rows.toDouble(),
                     )
                     g2D.scale(factor, factor)
 

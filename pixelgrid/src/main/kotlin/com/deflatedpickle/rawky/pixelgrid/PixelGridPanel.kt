@@ -35,8 +35,6 @@ import java.awt.dnd.DropTarget
 import java.awt.dnd.DropTargetAdapter
 import java.awt.dnd.DropTargetDragEvent
 import java.awt.dnd.DropTargetDropEvent
-import java.awt.event.MouseAdapter
-import java.awt.event.MouseEvent
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
@@ -67,7 +65,7 @@ object PixelGridPanel : PluginPanel() {
                             prop.returnType,
                             *(prop.returnType.classifier as KClass<*>)
                                 .supertypes
-                                .toTypedArray()
+                                .toTypedArray(),
                         )
                         ) {
                             val clazz = (t.classifier as KClass<*>)
@@ -87,7 +85,7 @@ object PixelGridPanel : PluginPanel() {
             RawkyPlugin.document?.let { doc ->
                 return Dimension(
                     doc.columns * Grid.pixel,
-                    doc.rows * Grid.pixel
+                    doc.rows * Grid.pixel,
                 )
             }
 
@@ -102,7 +100,7 @@ object PixelGridPanel : PluginPanel() {
                     val g2d = g as Graphics2D
                     g2d.setRenderingHint(
                         RenderingHints.KEY_INTERPOLATION,
-                        RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
+                        RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR,
                     )
 
                     val bufferedImage =
@@ -116,7 +114,7 @@ object PixelGridPanel : PluginPanel() {
                         val temp = bufferedImage.createGraphics()
                         temp.setRenderingHint(
                             RenderingHints.KEY_INTERPOLATION,
-                            RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
+                            RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR,
                         )
 
                         for ((i, layer) in frame.children.withIndex()) {
@@ -135,19 +133,19 @@ object PixelGridPanel : PluginPanel() {
     }
 
     private val wrapper = object : JPanel() {
-            init {
-                layout = GridBagLayout()
-                add(panel, StickCenter)
+        init {
+            layout = GridBagLayout()
+            add(panel, StickCenter)
 
-                EventCreateDocument.addListener {
-                    doLayout()
-                }
+            EventCreateDocument.addListener {
+                doLayout()
+            }
 
-                EventOpenDocument.addListener {
-                    doLayout()
-                }
+            EventOpenDocument.addListener {
+                doLayout()
             }
         }
+    }
 
     private val dropTargetAdapter = object : DropTargetAdapter() {
         override fun dragOver(dtde: DropTargetDragEvent) {

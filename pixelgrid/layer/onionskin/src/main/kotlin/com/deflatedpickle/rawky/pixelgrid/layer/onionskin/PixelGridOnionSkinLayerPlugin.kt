@@ -8,8 +8,6 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.rawky.api.CellProvider
-import com.deflatedpickle.rawky.collection.Frame
-import com.deflatedpickle.rawky.collection.Layer
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer.Companion.registry

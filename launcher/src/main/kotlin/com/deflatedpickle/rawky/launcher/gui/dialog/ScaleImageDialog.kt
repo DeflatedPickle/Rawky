@@ -6,13 +6,11 @@ package com.deflatedpickle.rawky.launcher.gui.dialog
 
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.monocons.MonoIcon
-import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.ResampleCollection
 import com.deflatedpickle.undulation.constraints.FillHorizontal
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.constraints.FinishLine
 import com.deflatedpickle.undulation.constraints.StickEast
-import org.jdesktop.swingx.JXTextField
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.GridBagLayout
 import javax.swing.JButton

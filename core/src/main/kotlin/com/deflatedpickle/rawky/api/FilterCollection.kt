@@ -1,13 +1,15 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.api
 
 import com.deflatedpickle.marvin.registry.Registry
 import java.awt.image.BufferedImage
 import kotlin.reflect.KClass
 
-abstract class FilterCollection: HasName {
+abstract class FilterCollection : HasName {
     abstract class Filter : HasName {
         abstract fun filter(
-            source: BufferedImage
+            source: BufferedImage,
         ): BufferedImage
 
         open val category: String? = null
@@ -21,9 +23,9 @@ abstract class FilterCollection: HasName {
         interface Packet
 
         data class Range<T : Number>(
-            var current : T,
+            var current: T,
             val min: T,
-            val max: T
+            val max: T,
         )
 
         abstract val packetClass: KClass<out T>
@@ -31,7 +33,7 @@ abstract class FilterCollection: HasName {
         abstract fun filter(
             // FIXME: type checking if we use T
             packet: Packet,
-            source: BufferedImage
+            source: BufferedImage,
         ): BufferedImage
     }
 
