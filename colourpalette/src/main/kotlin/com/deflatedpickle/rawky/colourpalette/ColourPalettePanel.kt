@@ -8,7 +8,7 @@ import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.rawky.api.palette.Palette
 import com.deflatedpickle.rawky.event.EventChangeColour
-import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
+import com.deflatedpickle.rawky.grid.pixel.PixelCellPlugin
 import com.deflatedpickle.undulation.constraints.FillBothFinishLine
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.widget.ColourButton

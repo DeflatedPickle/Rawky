@@ -11,7 +11,7 @@ import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.event.EventChangeColour
-import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
+import com.deflatedpickle.rawky.grid.pixel.PixelCellPlugin
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.ActionStack.Action
 import java.awt.Graphics2D

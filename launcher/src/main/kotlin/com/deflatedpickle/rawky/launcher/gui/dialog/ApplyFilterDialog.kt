@@ -3,8 +3,8 @@
 package com.deflatedpickle.rawky.launcher.gui.dialog
 
 import com.deflatedpickle.haruhi.Haruhi
-import com.deflatedpickle.marvin.extensions.get
-import com.deflatedpickle.marvin.extensions.set
+import com.deflatedpickle.marvin.functions.extensions.get
+import com.deflatedpickle.marvin.functions.extensions.set
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.constraints.StickEast

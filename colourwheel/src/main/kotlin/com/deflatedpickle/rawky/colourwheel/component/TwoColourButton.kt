@@ -6,7 +6,7 @@ package com.deflatedpickle.rawky.colourwheel.component
 
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.event.EventChangeColour
-import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
+import com.deflatedpickle.rawky.grid.pixel.PixelCellPlugin
 import com.deflatedpickle.undulation.functions.JButton
 import java.awt.Color
 import java.awt.Dimension

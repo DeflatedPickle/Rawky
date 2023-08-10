@@ -4,10 +4,13 @@ plugins {
 
 dependencies {
 	implementation project(":core")
+	implementation project(":launcher")
 	implementation project(":pixelgrid")
 	implementation project(":tilepalette")
 	implementation project(":layerlist")
 	implementation project(":tiledview")
+
+	implementation project(":pixelgrid.grid.tile")
 
 	implementation project(":sniffle.settingsgui")
 }

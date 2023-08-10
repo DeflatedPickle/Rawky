@@ -13,7 +13,7 @@ import com.deflatedpickle.rawky.api.impex.Importer
 import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
-import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
+import com.deflatedpickle.rawky.grid.pixel.PixelCellPlugin
 import com.deflatedpickle.rawky.pixelgrid.export.image.imageio.dialog.ExportImageDialog
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.util.ActionUtil

@@ -52,6 +52,8 @@ dependencies {
 	// Dialogs
 	api 'org.oxbow:swing-bits:1.0.0-SNAPSHOT'
 
+	api 'com.github.imcdonagh:image4j:0.7.2'
+
 	// Layouts
 	api 'com.github.DeflatedPickle:WrapLayout:9ae792ee13'
 
@@ -61,6 +63,7 @@ dependencies {
 	api 'com.deflatedpickle:tosuto:'
 	api 'com.deflatedpickle:monocons:'
 	api "com.deflatedpickle:owlgotrhythm:"
+	api 'com.deflatedpickle:paleta:'
 
 	// Plugins
 	implementation project(":sniffle.settingsgui")

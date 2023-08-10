@@ -3,7 +3,7 @@
 package com.deflatedpickle.rawky.launcher.gui
 
 import ModernDocking.RootDockingPanel
-import com.deflatedpickle.marvin.extensions.getLastModifiedTime
+import com.deflatedpickle.marvin.functions.extensions.getLastModifiedTime
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.launcher.LauncherPlugin
 import com.deflatedpickle.tosuto.ToastWindow

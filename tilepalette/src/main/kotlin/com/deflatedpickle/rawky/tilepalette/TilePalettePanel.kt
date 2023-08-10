@@ -7,7 +7,7 @@ package com.deflatedpickle.rawky.tilepalette
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.rawky.api.palette.Palette
-import com.deflatedpickle.rawky.tilecell.TileCellPlugin
+import com.deflatedpickle.rawky.grid.tile.TileCellPlugin
 import com.deflatedpickle.undulation.constraints.FillBothFinishLine
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.widget.ImageButton

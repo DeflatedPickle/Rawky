@@ -1,6 +1,6 @@
 /* Copyright (c) 2023 DeflatedPickle under the MIT license */
 
-package com.deflatedpickle.rawky.tilecell.collection
+package com.deflatedpickle.rawky.grid.tile.collection
 
 import com.deflatedpickle.marvin.serializer.BufferedImageSerializer
 import com.deflatedpickle.rawky.collection.Cell

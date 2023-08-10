@@ -13,15 +13,15 @@ import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
-import com.deflatedpickle.marvin.extensions.get
-import com.deflatedpickle.marvin.extensions.set
+import com.deflatedpickle.marvin.functions.extensions.get
+import com.deflatedpickle.marvin.functions.extensions.set
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.autosave.event.EventAutoSaveDocument
 import com.deflatedpickle.rawky.autosave.util.FileType
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.undulation.constraints.FillHorizontal
-import java.awt.Color
 import java.awt.Component
 import java.awt.GridBagLayout
 import java.awt.Panel
@@ -196,20 +196,18 @@ object AutoSavePlugin {
     }
 
     private fun checkEmpty(doc: RawkyDocument): Boolean {
-        val transparent = Color(0, 0, 0, 0)
-        var colour = transparent
+        var value = CellProvider.current.default
 
         for (f in doc.children) {
             for (l in f.children) {
                 for (c in l.child.children) {
-                    // TODO
-          /*if (c.colour != transparent) {
-              colour = c.colour
-          }*/
+                    if (c.content == CellProvider.current.default) {
+                        value = c.content
+                    }
                 }
             }
         }
 
-        return colour == transparent
+        return value == CellProvider.current.default
     }
 }

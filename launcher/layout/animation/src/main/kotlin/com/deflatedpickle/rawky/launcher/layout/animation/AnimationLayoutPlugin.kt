@@ -34,8 +34,18 @@ object AnimationLayoutPlugin {
     init {
         val layout =
             WindowLayoutBuilder("deflatedpickle@pixel_grid")
-                .dock("deflatedpickle@timeline", "deflatedpickle@pixel_grid", DockingRegion.SOUTH, 0.4)
-                .dock("deflatedpickle@layer_list", "deflatedpickle@pixel_grid", DockingRegion.EAST, 0.2)
+                .dock(
+                    "deflatedpickle@timeline",
+                    "deflatedpickle@pixel_grid",
+                    DockingRegion.SOUTH,
+                    0.3
+                )
+                .dock(
+                    "deflatedpickle@layer_list",
+                    "deflatedpickle@pixel_grid",
+                    DockingRegion.EAST,
+                    0.2
+                )
                 .dock(
                     "deflatedpickle@colour_wheel",
                     "deflatedpickle@pixel_grid",

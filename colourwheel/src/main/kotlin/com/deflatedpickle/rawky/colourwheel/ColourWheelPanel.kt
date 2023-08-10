@@ -6,7 +6,7 @@ import com.bric.colorpicker.ColorPicker
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.rawky.colourwheel.component.TwoColourButton
 import com.deflatedpickle.rawky.event.EventChangeColour
-import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
+import com.deflatedpickle.rawky.grid.pixel.PixelCellPlugin
 import java.awt.BorderLayout
 import javax.swing.JToolBar
 

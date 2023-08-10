@@ -4,7 +4,7 @@
 
 package com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.texture
 
-import com.deflatedpickle.marvin.extensions.set
+import com.deflatedpickle.marvin.functions.extensions.set
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.deflatedpickle.rawky.pixelgrid.filter.jhlabs.api.PaintMode
 import com.jhlabs.image.GradientFilter

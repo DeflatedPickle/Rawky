@@ -1,4 +1,4 @@
-/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+﻿/* Copyright (c) 2022 DeflatedPickle under the MIT license */
 
 @file:Suppress("MemberVisibilityCanBePrivate")
 
@@ -13,12 +13,12 @@ import ModernDocking.layouts.ApplicationLayout
 import ModernDocking.layouts.DockingLayouts
 import com.deflatedpickle.haruhi.api.Registry
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
+import com.deflatedpickle.haruhi.event.EventCreateDocument
+import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
-import com.deflatedpickle.marvin.extensions.get
-import com.deflatedpickle.marvin.extensions.set
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.FilterCollection
@@ -30,6 +30,7 @@ import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.event.packet.PacketChange
 import com.deflatedpickle.rawky.launcher.LauncherPlugin
 import com.deflatedpickle.rawky.launcher.LauncherSettings
+import com.deflatedpickle.rawky.launcher.gui.dialog.AboutDialog
 import com.deflatedpickle.rawky.launcher.gui.dialog.ApplyFilterDialog
 import com.deflatedpickle.rawky.launcher.gui.dialog.ScaleImageDialog
 import com.deflatedpickle.rawky.util.ActionUtil
@@ -39,13 +40,16 @@ import com.deflatedpickle.undulation.functions.extensions.add
 import com.deflatedpickle.undulation.functions.extensions.getScreenDevice
 import org.oxbow.swingbits.dialog.task.TaskDialog.StandardCommand
 import java.awt.Color
+import java.awt.Desktop
 import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
-import java.util.logging.Filter
+import java.io.File
+import java.net.URI
 import javax.swing.AbstractButton
 import javax.swing.Box
 import javax.swing.JMenu
 import javax.swing.JMenuBar
+import javax.swing.JMenuItem
 import javax.swing.KeyStroke
 import kotlin.reflect.full.createInstance
 import kotlin.system.exitProcess
@@ -61,6 +65,8 @@ object MenuBar : JMenuBar() {
     val toolsMenu = JMenu("Tools", KeyEvent.VK_T)
     val windowMenu = JMenu("Window", KeyEvent.VK_W)
     val help = JMenu("Help", KeyEvent.VK_H)
+
+    private val disabledUntilFile = mutableListOf<JMenuItem>()
 
     init {
         (RegistryUtil.register(MenuCategory.MENU.name, menuRegistry) as Registry<String, JMenu>).apply {
@@ -89,6 +95,23 @@ object MenuBar : JMenuBar() {
             populateFrameMenu()
             populateLayerMenu()
             populateWindowMenu()
+            populateHelpMenu()
+
+            for (i in disabledUntilFile) {
+                i.isEnabled = RawkyPlugin.document != null
+            }
+        }
+
+        EventCreateDocument.addListener {
+            for (i in disabledUntilFile) {
+                i.isEnabled = true
+            }
+        }
+
+        EventOpenDocument.addListener {
+            for (i in disabledUntilFile) {
+                i.isEnabled = true
+            }
         }
     }
 
@@ -114,10 +137,31 @@ object MenuBar : JMenuBar() {
                 LauncherPlugin.openDialog(this)
             }
 
+            add(
+                "Close File",
+                enabled = RawkyPlugin.document != null,
+            ) {
+
+            }
+
+            // TODO: make a file properties item and dialog
+
+            addSeparator()
+
             ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
                 if (it.history.isNotEmpty()) {
                     add(LauncherPlugin.historyMenu)
                 }
+            }
+
+            addSeparator()
+
+            add(
+                "Reload from Disk",
+                accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK),
+                enabled = RawkyPlugin.document != null,
+            ) {
+
             }
 
             addSeparator()
@@ -129,7 +173,8 @@ object MenuBar : JMenuBar() {
                 "Import a file into the editor",
             ) {
                 LauncherPlugin.importDialog()
-            }
+            }.also { disabledUntilFile.add(it) }
+
             add(
                 "Export...",
                 MonoIcon.FILE_EXPORT,
@@ -137,12 +182,21 @@ object MenuBar : JMenuBar() {
                 "Export the current project",
             ) {
                 LauncherPlugin.exportDialog()
-            }
+            }.also { disabledUntilFile.add(it) }
 
             addSeparator()
 
             // TODO: add an item to print the file
             // TODO: add an item to send the file by email
+
+            add(
+                "Show in File Explorer",
+                enabled = Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE_FILE_DIR),
+            ) {
+                Desktop.getDesktop().browseFileDirectory(RawkyPlugin.document?.path ?: File(System.getProperty("user.dir")))
+            }
+
+            addSeparator()
 
             add(
                 "Exit",
@@ -159,10 +213,48 @@ object MenuBar : JMenuBar() {
 
     private fun populateViewMenu() {
         viewMenu.apply {
+            add(JMenu("Appearance", KeyEvent.VK_A).apply {
+                add(
+                    "Menu Bar",
+                    accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.ALT_DOWN_MASK),
+                    message = "Show/hide the menu bar",
+                    type = MenuButtonType.CHECK
+                ) {
+                    MenuBar.isVisible = (it.source as AbstractButton).isSelected
+                }.apply {
+                    this.isSelected = MenuBar.isVisible
+                }
+
+                add(
+                    "Toolbar",
+                    accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_T, KeyEvent.ALT_DOWN_MASK),
+                    message = "Show/hide the toolbar",
+                    type = MenuButtonType.CHECK
+                ) {
+                    ToolBar.isVisible = (it.source as AbstractButton).isSelected
+                }.apply {
+                    this.isSelected = ToolBar.isVisible
+                }
+
+                add(
+                    "Status Bar",
+                    accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.ALT_DOWN_MASK),
+                    message = "Show/hide the status bar",
+                    type = MenuButtonType.CHECK
+                ) {
+                    StatusBar.isVisible = (it.source as AbstractButton).isSelected
+                }.apply {
+                    this.isSelected = StatusBar.isVisible
+                }
+            })
+
+            addSeparator()
+
             add(
                 "Fullscreen",
                 accelerator = KeyStroke.getKeyStroke("F11"),
                 message = "Toggle fullscreen view",
+                enabled = Window.getScreenDevice()?.isFullScreenSupported ?: false,
                 type = MenuButtonType.CHECK,
             ) {
                 if ((it.source as AbstractButton).isSelected) {
@@ -185,7 +277,7 @@ object MenuBar : JMenuBar() {
                 message = "Resize the image using a given algorithm",
             ) {
                 scaleLayer()
-            }
+            }.also { disabledUntilFile.add(it) }
 
             // TODO: add a rotate item
 
@@ -246,6 +338,39 @@ object MenuBar : JMenuBar() {
                     }
                 },
             )
+        }
+    }
+
+    private fun populateHelpMenu() {
+        helpMenu.apply {
+            add(
+                "Open wiki",
+                message = "Open the Rawky wiki on GitHub",
+                enabled = Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE),
+            ) {
+                Desktop.getDesktop().browse(URI("https://github.com/DeflatedPickle/Rawky/wiki"))
+            }
+
+            addSeparator()
+
+            add(
+                "Submit a Bug Report",
+                message = "Submit a new bug report on GitHub",
+                enabled = Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE),
+            ) {
+                Desktop.getDesktop().browse(URI("https://github.com/DeflatedPickle/Rawky/issues"))
+            }
+
+            addSeparator()
+
+            add(
+                "About",
+                accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.ALT_DOWN_MASK),
+                message = "Show information about Rawky"
+            ) {
+                val dialog = AboutDialog()
+                dialog.isVisible = true
+            }
         }
     }
 
@@ -313,7 +438,7 @@ object MenuBar : JMenuBar() {
                         message = i.comment,
                     ) {
                         action(i)
-                    }
+                    }.also { disabledUntilFile.add(it) }
                 }
             },
         )

@@ -19,7 +19,8 @@ include 'launcher'
 	'sprite',
 	"animation",
 	"tilemap",
-	"server"
+	"server",
+	"ascii",
 ].each {
 	include "launcher.layout.$it"
 	project(":launcher.layout.$it").projectDir = new File(settingsDir, "launcher/layout/$it")
@@ -62,7 +63,7 @@ include 'pixelgrid'
 	include "pixelgrid.impex.ascii.$it"
 	project(":pixelgrid.impex.ascii.$it").projectDir = new File(settingsDir, "pixelgrid/impex/ascii/$it")
 }
-['pixel', 'tile',].each {
+['pixel', 'tile', 'ascii',].each {
 	include "pixelgrid.grid.$it"
 	project(":pixelgrid.grid.$it").projectDir = new File(settingsDir, "pixelgrid/grid/$it")
 }
@@ -132,6 +133,12 @@ include 'tilepalette'
 	project(":tilepalette.parser.$it").projectDir = new File(settingsDir, "tilepalette/parser/$it")
 }
 
+include 'asciipalette'
+['ttf'].each {
+	include "asciipalette.parser.$it"
+	project(":asciipalette.parser.$it").projectDir = new File(settingsDir, "asciipalette/parser/$it")
+}
+
 include 'timeline'
 include 'layerlist'
 include 'animationpreview'
@@ -166,3 +173,4 @@ includeBuild 'libs/ModernDocking/docking'
 includeBuild 'libs/ModernDocking/docking-ui'
 includeBuild 'libs/colorpicker'
 includeBuild 'libs/owlgotrhythm'
+includeBuild 'libs/paleta'

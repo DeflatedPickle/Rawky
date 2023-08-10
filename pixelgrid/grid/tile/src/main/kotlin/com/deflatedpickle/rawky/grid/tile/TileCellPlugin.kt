@@ -2,13 +2,13 @@
 
 @file:Suppress("unused")
 
-package com.deflatedpickle.rawky.tilecell
+package com.deflatedpickle.rawky.grid.tile
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.collection.Cell
-import com.deflatedpickle.rawky.tilecell.collection.TileCell
+import com.deflatedpickle.rawky.grid.tile.collection.TileCell
 import kotlinx.serialization.Contextual
 import java.awt.AlphaComposite
 import java.awt.Graphics2D
@@ -69,7 +69,8 @@ object TileCellPlugin : CellProvider<BufferedImage>() {
     }
 
     override fun paintHover(g: Graphics2D, cell: Cell<@Contextual Any>) {
+        // TODO: make the alpha (and rule?) customisable
         g.composite = AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f)
-        g.drawImage((cell as TileCell).content, cell.polygon.x, cell.polygon.y, null)
+        g.drawImage(current, cell.polygon.x, cell.polygon.y, null)
     }
 }

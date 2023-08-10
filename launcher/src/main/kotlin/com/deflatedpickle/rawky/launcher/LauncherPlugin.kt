@@ -17,7 +17,7 @@ import com.deflatedpickle.haruhi.event.EventProgramShutdown
 import com.deflatedpickle.haruhi.event.EventSaveDocument
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
-import com.deflatedpickle.marvin.extensions.div
+import com.deflatedpickle.marvin.functions.extensions.div
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.api.impex.Exporter
@@ -217,7 +217,6 @@ object LauncherPlugin {
             if (file.extension in v.importerExtensions.flatMap { it.value }) {
                 none = false
 
-                // FIXME: the menu item should be disabled when there is no document
                 v.import(
                     RawkyPlugin.document
                         ?: ActionUtil.newDocument(16, 16, 1, 1).apply { RawkyPlugin.document = this },

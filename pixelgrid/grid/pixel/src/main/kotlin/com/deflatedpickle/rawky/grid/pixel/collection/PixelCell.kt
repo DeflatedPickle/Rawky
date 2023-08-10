@@ -1,6 +1,6 @@
 /* Copyright (c) 2023 DeflatedPickle under the MIT license */
 
-package com.deflatedpickle.rawky.pixelcell.collection
+package com.deflatedpickle.rawky.grid.pixel.collection
 
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.undulation.serializer.ColorSerializer

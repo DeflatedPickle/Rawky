@@ -31,7 +31,7 @@ abstract class FilterCollection : HasName {
         abstract val packetClass: KClass<out T>
 
         abstract fun filter(
-            // FIXME: type checking if we use T
+            // FIXME: type checking issue if we use T
             packet: Packet,
             source: BufferedImage,
         ): BufferedImage

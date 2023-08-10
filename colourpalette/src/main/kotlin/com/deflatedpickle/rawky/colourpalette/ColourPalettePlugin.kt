@@ -6,7 +6,7 @@ package com.deflatedpickle.rawky.colourpalette
 
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
-import com.deflatedpickle.marvin.extensions.div
+import com.deflatedpickle.marvin.functions.extensions.div
 import com.deflatedpickle.marvin.registry.Registry
 import com.deflatedpickle.rawky.api.palette.PaletteParser
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
@@ -27,7 +27,7 @@ import java.io.File
 )
 @Suppress("unused")
 object ColourPalettePlugin {
-    val folder = (File(".") / "palette").apply { mkdirs() }
+    val folder = (File(".") / "palette" / "colour").apply { mkdirs() }
     val registry = Registry<String, PaletteParser<Color>>()
 
     init {

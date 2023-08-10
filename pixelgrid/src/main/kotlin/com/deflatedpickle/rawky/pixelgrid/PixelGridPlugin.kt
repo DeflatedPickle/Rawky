@@ -8,8 +8,6 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
-import com.deflatedpickle.marvin.extensions.get
-import com.deflatedpickle.marvin.extensions.set
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import kotlinx.serialization.ExperimentalSerializationApi

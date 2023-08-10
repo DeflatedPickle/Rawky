@@ -250,6 +250,7 @@ run {
 		runtimeOnly project(":launcher.layout.animation")
 		runtimeOnly project(":launcher.layout.tilemap")
 		runtimeOnly project(":launcher.layout.server")
+		runtimeOnly project(":launcher.layout.ascii")
 
 		runtimeOnly project(":pixelgrid")
 
@@ -260,11 +261,13 @@ run {
 		runtimeOnly project(":pixelgrid.impex.imageio")
 		runtimeOnly project(":pixelgrid.impex.ascii")
 		runtimeOnly project(":pixelgrid.impex.rawr")
+		runtimeOnly project(":pixelgrid.impex.xpm")
 
 		runtimeOnly project(":pixelgrid.impex.ascii.block")
 
 		runtimeOnly project(":pixelgrid.grid.pixel")
 		runtimeOnly project(":pixelgrid.grid.tile")
+		runtimeOnly project(":pixelgrid.grid.ascii")
 
 		runtimeOnly project(":pixelgrid.layer.background")
 		runtimeOnly project(":pixelgrid.layer.gridfill")
@@ -296,6 +299,9 @@ run {
 		// runtimeOnly project(":tilepalette.parser.tmx")
 		// runtimeOnly project(":tilepalette.parser.ogmo")
 		// runtimeOnly project(":tilepalette.parser.ldtk")
+
+		runtimeOnly project(":asciipalette")
+		runtimeOnly project(":asciipalette.parser.ttf")
 
 		runtimeOnly project(":autosave")
 		runtimeOnly project(":autoload")

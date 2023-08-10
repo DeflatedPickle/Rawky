@@ -83,6 +83,11 @@ object MousePlugin : ControlMode() {
             override fun mouseMoved(e: MouseEvent) {
                 move(e)
             }
+
+            override fun mouseExited(e: MouseEvent) {
+                PixelGridPanel.selectedCells.clear()
+                PixelGridPanel.repaint()
+            }
         }
 
     override fun apply() {

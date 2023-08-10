@@ -11,7 +11,7 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.event.EventSerializeConfig
 import com.deflatedpickle.haruhi.util.RegistryUtil
-import com.deflatedpickle.marvin.extensions.div
+import com.deflatedpickle.marvin.functions.extensions.div
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.api.template.Guide

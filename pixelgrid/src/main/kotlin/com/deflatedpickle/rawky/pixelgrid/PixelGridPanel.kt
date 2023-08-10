@@ -38,8 +38,10 @@ import java.awt.dnd.DropTargetDropEvent
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
+import javax.swing.JLabel
 import javax.swing.JPanel
 import javax.swing.JScrollPane
+import javax.swing.JSeparator
 import javax.swing.JToolBar
 import kotlin.reflect.KClass
 import kotlin.reflect.full.declaredMemberProperties
@@ -53,11 +55,11 @@ object PixelGridPanel : PluginPanel() {
             removeAll()
 
             // FIXME: changes are delayed for some reason
-            for (i in tool.getQuickSettings()) {
+            for ((i, s) in tool.getQuickSettings().withIndex()) {
                 (RegistryUtil.get("setting_type") as Registry<String, (Plugin, String, Any) -> Component>?)
                     ?.let { registry ->
                         val settings = Tool.current.getSettings()!!
-                        val prop = settings::class.declaredMemberProperties.first { it.name == i }
+                        val prop = settings::class.declaredMemberProperties.first { it.name == s }
 
                         for (
                         t in
@@ -71,6 +73,11 @@ object PixelGridPanel : PluginPanel() {
                             val clazz = (t.classifier as KClass<*>)
                             val clazzName = clazz.qualifiedName!!
                             registry.get(clazzName)?.let {
+                                if (tool.getQuickSettings().isNotEmpty() && i > 0) {
+                                    add(JSeparator())
+                                }
+
+                                add(JLabel("${prop.name.capitalize()}:"))
                                 val widget = it(plugin, prop.name, settings)
                                 add(widget)
                             }

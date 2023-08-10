@@ -4,10 +4,10 @@ package com.deflatedpickle.rawky.colourshades
 
 import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.util.ConfigUtil
-import com.deflatedpickle.marvin.extensions.darken
-import com.deflatedpickle.marvin.extensions.lighten
+import com.deflatedpickle.marvin.functions.extensions.darken
+import com.deflatedpickle.marvin.functions.extensions.lighten
 import com.deflatedpickle.rawky.event.EventChangeColour
-import com.deflatedpickle.rawky.pixelcell.PixelCellPlugin
+import com.deflatedpickle.rawky.grid.pixel.PixelCellPlugin
 import com.deflatedpickle.undulation.constraints.FillBothFinishLine
 import com.deflatedpickle.undulation.functions.ColourButton
 import com.deflatedpickle.undulation.widget.ColourButton

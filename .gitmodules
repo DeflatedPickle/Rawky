@@ -43,3 +43,6 @@
 [submodule "libs/FlatCatppuccinIJTheme"]
 	path = libs/FlatCatppuccinIJTheme
 	url = https://github.com/DeflatedPickle/FlatCatppuccinIJTheme
+[submodule "libs/paleta"]
+	path = libs/paleta
+	url = https://github.com/DeflatedPickle/paleta

@@ -3,7 +3,7 @@
 package com.deflatedpickle.rawky.pixelgrid.export.image.imageio.dialog
 
 import com.deflatedpickle.haruhi.Haruhi
-import com.deflatedpickle.marvin.function.println
+import com.deflatedpickle.marvin.functions.println
 import com.deflatedpickle.undulation.constraints.FillBothFinishLine
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.constraints.StickEast

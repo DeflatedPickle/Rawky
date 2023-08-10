@@ -12,5 +12,7 @@ dependencies {
 	implementation project(":colourshades")
 	implementation project(":layerlist")
 
+	implementation project(":pixelgrid.grid.pixel")
+
 	implementation project(":sniffle.settingsgui")
 }

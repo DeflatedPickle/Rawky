@@ -21,4 +21,5 @@ dependencies {
 
 	implementation project(":pixelgrid.grid.pixel")
 	implementation project(":pixelgrid.grid.tile")
+	implementation project(":pixelgrid.grid.ascii")
 }

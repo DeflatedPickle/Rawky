@@ -10,7 +10,7 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.RegistryUtil
-import com.deflatedpickle.marvin.extensions.div
+import com.deflatedpickle.marvin.functions.extensions.div
 import com.deflatedpickle.marvin.registry.Registry
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.api.palette.PaletteParser
@@ -21,6 +21,7 @@ import java.awt.Image
 import java.io.File
 import javax.swing.JFileChooser
 import javax.swing.JMenu
+import javax.swing.JMenuItem
 import javax.swing.filechooser.FileNameExtensionFilter
 
 @Plugin(
@@ -35,7 +36,7 @@ import javax.swing.filechooser.FileNameExtensionFilter
     component = TilePalettePanel::class,
 )
 object TilePalettePlugin {
-    val folder = (File(".") / "tilemap").apply { mkdirs() }
+    val folder = (File(".") / "palette" / "tile").apply { mkdirs() }
     val registry = Registry<String, PaletteParser<Image>>()
 
     private val chooser =
@@ -53,7 +54,10 @@ object TilePalettePlugin {
         EventProgramFinishSetup.addListener {
             RegistryUtil.get(MenuCategory.MENU.name)?.apply {
                 (get(MenuCategory.FILE.name) as JMenu).apply {
-                    add("Import Tile Palette", MonoIcon.FOLDER_NEW) { importTilePalette() }
+                    val index = menuComponents.indexOf(menuComponents.filterIsInstance<JMenuItem>().first { it.text.startsWith("Import") })
+
+                    insertSeparator(index + 2)
+                    add("Import Tile Palette", MonoIcon.FOLDER_NEW, index = index + 3) { importTilePalette() }
                 }
             }
         }

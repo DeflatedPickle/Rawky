@@ -16,5 +16,5 @@ data class DebugSettings(
     Color = Color.PINK,
     var font:
     @Serializable(FontSerializer::class)
-    Font = Font(Font.MONOSPACED, Font.PLAIN, 20),
+    Font = Font(Font.MONOSPACED, Font.PLAIN, 12),
 ) : ConfigSection
