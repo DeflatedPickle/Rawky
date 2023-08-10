@@ -55,4 +55,6 @@ data class RawkyDocument(
 
         return frame
     }
+
+    operator fun get(index: Int) = children[index]
 }

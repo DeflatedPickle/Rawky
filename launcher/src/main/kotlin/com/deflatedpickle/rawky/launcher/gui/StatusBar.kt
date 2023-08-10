@@ -12,7 +12,9 @@ import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.event.EventChangeFrame
 import com.deflatedpickle.rawky.event.EventChangeLayer
+import com.deflatedpickle.rawky.event.EventUpdateCell
 import org.jdesktop.swingx.JXStatusBar
+import java.awt.Dimension
 import java.awt.event.ItemEvent
 import javax.swing.AbstractButton
 import javax.swing.JComboBox
@@ -20,6 +22,7 @@ import javax.swing.JLabel
 import javax.swing.JPopupMenu
 import javax.swing.MenuElement
 import javax.swing.SwingUtilities
+import kotlin.math.max
 
 // TODO: add a save progress bar
 object StatusBar : JXStatusBar() {
@@ -34,10 +37,13 @@ object StatusBar : JXStatusBar() {
 
     private val noteLabel = JLabel(note)
 
+    private val mouseGridPositionLabel = JLabel()
+
     private val sizeLabel = JLabel()
     private val frameLabel = JLabel()
     private val layerLabel = JLabel()
 
+    private val colourSpaceLabel = JLabel()
     private val cellProviderLabel = JLabel()
     private val controlModeLabel = JComboBox<ControlMode>().apply {
         isEnabled = false
@@ -96,6 +102,11 @@ object StatusBar : JXStatusBar() {
             setDynamicLabels()
         }
 
+        EventUpdateCell.addListener {
+            mouseGridPositionLabel.text =
+                "${it.row + 1}x${it.column + 1}"
+        }
+
         SwingUtilities.invokeLater {
             for (m in 0 until Window.jMenuBar.menuCount) {
                 Window.jMenuBar.getMenu(m)?.let { menu ->
@@ -106,9 +117,18 @@ object StatusBar : JXStatusBar() {
     }
 
     private fun addLabels() {
+        add(mouseGridPositionLabel.apply {
+            RawkyPlugin.document?.let { doc ->
+                val m = max(doc.rows + 1, doc.columns + 1)
+                preferredSize = Dimension(
+                    getFontMetrics(font).stringWidth("${m}x$m") + 1, preferredSize.height
+                )
+            }
+        }, 0)
         add(sizeLabel)
         add(frameLabel)
         add(layerLabel)
+        add(colourSpaceLabel)
         add(cellProviderLabel)
         add(controlModeLabel)
     }
@@ -116,6 +136,7 @@ object StatusBar : JXStatusBar() {
     private fun setStaticLabels() {
         RawkyPlugin.document?.let {
             sizeLabel.text = "${it.rows}x${it.columns}"
+            colourSpaceLabel.text = "Colour Space: ${it.colourChannel.name}"
             cellProviderLabel.text = "Cell Mode: ${CellProvider.current.name}"
         }
     }

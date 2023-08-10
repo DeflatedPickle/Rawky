@@ -46,7 +46,7 @@ object ActionUtil {
         }
     }
 
-    fun newDocument(columns: Int, rows: Int, frames: Int, layers: Int): RawkyDocument =
+    fun newDocument(rows: Int, columns: Int, frames: Int, layers: Int): RawkyDocument =
         RawkyDocument(
             rows = rows,
             columns = columns,

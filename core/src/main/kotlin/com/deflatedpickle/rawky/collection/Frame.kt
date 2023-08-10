@@ -28,5 +28,7 @@ data class Frame(
         return layer
     }
 
+    operator fun get(index: Int) = children[index]
+
     override fun toString() = name
 }

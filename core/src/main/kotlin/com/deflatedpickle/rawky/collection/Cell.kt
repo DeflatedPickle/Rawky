@@ -29,6 +29,8 @@ abstract class Cell<out T> {
 
     operator fun invoke(func: Cell<T>.() -> Unit) = this.apply(func)
 
+    operator fun get(x: Int, y: Int) = grid[x, y]
+
     companion object {
         val defaultColour = Color(0, 0, 0, 0)
     }

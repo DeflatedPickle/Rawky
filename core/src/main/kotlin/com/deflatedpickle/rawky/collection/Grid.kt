@@ -37,8 +37,8 @@ data class Grid(
                     polygon = Rectangle(column * pixel, row * pixel, width, height)
                 }
 
-                if (row + 1 == this.columns) {
-                    if (column + 1 == this.rows) column = 0 else column++
+                if (row + 1 == this.rows) {
+                    if (column + 1 == this.columns) column = 0 else column++
 
                     row = 0
                 } else {
