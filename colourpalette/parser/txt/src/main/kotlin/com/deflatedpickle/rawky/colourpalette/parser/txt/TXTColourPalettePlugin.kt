@@ -37,7 +37,7 @@ object TXTColourPalettePlugin : PaletteParser<Color> {
     override fun parse(file: File): Palette<Color> {
         val colours = mutableMapOf<Color, String?>()
 
-        file.readLines().forEach { line ->
+        file.readLines().map { it.trim() }.filter { it.isNotBlank() }.forEach { line ->
             if (!line.startsWith(";")) {
                 colours[Color(line.toLong(16).toInt(), true)] = null
             }
