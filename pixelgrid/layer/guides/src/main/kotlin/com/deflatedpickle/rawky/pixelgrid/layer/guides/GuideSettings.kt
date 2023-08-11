@@ -15,5 +15,5 @@ data class GuideSettings(
     var colour:
     @Serializable(ColorSerializer::class)
     Color = Color.PINK,
-    @FloatRange(0.1f, 8.0f) var thickness: Float = 0.5f,
+    @FloatRange(0.1f, 8.0f) var thickness: Float = 1.2f,
 ) : Config

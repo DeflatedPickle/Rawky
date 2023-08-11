@@ -13,7 +13,6 @@ import com.deflatedpickle.rawky.grid.pixel.PixelCellPlugin
 import com.deflatedpickle.undulation.impl.NullGlyphVector
 import kotlinx.serialization.Contextual
 import java.awt.AlphaComposite
-import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.event.MouseEvent.BUTTON1
 import java.awt.event.MouseEvent.NOBUTTON

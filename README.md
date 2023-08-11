@@ -8,8 +8,9 @@
 <h4 align="center">A pixel art & tile map editor</h4>
 
 <p align="center">
-	<a href="https://discord.gg/QEz4fb93xd"><img alt="Discord members" src="https://img.shields.io/discord/448452090147110913?label=Join%20The%20Discord&style=social"></a>
-	<a href="https://www.reddit.com/r/rawky/"><img alt="Subreddit subscribers" src="https://img.shields.io/reddit/subreddit-subscribers/rawky?style=social"></a>
+	<a href="https://api.securityscorecards.dev/projects/github.com/DeflatedPickle/Rawky"><img alt="OpenSSF Scorecard" src="https://api.securityscorecards.dev/projects/github.com/DeflatedPickle/Rawky/badge"></a>
+	<img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/DeflatedPickle/Rawky/gradle-packageAll.yml">
+	<a href="https://github.com/DeflatedPickle/Rawky/wiki"><img alt="Wiki" src="https://img.shields.io/badge/wiki-documentation-forestgreen"></a>
 </p>
 
 <table align="center">
@@ -22,9 +23,9 @@
 </table>
 
 <p align="center">
-	<a href="https://github.com/DeflatedPickle/Rawky/commits/rewrite"><img alt="Last Commit" src="https://img.shields.io/github/last-commit/DeflatedPickle/Rawky.svg"></a>
-	<img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/DeflatedPickle/Rawky/gradle-packageAll.yml">
-	<a href="https://github.com/DeflatedPickle/Rawky/wiki"><img alt="Wiki" src="https://img.shields.io/badge/wiki-documentation-forestgreen"></a>
+	<a href="https://github.com/DeflatedPickle/Rawky/releases"><img alt="Linux" src="https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black" height="48"></a>
+	<a href="https://github.com/DeflatedPickle/Rawky/releases"><img alt="MacOS" src="https://img.shields.io/badge/mac%20os-000000?style=for-the-badge&logo=macos&logoColor=white" height="48"></a>
+	<a href="https://github.com/DeflatedPickle/Rawky/releases"><img alt="Windows" src="https://img.shields.io/badge/Windows-0078D6?style=for-the-badge&logo=windows&logoColor=white" height="48"></a>
 </p>
 
 <p align="center">
@@ -43,11 +44,6 @@
 <p align="center">
     <img alt="Bytes" src="https://img.shields.io/github/languages/code-size/DeflatedPickle/Rawky">
     <img alt="Size" src="https://img.shields.io/github/repo-size/DeflatedPickle/Rawky">
-</p>
-
-<h3 align="center">Download</h3>
-<p align="center">
-	<a href="https://github.com/DeflatedPickle/Rawky/releases/tag/dist-latest"><img alt="Latest" src="https://img.shields.io/github/downloads/DeflatedPickle/Rawky/dist-latest/total.svg"></a>
 </p>
 
 ---

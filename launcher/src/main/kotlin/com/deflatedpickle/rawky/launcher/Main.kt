@@ -22,12 +22,11 @@ import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.ValidateUtil
 import com.deflatedpickle.marvin.util.OSUtil
-import com.deflatedpickle.paleta.PaletteWindow
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.grid.ascii.collection.ASCIICell
-import com.deflatedpickle.rawky.launcher.gui.Window
 import com.deflatedpickle.rawky.grid.pixel.collection.PixelCell
 import com.deflatedpickle.rawky.grid.tile.collection.TileCell
+import com.deflatedpickle.rawky.launcher.gui.Window
 import com.formdev.flatlaf.FlatLaf
 import com.jidesoft.plaf.LookAndFeelFactory
 import kotlinx.datetime.Clock

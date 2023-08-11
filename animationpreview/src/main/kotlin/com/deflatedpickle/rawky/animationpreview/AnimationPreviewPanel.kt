@@ -28,7 +28,7 @@ object AnimationPreviewPanel : PluginPanel() {
                 val g2D = g as Graphics2D
                 g2D.setRenderingHint(
                     RenderingHints.KEY_INTERPOLATION,
-                    RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR
+                    RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR,
                 )
 
                 val bufferedImage =

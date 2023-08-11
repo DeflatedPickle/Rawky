@@ -1,0 +1,139 @@
+[ {
+  "name": "Right Leg Accessory (Top)",
+  "x": 4,
+  "y": 32,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Right Leg Accessory (Bottom)",
+  "x": 8,
+  "y": 32,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Right Leg Accessory (Right)",
+  "x": 0,
+  "y": 36,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Right Leg Accessory (Front)",
+  "x": 4,
+  "y": 36,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Right Leg Accessory (Left)",
+  "x": 8,
+  "y": 36,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Right Leg Accessory (Back)",
+  "x": 12,
+  "y": 36,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Body Accessory (Right)",
+  "x": 16,
+  "y": 36,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Body Accessory (Top)",
+  "x": 20,
+  "y": 32,
+  "width": 8,
+  "height": 4
+}, {
+  "name": "Body Accessory (Bottom)",
+  "x": 28,
+  "y": 32,
+  "width": 8,
+  "height": 4
+}, {
+  "name": "Body Accessory (Front)",
+  "x": 20,
+  "y": 36,
+  "width": 8,
+  "height": 12
+}, {
+  "name": "Body Accessory (Left)",
+  "x": 28,
+  "y": 36,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Body Accessory (Back)",
+  "x": 32,
+  "y": 36,
+  "width": 8,
+  "height": 12
+}, {
+  "name": "Left Leg Accessory (Top)",
+  "x": 4,
+  "y": 48,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Left Leg Accessory (Bottom)",
+  "x": 8,
+  "y": 48,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Left Leg Accessory (Right)",
+  "x": 0,
+  "y": 52,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Left Leg Accessory (Front)",
+  "x": 4,
+  "y": 52,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Left Leg Accessory (Right)",
+  "x": 8,
+  "y": 52,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Left Leg Accessory (Back)",
+  "x": 12,
+  "y": 52,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Left Leg (Top)",
+  "x": 20,
+  "y": 48,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Left Leg (Bottom)",
+  "x": 24,
+  "y": 48,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Left Leg (Right)",
+  "x": 16,
+  "y": 52,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Left Leg (Front)",
+  "x": 20,
+  "y": 52,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Left Leg (Right)",
+  "x": 24,
+  "y": 52,
+  "width": 4,
+  "height": 12
+} ]

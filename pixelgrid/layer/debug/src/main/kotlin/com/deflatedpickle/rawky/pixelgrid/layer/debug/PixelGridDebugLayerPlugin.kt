@@ -11,13 +11,10 @@ import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer.Companion.registry
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.setting.RawkySettings
-import com.deflatedpickle.undulation.functions.extensions.getContrast
+import com.deflatedpickle.undulation.functions.extensions.drawOutlinedString
 import kotlinx.serialization.ExperimentalSerializationApi
-import java.awt.BasicStroke
 import java.awt.Graphics2D
 import java.awt.RenderingHints
-import java.awt.font.TextLayout
-import java.awt.geom.AffineTransform
 
 @ExperimentalSerializationApi
 @Plugin(
@@ -60,6 +57,15 @@ object PixelGridDebugLayerPlugin : PaintLayer {
         val grid = layer.child
 
         ConfigUtil.getSettings<RawkySettings>("deflatedpickle@core#*")?.let {
+            g.setRenderingHint(
+                RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON,
+            )
+            g.setRenderingHint(
+                RenderingHints.KEY_RENDERING,
+                RenderingHints.VALUE_RENDER_QUALITY,
+            )
+
             g.color = it.debug.colour
             g.font = it.debug.font
 
@@ -70,30 +76,5 @@ object PixelGridDebugLayerPlugin : PaintLayer {
             g.drawOutlinedString("visible: ${layer.visible}", 5, g.fontMetrics.height * 5 + 5)
             g.drawOutlinedString("lock: ${layer.lock}", 5, g.fontMetrics.height * 6 + 5)
         }
-    }
-
-    private fun Graphics2D.drawOutlinedString(string: String, x: Int, y: Int) {
-        val cached = color
-
-        setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-            RenderingHints.VALUE_ANTIALIAS_ON)
-        setRenderingHint(RenderingHints.KEY_RENDERING,
-            RenderingHints.VALUE_RENDER_QUALITY)
-
-        transform = AffineTransform.getTranslateInstance(x.toDouble(), y.toDouble())
-
-        val tl = TextLayout(
-                string,
-                font,
-                fontRenderContext
-            )
-
-        val shape = tl.getOutline(null)
-
-        color = cached.getContrast()
-        stroke = BasicStroke(4f)
-        draw(shape)
-        color = cached
-        fill(shape)
     }
 }

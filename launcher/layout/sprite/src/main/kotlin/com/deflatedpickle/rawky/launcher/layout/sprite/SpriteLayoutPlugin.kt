@@ -72,7 +72,7 @@ object SpriteLayoutPlugin {
                 "deflatedpickle@layer_list",
                 "deflatedpickle@pixel_grid",
                 DockingRegion.EAST,
-                0.3
+                0.3,
             )
             .buildApplicationLayout()
 

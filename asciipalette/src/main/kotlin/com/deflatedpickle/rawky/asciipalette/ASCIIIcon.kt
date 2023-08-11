@@ -1,3 +1,5 @@
+/* Copyright (c) 2023 DeflatedPickle under the MIT license */
+
 package com.deflatedpickle.rawky.asciipalette
 
 import com.deflatedpickle.rawky.grid.pixel.PixelCellPlugin
@@ -8,7 +10,7 @@ import java.awt.font.GlyphVector
 import javax.swing.Icon
 
 class ASCIIIcon(
-    val glyph: GlyphVector
+    val glyph: GlyphVector,
 ) : Icon {
     private var width = -1
     private var height = -1
@@ -24,7 +26,7 @@ class ASCIIIcon(
             g.drawGlyphVector(
                 glyph,
                 x.toFloat(),
-                y.toFloat() + height
+                y.toFloat() + height,
             )
         }
     }

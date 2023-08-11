@@ -38,13 +38,13 @@ object AnimationLayoutPlugin {
                     "deflatedpickle@timeline",
                     "deflatedpickle@pixel_grid",
                     DockingRegion.SOUTH,
-                    0.3
+                    0.3,
                 )
                 .dock(
                     "deflatedpickle@layer_list",
                     "deflatedpickle@pixel_grid",
                     DockingRegion.EAST,
-                    0.2
+                    0.2,
                 )
                 .dock(
                     "deflatedpickle@colour_wheel",

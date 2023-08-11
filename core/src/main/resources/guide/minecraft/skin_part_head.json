@@ -1,0 +1,73 @@
+[ {
+  "name": "Head (Top)",
+  "x": 8,
+  "y": 0,
+  "width": 8,
+  "height": 8
+}, {
+  "name": "Head (Bottom)",
+  "x": 16,
+  "y": 0,
+  "width": 8,
+  "height": 8
+}, {
+  "name": "Head (Right)",
+  "x": 0,
+  "y": 8,
+  "width": 8,
+  "height": 8
+}, {
+  "name": "Head (Front)",
+  "x": 8,
+  "y": 8,
+  "width": 8,
+  "height": 8
+}, {
+  "name": "Head (Left)",
+  "x": 16,
+  "y": 8,
+  "width": 8,
+  "height": 8
+}, {
+  "name": "Head (Back)",
+  "x": 24,
+  "y": 8,
+  "width": 8,
+  "height": 8
+}, {
+  "name": "Head Accessory (Top)",
+  "x": 40,
+  "y": 0,
+  "width": 8,
+  "height": 8
+}, {
+  "name": "Head Accessory (Bottom)",
+  "x": 48,
+  "y": 0,
+  "width": 8,
+  "height": 8
+}, {
+  "name": "Head Accessory (Right)",
+  "x": 32,
+  "y": 8,
+  "width": 8,
+  "height": 8
+}, {
+  "name": "Head Accessory (Front)",
+  "x": 40,
+  "y": 8,
+  "width": 8,
+  "height": 8
+}, {
+  "name": "Head Accessory (Left)",
+  "x": 48,
+  "y": 8,
+  "width": 8,
+  "height": 8
+}, {
+  "name": "Head Accessory (Back)",
+  "x": 56,
+  "y": 8,
+  "width": 8,
+  "height": 8
+} ]

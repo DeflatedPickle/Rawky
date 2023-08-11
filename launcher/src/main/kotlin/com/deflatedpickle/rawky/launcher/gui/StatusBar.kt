@@ -104,7 +104,7 @@ object StatusBar : JXStatusBar() {
 
         EventUpdateCell.addListener {
             mouseGridPositionLabel.text =
-                "${it.row + 1}x${it.column + 1}"
+                "${it.row}x${it.column}"
         }
 
         SwingUtilities.invokeLater {
@@ -117,14 +117,18 @@ object StatusBar : JXStatusBar() {
     }
 
     private fun addLabels() {
-        add(mouseGridPositionLabel.apply {
-            RawkyPlugin.document?.let { doc ->
-                val m = max(doc.rows + 1, doc.columns + 1)
-                preferredSize = Dimension(
-                    getFontMetrics(font).stringWidth("${m}x$m") + 1, preferredSize.height
-                )
-            }
-        }, 0)
+        add(
+            mouseGridPositionLabel.apply {
+                RawkyPlugin.document?.let { doc ->
+                    val m = max(doc.rows, doc.columns)
+                    preferredSize = Dimension(
+                        getFontMetrics(font).stringWidth("${m}x$m "),
+                        preferredSize.height,
+                    )
+                }
+            },
+            0,
+        )
         add(sizeLabel)
         add(frameLabel)
         add(layerLabel)

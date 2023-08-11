@@ -1,0 +1,145 @@
+[ {
+  "name": "Right Arm (Top)",
+  "x": 44,
+  "y": 16,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Right Arm (Bottom)",
+  "x": 48,
+  "y": 16,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Right Arm (Right)",
+  "x": 40,
+  "y": 20,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Right Arm (Front)",
+  "x": 44,
+  "y": 20,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Right Arm (Left)",
+  "x": 48,
+  "y": 20,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Right Arm (Back)",
+  "x": 52,
+  "y": 20,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Right Arm Accessory (Top)",
+  "x": 44,
+  "y": 32,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Right Arm Accessory (Bottom)",
+  "x": 48,
+  "y": 32,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Right Arm Accessory (Right)",
+  "x": 40,
+  "y": 36,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Right Arm Accessory (Front)",
+  "x": 44,
+  "y": 36,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Right Arm Accessory (Left)",
+  "x": 48,
+  "y": 36,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Right Arm Accessory (Back)",
+  "x": 52,
+  "y": 36,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Left Arm (Top)",
+  "x": 36,
+  "y": 48,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Left Arm (Bottom)",
+  "x": 40,
+  "y": 48,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Left Arm (Right)",
+  "x": 32,
+  "y": 52,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Left Arm (Front)",
+  "x": 36,
+  "y": 52,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Left Arm (Right)",
+  "x": 40,
+  "y": 52,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Left Arm (Back)",
+  "x": 44,
+  "y": 52,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Left Arm Accessory (Top)",
+  "x": 52,
+  "y": 48,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Left Arm Accessory (Bottom)",
+  "x": 56,
+  "y": 48,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Left Arm Accessory (Right)",
+  "x": 48,
+  "y": 52,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Left Arm Accessory (Front)",
+  "x": 52,
+  "y": 52,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Left Arm Accessory (Right)",
+  "x": 56,
+  "y": 52,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Left Arm Accessory (Back)",
+  "x": 60,
+  "y": 52,
+  "width": 4,
+  "height": 12
+} ]

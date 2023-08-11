@@ -16,10 +16,17 @@ import java.awt.font.GlyphVector
 data class ASCIICell(
     override val row: Int = 0,
     override val column: Int = 0,
-    override var content: @Serializable(
-        GlyphVectorSerializer::class
-    ) GlyphVector = NullGlyphVector(),
-    var colour: @Serializable(ColorSerializer::class) Color = Color.BLACK,
-) : Cell<@Serializable(
-    GlyphVectorSerializer::class
-) GlyphVector>()
+    override var content:
+    @Serializable(
+        GlyphVectorSerializer::class,
+    )
+    GlyphVector = NullGlyphVector(),
+    var colour:
+    @Serializable(ColorSerializer::class)
+    Color = Color.BLACK,
+) : Cell<
+    @Serializable(
+        GlyphVectorSerializer::class,
+    )
+    GlyphVector,
+    >()

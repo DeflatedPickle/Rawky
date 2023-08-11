@@ -54,10 +54,9 @@ object TilePalettePlugin {
         EventProgramFinishSetup.addListener {
             RegistryUtil.get(MenuCategory.MENU.name)?.apply {
                 (get(MenuCategory.FILE.name) as JMenu).apply {
-                    val index = menuComponents.indexOf(menuComponents.filterIsInstance<JMenuItem>().first { it.text.startsWith("Import") })
+                    val index = menuComponents.indexOf(menuComponents.filterIsInstance<JMenuItem>().first { it.text == "Import..." })
 
-                    insertSeparator(index + 2)
-                    add("Import Tile Palette", MonoIcon.FOLDER_NEW, index = index + 3) { importTilePalette() }
+                    add("Import Tile Palette", MonoIcon.FOLDER_NEW, index = index) { importTilePalette() }
                 }
             }
         }

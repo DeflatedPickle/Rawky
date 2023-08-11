@@ -12,10 +12,13 @@ import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer.Companion.registry
 import com.deflatedpickle.rawky.setting.RawkyDocument
+import com.deflatedpickle.undulation.functions.extensions.drawOutlinedRect
+import com.deflatedpickle.undulation.functions.extensions.drawOutlinedString
 import kotlinx.serialization.ExperimentalSerializationApi
 import java.awt.BasicStroke
 import java.awt.Color
 import java.awt.Graphics2D
+import java.awt.RenderingHints
 import java.awt.Stroke
 
 @ExperimentalSerializationApi
@@ -57,12 +60,21 @@ object PixelGridGuideLayerPlugin : PaintLayer {
     }
 
     private fun drawGuides(g: Graphics2D, doc: RawkyDocument, colour: Color, stroke: Stroke) {
+        g.setRenderingHint(
+            RenderingHints.KEY_ANTIALIASING,
+            RenderingHints.VALUE_ANTIALIAS_ON,
+        )
+        g.setRenderingHint(
+            RenderingHints.KEY_RENDERING,
+            RenderingHints.VALUE_RENDER_QUALITY,
+        )
+
         g.color = colour
         g.stroke = stroke
 
         for (i in doc.guides) {
-            g.drawString(i.name, i.x * Grid.pixel + 4, i.y * Grid.pixel + g.fontMetrics.height + 4)
-            g.drawRect(i.x * Grid.pixel, i.y * Grid.pixel, i.width * Grid.pixel, i.height * Grid.pixel)
+            g.drawOutlinedRect(i.x * Grid.pixel, i.y * Grid.pixel, i.width * Grid.pixel, i.height * Grid.pixel)
+            g.drawOutlinedString(i.name, i.x * Grid.pixel + 4, i.y * Grid.pixel + g.fontMetrics.height + 4)
         }
     }
 }

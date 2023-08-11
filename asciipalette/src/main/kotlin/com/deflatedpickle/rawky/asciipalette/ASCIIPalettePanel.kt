@@ -11,11 +11,9 @@ import com.deflatedpickle.rawky.event.EventChangeColour
 import com.deflatedpickle.rawky.grid.ascii.ASCIICellPlugin
 import com.deflatedpickle.undulation.constraints.FillBothFinishLine
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
-import com.deflatedpickle.undulation.widget.ColourButton
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator
 import so.n0weak.ExtendedComboBox
 import uk.co.timwise.wraplayout.WrapLayout
-import java.awt.Color
 import java.awt.GridBagLayout
 import java.awt.datatransfer.DataFlavor
 import java.awt.dnd.DnDConstants

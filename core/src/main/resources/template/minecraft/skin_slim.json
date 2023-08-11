@@ -1,0 +1,6 @@
+{
+  "name": "Skin (Slim)",
+  "width": 64,
+  "height": 64,
+  "guides": [ "skin_part_head", "skin_part_accessories", "skin_slim_arms", "skin_right_leg_body" ]
+}

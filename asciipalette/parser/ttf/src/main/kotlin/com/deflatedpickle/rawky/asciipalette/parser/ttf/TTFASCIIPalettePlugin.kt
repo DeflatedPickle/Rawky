@@ -44,13 +44,16 @@ object TTFASCIIPalettePlugin : PaletteParser<GlyphVector> {
 
         for (i in Char.MIN_VALUE..Char.MAX_VALUE) {
             if (f.canDisplay(i)) {
-                colours[f.createGlyphVector(
-                    FontRenderContext(
-                        AffineTransform(),
-                        true,
-                        true
-                    ), charArrayOf(i)
-                )] = i.toString()
+                colours[
+                    f.createGlyphVector(
+                        FontRenderContext(
+                            AffineTransform(),
+                            true,
+                            true,
+                        ),
+                        charArrayOf(i),
+                    ),
+                ] = i.toString()
             }
         }
 

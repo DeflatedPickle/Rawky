@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2022 DeflatedPickle under the MIT license */
+/* Copyright (c) 2022 DeflatedPickle under the MIT license */
 
 @file:Suppress("MemberVisibilityCanBePrivate")
 
@@ -141,7 +141,6 @@ object MenuBar : JMenuBar() {
                 "Close File",
                 enabled = RawkyPlugin.document != null,
             ) {
-
             }
 
             // TODO: make a file properties item and dialog
@@ -161,7 +160,6 @@ object MenuBar : JMenuBar() {
                 accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK),
                 enabled = RawkyPlugin.document != null,
             ) {
-
             }
 
             addSeparator()
@@ -213,40 +211,42 @@ object MenuBar : JMenuBar() {
 
     private fun populateViewMenu() {
         viewMenu.apply {
-            add(JMenu("Appearance", KeyEvent.VK_A).apply {
-                add(
-                    "Menu Bar",
-                    accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.ALT_DOWN_MASK),
-                    message = "Show/hide the menu bar",
-                    type = MenuButtonType.CHECK
-                ) {
-                    MenuBar.isVisible = (it.source as AbstractButton).isSelected
-                }.apply {
-                    this.isSelected = MenuBar.isVisible
-                }
+            add(
+                JMenu("Appearance", KeyEvent.VK_A).apply {
+                    add(
+                        "Menu Bar",
+                        accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_M, KeyEvent.ALT_DOWN_MASK),
+                        message = "Show/hide the menu bar",
+                        type = MenuButtonType.CHECK,
+                    ) {
+                        MenuBar.isVisible = (it.source as AbstractButton).isSelected
+                    }.apply {
+                        this.isSelected = MenuBar.isVisible
+                    }
 
-                add(
-                    "Toolbar",
-                    accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_T, KeyEvent.ALT_DOWN_MASK),
-                    message = "Show/hide the toolbar",
-                    type = MenuButtonType.CHECK
-                ) {
-                    ToolBar.isVisible = (it.source as AbstractButton).isSelected
-                }.apply {
-                    this.isSelected = ToolBar.isVisible
-                }
+                    add(
+                        "Toolbar",
+                        accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_T, KeyEvent.ALT_DOWN_MASK),
+                        message = "Show/hide the toolbar",
+                        type = MenuButtonType.CHECK,
+                    ) {
+                        ToolBar.isVisible = (it.source as AbstractButton).isSelected
+                    }.apply {
+                        this.isSelected = ToolBar.isVisible
+                    }
 
-                add(
-                    "Status Bar",
-                    accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.ALT_DOWN_MASK),
-                    message = "Show/hide the status bar",
-                    type = MenuButtonType.CHECK
-                ) {
-                    StatusBar.isVisible = (it.source as AbstractButton).isSelected
-                }.apply {
-                    this.isSelected = StatusBar.isVisible
-                }
-            })
+                    add(
+                        "Status Bar",
+                        accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_S, KeyEvent.ALT_DOWN_MASK),
+                        message = "Show/hide the status bar",
+                        type = MenuButtonType.CHECK,
+                    ) {
+                        StatusBar.isVisible = (it.source as AbstractButton).isSelected
+                    }.apply {
+                        this.isSelected = StatusBar.isVisible
+                    }
+                },
+            )
 
             addSeparator()
 
@@ -366,7 +366,7 @@ object MenuBar : JMenuBar() {
             add(
                 "About",
                 accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.ALT_DOWN_MASK),
-                message = "Show information about Rawky"
+                message = "Show information about Rawky",
             ) {
                 val dialog = AboutDialog()
                 dialog.isVisible = true

@@ -1,0 +1,73 @@
+[ {
+  "name": "Right Leg (Top)",
+  "x": 4,
+  "y": 16,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Right Leg (Bottom)",
+  "x": 8,
+  "y": 16,
+  "width": 4,
+  "height": 4
+}, {
+  "name": "Right Leg (Right)",
+  "x": 0,
+  "y": 20,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Right Leg (Front)",
+  "x": 4,
+  "y": 20,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Right Leg (Left)",
+  "x": 8,
+  "y": 20,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Right Leg (Back)",
+  "x": 12,
+  "y": 20,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Body (Top)",
+  "x": 20,
+  "y": 16,
+  "width": 8,
+  "height": 4
+}, {
+  "name": "Body (Bottom)",
+  "x": 28,
+  "y": 16,
+  "width": 8,
+  "height": 4
+}, {
+  "name": "Body (Right)",
+  "x": 16,
+  "y": 20,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Body (Front)",
+  "x": 20,
+  "y": 20,
+  "width": 8,
+  "height": 12
+}, {
+  "name": "Body (Left)",
+  "x": 28,
+  "y": 20,
+  "width": 4,
+  "height": 12
+}, {
+  "name": "Body (Back)",
+  "x": 32,
+  "y": 20,
+  "width": 8,
+  "height": 12
+} ]

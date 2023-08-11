@@ -9,7 +9,6 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.grid.pixel.collection.PixelCell
-import com.deflatedpickle.undulation.functions.extensions.getComplementary
 import com.deflatedpickle.undulation.functions.extensions.getContrast
 import kotlinx.serialization.Contextual
 import java.awt.BasicStroke
