@@ -11,6 +11,7 @@ import com.deflatedpickle.haruhi.event.EventImportDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.api.Tool
 import com.deflatedpickle.rawky.api.impex.Importer
 import com.deflatedpickle.rawky.api.impex.Opener
@@ -180,6 +181,17 @@ object PixelGridPanel : PluginPanel() {
                                 if (transferable.extension in v.openerExtensions.flatMap { it.value }) {
                                     RawkyPlugin.document = v.open(transferable)
                                         .apply { this.path = transferable.absoluteFile }
+
+                                    val mode = RawkyPlugin.document!!.controlMode
+                                    if (mode != null) {
+                                        ControlMode.current = mode
+                                    } else {
+                                        ControlMode.current = ControlMode.default
+                                        RawkyPlugin.document!!.controlMode = ControlMode.current
+                                    }
+
+                                    ControlMode.current.apply()
+
                                     EventOpenDocument.trigger(Pair(RawkyPlugin.document!!, transferable))
 
                                     break
@@ -208,7 +220,7 @@ object PixelGridPanel : PluginPanel() {
     init {
         layout = BorderLayout()
 
-        DropTarget(panel, DnDConstants.ACTION_COPY, dropTargetAdapter, true)
+        DropTarget(wrapper, DnDConstants.ACTION_COPY, dropTargetAdapter, true)
 
         add(quickBar, BorderLayout.NORTH)
         add(JScrollPane(wrapper), BorderLayout.CENTER)

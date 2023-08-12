@@ -1,0 +1,198 @@
+[
+  {
+    "name": "Player",
+    "x": 0,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Current Map",
+    "x": 8,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Over-world Position",
+    "x": 16,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Other Player",
+    "x": 24,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Target X",
+    "x": 32,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Target Point",
+    "x": 40,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Nearby Player",
+    "x": 48,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Far Away Player",
+    "x": 56,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Mansion",
+    "x": 64,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Monument",
+    "x": 72,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "White Banner",
+    "x": 80,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Orange Banner",
+    "x": 88,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Magenta Banner",
+    "x": 96,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Light Blue Banner",
+    "x": 104,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Yellow Banner",
+    "x": 112,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Lime Banner",
+    "x": 120,
+    "y": 0,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Pink Banner",
+    "x": 0,
+    "y": 8,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Gray Banner",
+    "x": 8,
+    "y": 8,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Light Gray Banner",
+    "x": 16,
+    "y": 8,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Cyan Banner",
+    "x": 24,
+    "y": 8,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Purple Banner",
+    "x": 32,
+    "y": 8,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Pink Banner",
+    "x": 40,
+    "y": 8,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Blue Banner",
+    "x": 48,
+    "y": 8,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Brown Banner",
+    "x": 56,
+    "y": 8,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Green Banner",
+    "x": 64,
+    "y": 8,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Red Banner",
+    "x": 72,
+    "y": 8,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Black Banner",
+    "x": 80,
+    "y": 8,
+    "width": 8,
+    "height": 8
+  },
+  {
+    "name": "Buried Treasure",
+    "x": 88,
+    "y": 8,
+    "width": 8,
+    "height": 8
+  }
+]
