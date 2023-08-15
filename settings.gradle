@@ -147,6 +147,11 @@ include 'tiledview'
 include 'autosave'
 include 'autoload'
 
+['discordipc'].each {
+	include "external.$it"
+	project(":external.$it").projectDir = new File(settingsDir, "external/$it")
+}
+
 [
 	'discordrpc',
 	'pluginmanager',

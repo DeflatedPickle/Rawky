@@ -25,6 +25,7 @@ import com.deflatedpickle.rawky.api.impex.Importer
 import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.event.EventUpdateCell
 import com.deflatedpickle.rawky.launcher.gui.Window
+import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.util.ActionUtil
 import com.deflatedpickle.undulation.functions.extensions.add
 import com.deflatedpickle.undulation.widget.LimitedMenu
@@ -195,6 +196,9 @@ object LauncherPlugin {
 
                 ControlMode.current.apply()
 
+                RawkyDocument.suggestedName = file.nameWithoutExtension
+                RawkyDocument.suggestedExtension = file.extension
+
                 EventOpenDocument.trigger(Pair(RawkyPlugin.document!!, file))
 
                 break
@@ -298,6 +302,10 @@ object LauncherPlugin {
     }
 
     fun exportDialog() {
+        RawkyDocument.suggestedName?.let { name ->
+            exporterChooser.selectedFile = File(".") / "${name}.${RawkyDocument.suggestedExtension ?: "rawr"}"
+        }
+
         if (exporterChooser.showSaveDialog(Haruhi.window) == JFileChooser.APPROVE_OPTION) {
             var file = exporterChooser.selectedFile
             if (file.extension == "") {

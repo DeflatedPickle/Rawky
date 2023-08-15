@@ -63,4 +63,5 @@
 	<br>
 	<a href="https://github.com/andrewauclair/ModernDocking">ModernDocking</a>
 	<a href="https://github.com/dheid/colorpicker">ColorPicker</a>
+	<a href="https://github.com/caoimhebyrne/KDiscordIPC">KDiscordIPC</a>
 </p>

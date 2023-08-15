@@ -41,6 +41,11 @@ data class RawkyDocument(
 ) : MultiParent<Frame>, ChildSelector, Document {
     @Transient var dirty = true
 
+    companion object {
+        var suggestedName: String? = null
+        var suggestedExtension: String? = null
+    }
+
     fun addFrame(
         name: String? = null,
         index: Int = -1,

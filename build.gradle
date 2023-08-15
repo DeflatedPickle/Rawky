@@ -338,6 +338,8 @@ run {
 		runtimeOnly project(":toolbox.bucket.fill.solid")
 		runtimeOnly project(":toolbox.bucket.fill.stipple")
 
+		runtimeOnly project(":external.discordipc")
+
 		runtimeOnly project(':sniffle.pluginmanager')
 		runtimeOnly project(':sniffle.settingsgui')
 		runtimeOnly project(':sniffle.tipoftheday')

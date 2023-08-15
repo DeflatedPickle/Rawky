@@ -31,6 +31,7 @@ abstract class Tool<T>(
             }
         }
 
+        // unlike you, the tool isn't always valid
         fun isToolValid() = this::current.isInitialized
     }
 

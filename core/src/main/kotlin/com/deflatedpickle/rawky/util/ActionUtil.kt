@@ -1,10 +1,13 @@
 /* Copyright (c) 2022 DeflatedPickle under the MIT license */
 
+@file:Suppress("UNCHECKED_CAST")
+
 package com.deflatedpickle.rawky.util
 
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.CellProvider
+import com.deflatedpickle.rawky.api.ColourChannel
 import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.api.template.Guide
 import com.deflatedpickle.rawky.api.template.Template
@@ -30,7 +33,26 @@ object ActionUtil {
             ControlMode.current = dialog.controlModeComboBox.selectedItem as ControlMode
             CellProvider.current = dialog.cellProviderComboBox.selectedItem as CellProvider<Cell<Any>>
 
-            val document = newDocument(maxRows, maxColumns, frames, layers)
+            val document = newDocument(maxRows, maxColumns, frames, layers).apply {
+                RawkyDocument.suggestedName = null
+                RawkyDocument.suggestedExtension = null
+
+                if (dialog.nameInput.text.isNotEmpty()) {
+                    val name = dialog.nameInput.text
+                    if (name.isNotBlank()) {
+                        RawkyDocument.suggestedName = name
+                    }
+
+                    val ext = dialog.extensionComboBox.selectedItem
+                    if (ext != null) {
+                        RawkyDocument.suggestedExtension = ext as String
+                    }
+                }
+
+                controlMode = ControlMode.current
+                cellProvider = CellProvider.current
+            }
+
             (dialog.template.selectedItem as Template?)
                 ?.guides
                 ?.flatMap { Guide.registry[it]!! }
