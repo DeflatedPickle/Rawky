@@ -37,9 +37,11 @@ import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.event.packet.PacketChange
 import com.deflatedpickle.rawky.launcher.LauncherPlugin
 import com.deflatedpickle.rawky.launcher.LauncherSettings
+import com.deflatedpickle.rawky.launcher.api.ScreenShotArea
 import com.deflatedpickle.rawky.launcher.gui.dialog.AboutDialog
 import com.deflatedpickle.rawky.launcher.gui.dialog.ApplyFilterDialog
 import com.deflatedpickle.rawky.launcher.gui.dialog.ScaleImageDialog
+import com.deflatedpickle.rawky.launcher.gui.dialog.ScreenshotDialog
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.ActionUtil
@@ -51,6 +53,8 @@ import org.oxbow.swingbits.dialog.task.TaskDialog.StandardCommand
 import java.awt.Color
 import java.awt.Desktop
 import java.awt.Rectangle
+import java.awt.Robot
+import java.awt.Toolkit
 import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
 import java.io.File
@@ -63,6 +67,7 @@ import javax.swing.JMenu
 import javax.swing.JMenuBar
 import javax.swing.JMenuItem
 import javax.swing.KeyStroke
+import javax.swing.Timer
 import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.reflect.full.createInstance
 import kotlin.system.exitProcess
@@ -81,6 +86,15 @@ object MenuBar : JMenuBar() {
     val help = JMenu("Help", KeyEvent.VK_H)
 
     private val disabledUntilFile = mutableListOf<JMenuItem>()
+
+    private val screenshotChooser = JFileChooser(File(".")).apply {
+        addChoosableFileFilter(
+            FileNameExtensionFilter(
+                "Portable Network Graphics (\"*.png\")",
+                "png",
+            ),
+        )
+    }
 
     init {
         (RegistryUtil.register(MenuCategory.MENU.name, menuRegistry) as Registry<String, JMenu>).apply {
@@ -146,6 +160,8 @@ object MenuBar : JMenuBar() {
                 ActionUtil.newFile()
             }
 
+            // TODO: new from screenshot
+
             add(
                 "Open...",
                 MonoIcon.FOLDER_OPEN,
@@ -156,14 +172,20 @@ object MenuBar : JMenuBar() {
             }
 
             add(
-                "Close File",
-                enabled = RawkyPlugin.document != null,
+                "Open as Frames...",
+                message = "Open a series of files as independent frames",
+                enabled = false
             ) {
+
             }
 
-            // TODO: make a file properties item and dialog
+            add(
+                "Open as Layers...",
+                message = "Open a series of files as layers in a given frame",
+                enabled = false
+            ) {
 
-            addSeparator()
+            }
 
             ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
                 if (it.history.isNotEmpty()) {
@@ -446,6 +468,15 @@ object MenuBar : JMenuBar() {
     private fun populateToolsMenu() {
         toolsMenu.apply {
             add(
+                "Take Screenshot...",
+                accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK or KeyEvent.SHIFT_DOWN_MASK)
+            ) {
+                saveScreenshot()
+            }
+
+            addSeparator()
+
+            add(
                 "Default Colours",
                 accelerator = KeyStroke.getKeyStroke("D"),
                 message = "Set the foreground colour to black and the background colour to white"
@@ -553,6 +584,55 @@ object MenuBar : JMenuBar() {
             ) {
                 val dialog = AboutDialog()
                 dialog.isVisible = true
+            }
+        }
+    }
+
+    private fun saveScreenshot() {
+        val dialog = ScreenshotDialog()
+        dialog.isVisible = true
+
+        if (dialog.result == StandardCommand.OK) {
+            val area = dialog.areaComboBox.selectedItem as ScreenShotArea
+            var delay = dialog.delaySpinner.value * 1000
+            val decoration = dialog.includeDecoration.isSelected
+            val open = dialog.openCheckBox.isSelected
+
+            // we do this as otherwise the dialog is in the screenshot
+            if (delay == 0 && area == ScreenShotArea.PROGRAM && decoration) {
+                delay = 200
+            }
+
+            Timer(delay) {
+                val img = when (area) {
+                    // TODO: add a drop shadow
+                    ScreenShotArea.PROGRAM -> if (decoration) {
+                        dialog.isVisible = false
+                        BufferedImage(Window.contentPane.width, Window.contentPane.height, BufferedImage.TYPE_INT_ARGB).apply {
+                            graphics.drawImage(Robot().createScreenCapture(Window.bounds), 0, 0, null)
+                        }
+                    } else {
+                        BufferedImage(Window.contentPane.width, Window.contentPane.height, BufferedImage.TYPE_INT_ARGB).apply {
+                            Window.contentPane.paint(this.graphics)
+                        }
+                    }
+                    ScreenShotArea.SCREEN -> {
+                        val size = Toolkit.getDefaultToolkit().screenSize
+                        // TODO: add a graphics device selector
+                        Robot().createScreenCapture(Rectangle(0, 0, size.width, size.height))
+                    }
+                }
+
+                if (screenshotChooser.showSaveDialog(Haruhi.window) == JFileChooser.APPROVE_OPTION) {
+                    ImageIO.write(img, "png", screenshotChooser.selectedFile)
+
+                    if (open) {
+                        Desktop.getDesktop().open(screenshotChooser.selectedFile)
+                    }
+                }
+            }.apply {
+                isRepeats = false
+                start()
             }
         }
     }
