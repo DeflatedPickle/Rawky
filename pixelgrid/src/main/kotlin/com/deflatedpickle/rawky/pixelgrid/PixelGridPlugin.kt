@@ -8,11 +8,13 @@ import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
+import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
+import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import kotlinx.serialization.ExperimentalSerializationApi
+import javax.swing.JMenuItem
 
-@ExperimentalSerializationApi
 @Plugin(
     value = "pixel_grid",
     author = "DeflatedPickle",
@@ -32,10 +34,24 @@ import kotlinx.serialization.ExperimentalSerializationApi
 )
 @Suppress("unused")
 object PixelGridPlugin {
-    init {
-        EventCreateDocument.addListener { PixelGridPanel.repaint() }
+    val disabledUntilFile = mutableListOf<JMenuItem>()
 
-        EventOpenDocument.addListener { PixelGridPanel.repaint() }
+    init {
+        EventCreateDocument.addListener {
+            for (i in disabledUntilFile) {
+                i.isEnabled = RawkyPlugin.document != null
+            }
+
+            PixelGridPanel.repaint()
+        }
+
+        EventOpenDocument.addListener {
+            for (i in disabledUntilFile) {
+                i.isEnabled = RawkyPlugin.document != null
+            }
+
+            PixelGridPanel.repaint()
+        }
 
         EventUpdateGrid.addListener { PixelGridPanel.repaint() }
 

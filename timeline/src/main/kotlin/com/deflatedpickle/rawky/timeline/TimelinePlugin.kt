@@ -10,6 +10,7 @@ import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.event.EventChangeFrame
+import com.deflatedpickle.rawky.event.EventNewFrame
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
 import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
@@ -50,6 +51,10 @@ object TimelinePlugin {
         }
 
         EventChangeFrame.addListener { triggerButtons() }
+
+        EventNewFrame.addListener {
+            TimelinePanel.model.addElement(it)
+        }
     }
 
     private fun createInitialFrames(it: RawkyDocument) {

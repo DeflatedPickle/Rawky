@@ -54,7 +54,13 @@ object PixelGridBackgroundLayerPlugin : PaintLayer {
 
                     // we just need a grid for width and height
                     f.children.first().child.let { grid ->
-                        drawBackground(g2d, grid, settings.fill, settings.size, settings.even, settings.odd)
+                        drawBackground(
+                            g2d,
+                            grid,
+                            settings.size,
+                            settings.even,
+                            settings.odd
+                        )
                     }
                 }
         }
@@ -63,19 +69,12 @@ object PixelGridBackgroundLayerPlugin : PaintLayer {
     private fun drawBackground(
         g: Graphics2D,
         grid: Grid,
-        fillType: FillType,
         size: Int,
         evenColour: Color,
         oddColour: Color,
     ) {
-        val fill =
-            when (fillType) {
-                FillType.ALL -> Pair(g.clipBounds.width, g.clipBounds.height)
-                FillType.GRID -> Pair(grid.rows, grid.columns)
-            }
-
-        for (r in 0 until fill.first * Grid.pixel / size) {
-            for (c in 0 until fill.second * Grid.pixel / size) {
+        for (r in 0 until grid.rows * Grid.pixel / size) {
+            for (c in 0 until grid.columns * Grid.pixel / size) {
                 g.color = if (r % 2 == c % 2) evenColour else oddColour
                 g.fillRect(c * size, r * size, size, size)
             }

@@ -20,7 +20,7 @@ object Window : JFrame("Rawky") {
 
     val toastWindow = ToastWindow(
         parent = this,
-        toastWidth = 160,
+        toastWidth = 200,
     )
 
     init {

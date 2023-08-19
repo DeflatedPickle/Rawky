@@ -41,6 +41,8 @@ object TilePalettePlugin {
 
     private val chooser =
         JFileChooser(File(".")).apply {
+            isAcceptAllFileFilterUsed = false
+
             EventProgramFinishSetup.addListener {
                 for ((k, v) in registry) {
                     addChoosableFileFilter(FileNameExtensionFilter("${v.name} (*.$k)", k))
@@ -56,7 +58,7 @@ object TilePalettePlugin {
                 (get(MenuCategory.FILE.name) as JMenu).apply {
                     val index = menuComponents.indexOf(menuComponents.filterIsInstance<JMenuItem>().first { it.text == "Import..." })
 
-                    add("Import Tile Palette", MonoIcon.FOLDER_NEW, index = index) { importTilePalette() }
+                    add("Import Tile Palette...", index = index) { importTilePalette() }
                 }
             }
         }

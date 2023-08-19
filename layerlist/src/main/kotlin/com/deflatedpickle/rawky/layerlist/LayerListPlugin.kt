@@ -11,6 +11,7 @@ import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.event.EventChangeFrame
 import com.deflatedpickle.rawky.event.EventChangeLayer
+import com.deflatedpickle.rawky.event.EventNewLayer
 import com.deflatedpickle.rawky.extension.removeAll
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
@@ -62,6 +63,11 @@ object LayerListPlugin {
         }
 
         EventChangeLayer.addListener { triggerButtons() }
+
+        EventNewLayer.addListener {
+            LayerListPanel.model.insertRow(0, arrayOf(it, it.name, true, false))
+            LayerListPanel.table.setRowSelectionInterval(0, 0)
+        }
     }
 
     private fun createInitialLayers(it: RawkyDocument) {

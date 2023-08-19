@@ -11,6 +11,7 @@ import ModernDocking.internal.DockingInternal
 import ModernDocking.internal.DockingListeners
 import ModernDocking.layouts.ApplicationLayout
 import ModernDocking.layouts.DockingLayouts
+import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.Registry
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.event.EventCreateDocument
@@ -25,7 +26,13 @@ import com.deflatedpickle.rawky.api.FilterCollection
 import com.deflatedpickle.rawky.api.ResampleCollection
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
+import com.deflatedpickle.rawky.dialog.NewFrameDialog
+import com.deflatedpickle.rawky.dialog.NewLayerDialog
+import com.deflatedpickle.rawky.event.EventChangeColour
+import com.deflatedpickle.rawky.event.EventChangeFrame
 import com.deflatedpickle.rawky.event.EventChangeLayer
+import com.deflatedpickle.rawky.event.EventNewFrame
+import com.deflatedpickle.rawky.event.EventNewLayer
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.event.packet.PacketChange
 import com.deflatedpickle.rawky.launcher.LauncherPlugin
@@ -33,6 +40,8 @@ import com.deflatedpickle.rawky.launcher.LauncherSettings
 import com.deflatedpickle.rawky.launcher.gui.dialog.AboutDialog
 import com.deflatedpickle.rawky.launcher.gui.dialog.ApplyFilterDialog
 import com.deflatedpickle.rawky.launcher.gui.dialog.ScaleImageDialog
+import com.deflatedpickle.rawky.setting.RawkyDocument
+import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.ActionUtil
 import com.deflatedpickle.undulation.api.MenuButtonType
 import com.deflatedpickle.undulation.functions.JMenu
@@ -41,16 +50,20 @@ import com.deflatedpickle.undulation.functions.extensions.getScreenDevice
 import org.oxbow.swingbits.dialog.task.TaskDialog.StandardCommand
 import java.awt.Color
 import java.awt.Desktop
+import java.awt.Rectangle
 import java.awt.event.KeyEvent
 import java.awt.image.BufferedImage
 import java.io.File
 import java.net.URI
+import javax.imageio.ImageIO
 import javax.swing.AbstractButton
 import javax.swing.Box
+import javax.swing.JFileChooser
 import javax.swing.JMenu
 import javax.swing.JMenuBar
 import javax.swing.JMenuItem
 import javax.swing.KeyStroke
+import javax.swing.filechooser.FileNameExtensionFilter
 import kotlin.reflect.full.createInstance
 import kotlin.system.exitProcess
 
@@ -58,6 +71,7 @@ object MenuBar : JMenuBar() {
     private val menuRegistry = Registry<String, JMenu>()
 
     val fileMenu = JMenu("File", KeyEvent.VK_F)
+    val editMenu = JMenu("Edit", KeyEvent.VK_E)
     val viewMenu = JMenu("View", KeyEvent.VK_V)
     val imageMenu = JMenu("Image", KeyEvent.VK_M)
     val frameMenu = JMenu("Frame", KeyEvent.VK_F)
@@ -71,6 +85,7 @@ object MenuBar : JMenuBar() {
     init {
         (RegistryUtil.register(MenuCategory.MENU.name, menuRegistry) as Registry<String, JMenu>).apply {
             register(MenuCategory.FILE.name, fileMenu)
+            register(MenuCategory.EDIT.name, editMenu)
             register(MenuCategory.VIEW.name, viewMenu)
             register(MenuCategory.IMAGE.name, imageMenu)
             register(MenuCategory.TOOLS.name, toolsMenu)
@@ -79,6 +94,7 @@ object MenuBar : JMenuBar() {
         }
 
         add(fileMenu)
+        add(editMenu)
         add(viewMenu)
         add(imageMenu)
         add(frameMenu)
@@ -90,10 +106,12 @@ object MenuBar : JMenuBar() {
 
         EventProgramFinishSetup.addListener {
             populateFileMenu()
+            populateEditMenu()
             populateViewMenu()
             populateImageMenu()
             populateFrameMenu()
             populateLayerMenu()
+            populateToolsMenu()
             populateWindowMenu()
             populateHelpMenu()
 
@@ -197,6 +215,22 @@ object MenuBar : JMenuBar() {
             addSeparator()
 
             add(
+                "Close File",
+                enabled = RawkyPlugin.document != null,
+            ) {
+                RawkyPlugin.document?.let { doc ->
+                    val frame = doc.children[doc.selectedIndex]
+                    val layer = frame.children[frame.selectedIndex]
+
+                    RawkyPlugin.document = null
+                    EventUpdateGrid.trigger(layer.child)
+
+                    RawkyDocument.suggestedName = null
+                    RawkyDocument.suggestedExtension = null
+                }
+            }.also { disabledUntilFile.add(it) }
+
+            add(
                 "Exit",
                 MonoIcon.EXIT,
                 KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK),
@@ -206,6 +240,42 @@ object MenuBar : JMenuBar() {
             }
 
             addSeparator()
+        }
+    }
+
+    private fun populateEditMenu() {
+        editMenu.apply {
+            add(
+                "Undo",
+                accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK),
+                message = "Revoke the last action",
+                enabled = false,
+            ) {
+                RawkyPlugin.document?.let {  doc ->
+                    ActionStack.undo()
+
+                    val frame = doc.children[doc.selectedIndex]
+                    val layer = frame.children[frame.selectedIndex]
+
+                    EventUpdateGrid.trigger(layer.child)
+                }
+            }.let { disabledUntilFile.add(it) }
+
+            add(
+                "Redo",
+                accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK or KeyEvent.SHIFT_DOWN_MASK),
+                message = "Perform the last revoked action",
+                enabled = false,
+            ) {
+                RawkyPlugin.document?.let { doc ->
+                    ActionStack.redo()
+
+                    val frame = doc.children[doc.selectedIndex]
+                    val layer = frame.children[frame.selectedIndex]
+
+                    EventUpdateGrid.trigger(layer.child)
+                }
+            }.let { disabledUntilFile.add(it) }
         }
     }
 
@@ -263,18 +333,106 @@ object MenuBar : JMenuBar() {
                     Window.getScreenDevice()?.fullScreenWindow = null
                 }
             }
+
+            add(
+                "Always on Top",
+                accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_F12, KeyEvent.ALT_DOWN_MASK),
+                message = "Toggle top level",
+                enabled = Toolkit.getDefaultToolkit().isAlwaysOnTopSupported,
+                type = MenuButtonType.CHECK,
+            ) {
+                Window.isAlwaysOnTop = (it.source as AbstractButton).isSelected
+            }
         }
     }
 
     private fun populateImageMenu() {}
 
-    private fun populateFrameMenu() {}
+    private fun populateFrameMenu() {
+        frameMenu.apply {
+            add(
+                "New...",
+                message = "Create a new frame and add it to the document",
+                enabled = false
+            ) {
+                RawkyPlugin.document?.let { doc ->
+                    val frameDialog = NewFrameDialog()
+                    frameDialog.isVisible = true
+
+                    if (frameDialog.result == StandardCommand.OK) {
+                        val layerDialog = NewLayerDialog(0)
+                        layerDialog.isVisible = true
+
+                        if (layerDialog.result == StandardCommand.OK) {
+                            val properFrameName =
+                                if (frameDialog.nameInput.text == "") null else frameDialog.nameInput.text
+
+                            val frame = doc.addFrame(properFrameName, frameDialog.indexInput.value as Int)
+
+                            val properLayerName =
+                                if (layerDialog.nameInput.text == "") null else layerDialog.nameInput.text
+
+                            val layer =
+                                frame.addLayer(
+                                    properLayerName,
+                                    layerDialog.columnInput.value as Int,
+                                    layerDialog.rowInput.value as Int,
+                                    // layerDialog.indexInput.value as Int
+                                )
+
+                            EventNewFrame.trigger(frame)
+                            EventNewLayer.trigger(layer)
+                            EventChangeFrame.trigger(
+                                PacketChange(
+                                    System.nanoTime(),
+                                    PluginUtil.slugToPlugin("deflatedpickle@layer_list")!!,
+                                    frame,
+                                    frame,
+                                ),
+                            )
+                        }
+                    }
+                }
+            }.also { disabledUntilFile.add(it) }
+        }
+    }
 
     private fun populateLayerMenu() {
         layerMenu.apply {
             add(
+                "New...",
+                message = "Create a new layer and add it to the current frame",
+                enabled = false
+            ) {
+                RawkyPlugin.document?.let { doc ->
+                    val layerDialog = NewLayerDialog()
+                    layerDialog.isVisible = true
+
+                    if (layerDialog.result == StandardCommand.OK) {
+                        val layer =
+                            doc.children[doc.selectedIndex].addLayer(
+                                layerDialog.nameInput.text,
+                                layerDialog.columnInput.value as Int,
+                                layerDialog.rowInput.value as Int,
+                                // layerDialog.indexInput.value as Int
+                            )
+
+                        EventNewLayer.trigger(layer)
+                        EventChangeLayer.trigger(
+                            PacketChange(
+                                System.nanoTime(),
+                                PluginUtil.slugToPlugin("deflatedpickle@layer_list")!!,
+                                layer,
+                                layer,
+                            ),
+                        )
+                    }
+                }
+            }.also { disabledUntilFile.add(it) }
+
+            add(
                 "Scale...",
-                message = "Resize the image using a given algorithm",
+                message = "Resize the selected layer using a given algorithm",
             ) {
                 scaleLayer()
             }.also { disabledUntilFile.add(it) }
@@ -282,6 +440,31 @@ object MenuBar : JMenuBar() {
             // TODO: add a rotate item
 
             makeFilterMenu(this) { filterLayer(it) }
+        }
+    }
+
+    private fun populateToolsMenu() {
+        toolsMenu.apply {
+            add(
+                "Default Colours",
+                accelerator = KeyStroke.getKeyStroke("D"),
+                message = "Set the foreground colour to black and the background colour to white"
+            ) {
+                EventChangeColour.trigger(Color.BLACK)
+
+                // TODO: the concept of a secondary colour only exists with the colour wheel
+            }
+
+            add(
+                "Swap Colours",
+                accelerator = KeyStroke.getKeyStroke("X"),
+                message = "Swap foreground and background colours",
+                enabled = false
+            ) {
+
+            }
+
+            addSeparator()
         }
     }
 

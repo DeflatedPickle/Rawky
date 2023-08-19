@@ -20,6 +20,7 @@ abstract class CellProvider<T> : Provider<Cell<T>>, HasName {
     abstract var current: @UnsafeVariance T
     abstract var default: @UnsafeVariance T
 
+    // exists to side step a type checking issue
     fun current(value: Any) {
         current = value as T
     }

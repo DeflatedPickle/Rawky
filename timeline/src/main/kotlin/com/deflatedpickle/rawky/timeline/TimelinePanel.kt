@@ -60,7 +60,11 @@ import kotlin.math.min
 // TODO add reordering of frames
 object TimelinePanel : PluginPanel() {
     val addButton =
-        AbstractButton(icon = MonoIcon.ADD_ELEMENT, tooltip = "Add element", enabled = false) {
+        AbstractButton(
+            icon = MonoIcon.ADD_ELEMENT,
+            tooltip = "Add frame",
+            enabled = false
+        ) {
             RawkyPlugin.document?.let { doc ->
                 val frameDialog = NewFrameDialog()
                 frameDialog.isVisible = true
@@ -74,8 +78,6 @@ object TimelinePanel : PluginPanel() {
                             if (frameDialog.nameInput.text == "") null else frameDialog.nameInput.text
 
                         val frame = doc.addFrame(properFrameName, frameDialog.indexInput.value as Int)
-
-                        model.addElement(frame)
 
                         EventNewFrame.trigger(frame)
 

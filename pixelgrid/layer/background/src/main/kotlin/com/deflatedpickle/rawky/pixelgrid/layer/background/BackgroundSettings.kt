@@ -13,7 +13,6 @@ import java.awt.Color
 data class BackgroundSettings(
     override val version: Int = 1,
     var enabled: Boolean = true,
-    var fill: FillType = FillType.GRID,
     @IntRange(1, Grid.pixel) var size: Int = Grid.pixel / 3,
     var even:
     @Serializable(ColorSerializer::class)

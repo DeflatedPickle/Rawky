@@ -16,5 +16,6 @@ interface Importer : HasName {
     val importerExtensions: MutableMap<String, List<String>>
 
     /** Opens a file into the current document */
+    // TODO: accept a null document so a correctly sized one can be made
     fun import(document: RawkyDocument, file: File)
 }

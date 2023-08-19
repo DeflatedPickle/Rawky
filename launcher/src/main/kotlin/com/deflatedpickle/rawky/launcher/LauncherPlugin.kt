@@ -108,12 +108,6 @@ object LauncherPlugin {
             }
         }
 
-    private val gridChooser =
-        JFileChooser(File(".")).apply {
-            isAcceptAllFileFilterUsed = false
-            addChoosableFileFilter(FileNameExtensionFilter("Theme (.xml)", "xml"))
-        }
-
     val historyMenu =
         LimitedMenu("History", 0).apply {
             ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {

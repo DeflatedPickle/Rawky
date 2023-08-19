@@ -3,27 +3,20 @@
 package com.deflatedpickle.rawky.pixelgrid.export.image.imageio.dialog
 
 import com.deflatedpickle.haruhi.Haruhi
-import com.deflatedpickle.marvin.functions.println
-import com.deflatedpickle.undulation.constraints.FillBothFinishLine
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.constraints.StickEast
 import com.deflatedpickle.undulation.widget.SliderSpinner
-import org.jdesktop.swingx.JXTable
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.GridBagLayout
 import java.awt.event.ItemEvent
 import javax.imageio.ImageWriteParam
-import javax.imageio.metadata.IIOMetadata
 import javax.swing.JComboBox
 import javax.swing.JLabel
 import javax.swing.JPanel
-import javax.swing.ListSelectionModel
-import javax.swing.table.DefaultTableModel
 
 // TODO: add a frame & layer input
 class ExportImageDialog(
-    param: ImageWriteParam,
-    metadata: IIOMetadata?,
+    param: ImageWriteParam
 ) : TaskDialog(Haruhi.window, "Export Image") {
     val compressionType = JComboBox<String>()
     private val compressionQualityCombo: JComboBox<String> = JComboBox<String>().apply {
@@ -45,19 +38,6 @@ class ExportImageDialog(
         }
     }
 
-    val metadataTableModel = DefaultTableModel(
-        arrayOf(),
-        arrayOf("Key", "Value"),
-    )
-
-    val metadataTable = JXTable(metadataTableModel).apply {
-        showVerticalLines = false
-        tableHeader = null
-        selectionMode = ListSelectionModel.SINGLE_SELECTION
-
-        // TODO: add the data
-    }
-
     init {
         setCommands(StandardCommand.OK, StandardCommand.CANCEL)
 
@@ -66,9 +46,9 @@ class ExportImageDialog(
                 compressionType.addItem(i)
             }
 
-            if (param.compressionTypes.isNotEmpty()) {
-                println(param.compressionQualityDescriptions.toList(), param.compressionQualityValues.toList())
-
+            if (param.compressionTypes.isNotEmpty()
+                && param.compressionType != null
+                && param.compressionQualityDescriptions != null) {
                 for (i in param.compressionQualityDescriptions) {
                     compressionQualityCombo.addItem(i)
                 }
@@ -93,10 +73,6 @@ class ExportImageDialog(
                     add(JLabel("Compression Quality:"), StickEast)
                     add(compressionQualityCombo, FillHorizontalFinishLine)
                     add(compressionQualitySlider, FillHorizontalFinishLine)
-                }
-
-                if (metadata != null) {
-                    add(metadataTable, FillBothFinishLine)
                 }
             }
     }

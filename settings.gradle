@@ -71,6 +71,7 @@ include 'pixelgrid'
 	'background',
 	'gridfill',
 	'gridlines',
+	'reference',
 	"guides",
 	"onionskin",
 	"toolpaint",

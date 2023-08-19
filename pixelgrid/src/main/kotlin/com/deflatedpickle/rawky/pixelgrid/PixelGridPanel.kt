@@ -19,10 +19,14 @@ import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.event.EventChangeTool
 import com.deflatedpickle.rawky.event.EventUpdateCell
+import com.deflatedpickle.rawky.event.EventUpdateGrid
+import com.deflatedpickle.rawky.pixelgrid.PixelGridPlugin.disabledUntilFile
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
+import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.DnDUtil
 import com.deflatedpickle.undulation.constraints.StickCenter
+import com.deflatedpickle.undulation.functions.extensions.add
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Dimension
@@ -36,14 +40,20 @@ import java.awt.dnd.DropTarget
 import java.awt.dnd.DropTargetAdapter
 import java.awt.dnd.DropTargetDragEvent
 import java.awt.dnd.DropTargetDropEvent
+import java.awt.event.KeyEvent
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
 import javax.swing.JLabel
+import javax.swing.JMenuItem
 import javax.swing.JPanel
+import javax.swing.JPopupMenu
 import javax.swing.JScrollPane
 import javax.swing.JSeparator
 import javax.swing.JToolBar
+import javax.swing.KeyStroke
 import kotlin.reflect.KClass
 import kotlin.reflect.full.declaredMemberProperties
 
@@ -217,6 +227,40 @@ object PixelGridPanel : PluginPanel() {
         }
     }
 
+    val contextMenu = JPopupMenu().apply {
+        add(
+            "Undo",
+            accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK),
+            message = "Revoke the last action",
+            enabled = false,
+        ) {
+            RawkyPlugin.document?.let {  doc ->
+                ActionStack.undo()
+
+                val frame = doc.children[doc.selectedIndex]
+                val layer = frame.children[frame.selectedIndex]
+
+                EventUpdateGrid.trigger(layer.child)
+            }
+        }.let { disabledUntilFile.add(it) }
+
+        add(
+            "Redo",
+            accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK or KeyEvent.SHIFT_DOWN_MASK),
+            message = "Perform the last revoked action",
+            enabled = false,
+        ) {
+            RawkyPlugin.document?.let { doc ->
+                ActionStack.redo()
+
+                val frame = doc.children[doc.selectedIndex]
+                val layer = frame.children[frame.selectedIndex]
+
+                EventUpdateGrid.trigger(layer.child)
+            }
+        }.let { disabledUntilFile.add(it) }
+    }
+
     init {
         layout = BorderLayout()
 
@@ -224,6 +268,20 @@ object PixelGridPanel : PluginPanel() {
 
         add(quickBar, BorderLayout.NORTH)
         add(JScrollPane(wrapper), BorderLayout.CENTER)
+
+        wrapper.addMouseListener(object : MouseAdapter() {
+            override fun mousePressed(e: MouseEvent) {
+                if (e.isPopupTrigger) {
+                    contextMenu.show(e.component, e.x, e.y)
+                }
+            }
+
+            override fun mouseReleased(e: MouseEvent) {
+                if (e.isPopupTrigger) {
+                    contextMenu.show(e.component, e.x, e.y)
+                }
+            }
+        })
 
         EventUpdateCell.addListener { repaint() }
     }

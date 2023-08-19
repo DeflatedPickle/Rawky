@@ -46,13 +46,12 @@ import kotlin.math.min
 // FIXME: all of it
 object LayerListPanel : PluginPanel() {
     val addButton =
-        AbstractButton(icon = MonoIcon.ADD_ELEMENT, tooltip = "Add element", enabled = false) {
+        AbstractButton(icon = MonoIcon.ADD_ELEMENT, tooltip = "Add layer", enabled = false) {
             RawkyPlugin.document?.let { doc ->
                 val layerDialog = NewLayerDialog()
                 layerDialog.isVisible = true
 
                 if (layerDialog.result == TaskDialog.StandardCommand.OK) {
-
                     val layer =
                         doc.children[doc.selectedIndex].addLayer(
                             layerDialog.nameInput.text,
@@ -60,9 +59,6 @@ object LayerListPanel : PluginPanel() {
                             layerDialog.rowInput.value as Int,
                             // layerDialog.indexInput.value as Int
                         )
-
-                    model.insertRow(0, arrayOf(layer, layerDialog.nameInput.text, true, false))
-                    table.setRowSelectionInterval(0, 0)
 
                     EventNewLayer.trigger(layer)
                     EventChangeLayer.trigger(

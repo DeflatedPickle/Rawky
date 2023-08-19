@@ -22,6 +22,7 @@ abstract class FilterCollection : HasName {
         // TODO: link filters to packets using an annotation
         interface Packet
 
+        // TODO: make use of number ranges
         data class Range<T : Number>(
             var current: T,
             val min: T,

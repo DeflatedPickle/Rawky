@@ -13,6 +13,8 @@ import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.event.EventChangeFrame
 import com.deflatedpickle.rawky.event.EventChangeLayer
 import com.deflatedpickle.rawky.event.EventUpdateCell
+import com.deflatedpickle.rawky.pixelgrid.event.EventReadProgress
+import com.deflatedpickle.rawky.pixelgrid.event.EventWriteProgress
 import org.jdesktop.swingx.JXStatusBar
 import java.awt.Dimension
 import java.awt.event.ItemEvent
@@ -20,11 +22,12 @@ import javax.swing.AbstractButton
 import javax.swing.JComboBox
 import javax.swing.JLabel
 import javax.swing.JPopupMenu
+import javax.swing.JProgressBar
 import javax.swing.MenuElement
 import javax.swing.SwingUtilities
 import kotlin.math.max
+import kotlin.math.roundToInt
 
-// TODO: add a save progress bar
 object StatusBar : JXStatusBar() {
     var note = " "
         set(value) {
@@ -45,6 +48,9 @@ object StatusBar : JXStatusBar() {
 
     private val colourSpaceLabel = JLabel()
     private val cellProviderLabel = JLabel()
+    private val programProcessBar = JProgressBar(0, 100).apply {
+        isStringPainted = true
+    }
     private val controlModeLabel = JComboBox<ControlMode>().apply {
         isEnabled = false
 
@@ -83,6 +89,9 @@ object StatusBar : JXStatusBar() {
             setStaticLabels()
             setDynamicLabels()
 
+            programProcessBar.value = 0
+            programProcessBar.toolTipText = ""
+
             controlModeLabel.isEnabled = true
         }
 
@@ -90,6 +99,9 @@ object StatusBar : JXStatusBar() {
             addLabels()
             setStaticLabels()
             setDynamicLabels()
+
+            programProcessBar.value = 0
+            programProcessBar.toolTipText = ""
 
             controlModeLabel.isEnabled = true
         }
@@ -105,6 +117,26 @@ object StatusBar : JXStatusBar() {
         EventUpdateCell.addListener {
             mouseGridPositionLabel.text =
                 "${it.row}x${it.column}"
+        }
+
+        EventReadProgress.addListener {
+            programProcessBar.value = it.progress.roundToInt()
+
+            if (it.progress.roundToInt() >= 100) {
+                programProcessBar.toolTipText = "Finished Reading \"${it.file.absolutePath}\""
+            } else {
+                programProcessBar.toolTipText = "Reading \"${it.file.absolutePath}\"..."
+            }
+        }
+
+        EventWriteProgress.addListener {
+            programProcessBar.value = it.progress.roundToInt()
+
+            if (it.progress.roundToInt() >= 100) {
+                programProcessBar.toolTipText = "Finished Writing \"${it.file.absolutePath}\""
+            } else {
+                programProcessBar.toolTipText = "Writing \"${it.file.absolutePath}\"..."
+            }
         }
 
         SwingUtilities.invokeLater {
@@ -134,6 +166,7 @@ object StatusBar : JXStatusBar() {
         add(layerLabel)
         add(colourSpaceLabel)
         add(cellProviderLabel)
+        add(programProcessBar)
         add(controlModeLabel)
     }
 
@@ -147,6 +180,8 @@ object StatusBar : JXStatusBar() {
 
     private fun setDynamicLabels() {
         RawkyPlugin.document?.let { doc ->
+            mouseGridPositionLabel.text = "0x0"
+
             val frame = doc.children[doc.selectedIndex]
             val frameIndex = doc.selectedIndex + 1
             val layerIndex = frame.selectedIndex + 1

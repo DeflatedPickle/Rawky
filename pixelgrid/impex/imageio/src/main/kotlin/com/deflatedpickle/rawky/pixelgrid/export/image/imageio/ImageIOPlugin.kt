@@ -7,6 +7,10 @@ package com.deflatedpickle.rawky.pixelgrid.export.image.imageio
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.util.PluginUtil
+import com.deflatedpickle.marvin.functions.extensions.get
+import com.deflatedpickle.marvin.impl.IIOReadProgressAdapter
+import com.deflatedpickle.marvin.impl.IIOWriteProgressAdapter
 import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.api.impex.Importer
@@ -14,18 +18,29 @@ import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
 import com.deflatedpickle.rawky.grid.pixel.PixelCellPlugin
+import com.deflatedpickle.rawky.pixelgrid.event.EventReadProgress
+import com.deflatedpickle.rawky.pixelgrid.event.EventWriteProgress
+import com.deflatedpickle.rawky.pixelgrid.event.PacketReadWriteProgress
 import com.deflatedpickle.rawky.pixelgrid.export.image.imageio.dialog.ExportImageDialog
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.util.ActionUtil
+import com.deflatedpickle.tosuto.TimedToastItem
+import com.deflatedpickle.tosuto.ToastItem
+import com.deflatedpickle.tosuto.action.ToastSingleAction
+import com.deflatedpickle.tosuto.api.ToastLevel
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import org.oxbow.swingbits.dialog.task.TaskDialogs
 import java.awt.Color
+import java.awt.Desktop
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.IIOImage
 import javax.imageio.ImageIO
+import javax.imageio.ImageReader
 import javax.imageio.ImageTypeSpecifier
 import javax.imageio.ImageWriteParam
+import javax.imageio.ImageWriter
+import javax.imageio.stream.FileImageInputStream
 import javax.imageio.stream.FileImageOutputStream
 
 @Plugin(
@@ -66,12 +81,14 @@ object ImageIOPlugin : Exporter, Importer, Opener {
                     "Apple Icon Image" to listOf("icns"),
                     "Interchange File Format" to listOf("iff"),
                     "Joint Photographic Experts Group" to
-                        listOf("jpg", "jpeg", "jpe", "jif", "jfif", "jfi"),
+                            listOf("jpg", "jpeg", "jpe", "jif", "jfif", "jfi"),
                     "Apple QuickDraw" to listOf("pict", "pct", "pic"),
-                    "Portable Any Map" to listOf("pnm", "ppm"),
+                    "NetPBM Portable Any Map" to listOf("pam"),
+                    "NetPBM Portable Pix Map" to listOf("ppm"),
                     "Adobe Photoshop Document" to listOf("psd"),
                     "Truevision TGA Image Format" to listOf("tga", "icb", "vda", "vst"),
-                    "Tagged Image File Format" to listOf("tiff", "tif"),
+                    "Tagged Image File Format" to listOf("tif", "tiff"),
+                    "BigTiff" to listOf("tif", "tiff", "btf", "tf8", "btiff"),
                     "Google WebP Format" to listOf("webp"),
                     "Quit Ok Image" to listOf("qoi"),
                 ),
@@ -85,14 +102,14 @@ object ImageIOPlugin : Exporter, Importer, Opener {
                     "Scalable Vector Graphics" to listOf("svg"),
                     "MS Windows Metafile" to listOf("wmf"),
                     "MS Cursor" to listOf("cur"),
-                    "HDRsoft High Dynamic Range" to listOf("hdr"),
+                    "Radiance HDR" to listOf("hdr"),
                     "Lossless JPEG" to listOf("jpg", "ljpg", "ljpeg"),
                     "ZSoft Paintbrush" to listOf("pcx"),
                     "ZSoft Multi-Page Paintbrush" to listOf("dcx"),
-                    "MacPaint Graphic" to listOf("pntg"),
+                    "Apple MacPaint" to listOf("pntg"),
                     "NetPBM Portable Bit Map" to listOf("pbm"),
                     "NetPBM Portable Grey Map" to listOf("pgm"),
-                    "Portable Float Map" to listOf("pfm"),
+                    "NetPBM Portable Float Map" to listOf("pfm"),
                     "Adobe Photoshop Large Document" to listOf("psb"),
                     "Silicon Graphics Image" to listOf("sgi", "bw", "rgb", "rgba"),
                     "Windows Thumbnail Cache" to listOf("db"),
@@ -103,7 +120,29 @@ object ImageIOPlugin : Exporter, Importer, Opener {
     }
 
     override fun export(doc: RawkyDocument, file: File) {
-        val writer = ImageIO.getImageWritersByFormatName(file.extension).next()
+        val writer = ImageIO.getImageWritersByFormatName(file.extension).next().apply {
+            addIIOWriteProgressListener(object : IIOWriteProgressAdapter() {
+                override fun imageProgress(source: ImageWriter, percentageDone: Float) {
+                    EventWriteProgress.trigger(
+                        PacketReadWriteProgress(
+                            source = PluginUtil.slugToPlugin("DeflatedPickle@imageio#*")!!,
+                            file = file,
+                            progress = percentageDone
+                        )
+                    )
+                }
+            })
+
+            addIIOWriteWarningListener { _, _, warning ->
+                Haruhi.toastWindow.add(
+                    TimedToastItem(
+                        level = ToastLevel.WARNING,
+                        title = "Image Write Warning",
+                        content = warning
+                    )
+                )
+            }
+        }
         val parameters = writer.defaultWriteParam.apply {
             if (canWriteCompressed()) compressionMode = ImageWriteParam.MODE_EXPLICIT
             if (canWriteProgressive()) progressiveMode = ImageWriteParam.MODE_DEFAULT
@@ -112,7 +151,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
         val metadata = writer.getDefaultImageMetadata(type, parameters)
 
         if (parameters.canWriteCompressed() || metadata != null) {
-            val dialog = ExportImageDialog(parameters, metadata)
+            val dialog = ExportImageDialog(parameters)
             dialog.isVisible = true
 
             if (dialog.result == TaskDialog.StandardCommand.OK) {
@@ -123,9 +162,9 @@ object ImageIOPlugin : Exporter, Importer, Opener {
             }
         }
 
-        val frame = doc.children[0]
+        val frame = doc.children[doc.selectedIndex]
         val layers = frame.children
-        val grid = frame.children[0].child
+        val grid = frame.children[frame.selectedIndex].child
 
         val image =
             BufferedImage(grid.columns, grid.rows, doc.colourChannel.code).apply {
@@ -140,6 +179,20 @@ object ImageIOPlugin : Exporter, Importer, Opener {
 
         writer.output = FileImageOutputStream(file)
         writer.write(null, IIOImage(image, listOf(image), metadata), parameters)
+
+        Haruhi.toastWindow.add(
+            ToastItem(
+                level = ToastLevel.INFO,
+                title = "Saved",
+                // content = file.absolutePath,
+                actions = listOf(
+                    ToastSingleAction("Open") { _, toast: ToastItem ->
+                        Desktop.getDesktop().open(file)
+                        toast.close()
+                    }
+                )
+            )
+        )
     }
 
     override fun import(document: RawkyDocument, file: File) {
@@ -153,8 +206,10 @@ object ImageIOPlugin : Exporter, Importer, Opener {
             return
         }
 
-        ImageIO.read(file).apply {
-            val frame = document.children[0]
+        val reader = getReader(file)
+        reader.input = FileImageInputStream(file)
+        reader.read(0).apply {
+            val frame = document.children[document.selectedIndex]
             val layers = frame.children
 
             layers.add(0, Layer(child = Grid(rows = this.height, columns = this.width)))
@@ -172,10 +227,12 @@ object ImageIOPlugin : Exporter, Importer, Opener {
 
         CellProvider.current = PixelCellPlugin
 
-        ImageIO.read(file).apply {
+        val reader = getReader(file)
+        reader.input = FileImageInputStream(file)
+        reader.read(0).apply {
             doc = ActionUtil.newDocument(this.width, this.height, 1, 1)
 
-            val frame = doc.children[0]
+            val frame = doc.children[doc.selectedIndex]
             val layers = frame.children
 
             for (row in 0 until this.height) {
@@ -187,4 +244,29 @@ object ImageIOPlugin : Exporter, Importer, Opener {
 
         return doc
     }
+
+    private fun getReader(file: File) =
+        ImageIO.getImageReadersByFormatName(file.extension).next().apply {
+            addIIOReadProgressListener(object : IIOReadProgressAdapter() {
+                override fun imageProgress(source: ImageReader, percentageDone: Float) {
+                    EventReadProgress.trigger(
+                        PacketReadWriteProgress(
+                            source = PluginUtil.slugToPlugin("DeflatedPickle@imageio#*")!!,
+                            file = file,
+                            progress = percentageDone
+                        )
+                    )
+                }
+            })
+
+            addIIOReadWarningListener { _, warning ->
+                Haruhi.toastWindow.add(
+                    TimedToastItem(
+                        level = ToastLevel.WARNING,
+                        title = "Image Read Warning",
+                        content = warning
+                    )
+                )
+            }
+        }
 }

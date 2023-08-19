@@ -271,6 +271,7 @@ run {
 		runtimeOnly project(":pixelgrid.layer.background")
 		runtimeOnly project(":pixelgrid.layer.gridfill")
 		runtimeOnly project(":pixelgrid.layer.gridlines")
+		runtimeOnly project(":pixelgrid.layer.reference")
 		runtimeOnly project(":pixelgrid.layer.guides")
 		runtimeOnly project(":pixelgrid.layer.onionskin")
 		runtimeOnly project(":pixelgrid.layer.toolpaint")
