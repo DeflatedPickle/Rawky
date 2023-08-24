@@ -18,6 +18,7 @@ import com.deflatedpickle.haruhi.event.EventSaveDocument
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.marvin.functions.extensions.div
+import com.deflatedpickle.marvin.functions.println
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.ControlMode
 import com.deflatedpickle.rawky.api.impex.Exporter
@@ -307,6 +308,14 @@ object LauncherPlugin {
                     File(
                         "${file.absolutePath}.${(exporterChooser.fileFilter as FileNameExtensionFilter).extensions.first()}",
                     )
+            }
+
+            if (file.exists() && !TaskDialogs.ask(
+                    Haruhi.window,
+                    "Overwrite?",
+                    "The file \"${file.absolutePath}\" already exists. Would you like to overwrite it?"
+            )) {
+                return
             }
 
             export(file)

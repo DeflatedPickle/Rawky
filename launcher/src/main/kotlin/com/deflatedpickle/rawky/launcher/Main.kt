@@ -22,6 +22,7 @@ import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.ValidateUtil
 import com.deflatedpickle.marvin.util.OSUtil
+import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.grid.ascii.collection.ASCIICell
 import com.deflatedpickle.rawky.grid.pixel.collection.PixelCell
@@ -44,6 +45,7 @@ import org.oxbow.swingbits.util.Strings
 import java.awt.BorderLayout
 import java.awt.Dimension
 import java.io.File
+import javax.swing.ImageIcon
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
 import kotlin.system.exitProcess
@@ -78,7 +80,7 @@ fun main(args: Array<String>) {
         ignoreUnknownKeys = true
         prettyPrint = true
 
-        // FIXME: have these registered by the plugin's responsible
+        // TODO: have these registered by the plugin's responsible
         serializersModule = SerializersModule {
             polymorphic(Cell::class) {
                 subclass(PixelCell::class)
@@ -94,6 +96,8 @@ fun main(args: Array<String>) {
     FlatCatppuccinMacchiatoIJTheme.setup()
 
     UIManager.put("ModernDocking.titlebar.background.color", UIManager.get("TabbedPane.focusColor"))
+    UIManager.put("ModernDocking.titlebar.button.settings", MonoIcon.SETTINGS)
+    UIManager.put("ModernDocking.titlebar.button.close", MonoIcon.EXIT)
 
     // UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName())
     // SwingUtilities.updateComponentTreeUI(Window)

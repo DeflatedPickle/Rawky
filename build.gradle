@@ -96,7 +96,7 @@ allprojects { p ->
 		}
 
 		kotlin {
-			ktlint()
+			ktlint(ktlintVersion)
 
 			licenseHeader "$licenseHeader\n\n"
 		}
@@ -231,6 +231,8 @@ configurations {
 }
 
 run {
+	dependsOn spotlessApply
+
 	args = ['indev']
 
 	doFirst {
