@@ -73,10 +73,8 @@ object ToolboxPlugin {
         }
 
         EventChangeTool.addListener {
-            // if (group.elements.toList().any { it.isSelected }) return@addListener
-
             for (i in group.elements) {
-                if (i.icon == Tool.current.icon) {
+                if (i.icon == it.icon) {
                     i.isSelected = true
                     break
                 }

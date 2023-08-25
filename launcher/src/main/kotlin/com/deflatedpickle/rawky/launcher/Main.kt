@@ -27,8 +27,12 @@ import com.deflatedpickle.rawky.collection.Cell
 import com.deflatedpickle.rawky.grid.ascii.collection.ASCIICell
 import com.deflatedpickle.rawky.grid.pixel.collection.PixelCell
 import com.deflatedpickle.rawky.grid.tile.collection.TileCell
+import com.deflatedpickle.rawky.launcher.gui.MenuBar
+import com.deflatedpickle.rawky.launcher.gui.ToolBar
 import com.deflatedpickle.rawky.launcher.gui.Window
+import com.deflatedpickle.rawky.launcher.gui.dialog.AboutDialog
 import com.formdev.flatlaf.FlatLaf
+import com.formdev.flatlaf.util.SystemInfo
 import com.jidesoft.plaf.LookAndFeelFactory
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
@@ -43,9 +47,13 @@ import org.fusesource.jansi.AnsiConsole
 import org.oxbow.swingbits.dialog.task.TaskDialogs
 import org.oxbow.swingbits.util.Strings
 import java.awt.BorderLayout
+import java.awt.Desktop
 import java.awt.Dimension
 import java.io.File
+import javax.swing.Box
 import javax.swing.ImageIcon
+import javax.swing.JDialog
+import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
 import kotlin.system.exitProcess
@@ -90,9 +98,43 @@ fun main(args: Array<String>) {
         }
     }
 
+    if (SystemInfo.isLinux) {
+        JFrame.setDefaultLookAndFeelDecorated(true)
+        JDialog.setDefaultLookAndFeelDecorated(true)
+    }
+
+    if (SystemInfo.isMacOS) {
+        System.setProperty("apple.laf.useScreenMenuBar", "true")
+        System.setProperty("apple.awt.application.appearance", "system")
+
+        MenuBar.aboutItem.isVisible = false
+        MenuBar.exitItem.isVisible = false
+
+        with(Desktop.getDesktop()) {
+            if (isSupported(Desktop.Action.APP_ABOUT)) {
+                setAboutHandler {
+                    val dialog = AboutDialog()
+                    dialog.isVisible = true
+                }
+            }
+
+            if (isSupported(Desktop.Action.APP_QUIT_HANDLER)) {
+                setQuitHandler { e, response ->
+                    response.performQuit()
+                }
+            }
+        }
+
+        if (SystemInfo.isMacFullWindowContentSupported) {
+            Window.rootPane.putClientProperty("apple.awt.fullWindowContent", true)
+            Window.rootPane.putClientProperty("apple.awt.transparentTitleBar", true)
+            Window.title = null
+            ToolBar.add(Box.createHorizontalStrut(70), 0)
+        }
+    }
+
     FlatOpenDyslexicFont.install()
     FlatLaf.setPreferredFontFamily(FlatOpenDyslexicFont.FAMILY)
-
     FlatCatppuccinMacchiatoIJTheme.setup()
 
     UIManager.put("ModernDocking.titlebar.background.color", UIManager.get("TabbedPane.focusColor"))
@@ -207,14 +249,14 @@ fun main(args: Array<String>) {
     PluginUtil.loadPlugins {
         // Versions must be semantic
         ValidateUtil.validateVersion(it) &&
-            // Descriptions must contain a <br> tag
-            ValidateUtil.validateDescription(it) &&
-            // Specific types need a specified field
-            ValidateUtil.validateType(it) &&
-            // Dependencies should be "author@plugin#version"
-            // PluginUtil.validateDependencySlug(it) &&
-            // The dependency should exist
-            ValidateUtil.validateDependencyExistence(it)
+                // Descriptions must contain a <br> tag
+                ValidateUtil.validateDescription(it) &&
+                // Specific types need a specified field
+                ValidateUtil.validateType(it) &&
+                // Dependencies should be "author@plugin#version"
+                // PluginUtil.validateDependencySlug(it) &&
+                // The dependency should exist
+                ValidateUtil.validateDependencyExistence(it)
     }
     logger.info("Loaded plugins; ${PluginUtil.loadedPlugins.map { PluginUtil.pluginToSlug(it) }}")
     EventLoadedPlugins.trigger(PluginUtil.loadedPlugins)

@@ -79,7 +79,7 @@ object RawkyPlugin {
                 (get(MenuCategory.TOOLS.name) as JMenu).apply {
                     add(
                         "Debug",
-                        MonoIcon.SETTINGS,
+                        MonoIcon.WRENCH,
                         KeyStroke.getKeyStroke("F3"),
                         "Toggle debugging hints",
                         type = CHECK,

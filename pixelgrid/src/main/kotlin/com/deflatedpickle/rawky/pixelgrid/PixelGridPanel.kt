@@ -9,6 +9,7 @@ import com.deflatedpickle.haruhi.component.PluginPanel
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventImportDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
+import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.ControlMode
@@ -25,8 +26,12 @@ import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.DnDUtil
+import com.deflatedpickle.undulation.api.ButtonType
+import com.deflatedpickle.undulation.api.MenuButtonType
 import com.deflatedpickle.undulation.constraints.StickCenter
+import com.deflatedpickle.undulation.functions.JMenu
 import com.deflatedpickle.undulation.functions.extensions.add
+import jdk.jfr.Event
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Dimension
@@ -46,6 +51,7 @@ import java.awt.event.MouseEvent
 import java.awt.image.BufferedImage
 import java.io.File
 import java.io.IOException
+import javax.swing.ButtonGroup
 import javax.swing.JLabel
 import javax.swing.JMenuItem
 import javax.swing.JPanel
@@ -65,7 +71,7 @@ object PixelGridPanel : PluginPanel() {
         EventChangeTool.addListener { tool ->
             removeAll()
 
-            // FIXME: changes are delayed for some reason
+            // FIXME: changes are delayed till the next change
             for ((i, s) in tool.getQuickSettings().withIndex()) {
                 (RegistryUtil.get("setting_type") as Registry<String, (Plugin, String, Any) -> Component>?)
                     ?.let { registry ->
@@ -234,7 +240,7 @@ object PixelGridPanel : PluginPanel() {
             message = "Revoke the last action",
             enabled = false,
         ) {
-            RawkyPlugin.document?.let {  doc ->
+            RawkyPlugin.document?.let { doc ->
                 ActionStack.undo()
 
                 val frame = doc.children[doc.selectedIndex]
@@ -259,6 +265,53 @@ object PixelGridPanel : PluginPanel() {
                 EventUpdateGrid.trigger(layer.child)
             }
         }.let { disabledUntilFile.add(it) }
+
+        addSeparator()
+
+        add(JMenu("Tools", KeyEvent.VK_T).apply {
+            val group = ButtonGroup()
+
+            EventProgramFinishSetup.addListener {
+                for (v in Tool.registry.values.sortedBy { it.name }) {
+                    add(
+                        v.name,
+                        icon = v.icon,
+                        enabled = false,
+                        type = MenuButtonType.RADIO,
+                    ) {
+                        Tool.current = v
+
+                        EventChangeTool.trigger(v)
+                    }.also {
+                        EventChangeTool.addListener { tool ->
+                            for (i in group.elements) {
+                                if (i.icon == tool.icon) {
+                                    i.isSelected = true
+                                    break
+                                }
+                            }
+                        }
+
+                        group.add(it)
+                        disabledUntilFile.add(it)
+                    }
+                }
+            }
+        })
+    }
+
+    private val mouseAdapter = object : MouseAdapter() {
+        override fun mousePressed(e: MouseEvent) {
+            if (e.isPopupTrigger) {
+                contextMenu.show(e.component, e.x, e.y)
+            }
+        }
+
+        override fun mouseReleased(e: MouseEvent) {
+            if (e.isPopupTrigger) {
+                contextMenu.show(e.component, e.x, e.y)
+            }
+        }
     }
 
     init {
@@ -269,19 +322,8 @@ object PixelGridPanel : PluginPanel() {
         add(quickBar, BorderLayout.NORTH)
         add(JScrollPane(wrapper), BorderLayout.CENTER)
 
-        wrapper.addMouseListener(object : MouseAdapter() {
-            override fun mousePressed(e: MouseEvent) {
-                if (e.isPopupTrigger) {
-                    contextMenu.show(e.component, e.x, e.y)
-                }
-            }
-
-            override fun mouseReleased(e: MouseEvent) {
-                if (e.isPopupTrigger) {
-                    contextMenu.show(e.component, e.x, e.y)
-                }
-            }
-        })
+        wrapper.addMouseListener(mouseAdapter)
+        panel.addMouseListener(mouseAdapter)
 
         EventUpdateCell.addListener { repaint() }
     }

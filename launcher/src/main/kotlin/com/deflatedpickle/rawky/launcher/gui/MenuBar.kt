@@ -47,6 +47,7 @@ import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.ActionUtil
 import com.deflatedpickle.undulation.api.MenuButtonType
 import com.deflatedpickle.undulation.functions.JMenu
+import com.deflatedpickle.undulation.functions.extensions.JMenuItem
 import com.deflatedpickle.undulation.functions.extensions.add
 import com.deflatedpickle.undulation.functions.extensions.getScreenDevice
 import org.oxbow.swingbits.dialog.task.TaskDialog.StandardCommand
@@ -84,6 +85,24 @@ object MenuBar : JMenuBar() {
     val toolsMenu = JMenu("Tools", KeyEvent.VK_T)
     val windowMenu = JMenu("Window", KeyEvent.VK_W)
     val help = JMenu("Help", KeyEvent.VK_H)
+
+    val aboutItem = JMenuItem(
+        "About",
+        accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.ALT_DOWN_MASK),
+        message = "Show information about Rawky",
+    ) {
+        val dialog = AboutDialog()
+        dialog.isVisible = true
+    }
+
+    val exitItem = JMenuItem(
+        "Exit",
+        MonoIcon.EXIT,
+        KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK),
+        "Close the program",
+    ) {
+        exitProcess(0)
+    }
 
     private val disabledUntilFile = mutableListOf<JMenuItem>()
 
@@ -252,14 +271,7 @@ object MenuBar : JMenuBar() {
                 }
             }.also { disabledUntilFile.add(it) }
 
-            add(
-                "Exit",
-                MonoIcon.EXIT,
-                KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.CTRL_DOWN_MASK),
-                "Close the program",
-            ) {
-                exitProcess(0)
-            }
+            add(exitItem)
 
             addSeparator()
         }
@@ -577,14 +589,7 @@ object MenuBar : JMenuBar() {
 
             addSeparator()
 
-            add(
-                "About",
-                accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.ALT_DOWN_MASK),
-                message = "Show information about Rawky",
-            ) {
-                val dialog = AboutDialog()
-                dialog.isVisible = true
-            }
+            add(aboutItem)
         }
     }
 

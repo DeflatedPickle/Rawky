@@ -4,11 +4,9 @@ package com.deflatedpickle.rawky.launcher
 
 import com.deflatedpickle.haruhi.api.config.Config
 import com.deflatedpickle.marvin.serializer.FileSerializer
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.Serializable
 import java.io.File
 
-@OptIn(ExperimentalSerializationApi::class)
 @Serializable
 data class LauncherSettings(
     override val version: Int = 1,

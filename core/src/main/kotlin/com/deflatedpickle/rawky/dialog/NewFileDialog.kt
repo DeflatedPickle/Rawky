@@ -70,10 +70,8 @@ class NewFileDialog : TaskDialog(Haruhi.window, "New File") {
 
     val extensionComboBox = JComboBox<String>().apply {
         for (o in Exporter.registry.values) {
-            for (oe in o.exporterExtensions.values) {
-                for (e in oe) {
-                    addItem(e)
-                }
+            for (e in o.exporterExtensions.values) {
+                addItem(e.first())
             }
         }
 
