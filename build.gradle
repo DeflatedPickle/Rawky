@@ -1,5 +1,6 @@
 //file:noinspection GroovyAccessibility
 import io.github.fvarrui.javapackager.gradle.PackageTask
+import io.github.fvarrui.javapackager.model.FileAssociation
 
 buildscript {
 	repositories {
@@ -192,7 +193,7 @@ distZip {
 
 javapackager {
 	mainClass = "com.deflatedpickle.rawky.launcher.MainKt"
-	description = "A pixel art & tile map editor"
+	description = "A pixel art editor"
 	version = project.properties["pre"] ?: version
 
 	bundleJre = true
@@ -201,13 +202,28 @@ javapackager {
 	administratorRequired = false
 	copyDependencies = true
 
-	createTarball = true
+	createTarball = false
 	createZipball = true
+
+	jreMinVersion = "11"
+
+	fileAssociations = [
+			new FileAssociation(mimeType: 'application/rawky', extension: 'rawr', description: 'Rawky'),
+			new FileAssociation(mimeType: 'application/rawky', extension: 'rawrxd', description: 'Rawky Binary')
+	]
+
+	assetsDir = new File(projectDir, "/launcher/src/main/resources/assets")
 }
 
 
 task packageLinux(type: PackageTask, dependsOn: build) {
 	platform = "linux"
+
+	linuxConfig {
+		generateAppImage = false
+
+		categories = ["Graphics"]
+	}
 }
 
 task packageMac(type: PackageTask, dependsOn: build) {

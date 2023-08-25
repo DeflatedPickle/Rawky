@@ -5,11 +5,15 @@
 	<a href='https://ko-fi.com/Q5Q0CSWL' target='_blank'><img height='24' style='border:0px;height:24px;' src='https://az743702.vo.msecnd.net/cdn/kofi4.png?v=2' border='0' alt='Buy Me a Coffee at ko-fi.com'/></a>
 </p>
 
-<h4 align="center">A pixel art & tile map editor</h4>
+<p align="center">
+	<img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/launcher/src/main/resources/assets/linux/Rawky.png?raw=true" alt="Rawky" width="256">
+</p>
+
+<h4 align="center">A pixel art editor</h4>
 
 <p align="center">
 	<a href="https://api.securityscorecards.dev/projects/github.com/DeflatedPickle/Rawky"><img alt="OpenSSF Scorecard" src="https://api.securityscorecards.dev/projects/github.com/DeflatedPickle/Rawky/badge"></a>
-	<img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/DeflatedPickle/Rawky/gradle-packageAll.yml">
+	<img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/DeflatedPickle/Rawky/gradle-package.yml">
 	<a href="https://github.com/DeflatedPickle/Rawky/wiki"><img alt="Wiki" src="https://img.shields.io/badge/wiki-documentation-forestgreen"></a>
 </p>
 

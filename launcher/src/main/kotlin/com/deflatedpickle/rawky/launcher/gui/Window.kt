@@ -7,10 +7,12 @@ import com.deflatedpickle.marvin.functions.extensions.getLastModifiedTime
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.launcher.LauncherPlugin
 import com.deflatedpickle.tosuto.ToastWindow
+import com.formdev.flatlaf.util.SystemInfo
 import java.awt.BorderLayout
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.time.ZoneId
+import javax.imageio.ImageIO
 import javax.swing.JFrame
 import javax.swing.JOptionPane
 import kotlin.system.exitProcess
@@ -26,6 +28,15 @@ object Window : JFrame("Rawky") {
     init {
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
         jMenuBar = MenuBar
+
+        val image = when {
+            SystemInfo.isLinux -> "/assets/linux/Rawky.png"
+            SystemInfo.isWindows -> "/assets/windows/Rawky.ico"
+            SystemInfo.isMacOS -> "/assets/mac/Rawky.icns"
+            else -> null
+        }
+
+        image?.let { iconImage = ImageIO.read(LauncherPlugin::class.java.getResource(it)) }
 
         addWindowListener(object : WindowAdapter() {
             override fun windowClosing(e: WindowEvent) {
