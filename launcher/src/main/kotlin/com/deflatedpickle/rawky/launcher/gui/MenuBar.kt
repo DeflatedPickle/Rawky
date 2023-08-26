@@ -581,7 +581,7 @@ object MenuBar : JMenuBar() {
                 }
 
                 if (shadow) {
-                    val radius = 8
+                    val radius = 12
                     val offset = 10
 
                     var shadow = ShadowFilter(radius.toFloat(), 0f, -offset.toFloat(), 0.8f).apply {

@@ -22,6 +22,7 @@
 	<tr>
 		<th><img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/.github/image/animation.png?raw=true" alt="Animation"></th>
 		<th><img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/.github/image/tilemap.png?raw=true" alt="Tilemap"></th>
+		<th><img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/.github/image/ascii.png?raw=true" alt="Ascii"></th>
 		<th><img src="https://github.com/DeflatedPickle/Rawky/blob/rewrite/.github/image/server.png?raw=true" alt="Server"></th>
 	</tr>
 </table>
