@@ -23,7 +23,6 @@ class EditFrameDialog(val index: Int = -1) : TaskDialog(Haruhi.window, "Edit Fra
 
         this.fixedComponent =
             JPanel().apply {
-                isOpaque = false
                 layout = GridBagLayout()
 
                 add(JLabel("Name:"), StickEast)

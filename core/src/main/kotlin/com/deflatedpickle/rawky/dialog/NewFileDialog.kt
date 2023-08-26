@@ -122,7 +122,6 @@ class NewFileDialog : TaskDialog(Haruhi.window, "New File") {
 
         this.fixedComponent =
             JPanel().apply {
-                isOpaque = false
                 layout = GridBagLayout()
 
                 add(JLabel("Template:"), StickEast)

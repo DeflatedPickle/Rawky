@@ -44,7 +44,6 @@ class ScaleImageDialog(scale: String) : TaskDialog(Haruhi.window, "Scale $scale"
 
         this.fixedComponent =
             JPanel().apply {
-                isOpaque = false
                 layout = GridBagLayout()
 
                 add(JLabel("Size:"), StickEast)

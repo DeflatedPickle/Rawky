@@ -25,6 +25,7 @@ import com.deflatedpickle.rawky.pixelgrid.PixelGridPlugin.disabledUntilFile
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.util.ActionStack
+import com.deflatedpickle.rawky.util.CommonMenuItems
 import com.deflatedpickle.rawky.util.DnDUtil
 import com.deflatedpickle.undulation.api.ButtonType
 import com.deflatedpickle.undulation.api.MenuButtonType
@@ -234,37 +235,8 @@ object PixelGridPanel : PluginPanel() {
     }
 
     val contextMenu = JPopupMenu().apply {
-        add(
-            "Undo",
-            accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK),
-            message = "Revoke the last action",
-            enabled = false,
-        ) {
-            RawkyPlugin.document?.let { doc ->
-                ActionStack.undo()
-
-                val frame = doc.children[doc.selectedIndex]
-                val layer = frame.children[frame.selectedIndex]
-
-                EventUpdateGrid.trigger(layer.child)
-            }
-        }.let { disabledUntilFile.add(it) }
-
-        add(
-            "Redo",
-            accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK or KeyEvent.SHIFT_DOWN_MASK),
-            message = "Perform the last revoked action",
-            enabled = false,
-        ) {
-            RawkyPlugin.document?.let { doc ->
-                ActionStack.redo()
-
-                val frame = doc.children[doc.selectedIndex]
-                val layer = frame.children[frame.selectedIndex]
-
-                EventUpdateGrid.trigger(layer.child)
-            }
-        }.let { disabledUntilFile.add(it) }
+        add(CommonMenuItems.undoItem())
+        add(CommonMenuItems.redoItem())
 
         addSeparator()
 

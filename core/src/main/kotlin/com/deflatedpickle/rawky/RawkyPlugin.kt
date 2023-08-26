@@ -96,6 +96,8 @@ object RawkyPlugin {
                     }.apply {
                         isSelected = Haruhi.isInDev
                     }
+
+                    addSeparator()
                 }
             }
         }

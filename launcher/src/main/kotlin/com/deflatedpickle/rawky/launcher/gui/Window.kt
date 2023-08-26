@@ -25,16 +25,16 @@ object Window : JFrame("Rawky") {
         toastWidth = 200,
     )
 
+    val image = when {
+        SystemInfo.isLinux -> "/assets/linux/Rawky.png"
+        SystemInfo.isWindows -> "/assets/windows/Rawky.ico"
+        SystemInfo.isMacOS -> "/assets/mac/Rawky.icns"
+        else -> null
+    }
+
     init {
         defaultCloseOperation = DO_NOTHING_ON_CLOSE
         jMenuBar = MenuBar
-
-        val image = when {
-            SystemInfo.isLinux -> "/assets/linux/Rawky.png"
-            SystemInfo.isWindows -> "/assets/windows/Rawky.ico"
-            SystemInfo.isMacOS -> "/assets/mac/Rawky.icns"
-            else -> null
-        }
 
         image?.let { iconImage = ImageIO.read(LauncherPlugin::class.java.getResource(it)) }
 

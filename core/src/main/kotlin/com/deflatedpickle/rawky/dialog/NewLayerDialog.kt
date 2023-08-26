@@ -54,14 +54,12 @@ class NewLayerDialog(val index: Int = -1) : TaskDialog(Haruhi.window, "New Layer
 
         this.fixedComponent =
             JPanel().apply {
-                isOpaque = false
                 layout = GridBagLayout()
 
                 add(JLabel("Name:"), StickEast)
                 add(nameInput, FillHorizontalFinishLine)
 
-          /*add(JLabel("Index:"), StickEast)
-          add(indexInput, FillHorizontalFinishLine)*/
+                // TODO: add an index option
 
                 add(JLabel("Size:"), StickEast)
                 add(columnInput, FillHorizontal)

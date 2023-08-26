@@ -13,7 +13,7 @@
 
 <p align="center">
 	<a href="https://api.securityscorecards.dev/projects/github.com/DeflatedPickle/Rawky"><img alt="OpenSSF Scorecard" src="https://api.securityscorecards.dev/projects/github.com/DeflatedPickle/Rawky/badge"></a>
-	<img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/DeflatedPickle/Rawky/gradle-package.yml">
+	<img alt="Build Status" src="https://img.shields.io/github/actions/workflow/status/DeflatedPickle/Rawky/gradle-packageAll.yml">
 	<a href="https://github.com/DeflatedPickle/Rawky/wiki"><img alt="Wiki" src="https://img.shields.io/badge/wiki-documentation-forestgreen"></a>
 </p>
 

@@ -17,6 +17,7 @@ import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
+import com.deflatedpickle.haruhi.event.EventSaveDocument
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
@@ -45,11 +46,14 @@ import com.deflatedpickle.rawky.launcher.gui.dialog.ScreenshotDialog
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.ActionUtil
+import com.deflatedpickle.rawky.util.CommonMenuItems
 import com.deflatedpickle.undulation.api.MenuButtonType
 import com.deflatedpickle.undulation.functions.JMenu
 import com.deflatedpickle.undulation.functions.extensions.JMenuItem
 import com.deflatedpickle.undulation.functions.extensions.add
 import com.deflatedpickle.undulation.functions.extensions.getScreenDevice
+import com.jhlabs.image.GaussianFilter
+import com.jhlabs.image.ShadowFilter
 import org.oxbow.swingbits.dialog.task.TaskDialog.StandardCommand
 import java.awt.Color
 import java.awt.Desktop
@@ -104,6 +108,14 @@ object MenuBar : JMenuBar() {
         exitProcess(0)
     }
 
+    val reloadDiskItem = JMenuItem(
+        "Reload from Disk",
+        accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK),
+        enabled = RawkyPlugin.document != null && RawkyPlugin.document!!.path != null,
+    ) {
+        LauncherPlugin.open(RawkyPlugin.document!!.path!!)
+    }
+
     private val disabledUntilFile = mutableListOf<JMenuItem>()
 
     private val screenshotChooser = JFileChooser(File(".")).apply {
@@ -147,21 +159,19 @@ object MenuBar : JMenuBar() {
             populateToolsMenu()
             populateWindowMenu()
             populateHelpMenu()
-
-            for (i in disabledUntilFile) {
-                i.isEnabled = RawkyPlugin.document != null
-            }
-        }
-
-        EventCreateDocument.addListener {
-            for (i in disabledUntilFile) {
-                i.isEnabled = true
-            }
         }
 
         EventOpenDocument.addListener {
-            for (i in disabledUntilFile) {
-                i.isEnabled = true
+            val path = (it.first as RawkyDocument).path
+            if (path != null && path.exists()) {
+                reloadDiskItem.isEnabled = true
+            }
+        }
+
+        EventSaveDocument.addListener {
+            val path = (it.first as RawkyDocument).path
+            if (path != null && path.exists()) {
+                reloadDiskItem.isEnabled = true
             }
         }
     }
@@ -190,6 +200,8 @@ object MenuBar : JMenuBar() {
                 LauncherPlugin.openDialog(this)
             }
 
+            add(LauncherPlugin.historyMenu)
+
             add(
                 "Open as Frames...",
                 message = "Open a series of files as independent frames",
@@ -206,20 +218,9 @@ object MenuBar : JMenuBar() {
 
             }
 
-            ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
-                if (it.history.isNotEmpty()) {
-                    add(LauncherPlugin.historyMenu)
-                }
-            }
-
             addSeparator()
 
-            add(
-                "Reload from Disk",
-                accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_R, KeyEvent.CTRL_DOWN_MASK),
-                enabled = RawkyPlugin.document != null,
-            ) {
-            }
+            add(reloadDiskItem)
 
             addSeparator()
 
@@ -279,37 +280,8 @@ object MenuBar : JMenuBar() {
 
     private fun populateEditMenu() {
         editMenu.apply {
-            add(
-                "Undo",
-                accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK),
-                message = "Revoke the last action",
-                enabled = false,
-            ) {
-                RawkyPlugin.document?.let {  doc ->
-                    ActionStack.undo()
-
-                    val frame = doc.children[doc.selectedIndex]
-                    val layer = frame.children[frame.selectedIndex]
-
-                    EventUpdateGrid.trigger(layer.child)
-                }
-            }.let { disabledUntilFile.add(it) }
-
-            add(
-                "Redo",
-                accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_Z, KeyEvent.CTRL_DOWN_MASK or KeyEvent.SHIFT_DOWN_MASK),
-                message = "Perform the last revoked action",
-                enabled = false,
-            ) {
-                RawkyPlugin.document?.let { doc ->
-                    ActionStack.redo()
-
-                    val frame = doc.children[doc.selectedIndex]
-                    val layer = frame.children[frame.selectedIndex]
-
-                    EventUpdateGrid.trigger(layer.child)
-                }
-            }.let { disabledUntilFile.add(it) }
+            add(CommonMenuItems.undoItem())
+            add(CommonMenuItems.redoItem())
         }
     }
 
@@ -487,27 +459,6 @@ object MenuBar : JMenuBar() {
             }
 
             addSeparator()
-
-            add(
-                "Default Colours",
-                accelerator = KeyStroke.getKeyStroke("D"),
-                message = "Set the foreground colour to black and the background colour to white"
-            ) {
-                EventChangeColour.trigger(Color.BLACK)
-
-                // TODO: the concept of a secondary colour only exists with the colour wheel
-            }
-
-            add(
-                "Swap Colours",
-                accelerator = KeyStroke.getKeyStroke("X"),
-                message = "Swap foreground and background colours",
-                enabled = false
-            ) {
-
-            }
-
-            addSeparator()
         }
     }
 
@@ -601,6 +552,7 @@ object MenuBar : JMenuBar() {
             val area = dialog.areaComboBox.selectedItem as ScreenShotArea
             var delay = dialog.delaySpinner.value * 1000
             val decoration = dialog.includeDecoration.isSelected
+            val shadow = dialog.addShadow.isSelected
             val open = dialog.openCheckBox.isSelected
 
             // we do this as otherwise the dialog is in the screenshot
@@ -609,11 +561,11 @@ object MenuBar : JMenuBar() {
             }
 
             Timer(delay) {
-                val img = when (area) {
+                var img = when (area) {
                     // TODO: add a drop shadow
                     ScreenShotArea.PROGRAM -> if (decoration) {
                         dialog.isVisible = false
-                        BufferedImage(Window.contentPane.width, Window.contentPane.height, BufferedImage.TYPE_INT_ARGB).apply {
+                        BufferedImage(Window.width, Window.height, BufferedImage.TYPE_INT_ARGB).apply {
                             graphics.drawImage(Robot().createScreenCapture(Window.bounds), 0, 0, null)
                         }
                     } else {
@@ -625,6 +577,23 @@ object MenuBar : JMenuBar() {
                         val size = Toolkit.getDefaultToolkit().screenSize
                         // TODO: add a graphics device selector
                         Robot().createScreenCapture(Rectangle(0, 0, size.width, size.height))
+                    }
+                }
+
+                if (shadow) {
+                    val radius = 8
+                    val offset = 10
+
+                    var shadow = ShadowFilter(radius.toFloat(), 0f, -offset.toFloat(), 0.8f).apply {
+                        angle = 90f
+                        addMargins = true
+                        shadowOnly = true
+                    }.filter(img, null)
+                    shadow = GaussianFilter(radius.toFloat()).filter(shadow, null)
+
+                    img = BufferedImage(img.width + radius, img.height + offset + radius, BufferedImage.TYPE_INT_ARGB).apply {
+                        graphics.drawImage(shadow, -radius / 2, offset, null)
+                        graphics.drawImage(img, radius / 2, 0, null)
                     }
                 }
 

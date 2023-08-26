@@ -109,16 +109,7 @@ object LauncherPlugin {
             }
         }
 
-    val historyMenu =
-        LimitedMenu("History", 0).apply {
-            ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
-                this.limit = it.historyLength
-
-                for (i in it.history) {
-                    add("Open \"${i.absolutePath}\"") { open(i) }
-                }
-            }
-        }
+    val historyMenu = LimitedMenu("History", 6)
 
     init {
         EventProgramShutdown.addListener { saveLayouts() }
@@ -126,6 +117,14 @@ object LauncherPlugin {
         EventProgramFinishSetup.addListener {
             saveLayouts()
             loadUserLayouts()
+
+            ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
+                historyMenu.limit = it.historyLength
+
+                for (i in it.history) {
+                    historyMenu.add("Open \"${i.absolutePath}\"") { open(i) }
+                }
+            }
         }
 
         EventCreateDocument.addListener {
@@ -267,26 +266,7 @@ object LauncherPlugin {
     fun openDialog(menu: JMenu) {
         if (openerChooser.showOpenDialog(Haruhi.window) == JFileChooser.APPROVE_OPTION) {
             open(openerChooser.selectedFile)
-
-            if (!menu.menuComponents.contains(historyMenu)) {
-                menu.add(historyMenu)
-            }
-
-            ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
-                it.history.add(openerChooser.selectedFile)
-
-                if (it.history.size >= it.historyLength) {
-                    for (i in it.historyLength until it.history.size) {
-                        it.history.removeAt(0)
-                    }
-                }
-
-                historyMenu.add("Open \"${openerChooser.selectedFile.absolutePath}\"")
-
-                PluginUtil.slugToPlugin("deflatedpickle@launcher#*")?.let { plug ->
-                    ConfigUtil.serializeConfig(plug)
-                }
-            }
+            addToHistory(openerChooser.selectedFile)
         }
     }
 
@@ -319,6 +299,27 @@ object LauncherPlugin {
             }
 
             export(file)
+            addToHistory(file)
+        }
+    }
+
+    fun addToHistory(file: File) {
+        ConfigUtil.getSettings<LauncherSettings>("deflatedpickle@launcher#*")?.let {
+            if (!it.history.contains(file)) {
+                it.history.add(file)
+            }
+
+            if (it.history.size >= it.historyLength) {
+                for (i in it.historyLength until it.history.size) {
+                    it.history.removeAt(0)
+                }
+            }
+
+            historyMenu.add("Open \"${file.absolutePath}\"")
+
+            PluginUtil.slugToPlugin("deflatedpickle@launcher#*")?.let { plug ->
+                ConfigUtil.serializeConfig(plug)
+            }
         }
     }
 

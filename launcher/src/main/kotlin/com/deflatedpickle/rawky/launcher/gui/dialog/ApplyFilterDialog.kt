@@ -29,7 +29,6 @@ class ApplyFilterDialog(
 ) : TaskDialog(Haruhi.window, "Apply Filter") {
     init {
         this.fixedComponent = JPanel().apply {
-            isOpaque = false
             layout = GridBagLayout()
 
             // TODO: add a live preview

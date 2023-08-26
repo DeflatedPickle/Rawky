@@ -38,6 +38,7 @@ class ScreenshotDialog : TaskDialog(Haruhi.window, "Take Screenshot") {
                         ScreenShotArea.PROGRAM -> {
                             areaOptions.contentContainer.apply {
                                 add(includeDecoration, FillHorizontalFinishLine)
+                                add(addShadow, FillHorizontalFinishLine)
                             }
                         }
                     }
@@ -49,7 +50,8 @@ class ScreenshotDialog : TaskDialog(Haruhi.window, "Take Screenshot") {
         }
     }
 
-    val includeDecoration = JCheckBox("Include Window Decoration")
+    val includeDecoration = JCheckBox("Include Window Decoration", true)
+    val addShadow = JCheckBox("Add Drop Shadow", true)
 
     val delaySpinner = SliderSpinner(0, 0, 100)
 
@@ -68,7 +70,6 @@ class ScreenshotDialog : TaskDialog(Haruhi.window, "Take Screenshot") {
 
         this.fixedComponent =
             JPanel().apply {
-                isOpaque = false
                 layout = GridBagLayout()
 
                 add(JLabel("Area:"), StickEast)

@@ -29,7 +29,6 @@ class NewFrameDialog : TaskDialog(Haruhi.window, "New Frame") {
 
         this.fixedComponent =
             JPanel().apply {
-                isOpaque = false
                 layout = GridBagLayout()
 
                 add(JLabel("Name:"), StickEast)
