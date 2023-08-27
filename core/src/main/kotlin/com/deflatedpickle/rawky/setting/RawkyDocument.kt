@@ -62,4 +62,5 @@ data class RawkyDocument(
     }
 
     operator fun get(index: Int) = children[index]
+    operator fun iterator() = children.iterator()
 }

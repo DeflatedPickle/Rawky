@@ -8,16 +8,23 @@ import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.constants.MenuCategory
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
+import com.deflatedpickle.haruhi.event.EventCreateDocument
+import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.marvin.functions.extensions.div
 import com.deflatedpickle.marvin.registry.Registry
-import com.deflatedpickle.monocons.MonoIcon
+import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.palette.PaletteParser
+import com.deflatedpickle.rawky.event.EventUpdateGrid
+import com.deflatedpickle.rawky.grid.tile.TileCellPlugin
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
+import com.deflatedpickle.undulation.functions.extensions.JMenuItem
 import com.deflatedpickle.undulation.functions.extensions.add
 import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
 import java.awt.Image
+import java.awt.image.BufferedImage
 import java.io.File
 import javax.swing.JFileChooser
 import javax.swing.JMenu
@@ -50,8 +57,24 @@ object TilePalettePlugin {
             }
         }
 
+    private val fillTileItem = JMenuItem(
+        "Fill with Tile",
+        message = "Change every cell to the currently selected tile",
+        enabled = false,
+    ) {
+        fill(TileCellPlugin.current)
+    }
+
     init {
         EventChangeTheme.addListener { TilePalettePanel.updateUIRecursively() }
+
+        EventCreateDocument.addListener {
+            fillTileItem.isEnabled = CellProvider.current == TileCellPlugin
+        }
+
+        EventOpenDocument.addListener {
+            fillTileItem.isEnabled = CellProvider.current == TileCellPlugin
+        }
 
         EventProgramFinishSetup.addListener {
             RegistryUtil.get(MenuCategory.MENU.name)?.apply {
@@ -59,6 +82,10 @@ object TilePalettePlugin {
                     val index = menuComponents.indexOf(menuComponents.filterIsInstance<JMenuItem>().first { it.text == "Import..." })
 
                     add("Import Tile Palette...", index = index) { importTilePalette() }
+                }
+
+                (get(MenuCategory.EDIT.name) as JMenu).apply {
+                    add(fillTileItem)
                 }
             }
         }
@@ -71,6 +98,23 @@ object TilePalettePlugin {
             if (i.isFile) {
                 registry[i.extension]?.let { pp -> TilePalettePanel.combo.addItem(pp.parse(i)) }
             }
+        }
+    }
+
+    private fun fill(tile: BufferedImage) {
+        RawkyPlugin.document?.let { doc ->
+            for (frame in doc) {
+                for (layer in frame) {
+                    for (cell in layer.child) {
+                        cell.content = tile
+                    }
+                }
+            }
+
+            val frame = doc.children[doc.selectedIndex]
+            val layer = frame.children[frame.selectedIndex]
+
+            EventUpdateGrid.trigger(layer.child)
         }
     }
 }

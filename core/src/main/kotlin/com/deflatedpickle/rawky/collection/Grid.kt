@@ -54,4 +54,6 @@ data class Grid(
 
     operator fun set(column: Int, row: Int, value: Cell<Any>) =
         children.set((column * columns) + row, value)
+
+    operator fun iterator() = children.iterator()
 }

@@ -83,7 +83,7 @@ object AnimationPreviewPlugin {
             AnimationPreviewPanel.backButton.isEnabled = currentFrame - 1 >= 0
             AnimationPreviewPanel.playButton.isEnabled = doc.children.size >= 1
             AnimationPreviewPanel.forwardButton.isEnabled = currentFrame + 1 < doc.children.size
-            AnimationPreviewPanel.fastforwardButton.isEnabled = currentFrame + 1 < doc.children.size
+            AnimationPreviewPanel.fastForwardButton.isEnabled = currentFrame + 1 < doc.children.size
         }
     }
 }

@@ -75,7 +75,7 @@ class NewFileDialog : TaskDialog(Haruhi.window, "New File") {
             }
         }
 
-        selectedItem = null
+        selectedItem = "rawr"
     }
     val nameInput = JXTextField("Name").apply {
         addBuddy(extensionComboBox, BuddySupport.Position.RIGHT)

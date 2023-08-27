@@ -167,7 +167,7 @@ object TimelinePanel : PluginPanel() {
 
     val navbar =
         JToolBar("Navbar").apply {
-            add(icon = MonoIcon.ARROW_LEFT, tooltip = "Decrement frame", enabled = false) {
+            add(icon = MonoIcon.ARROW_LEFT, tooltip = "Decrement Frame", enabled = false) {
                 RawkyPlugin.document?.let { doc ->
                     if (doc.selectedIndex - 1 >= 0) {
                         list.selectedIndex = --doc.selectedIndex
@@ -175,7 +175,7 @@ object TimelinePanel : PluginPanel() {
                 }
             }
 
-            add(icon = MonoIcon.ARROW_RIGHT, tooltip = "Increment frame", enabled = false) {
+            add(icon = MonoIcon.ARROW_RIGHT, tooltip = "Increment Frame", enabled = false) {
                 RawkyPlugin.document?.let { doc ->
                     if (doc.selectedIndex + 1 < doc.children.size) {
                         list.selectedIndex = ++doc.selectedIndex

@@ -23,6 +23,7 @@ import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
+import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.FilterCollection
 import com.deflatedpickle.rawky.api.ResampleCollection
 import com.deflatedpickle.rawky.collection.Grid
@@ -161,7 +162,17 @@ object MenuBar : JMenuBar() {
             populateHelpMenu()
         }
 
+        EventCreateDocument.addListener {
+            for (i in disabledUntilFile) {
+                i.isEnabled = true
+            }
+        }
+
         EventOpenDocument.addListener {
+            for (i in disabledUntilFile) {
+                i.isEnabled = true
+            }
+
             val path = (it.first as RawkyDocument).path
             if (path != null && path.exists()) {
                 reloadDiskItem.isEnabled = true
@@ -169,6 +180,10 @@ object MenuBar : JMenuBar() {
         }
 
         EventSaveDocument.addListener {
+            for (i in disabledUntilFile) {
+                i.isEnabled = true
+            }
+
             val path = (it.first as RawkyDocument).path
             if (path != null && path.exists()) {
                 reloadDiskItem.isEnabled = true
@@ -282,6 +297,30 @@ object MenuBar : JMenuBar() {
         editMenu.apply {
             add(CommonMenuItems.undoItem())
             add(CommonMenuItems.redoItem())
+
+            addSeparator()
+
+            add(
+                "Clear",
+                accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_DELETE, 0),
+                message = "Reset all cells",
+                enabled = RawkyPlugin.document != null,
+            ) {
+                RawkyPlugin.document?.let { doc ->
+                    for (frame in doc) {
+                        for (layer in frame) {
+                            for (cell in layer.child) {
+                                cell.content = CellProvider.current.default
+                            }
+                        }
+                    }
+
+                    val frame = doc.children[doc.selectedIndex]
+                    val layer = frame.children[frame.selectedIndex]
+
+                    EventUpdateGrid.trigger(layer.child)
+                }
+            }.also { disabledUntilFile.add(it) }
         }
     }
 

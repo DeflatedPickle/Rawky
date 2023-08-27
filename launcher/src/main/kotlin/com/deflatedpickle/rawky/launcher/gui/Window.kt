@@ -9,6 +9,7 @@ import com.deflatedpickle.rawky.launcher.LauncherPlugin
 import com.deflatedpickle.tosuto.ToastWindow
 import com.formdev.flatlaf.util.SystemInfo
 import java.awt.BorderLayout
+import java.awt.Image
 import java.awt.event.WindowAdapter
 import java.awt.event.WindowEvent
 import java.time.ZoneId

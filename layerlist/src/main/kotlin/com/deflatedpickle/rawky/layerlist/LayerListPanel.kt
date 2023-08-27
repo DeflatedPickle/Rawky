@@ -134,7 +134,7 @@ object LayerListPanel : PluginPanel() {
         JToolBar("Navbar").apply {
             orientation = JToolBar.VERTICAL
 
-            add(icon = MonoIcon.ARROW_UP, tooltip = "Decrement layer", enabled = false) {
+            add(icon = MonoIcon.ARROW_UP, tooltip = "Decrement Layer", enabled = false) {
                 RawkyPlugin.document?.let { doc ->
                     val frame = doc.children[doc.selectedIndex]
 
@@ -144,7 +144,7 @@ object LayerListPanel : PluginPanel() {
                 }
             }
 
-            add(icon = MonoIcon.ARROW_DOWN, tooltip = "Increment layer", enabled = false) {
+            add(icon = MonoIcon.ARROW_DOWN, tooltip = "Increment Layer", enabled = false) {
                 RawkyPlugin.document?.let { doc ->
                     val frame = doc.children[doc.selectedIndex]
 
@@ -229,7 +229,6 @@ object LayerListPanel : PluginPanel() {
 
     val table =
         JTable(model).apply {
-            showVerticalLines = false
             tableHeader = null
             setSelectionMode(ListSelectionModel.SINGLE_SELECTION)
 
@@ -244,7 +243,7 @@ object LayerListPanel : PluginPanel() {
                         frame.selectedIndex =
                             min(frame.children.lastIndex, selectionModel.anchorSelectionIndex)
 
-                        val newLayer = frame.children[frame.selectedIndex]
+                        val newLayer = frame.children.reversed()[frame.selectedIndex]
                         val grid = newLayer.child
 
                         EventUpdateGrid.trigger(grid)

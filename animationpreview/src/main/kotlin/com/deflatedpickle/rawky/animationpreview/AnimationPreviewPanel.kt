@@ -58,7 +58,7 @@ object AnimationPreviewPanel : PluginPanel() {
 
                         doc.children[AnimationPreviewPlugin.currentFrame].let { frame ->
                             for (layer in frame.children.indices) {
-                                v.paint(doc, doc.selectedIndex, layer, temp)
+                                v.paint(doc, doc.children.indexOf(frame), layer, temp)
                                 temp.dispose()
                             }
                         }
@@ -121,7 +121,7 @@ object AnimationPreviewPanel : PluginPanel() {
                 }
         }
 
-    val fastforwardButton =
+    val fastForwardButton =
         AbstractButton(icon = MonoIcon.FAST_FORWARD, tooltip = "Fast Forward", enabled = false) {
             RawkyPlugin.document?.let { doc ->
                 AnimationPreviewPlugin.currentFrame = doc.children.size - 1
@@ -137,7 +137,7 @@ object AnimationPreviewPanel : PluginPanel() {
             add(backButton)
             add(playButton)
             add(forwardButton)
-            add(fastforwardButton)
+            add(fastForwardButton)
         }
 
     init {

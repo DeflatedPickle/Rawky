@@ -29,6 +29,7 @@ data class Frame(
     }
 
     operator fun get(index: Int) = children[index]
+    operator fun iterator() = children.iterator()
 
     override fun toString() = name
 }

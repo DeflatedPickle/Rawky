@@ -39,7 +39,9 @@ object LayerListPlugin {
         EventCreateDocument.addListener {
             LayerListPanel.model.removeAll()
             createInitialLayers(it as RawkyDocument)
-            LayerListPanel.table.setRowSelectionInterval(0, 0)
+
+            val row = LayerListPanel.table.rowCount - 1
+            LayerListPanel.table.setRowSelectionInterval(row, row)
 
             triggerButtons()
         }
@@ -47,7 +49,9 @@ object LayerListPlugin {
         EventOpenDocument.addListener {
             LayerListPanel.model.removeAll()
             createInitialLayers(it.first as RawkyDocument)
-            LayerListPanel.table.setRowSelectionInterval(0, 0)
+
+            val row = LayerListPanel.table.rowCount - 1
+            LayerListPanel.table.setRowSelectionInterval(row, row)
 
             triggerButtons()
         }
@@ -56,7 +60,7 @@ object LayerListPlugin {
             LayerListPanel.model.removeAll()
 
             for (i in it.new.children) {
-                LayerListPanel.model.insertRow(0, arrayOf(i, i.name, i.visible, i.lock))
+                LayerListPanel.model.addRow(arrayOf(i, i.name, i.visible, i.lock))
             }
 
             triggerButtons()
@@ -65,14 +69,16 @@ object LayerListPlugin {
         EventChangeLayer.addListener { triggerButtons() }
 
         EventNewLayer.addListener {
-            LayerListPanel.model.insertRow(0, arrayOf(it, it.name, true, false))
-            LayerListPanel.table.setRowSelectionInterval(0, 0)
+            LayerListPanel.model.addRow(arrayOf(it, it.name, true, false))
+
+            val row = LayerListPanel.table.rowCount - 1
+            LayerListPanel.table.setRowSelectionInterval(row, row)
         }
     }
 
     private fun createInitialLayers(it: RawkyDocument) {
         for (i in it.children[0].children) {
-            LayerListPanel.model.insertRow(0, arrayOf(i, i.name, i.visible, i.lock))
+            LayerListPanel.model.addRow(arrayOf(i, i.name, i.visible, i.lock))
         }
     }
 
