@@ -75,4 +75,15 @@ object TimelinePlugin {
             i.isEnabled = true
         }
     }
+
+    fun triggerNavButtons() {
+        RawkyPlugin.document?.let { doc ->
+            val index = TimelinePanel.list.selectedIndex
+
+            TimelinePanel.firstButton.isEnabled = index - 1 >= 0
+            TimelinePanel.decrementButton.isEnabled = index - 1 >= 0
+            TimelinePanel.incrementButton.isEnabled = index + 1 < doc.children.size
+            TimelinePanel.lastButton.isEnabled = index + 1 < doc.children.size
+        }
+    }
 }

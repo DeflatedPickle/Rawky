@@ -11,5 +11,7 @@ dependencies {
 	implementation project(":timeline")
 	implementation project(":animationpreview")
 
+	implementation project(":pixelgrid.grid.pixel")
+
 	implementation project(":sniffle.settingsgui")
 }

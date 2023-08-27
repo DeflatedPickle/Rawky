@@ -130,29 +130,53 @@ object LayerListPanel : PluginPanel() {
             // TODO: add a delete all button
         }
 
+    val firstButton = AbstractButton(icon = MonoIcon.ARROW_START_VERTICAL, tooltip = "First Layer", enabled = false) {
+        RawkyPlugin.document?.let {
+            table.setRowSelectionInterval(0, 0)
+            LayerListPlugin.triggerNavButtons()
+        }
+    }
+
+    val decrementButton = AbstractButton(icon = MonoIcon.ARROW_UP, tooltip = "Decrement Layer", enabled = false) {
+        RawkyPlugin.document?.let { doc ->
+            val frame = doc.children[doc.selectedIndex]
+
+            if (frame.selectedIndex - 1 >= 0) {
+                table.setRowSelectionInterval(frame.selectedIndex - 1, frame.selectedIndex - 1)
+            }
+
+            LayerListPlugin.triggerNavButtons()
+        }
+    }
+
+    val incrementButton = AbstractButton(icon = MonoIcon.ARROW_DOWN, tooltip = "Increment Layer", enabled = false) {
+        RawkyPlugin.document?.let { doc ->
+            val frame = doc.children[doc.selectedIndex]
+
+            if (frame.selectedIndex + 1 < frame.children.size) {
+                table.setRowSelectionInterval(frame.selectedIndex + 1, frame.selectedIndex + 1)
+            }
+
+            LayerListPlugin.triggerNavButtons()
+        }
+    }
+
+    val lastButton = AbstractButton(icon = MonoIcon.ARROW_END_VERTICAL, tooltip = "Last Frame", enabled = false) {
+        RawkyPlugin.document?.let {
+            val row = table.rowCount - 1
+            table.setRowSelectionInterval(row, row)
+            LayerListPlugin.triggerNavButtons()
+        }
+    }
+
     val navbar =
         JToolBar("Navbar").apply {
             orientation = JToolBar.VERTICAL
 
-            add(icon = MonoIcon.ARROW_UP, tooltip = "Decrement Layer", enabled = false) {
-                RawkyPlugin.document?.let { doc ->
-                    val frame = doc.children[doc.selectedIndex]
-
-                    if (frame.selectedIndex - 1 >= 0) {
-                        table.setRowSelectionInterval(frame.selectedIndex - 1, frame.selectedIndex - 1)
-                    }
-                }
-            }
-
-            add(icon = MonoIcon.ARROW_DOWN, tooltip = "Increment Layer", enabled = false) {
-                RawkyPlugin.document?.let { doc ->
-                    val frame = doc.children[doc.selectedIndex]
-
-                    if (frame.selectedIndex + 1 < frame.children.size) {
-                        table.setRowSelectionInterval(frame.selectedIndex + 1, frame.selectedIndex + 1)
-                    }
-                }
-            }
+            add(firstButton)
+            add(decrementButton)
+            add(incrementButton)
+            add(lastButton)
         }
 
     val model =
@@ -255,6 +279,8 @@ object LayerListPanel : PluginPanel() {
                                 newLayer,
                             ),
                         )
+
+                        LayerListPlugin.triggerNavButtons()
                     }
                 }
             }

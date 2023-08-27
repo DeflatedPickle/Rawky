@@ -96,4 +96,16 @@ object LayerListPlugin {
             i.isEnabled = true
         }
     }
+
+    fun triggerNavButtons() {
+        RawkyPlugin.document?.let { doc ->
+            val frame = doc[doc.selectedIndex]
+            val index = LayerListPanel.table.selectedRow
+
+            LayerListPanel.firstButton.isEnabled = index - 1 >= 0
+            LayerListPanel.decrementButton.isEnabled = index - 1 >= 0
+            LayerListPanel.incrementButton.isEnabled = index + 1 < frame.children.size
+            LayerListPanel.lastButton.isEnabled = index + 1 < frame.children.size
+        }
+    }
 }

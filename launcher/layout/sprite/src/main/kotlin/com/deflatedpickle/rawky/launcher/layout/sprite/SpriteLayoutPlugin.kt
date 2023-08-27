@@ -96,7 +96,7 @@ object SpriteLayoutPlugin {
 
     private fun loadLayout() {
         RawkyPlugin.document?.let {
-            if (it.cellProvider == PixelCellPlugin) {
+            if (it.cellProvider == PixelCellPlugin && it.children.size == 1) {
                 DockingState.restoreApplicationLayout(layout)
                 ToolBar.layoutComboBox.selectedItem = "Sprite"
             }

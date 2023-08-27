@@ -165,23 +165,46 @@ object TimelinePanel : PluginPanel() {
             // false) {}
         }
 
-    val navbar =
-        JToolBar("Navbar").apply {
-            add(icon = MonoIcon.ARROW_LEFT, tooltip = "Decrement Frame", enabled = false) {
-                RawkyPlugin.document?.let { doc ->
-                    if (doc.selectedIndex - 1 >= 0) {
-                        list.selectedIndex = --doc.selectedIndex
-                    }
-                }
+    val firstButton = AbstractButton(icon = MonoIcon.ARROW_START_HORIZONTAL, tooltip = "First Frame", enabled = false) {
+        RawkyPlugin.document?.let {
+            list.selectedIndex = 0
+            TimelinePlugin.triggerNavButtons()
+        }
+    }
+
+    val decrementButton = AbstractButton(icon = MonoIcon.ARROW_LEFT, tooltip = "Decrement Frame", enabled = false) {
+        RawkyPlugin.document?.let { doc ->
+            if (doc.selectedIndex - 1 >= 0) {
+                list.selectedIndex = --doc.selectedIndex
             }
 
-            add(icon = MonoIcon.ARROW_RIGHT, tooltip = "Increment Frame", enabled = false) {
-                RawkyPlugin.document?.let { doc ->
-                    if (doc.selectedIndex + 1 < doc.children.size) {
-                        list.selectedIndex = ++doc.selectedIndex
-                    }
-                }
+            TimelinePlugin.triggerNavButtons()
+        }
+    }
+
+    val incrementButton = AbstractButton(icon = MonoIcon.ARROW_RIGHT, tooltip = "Increment Frame", enabled = false) {
+        RawkyPlugin.document?.let { doc ->
+            if (doc.selectedIndex + 1 < doc.children.size) {
+                list.selectedIndex = ++doc.selectedIndex
             }
+
+            TimelinePlugin.triggerNavButtons()
+        }
+    }
+
+    val lastButton = AbstractButton(icon = MonoIcon.ARROW_END_HORIZONTAL, tooltip = "Last Frame", enabled = false) {
+        RawkyPlugin.document?.let {
+            list.selectedIndex = list.model.size - 1
+            TimelinePlugin.triggerNavButtons()
+        }
+    }
+
+    val navbar =
+        JToolBar("Navbar").apply {
+            add(firstButton)
+            add(decrementButton)
+            add(incrementButton)
+            add(lastButton)
         }
 
     private val listCellRenderer =
@@ -278,6 +301,8 @@ object TimelinePanel : PluginPanel() {
                             newFrame,
                         ),
                     )
+
+                    TimelinePlugin.triggerNavButtons()
                 }
             }
 
