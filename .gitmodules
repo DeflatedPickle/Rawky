@@ -46,6 +46,3 @@
 [submodule "libs/paleta"]
 	path = libs/paleta
 	url = https://github.com/DeflatedPickle/paleta
-[submodule "libs/gimmeicon"]
-	path = libs/gimmeicon
-	url = https://github.com/DeflatedPickle/gimmeicon
