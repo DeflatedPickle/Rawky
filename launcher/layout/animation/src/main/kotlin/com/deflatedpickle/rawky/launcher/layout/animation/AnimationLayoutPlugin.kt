@@ -36,6 +36,7 @@ import com.deflatedpickle.rawky.launcher.gui.ToolBar
         "deflatedpickle@layer_list#*",
         "deflatedpickle@timeline#*",
         "deflatedpickle@animation_preview#*",
+        "deflatedpickle@colour_history#*",
     ],
 )
 object AnimationLayoutPlugin {
@@ -54,10 +55,24 @@ object AnimationLayoutPlugin {
                 0.2,
             )
             .dock(
-                "deflatedpickle@colour_wheel",
+                "deflatedpickle@colour_history",
                 "deflatedpickle@pixel_grid",
                 DockingRegion.WEST,
                 0.2,
+            )
+            .dock(
+                "deflatedpickle@colour_wheel",
+                "deflatedpickle@colour_history",
+            )
+            .dock(
+                "deflatedpickle@colour_shades",
+                "deflatedpickle@colour_history",
+                DockingRegion.SOUTH,
+                0.4,
+            )
+            .dock(
+                "deflatedpickle@colour_palette",
+                "deflatedpickle@colour_shades",
             )
             .dock(
                 "deflatedpickle@animation_preview",

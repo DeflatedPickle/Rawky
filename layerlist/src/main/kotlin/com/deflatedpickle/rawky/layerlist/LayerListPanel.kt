@@ -43,7 +43,6 @@ import javax.swing.table.TableCellRenderer
 import kotlin.math.min
 
 // TODO: add reordering of layers
-// FIXME: all of it
 object LayerListPanel : PluginPanel() {
     val addButton =
         AbstractButton(icon = MonoIcon.ADD_ELEMENT, tooltip = "Add layer", enabled = false) {
@@ -183,16 +182,20 @@ object LayerListPanel : PluginPanel() {
         DefaultTableModel(arrayOf(), arrayOf("Preview", "Name", "Visibility", "Lock")).apply {
             addTableModelListener {
                 RawkyPlugin.document?.let { doc ->
+                    val frame = doc.children[doc.selectedIndex]
+
+                    if (it.firstRow >= frame.children.size) return@let
+
                     when (it.column) {
                         2 ->
-                            doc.children[doc.selectedIndex].children[it.firstRow].visible =
+                            frame.children[it.firstRow].visible =
                                 this.getValueAt(it.firstRow, it.column) as Boolean
                         3 ->
-                            doc.children[doc.selectedIndex].children[it.firstRow].lock =
+                            frame.children[it.firstRow].lock =
                                 this.getValueAt(it.firstRow, it.column) as Boolean
                     }
 
-                    EventUpdateGrid.trigger(doc.children[doc.selectedIndex].children[it.firstRow].child)
+                    EventUpdateGrid.trigger(frame.children[it.firstRow].child)
                 }
             }
         }

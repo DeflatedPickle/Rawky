@@ -10,6 +10,9 @@ dependencies {
 	implementation project(":layerlist")
 	implementation project(":timeline")
 	implementation project(":animationpreview")
+	implementation project(":colourhistory")
+	implementation project(":colourshades")
+	implementation project(":colourpalette")
 
 	implementation project(":pixelgrid.grid.pixel")
 

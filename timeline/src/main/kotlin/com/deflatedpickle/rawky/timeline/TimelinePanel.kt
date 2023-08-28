@@ -57,7 +57,7 @@ import javax.swing.UIManager
 import javax.swing.border.LineBorder
 import kotlin.math.min
 
-// TODO add reordering of frames
+// TODO: add reordering of frames
 object TimelinePanel : PluginPanel() {
     val addButton =
         AbstractButton(
@@ -81,8 +81,7 @@ object TimelinePanel : PluginPanel() {
 
                         EventNewFrame.trigger(frame)
 
-                        val properLayerName =
-                            if (layerDialog.nameInput.text == "") null else layerDialog.nameInput.text
+                        val properLayerName = layerDialog.nameInput.text.ifBlank { null }
 
                         val layer =
                             frame.addLayer(
@@ -91,8 +90,6 @@ object TimelinePanel : PluginPanel() {
                                 layerDialog.rowInput.value as Int,
                                 // layerDialog.indexInput.value as Int
                             )
-
-                        list.selectedIndex = frameDialog.indexInput.value as Int
 
                         EventNewLayer.trigger(layer)
                         EventChangeFrame.trigger(
@@ -216,7 +213,7 @@ object TimelinePanel : PluginPanel() {
                     background = UIManager.getColor("List.selectionBackground")
                     border = LineBorder(UIManager.getColor("List.selectionBackground"), 2)
                 } else {
-                    border = LineBorder(Color.BLACK, 2)
+                    border = LineBorder(UIManager.getColor("List.background"), 2)
                 }
 
                 add(
@@ -308,56 +305,6 @@ object TimelinePanel : PluginPanel() {
 
             cellRenderer = listCellRenderer
         }
-
-    private val dropTargetAdapter = object : DropTargetAdapter() {
-        override fun dragOver(dtde: DropTargetDragEvent) {
-            try {
-                when {
-                    DnDUtil.isDnDAnImage(dtde.transferable) -> dtde.acceptDrag(DnDConstants.ACTION_COPY)
-                    else -> dtde.rejectDrag()
-                }
-            } catch (_: IOException) {
-            }
-        }
-
-        override fun drop(dtde: DropTargetDropEvent) {
-            when {
-                dtde.transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor) -> {
-                    dtde.acceptDrop(DnDConstants.ACTION_COPY)
-
-                    if (DnDUtil.isDnDAnImage(dtde.transferable)) {
-                        val transferable = (dtde.transferable.getTransferData(DataFlavor.javaFileListFlavor) as List<File>)
-                            .first()
-
-                        if (RawkyPlugin.document == null) {
-                            for ((_, v) in Opener.registry) {
-                                if (transferable.extension in v.openerExtensions.flatMap { it.value }) {
-                                    RawkyPlugin.document = v.open(transferable)
-                                        .apply { this.path = transferable.absoluteFile }
-                                    EventOpenDocument.trigger(Pair(RawkyPlugin.document!!, transferable))
-
-                                    break
-                                }
-                            }
-                        } else {
-                            for ((_, v) in Importer.registry) {
-                                if (transferable.extension in v.importerExtensions.flatMap { it.value }) {
-                                    v.import(RawkyPlugin.document!!, transferable)
-                                    EventImportDocument.trigger(Pair(RawkyPlugin.document!!, transferable))
-
-                                    break
-                                }
-                            }
-                        }
-
-                        dtde.dropComplete(true)
-                    }
-                }
-            }
-
-            dtde.rejectDrop()
-        }
-    }
 
     init {
         layout = BorderLayout()
