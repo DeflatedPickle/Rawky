@@ -33,6 +33,7 @@ import com.deflatedpickle.undulation.constraints.StickCenter
 import com.deflatedpickle.undulation.functions.JMenu
 import com.deflatedpickle.undulation.functions.extensions.add
 import jdk.jfr.Event
+import java.awt.AlphaComposite
 import java.awt.BorderLayout
 import java.awt.Component
 import java.awt.Dimension

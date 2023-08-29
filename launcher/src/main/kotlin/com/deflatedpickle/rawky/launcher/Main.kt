@@ -151,8 +151,8 @@ fun main(args: Array<String>) {
     Haruhi.toastWindow = Window.toastWindow
 
     SystemTray.get()?.let { icon ->
-        icon.setImage(Window.iconImage)
         icon.setStatus("Rawky")
+        icon.setImage(Window.iconImage)
 
         icon.menu.let { menu ->
             menu.add(JSeparator())

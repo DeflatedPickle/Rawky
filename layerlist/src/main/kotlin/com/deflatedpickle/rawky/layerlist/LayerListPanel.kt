@@ -21,7 +21,6 @@ import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.util.DrawUtil
 import com.deflatedpickle.undulation.functions.AbstractButton
-import com.deflatedpickle.undulation.functions.extensions.add
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.BorderLayout
 import java.awt.Component
@@ -82,6 +81,7 @@ object LayerListPanel : PluginPanel() {
                     val layer = frame.children[frame.selectedIndex]
 
                     layer.name = layerDialog.nameInput.text
+                    layer.opacity = layerDialog.opacitySlider.value
 
                     val grid = layer.child
 

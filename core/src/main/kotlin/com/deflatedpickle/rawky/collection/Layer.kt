@@ -9,6 +9,7 @@ import kotlinx.serialization.Transient
 @Serializable
 data class Layer(
     var name: String = "",
+    var opacity: Float = 1f,
     var visible: Boolean = true,
     var lock: Boolean = false,
     override var child: Grid = Grid(),

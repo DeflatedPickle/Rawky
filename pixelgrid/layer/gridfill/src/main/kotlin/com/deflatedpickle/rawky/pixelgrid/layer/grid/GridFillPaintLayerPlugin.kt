@@ -12,6 +12,7 @@ import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer.Companion.registry
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.util.DrawUtil
 import kotlinx.serialization.ExperimentalSerializationApi
+import java.awt.AlphaComposite
 import java.awt.Graphics2D
 import kotlin.math.max
 import kotlin.math.min
@@ -48,6 +49,7 @@ object GridFillPaintLayerPlugin : PaintLayer {
             val f = doc.children[frame]
             val l = f.children[max(0, min(layer, f.children.lastIndex))]
 
+            g2d.composite = AlphaComposite.SrcOver.derive(l.opacity)
             DrawUtil.paintGridFill(g2d, l.child)
         }
     }

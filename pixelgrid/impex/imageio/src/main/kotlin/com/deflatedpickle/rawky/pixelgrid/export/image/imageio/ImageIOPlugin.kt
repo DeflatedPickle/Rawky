@@ -8,7 +8,6 @@ import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.util.PluginUtil
-import com.deflatedpickle.marvin.functions.extensions.get
 import com.deflatedpickle.marvin.impl.IIOReadProgressAdapter
 import com.deflatedpickle.marvin.impl.IIOWriteProgressAdapter
 import com.deflatedpickle.rawky.api.CellProvider
@@ -171,7 +170,19 @@ object ImageIOPlugin : Exporter, Importer, Opener {
                 for (row in 0 until this.height) {
                     for (column in 0 until this.width) {
                         for (layer in layers.reversed()) {
-                            setRGB(column, row, (layer.child[column, row].content as Color).rgb)
+                            val color = (layer.child[column, row]
+                                .content as Color)
+
+                            if (layer.visible && layer.opacity > 0 && color.alpha > 0) {
+                                setRGB(
+                                    column,
+                                    row,
+                                    color.rgb and (
+                                            (layer.opacity * 255)
+                                                .toInt() shl 24 or 0x00ffffff
+                                            )
+                                )
+                            }
                         }
                     }
                 }
