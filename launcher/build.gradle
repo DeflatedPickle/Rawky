@@ -6,6 +6,9 @@ dependencies {
 	// Terminal colours
 	implementation 'org.fusesource.jansi:jansi:1.18'
 
+	// Tray icon
+	implementation("com.dorkbox:SystemTray:4.1")
+
 	// Default theme
 	implementation 'com.formdev:flatlaf:3.2'
 	implementation 'com.formdev:flatlaf-extras:3.2'

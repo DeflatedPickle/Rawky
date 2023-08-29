@@ -117,6 +117,13 @@ object MenuBar : JMenuBar() {
         LauncherPlugin.open(RawkyPlugin.document!!.path!!)
     }
 
+    val takeScreenshotItem = JMenuItem(
+        "Take Screenshot...",
+        accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK or KeyEvent.SHIFT_DOWN_MASK)
+    ) {
+        saveScreenshot()
+    }
+
     private val disabledUntilFile = mutableListOf<JMenuItem>()
 
     private val screenshotChooser = JFileChooser(File(".")).apply {
@@ -490,12 +497,7 @@ object MenuBar : JMenuBar() {
 
     private fun populateToolsMenu() {
         toolsMenu.apply {
-            add(
-                "Take Screenshot...",
-                accelerator = KeyStroke.getKeyStroke(KeyEvent.VK_E, KeyEvent.CTRL_DOWN_MASK or KeyEvent.SHIFT_DOWN_MASK)
-            ) {
-                saveScreenshot()
-            }
+            add(takeScreenshotItem)
 
             addSeparator()
         }

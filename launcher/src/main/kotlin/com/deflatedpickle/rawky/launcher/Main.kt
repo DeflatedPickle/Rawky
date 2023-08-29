@@ -34,6 +34,7 @@ import com.deflatedpickle.rawky.launcher.gui.dialog.AboutDialog
 import com.formdev.flatlaf.FlatLaf
 import com.formdev.flatlaf.util.SystemInfo
 import com.jidesoft.plaf.LookAndFeelFactory
+import dorkbox.systemTray.SystemTray
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -54,6 +55,7 @@ import javax.swing.Box
 import javax.swing.ImageIcon
 import javax.swing.JDialog
 import javax.swing.JFrame
+import javax.swing.JSeparator
 import javax.swing.SwingUtilities
 import javax.swing.UIManager
 import kotlin.system.exitProcess
@@ -147,6 +149,19 @@ fun main(args: Array<String>) {
 
     Haruhi.window = Window
     Haruhi.toastWindow = Window.toastWindow
+
+    SystemTray.get()?.let { icon ->
+        icon.setImage(Window.iconImage)
+        icon.setStatus("Rawky")
+
+        icon.menu.let { menu ->
+            menu.add(JSeparator())
+            menu.add(MenuBar.takeScreenshotItem)
+            menu.add(MenuBar.aboutItem)
+            menu.add(JSeparator())
+            menu.add(MenuBar.exitItem)
+        }
+    }
 
     Docking.initialize(Window)
 
