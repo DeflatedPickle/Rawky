@@ -35,6 +35,7 @@ import com.formdev.flatlaf.FlatLaf
 import com.formdev.flatlaf.util.SystemInfo
 import com.jidesoft.plaf.LookAndFeelFactory
 import dorkbox.systemTray.SystemTray
+import io.github.sanyarnd.applocker.AppLocker
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
@@ -84,6 +85,9 @@ fun main(args: Array<String>) {
     """
             .trimMargin(),
     )
+
+    val locker = AppLocker.create("com.deflatedpickle.rawky").build()
+    locker.lock()
 
     Haruhi.json = Json {
         encodeDefaults = true
@@ -183,6 +187,8 @@ fun main(args: Array<String>) {
                     // Changes were probably made, let's serialize the configs again
                     ConfigUtil.serializeAllConfigs()
                     logger.info("Serialized all the configs")
+
+                    locker.unlock()
                 }
             },
         )

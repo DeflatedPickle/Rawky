@@ -40,6 +40,7 @@ object TimelinePlugin {
             TimelinePanel.list.selectedIndex = 0
 
             triggerButtons()
+            triggerNavButtons()
         }
 
         EventOpenDocument.addListener {
@@ -48,9 +49,13 @@ object TimelinePlugin {
             TimelinePanel.list.selectedIndex = 0
 
             triggerButtons()
+            triggerNavButtons()
         }
 
-        EventChangeFrame.addListener { triggerButtons() }
+        EventChangeFrame.addListener {
+            triggerButtons()
+            triggerNavButtons()
+        }
 
         EventNewFrame.addListener {
             TimelinePanel.model.addElement(it)

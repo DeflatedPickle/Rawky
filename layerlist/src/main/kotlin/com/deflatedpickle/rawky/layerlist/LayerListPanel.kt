@@ -55,7 +55,6 @@ object LayerListPanel : PluginPanel() {
                             layerDialog.nameInput.text,
                             layerDialog.columnInput.value as Int,
                             layerDialog.rowInput.value as Int,
-                            // layerDialog.indexInput.value as Int
                         )
 
                     EventNewLayer.trigger(layer)
@@ -129,14 +128,22 @@ object LayerListPanel : PluginPanel() {
             // TODO: add a delete all button
         }
 
-    val firstButton = AbstractButton(icon = MonoIcon.ARROW_START_VERTICAL, tooltip = "First Layer", enabled = false) {
+    val firstButton = AbstractButton(
+        icon = MonoIcon.ARROW_START_VERTICAL,
+        tooltip = "First Layer",
+        enabled = false
+    ) {
         RawkyPlugin.document?.let {
             table.setRowSelectionInterval(0, 0)
             LayerListPlugin.triggerNavButtons()
         }
     }
 
-    val decrementButton = AbstractButton(icon = MonoIcon.ARROW_UP, tooltip = "Decrement Layer", enabled = false) {
+    val decrementButton = AbstractButton(
+        icon = MonoIcon.ARROW_UP,
+        tooltip = "Decrement Layer",
+        enabled = false
+    ) {
         RawkyPlugin.document?.let { doc ->
             val frame = doc.children[doc.selectedIndex]
 
@@ -148,7 +155,11 @@ object LayerListPanel : PluginPanel() {
         }
     }
 
-    val incrementButton = AbstractButton(icon = MonoIcon.ARROW_DOWN, tooltip = "Increment Layer", enabled = false) {
+    val incrementButton = AbstractButton(
+        icon = MonoIcon.ARROW_DOWN,
+        tooltip = "Increment Layer",
+        enabled = false
+    ) {
         RawkyPlugin.document?.let { doc ->
             val frame = doc.children[doc.selectedIndex]
 
@@ -160,7 +171,11 @@ object LayerListPanel : PluginPanel() {
         }
     }
 
-    val lastButton = AbstractButton(icon = MonoIcon.ARROW_END_VERTICAL, tooltip = "Last Frame", enabled = false) {
+    val lastButton = AbstractButton(
+        icon = MonoIcon.ARROW_END_VERTICAL,
+        tooltip = "Last Frame",
+        enabled = false
+    ) {
         RawkyPlugin.document?.let {
             val row = table.rowCount - 1
             table.setRowSelectionInterval(row, row)

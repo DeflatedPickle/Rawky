@@ -64,4 +64,5 @@
 	<a href="https://github.com/dheid/colorpicker">ColorPicker</a>
 	<a href="https://github.com/caoimhebyrne/KDiscordIPC">KDiscordIPC</a>
 	<a href="https://github.com/dorkbox/SystemTray">SystemTray</a>
+	<a href="https://github.com/sanyarnd/applocker">AppLocker</a>
 </p>
