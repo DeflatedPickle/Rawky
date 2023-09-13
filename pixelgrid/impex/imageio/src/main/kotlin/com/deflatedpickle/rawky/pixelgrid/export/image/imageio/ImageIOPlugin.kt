@@ -1,6 +1,6 @@
 /* Copyright (c) 2022 DeflatedPickle under the MIT license */
 
-@file:Suppress("unused", "UNUSED_PARAMETER")
+@file:Suppress("unused")
 
 package com.deflatedpickle.rawky.pixelgrid.export.image.imageio
 
@@ -14,6 +14,7 @@ import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.api.impex.Importer
 import com.deflatedpickle.rawky.api.impex.Opener
+import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
 import com.deflatedpickle.rawky.grid.pixel.PixelCellPlugin
@@ -119,29 +120,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
     }
 
     override fun export(doc: RawkyDocument, file: File) {
-        val writer = ImageIO.getImageWritersByFormatName(file.extension).next().apply {
-            addIIOWriteProgressListener(object : IIOWriteProgressAdapter() {
-                override fun imageProgress(source: ImageWriter, percentageDone: Float) {
-                    EventWriteProgress.trigger(
-                        PacketReadWriteProgress(
-                            source = PluginUtil.slugToPlugin("DeflatedPickle@imageio#*")!!,
-                            file = file,
-                            progress = percentageDone
-                        )
-                    )
-                }
-            })
-
-            addIIOWriteWarningListener { _, _, warning ->
-                Haruhi.toastWindow.add(
-                    TimedToastItem(
-                        level = ToastLevel.WARNING,
-                        title = "Image Write Warning",
-                        content = warning
-                    )
-                )
-            }
-        }
+        val writer = getWriter(file)
         val parameters = writer.defaultWriteParam.apply {
             if (canWriteCompressed()) compressionMode = ImageWriteParam.MODE_EXPLICIT
             if (canWriteProgressive()) progressiveMode = ImageWriteParam.MODE_DEFAULT
@@ -161,35 +140,24 @@ object ImageIOPlugin : Exporter, Importer, Opener {
             }
         }
 
-        val frame = doc.children[doc.selectedIndex]
-        val layers = frame.children
-        val grid = frame.children[frame.selectedIndex].child
+        writer.output = FileImageOutputStream(file)
 
-        val image =
-            BufferedImage(grid.columns, grid.rows, doc.colourChannel.code).apply {
-                for (row in 0 until this.height) {
-                    for (column in 0 until this.width) {
-                        for (layer in layers.reversed()) {
-                            val color = (layer.child[column, row]
-                                .content as Color)
+        if (writer.canWriteSequence()) {
+            writer.prepareWriteSequence(metadata)
 
-                            if (layer.visible && layer.opacity > 0 && color.alpha > 0) {
-                                setRGB(
-                                    column,
-                                    row,
-                                    color.rgb and (
-                                            (layer.opacity * 255)
-                                                .toInt() shl 24 or 0x00ffffff
-                                            )
-                                )
-                            }
-                        }
-                    }
-                }
+            for (i in doc.children) {
+                val image = frameToImage(doc, i)
+                writer.writeToSequence(IIOImage(image, listOf(image), null), parameters)
             }
 
-        writer.output = FileImageOutputStream(file)
-        writer.write(null, IIOImage(image, listOf(image), metadata), parameters)
+            writer.endWriteSequence()
+        } else {
+            val image = frameToImage(doc, doc.children[doc.selectedIndex])
+
+            writer.write(null, IIOImage(image, listOf(image), metadata), parameters)
+        }
+
+        (writer.output as FileImageOutputStream).close()
 
         Haruhi.toastWindow.add(
             ToastItem(
@@ -234,26 +202,52 @@ object ImageIOPlugin : Exporter, Importer, Opener {
     }
 
     override fun open(file: File): RawkyDocument {
-        val doc: RawkyDocument
-
         CellProvider.current = PixelCellPlugin
 
         val reader = getReader(file)
         reader.input = FileImageInputStream(file)
-        reader.read(0).apply {
-            doc = ActionUtil.newDocument(this.width, this.height, 1, 1)
 
-            val frame = doc.children[doc.selectedIndex]
-            val layers = frame.children
+        val numImages = reader.getNumImages(true)
+        val doc = ActionUtil.newDocument(reader.getWidth(0), reader.getHeight(0), numImages, 1)
 
-            for (row in 0 until this.height) {
-                for (column in 0 until this.width) {
-                    layers[0].child[column, row].content = Color(getRGB(column, row), true)
+        for (i in 0 until reader.getNumImages(true)) {
+            reader.read(i).apply {
+                val frame = doc.children[i]
+                val layers = frame.children
+
+                for (row in 0 until this.height) {
+                    for (column in 0 until this.width) {
+                        layers[0].child[column, row].content = Color(getRGB(column, row), true)
+                    }
                 }
             }
         }
 
         return doc
+    }
+
+    private fun getWriter(file: File) = ImageIO.getImageWritersByFormatName(file.extension).next().apply {
+        addIIOWriteProgressListener(object : IIOWriteProgressAdapter() {
+            override fun imageProgress(source: ImageWriter, percentageDone: Float) {
+                EventWriteProgress.trigger(
+                    PacketReadWriteProgress(
+                        source = PluginUtil.slugToPlugin("DeflatedPickle@imageio#*")!!,
+                        file = file,
+                        progress = percentageDone
+                    )
+                )
+            }
+        })
+
+        addIIOWriteWarningListener { _, _, warning ->
+            Haruhi.toastWindow.add(
+                TimedToastItem(
+                    level = ToastLevel.WARNING,
+                    title = "Image Write Warning",
+                    content = warning
+                )
+            )
+        }
     }
 
     private fun getReader(file: File) =
@@ -280,4 +274,29 @@ object ImageIOPlugin : Exporter, Importer, Opener {
                 )
             }
         }
+
+    private fun frameToImage(
+        doc: RawkyDocument,
+        frame: Frame
+    ) = BufferedImage(doc[0][0].child.columns, doc[0][0].child.rows, doc.colourChannel.code).apply {
+        for (row in 0 until this.height) {
+            for (column in 0 until this.width) {
+                for (layer in frame.children.reversed()) {
+                    val color = (layer.child[column, row]
+                        .content as Color)
+
+                    if (layer.visible && layer.opacity > 0 && color.alpha > 0) {
+                        setRGB(
+                            column,
+                            row,
+                            color.rgb and (
+                                    (layer.opacity * 255)
+                                        .toInt() shl 24 or 0x00ffffff
+                                    )
+                        )
+                    }
+                }
+            }
+        }
+    }
 }

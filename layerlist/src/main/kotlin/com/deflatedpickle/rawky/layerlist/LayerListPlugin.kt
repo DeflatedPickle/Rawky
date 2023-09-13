@@ -74,6 +74,7 @@ object LayerListPlugin {
 
         EventNewLayer.addListener {
             LayerListPanel.model.addRow(arrayOf(it, it.name, true, false))
+            // TODO: select the new layer
         }
     }
 

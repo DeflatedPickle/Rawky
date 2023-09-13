@@ -81,8 +81,6 @@ object LauncherPlugin {
 
     private val importerChooser =
         JFileChooser(File(".")).apply {
-            isAcceptAllFileFilterUsed = false
-
             EventProgramFinishSetup.addListener {
                 for ((k, v) in Importer.registry) {
                     for ((nk, nv) in v.importerExtensions) {
@@ -99,8 +97,6 @@ object LauncherPlugin {
 
     private val openerChooser =
         JFileChooser(File(".")).apply {
-            isAcceptAllFileFilterUsed = false
-
             EventProgramFinishSetup.addListener {
                 for ((k, v) in Opener.registry) {
                     for ((nk, nv) in v.openerExtensions) {
