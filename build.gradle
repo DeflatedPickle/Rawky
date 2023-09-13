@@ -359,6 +359,8 @@ run {
 
 		runtimeOnly project(":external.discordipc")
 
+		runtimeOnly project(":goofy.oneko")
+
 		runtimeOnly project(':sniffle.pluginmanager')
 		runtimeOnly project(':sniffle.settingsgui')
 		runtimeOnly project(':sniffle.tipoftheday')

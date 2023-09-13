@@ -148,6 +148,11 @@ include 'tiledview'
 include 'autosave'
 include 'autoload'
 
+['oneko'].each {
+	include "goofy.$it"
+	project(":goofy.$it").projectDir = new File(settingsDir, "goofy/$it")
+}
+
 ['discordipc'].each {
 	include "external.$it"
 	project(":external.$it").projectDir = new File(settingsDir, "external/$it")
@@ -180,3 +185,5 @@ includeBuild 'libs/ModernDocking/docking-ui'
 includeBuild 'libs/colorpicker'
 includeBuild 'libs/owlgotrhythm'
 includeBuild 'libs/paleta'
+includeBuild 'libs/olio'
+includeBuild 'libs/oneko'

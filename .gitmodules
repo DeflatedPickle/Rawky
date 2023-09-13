@@ -46,3 +46,9 @@
 [submodule "libs/paleta"]
 	path = libs/paleta
 	url = https://github.com/DeflatedPickle/paleta
+[submodule "libs/olio"]
+	path = libs/olio
+	url = https://github.com/DeflatedPickle/olio
+[submodule "libs/oneko"]
+	path = libs/oneko
+	url = https://github.com/DeflatedPickle/oneko
