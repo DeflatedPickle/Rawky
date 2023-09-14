@@ -2,7 +2,7 @@
 
 @file:Suppress("unused")
 
-package com.deflatedpickle.rawky.pixelgrid.export.image.imageio
+package com.deflatedpickle.rawky.pixelgrid.impex.imageio
 
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.Plugin
@@ -24,7 +24,7 @@ import com.deflatedpickle.rawky.grid.pixel.PixelCellPlugin
 import com.deflatedpickle.rawky.pixelgrid.event.EventReadProgress
 import com.deflatedpickle.rawky.pixelgrid.event.EventWriteProgress
 import com.deflatedpickle.rawky.pixelgrid.event.PacketReadWriteProgress
-import com.deflatedpickle.rawky.pixelgrid.export.image.imageio.dialog.ExportImageDialog
+import com.deflatedpickle.rawky.pixelgrid.impex.imageio.dialog.ExportImageDialog
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.rawky.util.ActionUtil
 import com.deflatedpickle.tosuto.TimedToastItem
@@ -155,7 +155,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
 
             writer.endWriteSequence()
         } else {
-            val image = frameToImage(doc, doc.children[doc.selectedIndex])
+            val image = frameToImage(doc, doc[doc.selectedIndex])
 
             writer.write(null, IIOImage(image, listOf(image), metadata), parameters)
         }
@@ -201,7 +201,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
                 ImportAs.FRAMES -> {
                     document.children.add(newFrame)
                     EventNewFrame.trigger(newFrame)
-                    newFrame[document.selectedIndex].child
+                    newFrame[0].child
                 }
                 ImportAs.LAYERS -> {
                     layers.add(0, newLayer)
@@ -292,7 +292,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
             }
         }
 
-    private fun frameToImage(
+    fun frameToImage(
         doc: RawkyDocument,
         frame: Frame
     ) = BufferedImage(doc[0][0].child.columns, doc[0][0].child.rows, doc.colourChannel.code).apply {

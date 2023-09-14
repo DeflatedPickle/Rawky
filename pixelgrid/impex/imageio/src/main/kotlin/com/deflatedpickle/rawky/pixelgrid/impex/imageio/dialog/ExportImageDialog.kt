@@ -1,6 +1,6 @@
 /* Copyright (c) 2023 DeflatedPickle under the MIT license */
 
-package com.deflatedpickle.rawky.pixelgrid.export.image.imageio.dialog
+package com.deflatedpickle.rawky.pixelgrid.impex.imageio.dialog
 
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine

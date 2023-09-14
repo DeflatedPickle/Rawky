@@ -2,7 +2,7 @@
 
 @file:Suppress("unused", "SpellCheckingInspection", "UNCHECKED_CAST")
 
-package com.deflatedpickle.rawky.pixelgrid.export.text.rawr
+package com.deflatedpickle.rawky.pixelgrid.impex.rawr
 
 import blue.endless.jankson.Jankson
 import com.deflatedpickle.haruhi.Haruhi

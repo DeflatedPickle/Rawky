@@ -279,6 +279,7 @@ run {
 		runtimeOnly project(":pixelgrid.impex.imageio")
 		runtimeOnly project(":pixelgrid.impex.ascii")
 		runtimeOnly project(":pixelgrid.impex.rawr")
+		runtimeOnly project(":pixelgrid.impex.imaging")
 
 		runtimeOnly project(":pixelgrid.impex.ascii.block")
 

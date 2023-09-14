@@ -13,6 +13,8 @@ dependencies {
 	implementation 'com.formdev:flatlaf-swingx:3.2'
 	implementation 'com.formdev:flatlaf-jide-oss:3.2'
 
+	implementation 'org.apache.commons:commons-imaging:1.0-alpha3'
+
 	implementation 'io.github.andrewauclair.ModernDocking:docking-ui:'
 
 	implementation 'com.deflatedpickle:FlatOpenDyslexicFont:'

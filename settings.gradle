@@ -55,6 +55,7 @@ include 'pixelgrid'
 	'imageio',
 	'ascii',
 	'rawr',
+	'imaging',
 ].each {
 	include "pixelgrid.impex.$it"
 	project(":pixelgrid.impex.$it").projectDir = new File(settingsDir, "pixelgrid/impex/$it")
