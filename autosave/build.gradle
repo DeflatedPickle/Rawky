@@ -1,6 +1,7 @@
 dependencies {
 	implementation project(":core")
 	implementation project(":pixelgrid")
+	implementation project(":pixelgrid.impex.rawr")
 
 	implementation project(":sniffle.settingsgui")
 }

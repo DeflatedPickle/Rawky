@@ -7,6 +7,7 @@ import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventSaveDocument
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
+import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.autoload.api.LoadType.LAST_OPENED
 import com.deflatedpickle.rawky.autoload.api.LoadType.LAST_SAVED
 import com.deflatedpickle.rawky.autosave.event.EventAutoSaveDocument
@@ -35,7 +36,9 @@ object AutoLoadPlugin {
     init {
         EventOpenDocument.addListener { open ->
             ConfigUtil.getSettings<AutoLoadSettings>("deflatedpickle@auto_load#*")?.let {
-                if (it.loadType == LAST_OPENED) {
+                if (it.loadType == LAST_OPENED
+                    && Opener.registry.values.flatMap { it.openerExtensions.values.flatten() }.contains(open.second.extension)
+                    ) {
                     it.lastFile = open.second
 
                     PluginUtil.slugToPlugin("deflatedpickle@auto_load#*")?.let { plug ->
@@ -47,7 +50,9 @@ object AutoLoadPlugin {
 
         EventSaveDocument.addListener { save ->
             ConfigUtil.getSettings<AutoLoadSettings>("deflatedpickle@auto_load#*")?.let {
-                if (it.loadType == LAST_SAVED) {
+                if (it.loadType == LAST_SAVED
+                    && Opener.registry.values.flatMap { it.openerExtensions.values.flatten() }.contains(save.second.extension)
+                    ) {
                     it.lastFile = save.second
 
                     PluginUtil.slugToPlugin("deflatedpickle@auto_load#*")?.let { plug ->
@@ -59,7 +64,10 @@ object AutoLoadPlugin {
 
         EventAutoSaveDocument.addListener { save ->
             ConfigUtil.getSettings<AutoLoadSettings>("deflatedpickle@auto_load#*")?.let {
-                if (it.loadType == LAST_SAVED && it.includeAutoSaves) {
+                if (it.loadType == LAST_SAVED
+                    && it.includeAutoSaves
+                    && Opener.registry.values.flatMap { it.openerExtensions.values.flatten() }.contains(save.second.extension)
+                    ) {
                     it.lastFile = save.second
 
                     PluginUtil.slugToPlugin("deflatedpickle@auto_load#*")?.let { plug ->

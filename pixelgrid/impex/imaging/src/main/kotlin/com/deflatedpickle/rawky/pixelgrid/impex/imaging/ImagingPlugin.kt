@@ -4,6 +4,7 @@ import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.haruhi.api.plugin.Plugin
 import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.rawky.api.CellProvider
+import com.deflatedpickle.rawky.api.ColourChannel
 import com.deflatedpickle.rawky.api.ImportAs
 import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.api.impex.Importer
@@ -26,7 +27,6 @@ import org.oxbow.swingbits.dialog.task.TaskDialogs
 import java.awt.Color
 import java.awt.Desktop
 import java.io.File
-import java.io.Writer
 
 @Plugin(
     value = "imaging",
@@ -113,6 +113,7 @@ object ImagingPlugin : Exporter, Importer, Opener {
                     EventNewFrame.trigger(newFrame)
                     newFrame[0].child
                 }
+
                 ImportAs.LAYERS -> {
                     layers.add(0, newLayer)
                     EventNewLayer.trigger(newLayer)
@@ -133,7 +134,17 @@ object ImagingPlugin : Exporter, Importer, Opener {
 
         val image = Imaging.getBufferedImage(file)
 
-        val doc = ActionUtil.newDocument(image.width, image.height, 1, 1)
+        val doc = ActionUtil.newDocument(
+            image.width,
+            image.height,
+            when (file.extension) {
+                "xbm" -> ColourChannel.RGB
+                "xpm" -> ColourChannel.ARGB
+                else -> throw NotImplementedError()
+            },
+            1,
+            1
+        )
 
         image.apply {
             val frame = doc[doc.selectedIndex]

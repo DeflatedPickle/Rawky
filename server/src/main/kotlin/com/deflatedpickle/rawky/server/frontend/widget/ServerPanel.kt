@@ -85,6 +85,7 @@ object ServerPanel : BetterGlassPane() {
             ResponseNewDocument(
                 grid.rows,
                 grid.columns,
+                doc.colourChannel,
                 doc.children.size,
                 frame.children.size,
             ),

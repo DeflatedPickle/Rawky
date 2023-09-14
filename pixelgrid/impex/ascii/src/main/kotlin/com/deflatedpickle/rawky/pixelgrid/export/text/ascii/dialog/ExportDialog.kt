@@ -7,6 +7,7 @@ import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.pixelgrid.export.text.ascii.api.Palette
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.constraints.StickEast
+import com.deflatedpickle.undulation.constraints.StickEastFinishLine
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.GridBagLayout
 import javax.swing.JCheckBox
@@ -19,6 +20,7 @@ import javax.swing.SpinnerNumberModel
 
 class ExportDialog : TaskDialog(Haruhi.window, "Export") {
     val paletteCombo = JComboBox(Palette.registry.values.toTypedArray())
+    val terminalCodesCheck = JCheckBox("Write Terminal Colour Codes", true)
 
     val frameSpinner =
         JSpinner(SpinnerNumberModel(0, 0, RawkyPlugin.document?.children?.size?.minus(1), 1))
@@ -34,11 +36,12 @@ class ExportDialog : TaskDialog(Haruhi.window, "Export") {
 
                 add(JLabel("Palette:"), StickEast)
                 add(paletteCombo, FillHorizontalFinishLine)
+                add(terminalCodesCheck, StickEastFinishLine)
 
                 add(JSeparator(JSeparator.HORIZONTAL), FillHorizontalFinishLine)
 
                 add(frameSpinner, FillHorizontalFinishLine)
-                add(openCheck, StickEast)
+                add(openCheck, StickEastFinishLine)
             }
     }
 }

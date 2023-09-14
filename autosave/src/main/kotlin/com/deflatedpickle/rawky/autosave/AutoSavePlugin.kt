@@ -18,8 +18,10 @@ import com.deflatedpickle.marvin.functions.extensions.set
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.api.CellProvider
 import com.deflatedpickle.rawky.api.impex.Exporter
+import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.autosave.event.EventAutoSaveDocument
 import com.deflatedpickle.rawky.autosave.util.FileType
+import com.deflatedpickle.rawky.pixelgrid.impex.rawr.RawrPlugin
 import com.deflatedpickle.rawky.setting.RawkyDocument
 import com.deflatedpickle.undulation.constraints.FillHorizontal
 import java.awt.Component
@@ -32,6 +34,7 @@ import javax.swing.DefaultComboBoxModel
 import javax.swing.JComboBox
 import javax.swing.JLabel
 import javax.swing.Timer
+import javax.swing.filechooser.FileNameExtensionFilter
 
 @Plugin(
     value = "auto_save",
@@ -83,7 +86,7 @@ object AutoSavePlugin {
         EventProgramFinishSetup.addListener {
             ConfigUtil.getSettings<AutoSaveSettings>("deflatedpickle@auto_save#*")?.let { config ->
                 if (config.fileType == null) {
-                    val exporter = Exporter.registry.values.first()
+                    val exporter = RawrPlugin
                     config.fileType = FileType(exporter, exporter.exporterExtensions.values.first().first())
 
                     PluginUtil.slugToPlugin("deflatedpickle@auto_save#*")?.let { plug ->
@@ -166,9 +169,8 @@ object AutoSavePlugin {
     }
 
     fun save(doc: RawkyDocument, config: AutoSaveSettings) {
-        if (config.ignoreEmpty && checkEmpty(doc)) {
-            return
-        }
+        if ((config.ignoreEmpty && checkEmpty(doc))) return
+        if (!Opener.registry.values.flatMap { it.openerExtensions.values.flatten() }.contains(config.fileType?.extension)) return
 
         var name = config.name
 

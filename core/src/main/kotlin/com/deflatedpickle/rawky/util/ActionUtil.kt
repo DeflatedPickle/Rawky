@@ -33,7 +33,7 @@ object ActionUtil {
             ControlMode.current = dialog.controlModeComboBox.selectedItem as ControlMode
             CellProvider.current = dialog.cellProviderComboBox.selectedItem as CellProvider<Cell<Any>>
 
-            val document = newDocument(maxRows, maxColumns, frames, layers).apply {
+            val document = newDocument(maxRows, maxColumns, ColourChannel.ARGB, frames, layers).apply {
                 RawkyDocument.suggestedName = null
                 RawkyDocument.suggestedExtension = null
 
@@ -68,10 +68,11 @@ object ActionUtil {
         }
     }
 
-    fun newDocument(rows: Int, columns: Int, frames: Int, layers: Int): RawkyDocument =
+    fun newDocument(rows: Int, columns: Int, colourChannel: ColourChannel, frames: Int, layers: Int): RawkyDocument =
         RawkyDocument(
             rows = rows,
             columns = columns,
+            colourChannel = colourChannel,
             children =
             Array(frames) { f ->
                 Frame(
@@ -82,10 +83,8 @@ object ActionUtil {
                             name = "Layer $l",
                             child = Grid(rows = rows, columns = columns),
                         )
-                    }
-                        .toMutableList(),
+                    }.toMutableList(),
                 )
-            }
-                .toMutableList(),
+            }.toMutableList(),
         )
 }

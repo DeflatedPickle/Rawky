@@ -11,6 +11,7 @@ import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.marvin.impl.IIOReadProgressAdapter
 import com.deflatedpickle.marvin.impl.IIOWriteProgressAdapter
 import com.deflatedpickle.rawky.api.CellProvider
+import com.deflatedpickle.rawky.api.ColourChannel
 import com.deflatedpickle.rawky.api.ImportAs
 import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.api.impex.Importer
@@ -225,7 +226,13 @@ object ImageIOPlugin : Exporter, Importer, Opener {
         reader.input = FileImageInputStream(file)
 
         val numImages = reader.getNumImages(true)
-        val doc = ActionUtil.newDocument(reader.getWidth(0), reader.getHeight(0), numImages, 1)
+        val doc = ActionUtil.newDocument(
+            reader.getWidth(0),
+            reader.getHeight(0),
+            ColourChannel.get(reader.read(0).type),
+            numImages,
+            1
+        )
 
         for (i in 0 until reader.getNumImages(true)) {
             reader.read(i).apply {

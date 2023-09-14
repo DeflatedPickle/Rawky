@@ -16,4 +16,9 @@ enum class ColourChannel(
     GRAY(BufferedImage.TYPE_BYTE_GRAY),
     BINARY(BufferedImage.TYPE_BYTE_BINARY),
     INDEXED(BufferedImage.TYPE_BYTE_INDEXED),
+    ;
+
+    companion object {
+        fun get(code: Int) = ColourChannel.values().first { it.code == code }
+    }
 }

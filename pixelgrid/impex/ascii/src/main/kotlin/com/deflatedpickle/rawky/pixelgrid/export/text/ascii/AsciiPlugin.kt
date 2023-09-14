@@ -44,6 +44,7 @@ object AsciiPlugin : Exporter {
         dialog.isVisible = true
 
         if (dialog.result == TaskDialog.StandardCommand.OK) {
+            val terminalColourCodes = dialog.terminalCodesCheck.isSelected
             val frame = doc.children[dialog.frameSpinner.value as Int]
             val layers = frame.children
             val grid = frame.children[0].child
@@ -54,13 +55,23 @@ object AsciiPlugin : Exporter {
                     for (row in 0 until grid.rows) {
                         for (column in 0 until grid.columns) {
                             for (layer in layers.reversed()) {
+                                val c = layer.child[column, row].content as Color
+
+                                if (c.alpha > 0 && terminalColourCodes) {
+                                    write("\\x1b[38;2;${c.red};${c.green};${c.blue}m")
+                                }
+
                                 write(
                                     (dialog.paletteCombo.selectedItem as Palette).char(
                                         column,
                                         row,
-                                        layer.child[column, row].content as Color,
+                                        c,
                                     ),
                                 )
+
+                                if (c.alpha > 0 && terminalColourCodes) {
+                                    write("\\033[0m")
+                                }
                             }
                         }
                         write("\n")
