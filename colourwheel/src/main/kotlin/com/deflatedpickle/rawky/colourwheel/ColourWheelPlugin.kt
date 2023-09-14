@@ -17,7 +17,7 @@ import com.deflatedpickle.rawky.event.EventChangeColour
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.grid.pixel.PixelCellPlugin
 import com.deflatedpickle.sniffle.swingsettings.event.EventChangeTheme
-import com.deflatedpickle.undulation.functions.extensions.JMenuItem
+import com.deflatedpickle.undulation.functions.JMenuItem
 import com.deflatedpickle.undulation.functions.extensions.add
 import com.deflatedpickle.undulation.functions.extensions.updateUIRecursively
 import java.awt.Color

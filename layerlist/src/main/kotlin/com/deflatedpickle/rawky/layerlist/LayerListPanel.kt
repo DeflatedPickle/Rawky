@@ -239,7 +239,9 @@ object LayerListPanel : PluginPanel() {
                         it.layer == LayerCategory.GRID || it.layer == LayerCategory.BACKGROUND
                     }
                     ) {
-                        v.paint(doc, doc.selectedIndex, doc.children[doc.selectedIndex].children.indexOf(l), g2D)
+                        if (doc.selectedIndex >= 0 && doc.selectedIndex < doc.children.size) {
+                            v.paint(doc, doc.selectedIndex, doc.children[doc.selectedIndex].children.indexOf(l), g2D)
+                        }
                     }
                 }
             }

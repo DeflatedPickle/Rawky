@@ -10,7 +10,9 @@ import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.rawky.launcher.gui.Window
 import com.deflatedpickle.undulation.functions.extensions.add
 import oneko.Neko
+import java.awt.MenuItem
 import javax.swing.JMenu
+import javax.swing.JMenuItem
 
 @Plugin(
     value = "oneko",
@@ -27,8 +29,10 @@ object ONekoPlugin {
         EventProgramFinishSetup.addListener {
             RegistryUtil.get(MenuCategory.MENU.name)?.apply {
                 (get(MenuCategory.TOOLS.name) as JMenu).apply {
-                    add("Spawn Cat") {
-                        Neko(Window)
+                    (menuComponents.filterIsInstance<JMenu>().firstOrNull { it.text == "Goofy" } ?: JMenu("Goofy").also { add(it) }).apply {
+                        add("Neko") {
+                            Neko(Window)
+                        }
                     }
 
                     addSeparator()

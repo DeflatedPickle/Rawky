@@ -118,6 +118,7 @@ object DiscordIPCPlugin {
             ipc.activityManager.setActivity {
                 details = "Editing ${document()}"
                 val doc = RawkyPlugin.document!!
+                if (doc.selectedIndex < 0 || doc.selectedIndex >= doc.children.size) return@setActivity
                 val frame = doc.children[doc.selectedIndex]
                 val frameIndex = doc.selectedIndex
                 val frameCount = doc.children.count()

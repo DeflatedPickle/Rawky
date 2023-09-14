@@ -43,7 +43,7 @@ object ToolBar : JToolBar() {
 
         add(icon = MonoIcon.FOLDER_NEW, tooltip = "New") { ActionUtil.newFile() }
         add(icon = MonoIcon.FOLDER_OPEN, tooltip = "Open") {
-            LauncherPlugin.openDialog(MenuBar.fileMenu)
+            LauncherPlugin.openDialog()
         }
 
         addSeparator()

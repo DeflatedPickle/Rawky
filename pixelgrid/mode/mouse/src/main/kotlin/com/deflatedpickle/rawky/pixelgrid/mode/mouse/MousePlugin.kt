@@ -36,7 +36,7 @@ object MousePlugin : ControlMode() {
         object : MouseAdapter() {
             fun click(e: MouseEvent, dragged: Boolean) {
                 RawkyPlugin.document?.let { doc ->
-                    if (doc.selectedIndex >= doc.children.size) return
+                    if (doc.selectedIndex < 0 || doc.selectedIndex >= doc.children.size) return
 
                     PixelGridPanel.paint(
                         e.button,
@@ -48,7 +48,7 @@ object MousePlugin : ControlMode() {
 
             fun move(e: MouseEvent) {
                 RawkyPlugin.document?.let { doc ->
-                    if (doc.selectedIndex >= doc.children.size) return
+                    if (doc.selectedIndex < 0 || doc.selectedIndex >= doc.children.size) return
 
                     val frame = doc.children[doc.selectedIndex]
                     val layer = frame.children[frame.selectedIndex]

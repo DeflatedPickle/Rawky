@@ -10,6 +10,7 @@ import kotlinx.serialization.Transient
 data class Layer(
     var name: String = "",
     var opacity: Float = 1f,
+    // TODO: add a blending mode
     var visible: Boolean = true,
     var lock: Boolean = false,
     override var child: Grid = Grid(),

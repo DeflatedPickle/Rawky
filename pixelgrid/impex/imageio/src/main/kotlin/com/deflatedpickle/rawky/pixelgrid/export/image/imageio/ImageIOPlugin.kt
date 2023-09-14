@@ -11,12 +11,15 @@ import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.marvin.impl.IIOReadProgressAdapter
 import com.deflatedpickle.marvin.impl.IIOWriteProgressAdapter
 import com.deflatedpickle.rawky.api.CellProvider
+import com.deflatedpickle.rawky.api.ImportAs
 import com.deflatedpickle.rawky.api.impex.Exporter
 import com.deflatedpickle.rawky.api.impex.Importer
 import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
+import com.deflatedpickle.rawky.event.EventNewFrame
+import com.deflatedpickle.rawky.event.EventNewLayer
 import com.deflatedpickle.rawky.grid.pixel.PixelCellPlugin
 import com.deflatedpickle.rawky.pixelgrid.event.EventReadProgress
 import com.deflatedpickle.rawky.pixelgrid.event.EventWriteProgress
@@ -174,7 +177,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
         )
     }
 
-    override fun import(document: RawkyDocument, file: File) {
+    override fun import(document: RawkyDocument, file: File, importAs: ImportAs) {
         if (CellProvider.current != PixelCellPlugin) {
             TaskDialogs.error(
                 Haruhi.window,
@@ -191,11 +194,25 @@ object ImageIOPlugin : Exporter, Importer, Opener {
             val frame = document.children[document.selectedIndex]
             val layers = frame.children
 
-            layers.add(0, Layer(child = Grid(rows = this.height, columns = this.width)))
+            val newLayer = Layer(child = Grid(rows = this.height, columns = this.width))
+            val newFrame = Frame(children = mutableListOf(newLayer))
+
+            val grid = when (importAs) {
+                ImportAs.FRAMES -> {
+                    document.children.add(newFrame)
+                    EventNewFrame.trigger(newFrame)
+                    newFrame[document.selectedIndex].child
+                }
+                ImportAs.LAYERS -> {
+                    layers.add(0, newLayer)
+                    EventNewLayer.trigger(newLayer)
+                    newLayer.child
+                }
+            }
 
             for (row in 0 until this.height) {
                 for (column in 0 until this.width) {
-                    layers[0].child[column, row].content = Color(getRGB(column, row), true)
+                    grid[column, row].content = Color(getRGB(column, row), true)
                 }
             }
         }
@@ -243,7 +260,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
             Haruhi.toastWindow.add(
                 TimedToastItem(
                     level = ToastLevel.WARNING,
-                    title = "Image Write Warning",
+                    title = "Image Write",
                     content = warning
                 )
             )
@@ -268,7 +285,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
                 Haruhi.toastWindow.add(
                     TimedToastItem(
                         level = ToastLevel.WARNING,
-                        title = "Image Read Warning",
+                        title = "Image Read",
                         content = warning
                     )
                 )

@@ -5,7 +5,7 @@ import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.event.EventUpdateGrid
-import com.deflatedpickle.undulation.functions.extensions.JMenuItem
+import com.deflatedpickle.undulation.functions.JMenuItem
 import java.awt.event.KeyEvent
 import javax.swing.JMenuItem
 import javax.swing.KeyStroke

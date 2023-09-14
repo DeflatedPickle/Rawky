@@ -49,6 +49,8 @@ object GamepadPlugin : ControlMode() {
 
         GamePadObserver.addListener() {
             RawkyPlugin.document?.let { doc ->
+                if (doc.selectedIndex < 0 || doc.selectedIndex >= doc.children.size) return@let
+
                 val frame = doc.children[doc.selectedIndex]
                 val layer = frame.children[frame.selectedIndex]
                 val grid = layer.child

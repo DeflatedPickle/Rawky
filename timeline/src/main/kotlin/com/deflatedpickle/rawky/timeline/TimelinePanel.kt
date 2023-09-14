@@ -5,13 +5,9 @@
 package com.deflatedpickle.rawky.timeline
 
 import com.deflatedpickle.haruhi.component.PluginPanel
-import com.deflatedpickle.haruhi.event.EventImportDocument
-import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.RawkyPlugin
-import com.deflatedpickle.rawky.api.impex.Importer
-import com.deflatedpickle.rawky.api.impex.Opener
 import com.deflatedpickle.rawky.collection.Frame
 import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.dialog.EditFrameDialog
@@ -25,25 +21,15 @@ import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.event.packet.PacketChange
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
-import com.deflatedpickle.rawky.util.DnDUtil
 import com.deflatedpickle.rawky.util.DrawUtil
 import com.deflatedpickle.undulation.functions.AbstractButton
-import com.deflatedpickle.undulation.functions.extensions.add
 import org.jdesktop.swingx.JXList
 import org.oxbow.swingbits.dialog.task.TaskDialog
 import java.awt.BorderLayout
-import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
 import java.awt.Graphics2D
 import java.awt.RenderingHints
-import java.awt.datatransfer.DataFlavor
-import java.awt.dnd.DnDConstants
-import java.awt.dnd.DropTargetAdapter
-import java.awt.dnd.DropTargetDragEvent
-import java.awt.dnd.DropTargetDropEvent
-import java.io.File
-import java.io.IOException
 import javax.swing.BoxLayout
 import javax.swing.DefaultListModel
 import javax.swing.JLabel
@@ -277,15 +263,15 @@ object TimelinePanel : PluginPanel() {
 
             addListSelectionListener {
                 RawkyPlugin.document?.let { doc ->
-                    if (doc.selectedIndex >= doc.children.size) return@let
+                    if (doc.selectedIndex < 0 || doc.selectedIndex >= doc.children.size) return@let
 
-                    val oldFrame = doc.children[doc.selectedIndex]
+                    val oldFrame = doc[doc.selectedIndex]
 
                     doc.selectedIndex = min(doc.children.size - 1, selectionModel.anchorSelectionIndex)
 
-                    if (doc.selectedIndex >= doc.children.size) return@let
+                    if (doc.selectedIndex < 0 || doc.selectedIndex < doc.children.size) return@let
 
-                    val newFrame = doc.children[doc.selectedIndex]
+                    val newFrame = doc[doc.selectedIndex]
                     val layer = newFrame.children[newFrame.selectedIndex]
                     val grid = layer.child
 

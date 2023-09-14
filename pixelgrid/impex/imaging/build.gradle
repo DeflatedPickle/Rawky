@@ -1,0 +1,15 @@
+plugins {
+	id 'org.jetbrains.kotlin.jvm'
+}
+
+dependencies {
+	implementation project(":core")
+	implementation project(":pixelgrid")
+	implementation project(":pixelgrid.grid.pixel")
+
+	implementation 'org.apache.commons:commons-imaging:1.0-alpha3'
+}
+
+repositories {
+	mavenCentral()
+}

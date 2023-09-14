@@ -11,11 +11,8 @@ import com.deflatedpickle.haruhi.api.plugin.PluginType
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
-import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.collection.Grid
-import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.pixelgrid.PixelGridPanel
-import com.deflatedpickle.rawky.pixelgrid.PixelGridPlugin
 import com.deflatedpickle.rawky.pixelgrid.api.LayerCategory
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer
 import com.deflatedpickle.rawky.pixelgrid.api.PaintLayer.Companion.registry
@@ -31,7 +28,6 @@ import java.io.File
 import javax.imageio.ImageIO
 import javax.swing.JFileChooser
 import javax.swing.JMenu
-import javax.swing.JMenuItem
 import javax.swing.JPopupMenu
 import javax.swing.filechooser.FileNameExtensionFilter
 

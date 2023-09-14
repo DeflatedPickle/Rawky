@@ -48,6 +48,8 @@ object KeyboardPlugin : ControlMode() {
         object : KeyAdapter() {
             override fun keyPressed(e: KeyEvent) {
                 RawkyPlugin.document?.let { doc ->
+                    if (doc.selectedIndex < 0 || doc.selectedIndex >= doc.children.size) return
+
                     val frame = doc.children[doc.selectedIndex]
                     val layer = frame.children[frame.selectedIndex]
                     val grid = layer.child

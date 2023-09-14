@@ -18,7 +18,6 @@ import com.deflatedpickle.haruhi.event.EventCreateDocument
 import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.haruhi.event.EventProgramFinishSetup
 import com.deflatedpickle.haruhi.event.EventSaveDocument
-import com.deflatedpickle.haruhi.util.ConfigUtil
 import com.deflatedpickle.haruhi.util.PluginUtil
 import com.deflatedpickle.haruhi.util.RegistryUtil
 import com.deflatedpickle.monocons.MonoIcon
@@ -30,7 +29,6 @@ import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
 import com.deflatedpickle.rawky.dialog.NewFrameDialog
 import com.deflatedpickle.rawky.dialog.NewLayerDialog
-import com.deflatedpickle.rawky.event.EventChangeColour
 import com.deflatedpickle.rawky.event.EventChangeFrame
 import com.deflatedpickle.rawky.event.EventChangeLayer
 import com.deflatedpickle.rawky.event.EventNewFrame
@@ -38,19 +36,18 @@ import com.deflatedpickle.rawky.event.EventNewLayer
 import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.event.packet.PacketChange
 import com.deflatedpickle.rawky.launcher.LauncherPlugin
-import com.deflatedpickle.rawky.launcher.LauncherSettings
+import com.deflatedpickle.rawky.api.ImportAs
 import com.deflatedpickle.rawky.launcher.api.ScreenShotArea
 import com.deflatedpickle.rawky.launcher.gui.dialog.AboutDialog
 import com.deflatedpickle.rawky.launcher.gui.dialog.ApplyFilterDialog
 import com.deflatedpickle.rawky.launcher.gui.dialog.ScaleImageDialog
 import com.deflatedpickle.rawky.launcher.gui.dialog.ScreenshotDialog
 import com.deflatedpickle.rawky.setting.RawkyDocument
-import com.deflatedpickle.rawky.util.ActionStack
 import com.deflatedpickle.rawky.util.ActionUtil
 import com.deflatedpickle.rawky.util.CommonMenuItems
 import com.deflatedpickle.undulation.api.MenuButtonType
 import com.deflatedpickle.undulation.functions.JMenu
-import com.deflatedpickle.undulation.functions.extensions.JMenuItem
+import com.deflatedpickle.undulation.functions.JMenuItem
 import com.deflatedpickle.undulation.functions.extensions.add
 import com.deflatedpickle.undulation.functions.extensions.getScreenDevice
 import com.jhlabs.image.GaussianFilter
@@ -219,7 +216,7 @@ object MenuBar : JMenuBar() {
                 KeyStroke.getKeyStroke(KeyEvent.VK_O, KeyEvent.CTRL_DOWN_MASK),
                 "Open a file in the editor",
             ) {
-                LauncherPlugin.openDialog(this)
+                LauncherPlugin.openDialog()
             }
 
             add(LauncherPlugin.historyMenu)
@@ -227,17 +224,15 @@ object MenuBar : JMenuBar() {
             add(
                 "Open as Frames...",
                 message = "Open a series of files as independent frames",
-                enabled = false
             ) {
-
+                LauncherPlugin.multiOpenDialog(ImportAs.FRAMES)
             }
 
             add(
                 "Open as Layers...",
                 message = "Open a series of files as layers in a given frame",
-                enabled = false
             ) {
-
+                LauncherPlugin.multiOpenDialog(ImportAs.LAYERS)
             }
 
             addSeparator()

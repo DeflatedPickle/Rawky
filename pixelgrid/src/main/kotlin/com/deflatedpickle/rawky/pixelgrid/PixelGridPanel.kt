@@ -55,13 +55,11 @@ import java.io.File
 import java.io.IOException
 import javax.swing.ButtonGroup
 import javax.swing.JLabel
-import javax.swing.JMenuItem
 import javax.swing.JPanel
 import javax.swing.JPopupMenu
 import javax.swing.JScrollPane
 import javax.swing.JSeparator
 import javax.swing.JToolBar
-import javax.swing.KeyStroke
 import kotlin.reflect.KClass
 import kotlin.reflect.full.declaredMemberProperties
 
@@ -241,7 +239,7 @@ object PixelGridPanel : PluginPanel() {
 
         addSeparator()
 
-        add(JMenu("Tools", KeyEvent.VK_T).apply {
+        add(JMenu("Tools").apply {
             val group = ButtonGroup()
 
             EventProgramFinishSetup.addListener {
