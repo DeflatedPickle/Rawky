@@ -1,6 +1,10 @@
 package com.deflatedpickle.rawky.launcher.gui
 
 import com.deflatedpickle.marvin.functions.extensions.size
+import com.deflatedpickle.rawky.grid.pixel.PixelCellPlugin
+import com.deflatedpickle.rawky.pixelgrid.impex.imageio.ImageIOPlugin
+import com.deflatedpickle.rawky.pixelgrid.impex.rawr.RawrPlugin
+import com.deflatedpickle.rawky.util.DrawUtil
 import org.apache.commons.imaging.Imaging
 import org.apache.commons.io.FileUtils
 import java.awt.*
@@ -46,7 +50,10 @@ class FilePreview(fc: JFileChooser) : JComponent() {
                     file = it.newValue as File?
 
                     isVisible = it.newValue != null
-                            && ((file != null && ImageIO.getImageReadersByFormatName(file?.extension).hasNext())
+                            && ((
+                            file != null && (ImageIO.getImageReadersByFormatName(file!!.extension).hasNext()
+                                    || (file!!.extension == "rawr" && RawrPlugin.open(file!!).cellProvider == PixelCellPlugin))
+                            )
                             || Imaging.hasImageFileExtension(file))
 
                     update = true
@@ -91,6 +98,13 @@ class FilePreview(fc: JFileChooser) : JComponent() {
             } else if (Imaging.hasImageFileExtension(file)) {
                 image = Imaging.getBufferedImage(file)
                 thumbnail = ImageIcon(image!!.getScaledInstance(96, 96, Image.SCALE_FAST))
+            } else if (file.extension == "rawr") {
+                val doc = RawrPlugin.open(file)
+
+                if (doc.cellProvider == PixelCellPlugin) {
+                    image = ImageIOPlugin.frameToImage(doc, doc[0])
+                    thumbnail = ImageIcon(image!!.getScaledInstance(96, 96, Image.SCALE_FAST))
+                }
             }
         }
     }

@@ -27,4 +27,7 @@ dependencies {
 	implementation project(":pixelgrid.grid.pixel")
 	implementation project(":pixelgrid.grid.tile")
 	implementation project(":pixelgrid.grid.ascii")
+
+	implementation project(":pixelgrid.impex.rawr")
+	implementation project(":pixelgrid.impex.imageio")
 }
