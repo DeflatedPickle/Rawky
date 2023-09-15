@@ -29,14 +29,13 @@ import com.deflatedpickle.rawky.collection.Grid
 import com.deflatedpickle.rawky.collection.Layer
 import com.deflatedpickle.rawky.dialog.NewFrameDialog
 import com.deflatedpickle.rawky.dialog.NewLayerDialog
-import com.deflatedpickle.rawky.event.EventChangeFrame
-import com.deflatedpickle.rawky.event.EventChangeLayer
-import com.deflatedpickle.rawky.event.EventNewFrame
-import com.deflatedpickle.rawky.event.EventNewLayer
-import com.deflatedpickle.rawky.event.EventUpdateGrid
 import com.deflatedpickle.rawky.event.packet.PacketChange
 import com.deflatedpickle.rawky.launcher.LauncherPlugin
 import com.deflatedpickle.rawky.api.ImportAs
+import com.deflatedpickle.rawky.collection.Frame
+import com.deflatedpickle.rawky.event.*
+import com.deflatedpickle.rawky.event.packet.PacketModify
+import com.deflatedpickle.rawky.launcher.api.Scale
 import com.deflatedpickle.rawky.launcher.api.ScreenShotArea
 import com.deflatedpickle.rawky.launcher.gui.dialog.AboutDialog
 import com.deflatedpickle.rawky.launcher.gui.dialog.ApplyFilterDialog
@@ -441,6 +440,13 @@ object MenuBar : JMenuBar() {
                     }
                 }
             }.also { disabledUntilFile.add(it) }
+
+            add(
+                "Scale...",
+                message = "Resize the selected layer using a given algorithm",
+            ) {
+                scaleDialogue(Scale.FRAME)
+            }.also { disabledUntilFile.add(it) }
         }
     }
 
@@ -481,7 +487,7 @@ object MenuBar : JMenuBar() {
                 "Scale...",
                 message = "Resize the selected layer using a given algorithm",
             ) {
-                scaleLayer()
+                scaleDialogue(Scale.LAYER)
             }.also { disabledUntilFile.add(it) }
 
             // TODO: add a rotate item
@@ -647,48 +653,72 @@ object MenuBar : JMenuBar() {
         }
     }
 
-    private fun scaleLayer() {
-        val dialog = ScaleImageDialog("Layer")
+    private fun scaleLayer(resampler: ResampleCollection.Resampler, columns: Int, rows: Int, frame: Frame, layer: Layer, index: Int) {
+        RawkyPlugin.document?.let { doc ->
+            resampler.resample(
+                columns,
+                rows,
+                BufferedImage(doc.columns, doc.rows, doc.colourChannel.code).apply {
+                    for (row in 0 until this.height) {
+                        for (column in 0 until this.width) {
+                            setRGB(column, row, (layer.child[column, row].content as Color).rgb)
+                        }
+                    }
+                },
+            ).apply {
+                val newLayer = Layer(name = layer.name, child = Grid(rows = this.height, columns = this.width))
+                frame.children[index] = newLayer
+
+                for (row in 0 until height) {
+                    for (column in 0 until width) {
+                        newLayer.child[column, row].content = Color(getRGB(column, row), true)
+                    }
+                }
+
+                doc.columns = columns
+                doc.rows = rows
+
+                EventModifyLayer.trigger(
+                    PacketModify(
+                        value = newLayer,
+                        index = index,
+                        source = PluginUtil.slugToPlugin("deflatedpickle@launcher#*")!!,
+                    ),
+                )
+                EventUpdateGrid.trigger(newLayer.child)
+            }
+        }
+    }
+
+    private fun scaleDialogue(scale: Scale) {
+        val dialog = ScaleImageDialog(scale)
         dialog.isVisible = true
 
         if (dialog.result == StandardCommand.OK) {
             RawkyPlugin.document?.let { doc ->
                 val frame = doc.children[doc.selectedIndex]
-                val layer = frame.children[frame.selectedIndex]
 
-                val layerIndex = frame.selectedIndex
-
-                (dialog.resamplerComboBox.selectedItem as ResampleCollection.Resampler).resample(
-                    dialog.columnInput.value as Int,
-                    dialog.rowInput.value as Int,
-                    BufferedImage(doc.columns, doc.rows, doc.colourChannel.code).apply {
-                        for (row in 0 until this.height) {
-                            for (column in 0 until this.width) {
-                                setRGB(column, row, (layer.child[column, row].content as Color).rgb)
-                            }
-                        }
-                    },
-                ).apply {
-                    val newLayer =
-                        Layer(name = layer.name, child = Grid(rows = this.height, columns = this.width))
-                    frame.children[layerIndex] = newLayer
-
-                    for (row in 0 until height) {
-                        for (column in 0 until width) {
-                            newLayer.child[column, row].content = Color(getRGB(column, row), true)
+                when (scale) {
+                    Scale.FRAME -> {
+                        for ((i, l) in frame.children.withIndex()) {
+                            scaleLayer(
+                                dialog.resamplerComboBox.selectedItem as ResampleCollection.Resampler,
+                                dialog.columnInput.value as Int,
+                                dialog.rowInput.value as Int,
+                                frame,
+                                l,
+                                i,
+                            )
                         }
                     }
 
-                    doc.columns = dialog.columnInput.value as Int
-                    doc.rows = dialog.rowInput.value as Int
-
-                    EventUpdateGrid.trigger(newLayer.child)
-                    EventChangeLayer.trigger(
-                        PacketChange(
-                            new = newLayer,
-                            old = layer,
-                            source = PluginUtil.slugToPlugin("deflatedpickle@launcher#*")!!,
-                        ),
+                    Scale.LAYER -> scaleLayer(
+                        dialog.resamplerComboBox.selectedItem as ResampleCollection.Resampler,
+                        dialog.columnInput.value as Int,
+                        dialog.rowInput.value as Int,
+                        frame,
+                        frame[frame.selectedIndex],
+                        frame.selectedIndex,
                     )
                 }
             }

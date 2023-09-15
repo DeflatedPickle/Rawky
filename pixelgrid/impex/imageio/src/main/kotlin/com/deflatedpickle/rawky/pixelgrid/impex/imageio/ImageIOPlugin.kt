@@ -193,10 +193,9 @@ object ImageIOPlugin : Exporter, Importer, Opener {
         reader.input = FileImageInputStream(file)
         reader.read(0).apply {
             val frame = document.children[document.selectedIndex]
-            val layers = frame.children
 
-            val newLayer = Layer(child = Grid(rows = this.height, columns = this.width))
-            val newFrame = Frame(children = mutableListOf(newLayer))
+            val newLayer = Layer(name = "Layer ${frame.children.size}", child = Grid(rows = this.height, columns = this.width))
+            val newFrame = Frame(name = "Frame ${document.children.size}", children = mutableListOf(newLayer))
 
             val grid = when (importAs) {
                 ImportAs.FRAMES -> {
@@ -205,7 +204,7 @@ object ImageIOPlugin : Exporter, Importer, Opener {
                     newFrame[0].child
                 }
                 ImportAs.LAYERS -> {
-                    layers.add(0, newLayer)
+                    frame.children.add(0, newLayer)
                     EventNewLayer.trigger(newLayer)
                     newLayer.child
                 }

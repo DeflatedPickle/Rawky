@@ -104,8 +104,8 @@ object ImagingPlugin : Exporter, Importer, Opener {
             val frame = document[document.selectedIndex]
             val layers = frame.children
 
-            val newLayer = Layer(child = Grid(rows = this.height, columns = this.width))
-            val newFrame = Frame(children = mutableListOf(newLayer))
+            val newLayer = Layer(name = "Layer ${frame.children.size}", child = Grid(rows = this.height, columns = this.width))
+            val newFrame = Frame(name = "Frame ${document.children.size}", children = mutableListOf(newLayer))
 
             val grid = when (importAs) {
                 ImportAs.FRAMES -> {

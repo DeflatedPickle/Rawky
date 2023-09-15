@@ -16,14 +16,18 @@ data class Frame(
         name: String? = null,
         rows: Int,
         columns: Int,
-        /*index: Int = -1*/
+        index: Int = -1
     ): Layer {
         val layer =
             Layer(name = name ?: "Layer ${children.size}", child = Grid(rows, columns)).apply {
                 frame = this@Frame
             }
 
-        children.add(layer)
+        if (index == -1) {
+            children.add(layer)
+        } else {
+            children.add(index, layer)
+        }
 
         return layer
     }

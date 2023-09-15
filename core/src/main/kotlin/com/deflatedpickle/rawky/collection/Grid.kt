@@ -10,6 +10,7 @@ import kotlinx.serialization.Polymorphic
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import java.awt.Rectangle
+import kotlin.math.min
 
 @Serializable
 data class Grid(
@@ -50,7 +51,7 @@ data class Grid(
         )
     }
 
-    operator fun get(column: Int, row: Int) = children[(column * columns) + row]
+    operator fun get(column: Int, row: Int) = children[min((column * columns) + row, children.size - 1)]
 
     operator fun set(column: Int, row: Int, value: Cell<Any>) =
         children.set((column * columns) + row, value)

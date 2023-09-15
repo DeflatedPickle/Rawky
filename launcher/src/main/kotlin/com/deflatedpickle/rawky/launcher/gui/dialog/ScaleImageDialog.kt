@@ -7,6 +7,7 @@ package com.deflatedpickle.rawky.launcher.gui.dialog
 import com.deflatedpickle.haruhi.Haruhi
 import com.deflatedpickle.monocons.MonoIcon
 import com.deflatedpickle.rawky.api.ResampleCollection
+import com.deflatedpickle.rawky.launcher.api.Scale
 import com.deflatedpickle.undulation.constraints.FillHorizontal
 import com.deflatedpickle.undulation.constraints.FillHorizontalFinishLine
 import com.deflatedpickle.undulation.constraints.FinishLine
@@ -21,7 +22,7 @@ import javax.swing.JSeparator
 import javax.swing.JSpinner
 import javax.swing.SpinnerNumberModel
 
-class ScaleImageDialog(scale: String) : TaskDialog(Haruhi.window, "Scale $scale") {
+class ScaleImageDialog(scale: Scale) : TaskDialog(Haruhi.window, "Scale ${scale.name.lowercase().capitalize()}") {
     val columnInput = JSpinner(SpinnerNumberModel(16, 1, null, 8))
     val rowInput = JSpinner(SpinnerNumberModel(16, 1, null, 8))
     private val sizeSwapper =

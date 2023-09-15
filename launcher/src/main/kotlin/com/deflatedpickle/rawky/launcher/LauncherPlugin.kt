@@ -62,6 +62,7 @@ object LauncherPlugin {
 
     private val exporterChooser =
         JFileChooser(File(".")).apply {
+            accessory = FilePreview(this)
             isAcceptAllFileFilterUsed = false
 
             EventProgramFinishSetup.addListener {

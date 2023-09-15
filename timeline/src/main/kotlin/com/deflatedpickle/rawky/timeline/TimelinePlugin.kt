@@ -60,6 +60,7 @@ object TimelinePlugin {
         EventNewFrame.addListener {
             TimelinePanel.model.addElement(it)
             // TODO: select the new frame
+            // TimelinePanel.list.setSelectedValue(it, true)
         }
     }
 

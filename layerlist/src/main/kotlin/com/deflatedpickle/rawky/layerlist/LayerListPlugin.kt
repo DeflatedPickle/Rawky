@@ -11,6 +11,7 @@ import com.deflatedpickle.haruhi.event.EventOpenDocument
 import com.deflatedpickle.rawky.RawkyPlugin
 import com.deflatedpickle.rawky.event.EventChangeFrame
 import com.deflatedpickle.rawky.event.EventChangeLayer
+import com.deflatedpickle.rawky.event.EventModifyLayer
 import com.deflatedpickle.rawky.event.EventNewLayer
 import com.deflatedpickle.rawky.extension.removeAll
 import com.deflatedpickle.rawky.setting.RawkyDocument
@@ -75,6 +76,11 @@ object LayerListPlugin {
         EventNewLayer.addListener {
             LayerListPanel.model.addRow(arrayOf(it, it.name, true, false))
             // TODO: select the new layer
+            // LayerListPanel.table.changeSelection(LayerListPanel.table.rowCount - 1, 1, false, false)
+        }
+
+        EventModifyLayer.addListener {
+            LayerListPanel.table.setValueAt(it.value, it.index, 0)
         }
     }
 
