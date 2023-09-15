@@ -149,7 +149,10 @@ include 'tiledview'
 include 'autosave'
 include 'autoload'
 
-['oneko'].each {
+[
+		'oneko',
+		'flchan'
+].each {
 	include "goofy.$it"
 	project(":goofy.$it").projectDir = new File(settingsDir, "goofy/$it")
 }
